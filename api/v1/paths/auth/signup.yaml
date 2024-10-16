@@ -1,0 +1,77 @@
+post:
+  tags:
+    - auth
+  summary: Signup User
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - email
+            - phone
+            - password
+            - first_name
+            - last_name
+            - middle_name
+            - avatar_url
+            - inn
+            - is_contractor
+          properties:
+            email:
+              type: string
+              format: email
+            phone:
+              type: string
+              format: phone
+              pattern: ^\+?\d{10,14}$
+            password:
+              type: string
+            first_name:
+              type: string
+            last_name:
+              type: string
+            middle_name:
+              type: string
+            avatar_url:
+              type: string
+            inn:
+              type: string
+            is_contractor:
+              type: boolean
+  responses:
+    '201':
+      description: Success
+      headers:
+        Set-Cookie:
+          schema:
+            type: string
+            example: refresh_token=7ff581a1-4dcf-4f53-a9cb-0ef408d4a7bb; Path=/; Max-Age=1727209098; HttpOnly; Secure; SameSite=Lax
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - access_token
+            properties:
+              access_token:
+                type: string
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/Error.yaml"
+    '422':
+      description: Validation Error
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/Error.yaml"
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/Error.yaml"

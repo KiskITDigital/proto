@@ -1,0 +1,165 @@
+openapi: 3.1.0
+info:
+  title: Ubrato core
+  description: ubrato core oas
+  version: 1.0.0
+servers:
+  - description: dev
+    url: https://api.ubrato.ru
+  - description: local
+    url: /
+paths:
+  /v1/auth/signin:
+    post:
+      tags:
+        - auth
+      summary: Signin User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Success
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: refresh_token=7ff581a1-4dcf-4f53-a9cb-0ef408d4a7bb; Path=/; Max-Age=1727209098; HttpOnly; Secure; SameSite=Lax
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - access_token
+                properties:
+                  access_token:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/auth/signup:
+    post:
+      tags:
+        - auth
+      summary: Signup User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - phone
+                - password
+                - first_name
+                - last_name
+                - middle_name
+                - avatar_url
+                - inn
+                - is_contractor
+              properties:
+                email:
+                  type: string
+                  format: email
+                phone:
+                  type: string
+                  format: phone
+                  pattern: ^\+?\d{10,14}$
+                password:
+                  type: string
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                middle_name:
+                  type: string
+                avatar_url:
+                  type: string
+                inn:
+                  type: string
+                is_contractor:
+                  type: boolean
+      responses:
+        '201':
+          description: Success
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: refresh_token=7ff581a1-4dcf-4f53-a9cb-0ef408d4a7bb; Path=/; Max-Age=1727209098; HttpOnly; Secure; SameSite=Lax
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - access_token
+                properties:
+                  access_token:
+                    type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - code
+        - message
+        - details
+      properties:
+        code:
+          type: string
+          description: application-specific error code
+          example: ERR_INTERNAL
+        message:
+          type: string
+          description: error message
+          example: invalid email
+        details:
+          type: object
+          additionalProperties:
+            type: string

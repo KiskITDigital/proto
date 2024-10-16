@@ -1,0 +1,21 @@
+openapi: 3.1.0
+servers:
+  - description: dev
+    url: https://api.ubrato.ru
+  - description: local
+    url: /
+info:
+  title: Ubrato core
+  description: ubrato core oas
+  version: 1.0.0
+paths:
+  /v1/auth/signin:
+    $ref: "./v1/paths/auth/signin.yaml"
+  /v1/auth/signup:
+    $ref: "./v1/paths/auth/signup.yaml"
+  # /v1/auth/refresh:
+  #   $ref: "./v1/paths/auth/refresh.yaml"
+  # /v1/auth/reset-password:
+  #   $ref: "./v1/paths/auth/reset-password.yaml"
+  # /v1/auth/confirm-email:
+  #   $ref: "./v1/paths/auth/confirm-email.yaml"
