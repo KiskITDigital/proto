@@ -20,13 +20,13 @@ func (s *SessionStore) Create(ctx context.Context, qe store.QueryExecutor, sessi
 	builder := squirrel.
 		Insert("sessions").
 		Columns(
-			"refresh_token",
+			"id",
 			"user_id",
 			"ip_address",
 			"expires_at",
 		).
 		Values(
-			session.RefreshToken,
+			session.ID,
 			session.UserID,
 			session.IPAddress,
 			session.ExpiresAt,
@@ -44,7 +44,7 @@ func (s *SessionStore) Create(ctx context.Context, qe store.QueryExecutor, sessi
 	var createdSession models.Session
 
 	err := builder.RunWith(qe).QueryRowContext(ctx).Scan(
-		&createdSession.RefreshToken,
+		&createdSession.ID,
 		&createdSession.UserID,
 		&createdSession.IPAddress,
 		&createdSession.CreatedAt,

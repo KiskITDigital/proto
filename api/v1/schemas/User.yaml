@@ -1,0 +1,49 @@
+type: object
+required:
+  - id
+  - email
+  - phone
+  - first_name
+  - last_name
+  - middle_name
+  - avatar_url
+  - verified
+  - email_verified
+  - role
+  - is_contractor
+  - organization
+  - created_at
+  - updated_at
+properties:
+  id:
+    type: integer
+  email:
+    $ref: "../properties/email.yaml"
+  phone:
+    $ref: "../properties/phone.yaml"
+  first_name:
+    $ref: "../properties/name.yaml"
+  last_name:
+    $ref: "../properties/name.yaml"
+  middle_name:
+    $ref: "../properties/name.yaml"
+  avatar_url:
+    $ref: "../properties/url.yaml"
+  verified:
+    type: boolean
+  email_verified:
+    type: boolean
+  role:
+    $ref: "../properties/role.yaml"
+  is_contractor:
+    type: boolean
+  is_banned:
+    type: boolean
+  organization:
+    $ref: "./Organization.yaml"
+  created_at:
+    type: string
+    format: date-time
+  updated_at:
+    type: string
+    format: date-time

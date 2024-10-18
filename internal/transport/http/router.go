@@ -15,7 +15,7 @@ type Router struct {
 }
 
 type Error interface {
-	HandleError(ctx context.Context, w http.ResponseWriter, _ *http.Request, err error)
+	HandleError(ctx context.Context, w http.ResponseWriter, r *http.Request, err error)
 }
 
 type Auth interface {

@@ -1,8 +1,13 @@
 package error
 
+import "log/slog"
+
 type Handler struct {
+	logger *slog.Logger
 }
 
-func New() *Handler {
-	return &Handler{}
+func New(logger *slog.Logger) *Handler {
+	return &Handler{
+		logger: logger,
+	}
 }

@@ -10,7 +10,7 @@ type Default struct {
 	Debug     bool      `env:"DEBUG" envDefault:"false"`
 	Store     Store     `envPrefix:"STORE_"`
 	Transport Transport `envPrefix:"TRANSPORT_"`
-	Auth      Auth      `envPrefix:"AUTH_"`
+	Gateway   Gateway   `envPrefix:"GATEWAY_"`
 }
 
 func ReadConfig() (Default, error) {

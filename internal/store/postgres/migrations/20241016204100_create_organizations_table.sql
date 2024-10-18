@@ -8,12 +8,12 @@ CREATE TABLE IF NOT EXISTS organizations (
     okpo TEXT NOT NULL,
     ogrn TEXT NOT NULL,
     kpp TEXT NOT NULL,
-    tax_code INT NOT NULL,
+    tax_code TEXT NOT NULL,
     address TEXT NOT NULL,
     avatar_url TEXT NULL,
-    emails JSONB NULL,
-    phones JSONB NULL,
-    messengers JSONB NULL,
+    emails JSONB NOT NULL,
+    phones JSONB NOT NULL,
+    messengers JSONB NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );

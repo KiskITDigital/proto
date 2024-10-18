@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
     middle_name TEXT NOT NULL,
-    avatar_url TEXT NOT NULL,
+    avatar_url TEXT NULL,
     verified BOOLEAN DEFAULT FALSE,
     email_verified BOOLEAN DEFAULT FALSE,
     role SMALLINT DEFAULT 0,

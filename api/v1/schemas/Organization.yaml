@@ -1,0 +1,41 @@
+type: object
+required:
+  - id
+  - brand_name
+  - full_name
+  - short_name
+  - inn
+  - okpo
+  - orgn
+  - kpp
+  - tax_code
+  - address
+  - avatar_url
+  - emails
+  - phones
+  - messangers
+  - created_at
+  - updated_at
+properties:
+  id:
+    type: integer
+  brand_name:
+    $ref: "../../properties/name.yaml"
+  full_name:
+    $ref: "../../properties/name.yaml"
+  short_name:
+    $ref: "../../properties/name.yaml"
+  inn:
+    $ref: "../../properties/inn.yaml"
+  okpo
+    $ref: "../../properties/name.yaml"
+  orgn
+  kpp
+  tax_code
+  address
+  avatar_url
+  emails
+  phones
+  messangers
+  created_at
+  updated_at

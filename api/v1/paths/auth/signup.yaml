@@ -15,29 +15,25 @@ post:
             - first_name
             - last_name
             - middle_name
-            - avatar_url
             - inn
             - is_contractor
           properties:
             email:
-              type: string
-              format: email
+              $ref: "../../properties/email.yaml"
             phone:
-              type: string
-              format: phone
-              pattern: ^\+?\d{10,14}$
+              $ref: "../../properties/phone.yaml"
             password:
-              type: string
+              $ref: "../../properties/password.yaml"
             first_name:
-              type: string
+              $ref: "../../properties/name.yaml"
             last_name:
-              type: string
+              $ref: "../../properties/name.yaml"
             middle_name:
-              type: string
+              $ref: "../../properties/name.yaml"
             avatar_url:
-              type: string
+              $ref: "../../properties/url.yaml"
             inn:
-              type: string
+              $ref: "../../properties/inn.yaml"
             is_contractor:
               type: boolean
   responses:
@@ -57,21 +53,5 @@ post:
             properties:
               access_token:
                 type: string
-    '400':
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: "../../schemas/Error.yaml"
-    '422':
-      description: Validation Error
-      content:
-        application/json:
-          schema:
-            $ref: "../../schemas/Error.yaml"
-    '500':
-      description: Internal Server Error
-      content:
-        application/json:
-          schema:
-            $ref: "../../schemas/Error.yaml"
+    default:
+      $ref: "../../responses/Error.yaml"

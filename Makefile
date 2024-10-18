@@ -43,4 +43,4 @@ migrate.postgres.up:
 
 .PHONY: migrate.postgres.down
 migrate.postgres.down:
-	$(goose) postgres $(POSTGRES_DSN) down -dir $(POSTGRES_MIGRATIONS_PATH)
+	$(goose) postgres $(POSTGRES_DSN) down-to 0 -dir $(POSTGRES_MIGRATIONS_PATH)

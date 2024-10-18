@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"gitlab.ubrato.ru/ubrato/core/internal/lib/auth"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/crypto"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
@@ -33,11 +32,16 @@ type SignUpResult struct {
 }
 
 func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult, error) {
-	var resp SignUpResult
+	var result SignUpResult
 
-	organization, err := s.dadataGateway.GetOrganization(ctx, params.INN)
+	resp, err := s.dadataGateway.FindByINN(ctx, params.INN)
 	if err != nil {
 		return SignUpResult{}, fmt.Errorf("get organization: %w", err)
+	}
+
+	organization, err := convertFindByINNResponseToOrganization(resp)
+	if err != nil {
+		return SignUpResult{}, fmt.Errorf("convert find by inn response to organization: %w", err)
 	}
 
 	err = s.psql.WithTransaction(ctx, func(qe store.QueryExecutor) error {
@@ -46,7 +50,7 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 			return fmt.Errorf("create organization: %w", err)
 		}
 
-		resp.Organization = organization
+		result.Organization = organization
 
 		hashedPassword, err := crypto.Password(params.Password)
 		if err != nil {
@@ -71,22 +75,13 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 			return fmt.Errorf("create user: %w", err)
 		}
 
-		resp.User = user
-
-		accessToken, err := s.tokenAuthorizer.GenerateToken(auth.Payload{
-			ID: user.ID,
-		})
-		if err != nil {
-			return fmt.Errorf("generate access token: %w", err)
-		}
-
-		resp.AccessToken = accessToken
+		result.User = user
 
 		session := models.Session{
-			RefreshToken: uuid.New(),
-			UserID:       user.ID,
-			IPAddress:    params.IPAddress,
-			ExpiresAt:    time.Now().Add(s.tokenAuthorizer.GetRefreshTokenDurationLifetime()),
+			ID:        randSessionID(sessionLength),
+			UserID:    user.ID,
+			IPAddress: params.IPAddress,
+			ExpiresAt: time.Now().Add(RefreshTokenLifetime),
 		}
 
 		session, err = s.sessionStore.Create(ctx, qe, session)
@@ -94,7 +89,7 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 			return fmt.Errorf("create session: %w", err)
 		}
 
-		resp.Session = session
+		result.Session = session
 
 		return nil
 	})
@@ -102,5 +97,5 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 		return SignUpResult{}, fmt.Errorf("run transaction: %w", err)
 	}
 
-	return resp, nil
+	return result, nil
 }

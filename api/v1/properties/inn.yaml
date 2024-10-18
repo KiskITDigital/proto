@@ -1,0 +1,2 @@
+type: string
+pattern: ^\d{10,12}$

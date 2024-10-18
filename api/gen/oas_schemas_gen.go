@@ -2,6 +2,10 @@
 
 package api
 
+import (
+	"github.com/go-faster/jx"
+)
+
 // Ref: #
 type Error struct {
 	// Application-specific error code.
@@ -41,16 +45,45 @@ func (s *Error) SetDetails(val ErrorDetails) {
 	s.Details = val
 }
 
-type ErrorDetails map[string]string
+type ErrorDetails map[string]jx.Raw
 
 func (s *ErrorDetails) init() ErrorDetails {
 	m := *s
 	if m == nil {
-		m = map[string]string{}
+		m = map[string]jx.Raw{}
 		*s = m
 	}
 	return m
 }
+
+// ErrorStatusCode wraps WrappedError with StatusCode.
+type ErrorStatusCode struct {
+	StatusCode int
+	Response   WrappedError
+}
+
+// GetStatusCode returns the value of StatusCode.
+func (s *ErrorStatusCode) GetStatusCode() int {
+	return s.StatusCode
+}
+
+// GetResponse returns the value of Response.
+func (s *ErrorStatusCode) GetResponse() WrappedError {
+	return s.Response
+}
+
+// SetStatusCode sets the value of StatusCode.
+func (s *ErrorStatusCode) SetStatusCode(val int) {
+	s.StatusCode = val
+}
+
+// SetResponse sets the value of Response.
+func (s *ErrorStatusCode) SetResponse(val WrappedError) {
+	s.Response = val
+}
+
+func (*ErrorStatusCode) v1AuthSigninPostRes() {}
+func (*ErrorStatusCode) v1AuthSignupPostRes() {}
 
 // NewOptString returns new OptString with value set to v.
 func NewOptString(v string) OptString {
@@ -97,10 +130,6 @@ func (o OptString) Or(d string) string {
 	}
 	return d
 }
-
-type V1AuthSigninPostNotFound Error
-
-func (*V1AuthSigninPostNotFound) v1AuthSigninPostRes() {}
 
 type V1AuthSigninPostOK struct {
 	AccessToken string `json:"access_token"`
@@ -169,18 +198,6 @@ func (s *V1AuthSigninPostReq) SetPassword(val string) {
 	s.Password = val
 }
 
-type V1AuthSigninPostUnauthorized Error
-
-func (*V1AuthSigninPostUnauthorized) v1AuthSigninPostRes() {}
-
-type V1AuthSigninPostUnprocessableEntity Error
-
-func (*V1AuthSigninPostUnprocessableEntity) v1AuthSigninPostRes() {}
-
-type V1AuthSignupPostBadRequest Error
-
-func (*V1AuthSignupPostBadRequest) v1AuthSignupPostRes() {}
-
 type V1AuthSignupPostCreated struct {
 	AccessToken string `json:"access_token"`
 }
@@ -223,20 +240,16 @@ func (s *V1AuthSignupPostCreatedHeaders) SetResponse(val V1AuthSignupPostCreated
 
 func (*V1AuthSignupPostCreatedHeaders) v1AuthSignupPostRes() {}
 
-type V1AuthSignupPostInternalServerError Error
-
-func (*V1AuthSignupPostInternalServerError) v1AuthSignupPostRes() {}
-
 type V1AuthSignupPostReq struct {
-	Email        string `json:"email"`
-	Phone        string `json:"phone"`
-	Password     string `json:"password"`
-	FirstName    string `json:"first_name"`
-	LastName     string `json:"last_name"`
-	MiddleName   string `json:"middle_name"`
-	AvatarURL    string `json:"avatar_url"`
-	Inn          string `json:"inn"`
-	IsContractor bool   `json:"is_contractor"`
+	Email        string    `json:"email"`
+	Phone        string    `json:"phone"`
+	Password     string    `json:"password"`
+	FirstName    string    `json:"first_name"`
+	LastName     string    `json:"last_name"`
+	MiddleName   string    `json:"middle_name"`
+	AvatarURL    OptString `json:"avatar_url"`
+	Inn          string    `json:"inn"`
+	IsContractor bool      `json:"is_contractor"`
 }
 
 // GetEmail returns the value of Email.
@@ -270,7 +283,7 @@ func (s *V1AuthSignupPostReq) GetMiddleName() string {
 }
 
 // GetAvatarURL returns the value of AvatarURL.
-func (s *V1AuthSignupPostReq) GetAvatarURL() string {
+func (s *V1AuthSignupPostReq) GetAvatarURL() OptString {
 	return s.AvatarURL
 }
 
@@ -315,7 +328,7 @@ func (s *V1AuthSignupPostReq) SetMiddleName(val string) {
 }
 
 // SetAvatarURL sets the value of AvatarURL.
-func (s *V1AuthSignupPostReq) SetAvatarURL(val string) {
+func (s *V1AuthSignupPostReq) SetAvatarURL(val OptString) {
 	s.AvatarURL = val
 }
 
@@ -329,6 +342,17 @@ func (s *V1AuthSignupPostReq) SetIsContractor(val bool) {
 	s.IsContractor = val
 }
 
-type V1AuthSignupPostUnprocessableEntity Error
+// Ref: #
+type WrappedError struct {
+	Error Error `json:"error"`
+}
 
-func (*V1AuthSignupPostUnprocessableEntity) v1AuthSignupPostRes() {}
+// GetError returns the value of Error.
+func (s *WrappedError) GetError() Error {
+	return s.Error
+}
+
+// SetError sets the value of Error.
+func (s *WrappedError) SetError(val Error) {
+	s.Error = val
+}

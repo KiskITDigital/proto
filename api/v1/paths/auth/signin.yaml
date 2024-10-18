@@ -13,10 +13,9 @@ post:
             - password
           properties:
             email:
-              type: string
-              format: email
+              $ref: "../../properties/email.yaml"
             password:
-              type: string
+              $ref: "../../properties/inn.yaml"
   responses:
     '200':
       description: Success
@@ -34,21 +33,5 @@ post:
             properties:
               access_token:
                 type: string
-    '401':
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: "../../schemas/Error.yaml"
-    '404':
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: "../../schemas/Error.yaml"
-    '422':
-      description: Validation Error
-      content:
-        application/json:
-          schema:
-            $ref: "../../schemas/Error.yaml"
+    default:
+      $ref: "../../responses/Error.yaml"

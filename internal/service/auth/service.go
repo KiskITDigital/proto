@@ -4,9 +4,10 @@ import (
 	"context"
 	"time"
 
-	"gitlab.ubrato.ru/ubrato/core/internal/lib/auth"
+	"gitlab.ubrato.ru/ubrato/core/internal/gateway/dadata"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
+	"golang.org/x/exp/rand"
 )
 
 type Service struct {
@@ -15,8 +16,14 @@ type Service struct {
 	organizationStore OrganizationStore
 	sessionStore      SessionStore
 	dadataGateway     DadataGateway
-	tokenAuthorizer   TokenAuthorizer
 }
+
+const (
+	RefreshTokenLifetime = 7 * 24 * time.Hour
+	sessionLength        = 32
+)
+
+var sessionRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!_-")
 
 type DBTX interface {
 	DB() store.QueryExecutor
@@ -37,12 +44,7 @@ type SessionStore interface {
 }
 
 type DadataGateway interface {
-	GetOrganization(ctx context.Context, INN string) (models.Organization, error)
-}
-
-type TokenAuthorizer interface {
-	GenerateToken(payload auth.Payload) (string, error)
-	GetRefreshTokenDurationLifetime() time.Duration
+	FindByINN(ctx context.Context, INN string) (dadata.FindByInnResponse, error)
 }
 
 func New(
@@ -51,7 +53,6 @@ func New(
 	organizationStore OrganizationStore,
 	sessionStore SessionStore,
 	dadataGateway DadataGateway,
-	tokenAuthorizer TokenAuthorizer,
 ) *Service {
 	return &Service{
 		psql:              psql,
@@ -60,4 +61,12 @@ func New(
 		sessionStore:      sessionStore,
 		dadataGateway:     dadataGateway,
 	}
+}
+
+func randSessionID(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = sessionRunes[rand.Intn(len(sessionRunes))]
+	}
+	return string(b)
 }

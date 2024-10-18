@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
@@ -43,7 +44,7 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, user mod
 			user.FirstName,
 			user.LastName,
 			user.MiddleName,
-			user.AvatarURL,
+			sql.NullString{Valid: user.AvatarURL != "", String: user.AvatarURL},
 			user.Verified,
 			user.EmailVerified,
 			user.Role,
@@ -54,6 +55,7 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, user mod
 				id,
 				organization_id,
 				email,
+				phone,
 				password_hash,
 				totp_salt,
 				first_name,
@@ -63,11 +65,16 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, user mod
 				verified,
 				email_verified,
 				role,
-				is_contractor
+				is_contractor,
+				created_at,
+				updated_at
 		`).
 		PlaceholderFormat(squirrel.Dollar)
 
-	var createdUser models.User
+	var (
+		createdUser models.User
+		avatarUrl   sql.NullString
+	)
 
 	err := builder.RunWith(qe).QueryRowContext(ctx).Scan(
 		&createdUser.ID,
@@ -79,7 +86,7 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, user mod
 		&createdUser.FirstName,
 		&createdUser.LastName,
 		&createdUser.MiddleName,
-		&createdUser.AvatarURL,
+		&avatarUrl,
 		&createdUser.Verified,
 		&createdUser.EmailVerified,
 		&createdUser.Role,
@@ -90,6 +97,8 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, user mod
 	if err != nil {
 		return models.User{}, fmt.Errorf("query row: %w", err)
 	}
+
+	createdUser.AvatarURL = avatarUrl.String
 
 	return createdUser, nil
 }

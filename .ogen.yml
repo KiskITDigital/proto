@@ -6,3 +6,5 @@ parser:
   allow_remote: true
   # is maximum depth of schema generation. Default is 1000.
   depth_limit: 1000
+generator:
+  convenient_errors: "off"

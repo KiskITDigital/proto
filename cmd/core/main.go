@@ -8,7 +8,7 @@ import (
 	"syscall"
 
 	"gitlab.ubrato.ru/ubrato/core/internal/config"
-	"gitlab.ubrato.ru/ubrato/core/internal/lib/auth"
+	dadataGateway "gitlab.ubrato.ru/ubrato/core/internal/gateway/dadata"
 	authService "gitlab.ubrato.ru/ubrato/core/internal/service/auth"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 	"gitlab.ubrato.ru/ubrato/core/internal/store/postgres"
@@ -50,27 +50,23 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	}
 	psql := store.New(psqlDB)
 
-	tokenAuthorizer, err := auth.NewTokenAuthorizer(cfg.Auth.JWTSettings)
-	if err != nil {
-		return fmt.Errorf("create token authorizer: %w", err)
-	}
-
 	userStore := postgres.NewUserStore()
 	organizationStore := postgres.NewOrganizationStore()
 	sessionStore := postgres.NewSessionStore()
+
+	dadataGateway := dadataGateway.NewClient(cfg.Gateway.Dadata.APIKey)
 
 	authService := authService.New(
 		psql,
 		userStore,
 		organizationStore,
 		sessionStore,
-		nil,
-		tokenAuthorizer,
+		dadataGateway,
 	)
 
 	router := http.NewRouter(http.RouterParams{
-		Error: errorHandler.New(),
-		Auth:  authHandler.New(authService),
+		Error: errorHandler.New(logger),
+		Auth:  authHandler.New(logger, authService),
 	})
 
 	server, err := http.NewServer(logger, cfg.Transport.HTTP, router)

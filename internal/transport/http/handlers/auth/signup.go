@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"time"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
 	"gitlab.ubrato.ru/ubrato/core/internal/service/auth"
@@ -18,7 +17,7 @@ func (h *Handler) V1AuthSignupPost(ctx context.Context, req *api.V1AuthSignupPos
 		FirstName:    req.GetFirstName(),
 		LastName:     req.GetLastName(),
 		MiddleName:   req.GetMiddleName(),
-		AvatarURL:    req.GetAvatarURL(),
+		AvatarURL:    req.GetAvatarURL().Value,
 		INN:          req.GetInn(),
 		IsContractor: req.GetIsContractor(),
 	})
@@ -28,9 +27,9 @@ func (h *Handler) V1AuthSignupPost(ctx context.Context, req *api.V1AuthSignupPos
 
 	cookie := http.Cookie{
 		Name:     "refresh_token",
-		Value:    resp.Session.RefreshToken.String(),
+		Value:    resp.Session.ID,
 		Path:     "/",
-		MaxAge:   int(resp.Session.ExpiresAt.Unix() - time.Now().Unix()),
+		Expires:  resp.Session.ExpiresAt,
 		HttpOnly: true,
 		Secure:   true,
 		SameSite: http.SameSiteNoneMode,

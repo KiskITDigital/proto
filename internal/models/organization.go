@@ -12,11 +12,17 @@ type ContactInfo struct {
 	Info    string `json:"info"`
 }
 
-func (a ContactInfo) Value() (driver.Value, error) {
+type ContactInfos []ContactInfo
+
+func (a ContactInfos) Value() (driver.Value, error) {
+	if a == nil {
+		return []byte("[]"), nil
+	}
+
 	return json.Marshal(a)
 }
 
-func (a *ContactInfo) Scan(value interface{}) error {
+func (a *ContactInfos) Scan(value interface{}) error {
 	b, ok := value.([]byte)
 	if !ok {
 		return errors.New("type assertion to []byte failed")
@@ -34,12 +40,12 @@ type Organization struct {
 	OKPO       string
 	ORGN       string
 	KPP        string
-	TaxCode    int
+	TaxCode    string
 	Address    string
 	AvatarURL  string
-	Emails     []ContactInfo
-	Phones     []ContactInfo
-	Messangers []ContactInfo
+	Emails     ContactInfos
+	Phones     ContactInfos
+	Messangers ContactInfos
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }

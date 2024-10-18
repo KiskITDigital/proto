@@ -4,10 +4,10 @@ info:
   description: ubrato core oas
   version: 1.0.0
 servers:
-  - description: dev
-    url: https://api.ubrato.ru
   - description: local
     url: /
+  - description: dev
+    url: https://api.ubrato.ru
 paths:
   /v1/auth/signin:
     post:
@@ -29,6 +29,7 @@ paths:
                   format: email
                 password:
                   type: string
+                  format: password
       responses:
         '200':
           description: Success
@@ -46,24 +47,8 @@ paths:
                 properties:
                   access_token:
                     type: string
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+        default:
+          $ref: '#/components/responses/Error'
   /v1/auth/signup:
     post:
       tags:
@@ -82,7 +67,6 @@ paths:
                 - first_name
                 - last_name
                 - middle_name
-                - avatar_url
                 - inn
                 - is_contractor
               properties:
@@ -95,16 +79,30 @@ paths:
                   pattern: ^\+?\d{10,14}$
                 password:
                   type: string
+                  format: password
+                  pattern: ^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$
                 first_name:
                   type: string
+                  minLength: 3
+                  pattern: ^[а-яА-ЯёЁ]+$
+                  example: Иван
                 last_name:
                   type: string
+                  minLength: 3
+                  pattern: ^[а-яА-ЯёЁ]+$
+                  example: Иванов
                 middle_name:
                   type: string
+                  minLength: 3
+                  pattern: ^[а-яА-ЯёЁ]+$
+                  example: Иванович
                 avatar_url:
                   type: string
+                  pattern: ^https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$
+                  example: https://s3.ubrato.ru/qwerty
                 inn:
                   type: string
+                  pattern: ^\d{10,12}$
                 is_contractor:
                   type: boolean
       responses:
@@ -124,24 +122,8 @@ paths:
                 properties:
                   access_token:
                     type: string
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+        default:
+          $ref: '#/components/responses/Error'
 components:
   schemas:
     Error:
@@ -161,5 +143,18 @@ components:
           example: invalid email
         details:
           type: object
-          additionalProperties:
-            type: string
+          additionalProperties: true
+    WrappedError:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+  responses:
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WrappedError'
