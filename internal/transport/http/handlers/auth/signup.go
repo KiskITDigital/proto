@@ -11,14 +11,14 @@ import (
 
 func (h *Handler) V1AuthSignupPost(ctx context.Context, req *api.V1AuthSignupPostReq) (api.V1AuthSignupPostRes, error) {
 	resp, err := h.svc.SignUp(ctx, auth.SignUpParams{
-		Email:        req.GetEmail(),
-		Phone:        req.GetPhone(),
-		Password:     req.GetPassword(),
-		FirstName:    req.GetFirstName(),
-		LastName:     req.GetLastName(),
-		MiddleName:   req.GetMiddleName(),
-		AvatarURL:    req.GetAvatarURL().Value,
-		INN:          req.GetInn(),
+		Email:        string(req.GetEmail()),
+		Phone:        string(req.GetPhone()),
+		Password:     string(req.GetPassword()),
+		FirstName:    string(req.GetFirstName()),
+		LastName:     string(req.GetLastName()),
+		MiddleName:   string(req.GetMiddleName()),
+		AvatarURL:    string(req.GetAvatarURL().Value),
+		INN:          string(req.GetInn()),
 		IsContractor: req.GetIsContractor(),
 	})
 	if err != nil {
@@ -26,7 +26,7 @@ func (h *Handler) V1AuthSignupPost(ctx context.Context, req *api.V1AuthSignupPos
 	}
 
 	cookie := http.Cookie{
-		Name:     "refresh_token",
+		Name:     "ubrato_session",
 		Value:    resp.Session.ID,
 		Path:     "/",
 		Expires:  resp.Session.ExpiresAt,
@@ -38,7 +38,9 @@ func (h *Handler) V1AuthSignupPost(ctx context.Context, req *api.V1AuthSignupPos
 	return &api.V1AuthSignupPostCreatedHeaders{
 		SetCookie: api.NewOptString(cookie.String()),
 		Response: api.V1AuthSignupPostCreated{
-			AccessToken: resp.AccessToken,
+			Data: api.V1AuthSignupPostCreatedData{
+				User: ConvertUserModelToApi(resp.User),
+			},
 		},
 	}, nil
 }

@@ -1,0 +1,11 @@
+type: object
+required:
+  - contact
+  - info
+properties:
+  contact:
+    type: string
+    minLenght: 1
+  info:
+    type: string
+    minLenght: 1

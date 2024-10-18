@@ -16,13 +16,15 @@ func (c Code) HTTPCode() int {
 }
 
 var (
-	CodeInternal       Code = "ERR_INTERNAL"
-	CodeValidate       Code = "ERR_VALIDATE"
-	CodeInitInProgress Code = "ERR_INIT_IN_PROGRES"
+	CodeInternal           Code = "ERR_INTERNAL"
+	CodeValidate           Code = "ERR_VALIDATE"
+	CodeInitInProgress     Code = "ERR_INIT_IN_PROGRES"
+	CodeInvalidCredentials Code = "ERR_INVALID_CREDENTIALS"
 )
 
 var codes = map[Code]int{
-	CodeInternal:       http.StatusInternalServerError,
-	CodeValidate:       http.StatusBadRequest,
-	CodeInitInProgress: http.StatusBadRequest,
+	CodeInternal:           http.StatusInternalServerError,
+	CodeValidate:           http.StatusBadRequest,
+	CodeInitInProgress:     http.StatusBadRequest,
+	CodeInvalidCredentials: http.StatusBadRequest,
 }

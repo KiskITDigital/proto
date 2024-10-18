@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
@@ -16,7 +17,7 @@ func NewOrganizationStore() *OrganizationStore {
 	return &OrganizationStore{}
 }
 
-func (s *OrganizationStore) Create(ctx context.Context, qe store.QueryExecutor, organization models.Organization) (models.Organization, error) {
+func (s *OrganizationStore) Create(ctx context.Context, qe store.QueryExecutor, params store.OrganizationCreateParams) (models.Organization, error) {
 	builder := squirrel.
 		Insert("organizations").
 		Columns(
@@ -29,25 +30,23 @@ func (s *OrganizationStore) Create(ctx context.Context, qe store.QueryExecutor, 
 			"kpp",
 			"tax_code",
 			"address",
-			"avatar_url",
 			"emails",
 			"phones",
 			"messengers",
 		).
 		Values(
-			organization.BrandName,
-			organization.FullName,
-			organization.ShortName,
-			organization.INN,
-			organization.OKPO,
-			organization.ORGN,
-			organization.KPP,
-			organization.TaxCode,
-			organization.Address,
-			organization.AvatarURL,
-			organization.Emails,
-			organization.Phones,
-			organization.Messangers,
+			params.BrandName,
+			params.FullName,
+			params.ShortName,
+			params.INN,
+			params.OKPO,
+			params.OGRN,
+			params.KPP,
+			params.TaxCode,
+			params.Address,
+			models.ContactInfos{},
+			models.ContactInfos{},
+			models.ContactInfos{},
 		).
 		Suffix(`
 			RETURNING
@@ -70,7 +69,10 @@ func (s *OrganizationStore) Create(ctx context.Context, qe store.QueryExecutor, 
 	`).
 		PlaceholderFormat(squirrel.Dollar)
 
-	var createdOrganization models.Organization
+	var (
+		createdOrganization models.Organization
+		avatarURL           sql.NullString
+	)
 
 	err := builder.RunWith(qe).QueryRowContext(ctx).Scan(
 		&createdOrganization.ID,
@@ -79,20 +81,22 @@ func (s *OrganizationStore) Create(ctx context.Context, qe store.QueryExecutor, 
 		&createdOrganization.ShortName,
 		&createdOrganization.INN,
 		&createdOrganization.OKPO,
-		&createdOrganization.ORGN,
+		&createdOrganization.OGRN,
 		&createdOrganization.KPP,
 		&createdOrganization.TaxCode,
 		&createdOrganization.Address,
-		&createdOrganization.AvatarURL,
+		&avatarURL,
 		&createdOrganization.Emails,
 		&createdOrganization.Phones,
-		&createdOrganization.Messangers,
+		&createdOrganization.Messengers,
 		&createdOrganization.CreatedAt,
 		&createdOrganization.UpdatedAt,
 	)
 	if err != nil {
 		return models.Organization{}, fmt.Errorf("query row: %w", err)
 	}
+
+	createdOrganization.AvatarURL = avatarURL.String
 
 	return createdOrganization, nil
 }

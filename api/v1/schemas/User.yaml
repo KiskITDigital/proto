@@ -11,7 +11,7 @@ required:
   - email_verified
   - role
   - is_contractor
-  - organization
+  - is_banned
   - created_at
   - updated_at
 properties:

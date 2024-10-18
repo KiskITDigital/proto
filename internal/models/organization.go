@@ -38,14 +38,14 @@ type Organization struct {
 	ShortName  string
 	INN        string
 	OKPO       string
-	ORGN       string
+	OGRN       string
 	KPP        string
 	TaxCode    string
 	Address    string
 	AvatarURL  string
 	Emails     ContactInfos
 	Phones     ContactInfos
-	Messangers ContactInfos
+	Messengers ContactInfos
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
 }

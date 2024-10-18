@@ -32,15 +32,16 @@ type DBTX interface {
 }
 
 type UserStore interface {
-	Create(ctx context.Context, qe store.QueryExecutor, user models.User) (models.User, error)
+	Create(ctx context.Context, qe store.QueryExecutor, params store.UserCreateParams) (models.User, error)
+	GetWithOrganiztion(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) (models.User, error)
 }
 
 type OrganizationStore interface {
-	Create(ctx context.Context, qe store.QueryExecutor, organization models.Organization) (models.Organization, error)
+	Create(ctx context.Context, qe store.QueryExecutor, organization store.OrganizationCreateParams) (models.Organization, error)
 }
 
 type SessionStore interface {
-	Create(ctx context.Context, qe store.QueryExecutor, session models.Session) (models.Session, error)
+	Create(ctx context.Context, qe store.QueryExecutor, session store.SessionCreateParams) (models.Session, error)
 }
 
 type DadataGateway interface {
@@ -64,6 +65,7 @@ func New(
 }
 
 func randSessionID(n int) string {
+	rand.Seed(uint64(time.Now().Unix()))
 	b := make([]rune, n)
 	for i := range b {
 		b[i] = sessionRunes[rand.Intn(len(sessionRunes))]

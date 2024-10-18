@@ -16,7 +16,7 @@ func NewSessionStore() *SessionStore {
 	return &SessionStore{}
 }
 
-func (s *SessionStore) Create(ctx context.Context, qe store.QueryExecutor, session models.Session) (models.Session, error) {
+func (s *SessionStore) Create(ctx context.Context, qe store.QueryExecutor, params store.SessionCreateParams) (models.Session, error) {
 	builder := squirrel.
 		Insert("sessions").
 		Columns(
@@ -26,14 +26,14 @@ func (s *SessionStore) Create(ctx context.Context, qe store.QueryExecutor, sessi
 			"expires_at",
 		).
 		Values(
-			session.ID,
-			session.UserID,
-			session.IPAddress,
-			session.ExpiresAt,
+			params.ID,
+			params.UserID,
+			params.IPAddress,
+			params.ExpiresAt,
 		).
 		Suffix(`
 			RETURNING
-				refresh_token,
+				id,
 				user_id,
 				ip_address,
 				created_at,

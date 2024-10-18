@@ -48,10 +48,18 @@ func (c *Client) FindByINN(ctx context.Context, inn string) (FindByInnResponse, 
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode != http.StatusOK {
+		return FindByInnResponse{}, fmt.Errorf("status code not OK")
+	}
+
 	var response FindByInnResponse
 	err = json.NewDecoder(resp.Body).Decode(&response)
 	if err != nil {
 		return FindByInnResponse{}, fmt.Errorf("decide response: %w", err)
+	}
+
+	if len(response.Suggestions) == 0 {
+		return FindByInnResponse{}, fmt.Errorf("empty suggestions")
 	}
 
 	return response, nil

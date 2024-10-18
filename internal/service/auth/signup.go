@@ -25,10 +25,8 @@ type SignUpParams struct {
 }
 
 type SignUpResult struct {
-	User         models.User
-	Organization models.Organization
-	Session      models.Session
-	AccessToken  string
+	User    models.User
+	Session models.Session
 }
 
 func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult, error) {
@@ -39,25 +37,29 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 		return SignUpResult{}, fmt.Errorf("get organization: %w", err)
 	}
 
-	organization, err := convertFindByINNResponseToOrganization(resp)
-	if err != nil {
-		return SignUpResult{}, fmt.Errorf("convert find by inn response to organization: %w", err)
-	}
-
 	err = s.psql.WithTransaction(ctx, func(qe store.QueryExecutor) error {
-		organization, err = s.organizationStore.Create(ctx, qe, organization)
+		// FIXME: panic
+		organization, err := s.organizationStore.Create(ctx, qe, store.OrganizationCreateParams{
+			BrandName: resp.Suggestions[0].Data.Name.Short,
+			FullName:  resp.Suggestions[0].Data.Name.FullWithOpf,
+			ShortName: resp.Suggestions[0].Data.Name.ShortWithOpf,
+			INN:       resp.Suggestions[0].Data.INN,
+			OKPO:      resp.Suggestions[0].Data.OKPO,
+			OGRN:      resp.Suggestions[0].Data.OGRN,
+			KPP:       resp.Suggestions[0].Data.KPP,
+			TaxCode:   resp.Suggestions[0].Data.Address.Data.TaxOffice,
+			Address:   resp.Suggestions[0].Data.Address.UnrestrictedValue,
+		})
 		if err != nil {
 			return fmt.Errorf("create organization: %w", err)
 		}
-
-		result.Organization = organization
 
 		hashedPassword, err := crypto.Password(params.Password)
 		if err != nil {
 			return fmt.Errorf("hash password: %w", err)
 		}
 
-		user := models.User{
+		user, err := s.userStore.Create(ctx, qe, store.UserCreateParams{
 			OrganizationID: organization.ID,
 			Email:          params.Email,
 			Phone:          params.Phone,
@@ -68,23 +70,20 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 			MiddleName:     params.MiddleName,
 			AvatarURL:      params.AvatarURL,
 			IsContractor:   params.IsContractor,
-		}
-
-		user, err = s.userStore.Create(ctx, qe, user)
+		})
 		if err != nil {
 			return fmt.Errorf("create user: %w", err)
 		}
 
+		user.Organization = organization
 		result.User = user
 
-		session := models.Session{
+		session, err := s.sessionStore.Create(ctx, qe, store.SessionCreateParams{
 			ID:        randSessionID(sessionLength),
 			UserID:    user.ID,
 			IPAddress: params.IPAddress,
 			ExpiresAt: time.Now().Add(RefreshTokenLifetime),
-		}
-
-		session, err = s.sessionStore.Create(ctx, qe, session)
+		})
 		if err != nil {
 			return fmt.Errorf("create session: %w", err)
 		}

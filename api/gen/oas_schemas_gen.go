@@ -3,8 +3,38 @@
 package api
 
 import (
+	"time"
+
 	"github.com/go-faster/jx"
 )
+
+// Ref: #
+type ContactInfo struct {
+	Contact string `json:"contact"`
+	Info    string `json:"info"`
+}
+
+// GetContact returns the value of Contact.
+func (s *ContactInfo) GetContact() string {
+	return s.Contact
+}
+
+// GetInfo returns the value of Info.
+func (s *ContactInfo) GetInfo() string {
+	return s.Info
+}
+
+// SetContact sets the value of Contact.
+func (s *ContactInfo) SetContact(val string) {
+	s.Contact = val
+}
+
+// SetInfo sets the value of Info.
+func (s *ContactInfo) SetInfo(val string) {
+	s.Info = val
+}
+
+type Email string
 
 // Ref: #
 type Error struct {
@@ -85,6 +115,62 @@ func (s *ErrorStatusCode) SetResponse(val WrappedError) {
 func (*ErrorStatusCode) v1AuthSigninPostRes() {}
 func (*ErrorStatusCode) v1AuthSignupPostRes() {}
 
+type Inn string
+
+type Kpp string
+
+type Name string
+
+type Ogrn string
+
+type Okpo string
+
+// NewOptOrganization returns new OptOrganization with value set to v.
+func NewOptOrganization(v Organization) OptOrganization {
+	return OptOrganization{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptOrganization is optional Organization.
+type OptOrganization struct {
+	Value Organization
+	Set   bool
+}
+
+// IsSet returns true if OptOrganization was set.
+func (o OptOrganization) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptOrganization) Reset() {
+	var v Organization
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptOrganization) SetTo(v Organization) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptOrganization) Get() (v Organization, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptOrganization) Or(d Organization) Organization {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptString returns new OptString with value set to v.
 func NewOptString(v string) OptString {
 	return OptString{
@@ -131,18 +217,454 @@ func (o OptString) Or(d string) string {
 	return d
 }
 
+// NewOptURL returns new OptURL with value set to v.
+func NewOptURL(v URL) OptURL {
+	return OptURL{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptURL is optional URL.
+type OptURL struct {
+	Value URL
+	Set   bool
+}
+
+// IsSet returns true if OptURL was set.
+func (o OptURL) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptURL) Reset() {
+	var v URL
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptURL) SetTo(v URL) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptURL) Get() (v URL, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptURL) Or(d URL) URL {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// Ref: #
+type Organization struct {
+	ID         int           `json:"id"`
+	BrandName  Name          `json:"brand_name"`
+	FullName   Name          `json:"full_name"`
+	ShortName  Name          `json:"short_name"`
+	Inn        Inn           `json:"inn"`
+	Okpo       Okpo          `json:"okpo"`
+	Ogrn       Ogrn          `json:"ogrn"`
+	Kpp        Kpp           `json:"kpp"`
+	TaxCode    TaxCode       `json:"tax_code"`
+	Address    string        `json:"address"`
+	AvatarURL  URL           `json:"avatar_url"`
+	Emails     []ContactInfo `json:"emails"`
+	Phones     []ContactInfo `json:"phones"`
+	Messengers []ContactInfo `json:"messengers"`
+	CreatedAt  time.Time     `json:"created_at"`
+	UpdatedAt  time.Time     `json:"updated_at"`
+}
+
+// GetID returns the value of ID.
+func (s *Organization) GetID() int {
+	return s.ID
+}
+
+// GetBrandName returns the value of BrandName.
+func (s *Organization) GetBrandName() Name {
+	return s.BrandName
+}
+
+// GetFullName returns the value of FullName.
+func (s *Organization) GetFullName() Name {
+	return s.FullName
+}
+
+// GetShortName returns the value of ShortName.
+func (s *Organization) GetShortName() Name {
+	return s.ShortName
+}
+
+// GetInn returns the value of Inn.
+func (s *Organization) GetInn() Inn {
+	return s.Inn
+}
+
+// GetOkpo returns the value of Okpo.
+func (s *Organization) GetOkpo() Okpo {
+	return s.Okpo
+}
+
+// GetOgrn returns the value of Ogrn.
+func (s *Organization) GetOgrn() Ogrn {
+	return s.Ogrn
+}
+
+// GetKpp returns the value of Kpp.
+func (s *Organization) GetKpp() Kpp {
+	return s.Kpp
+}
+
+// GetTaxCode returns the value of TaxCode.
+func (s *Organization) GetTaxCode() TaxCode {
+	return s.TaxCode
+}
+
+// GetAddress returns the value of Address.
+func (s *Organization) GetAddress() string {
+	return s.Address
+}
+
+// GetAvatarURL returns the value of AvatarURL.
+func (s *Organization) GetAvatarURL() URL {
+	return s.AvatarURL
+}
+
+// GetEmails returns the value of Emails.
+func (s *Organization) GetEmails() []ContactInfo {
+	return s.Emails
+}
+
+// GetPhones returns the value of Phones.
+func (s *Organization) GetPhones() []ContactInfo {
+	return s.Phones
+}
+
+// GetMessengers returns the value of Messengers.
+func (s *Organization) GetMessengers() []ContactInfo {
+	return s.Messengers
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Organization) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// GetUpdatedAt returns the value of UpdatedAt.
+func (s *Organization) GetUpdatedAt() time.Time {
+	return s.UpdatedAt
+}
+
+// SetID sets the value of ID.
+func (s *Organization) SetID(val int) {
+	s.ID = val
+}
+
+// SetBrandName sets the value of BrandName.
+func (s *Organization) SetBrandName(val Name) {
+	s.BrandName = val
+}
+
+// SetFullName sets the value of FullName.
+func (s *Organization) SetFullName(val Name) {
+	s.FullName = val
+}
+
+// SetShortName sets the value of ShortName.
+func (s *Organization) SetShortName(val Name) {
+	s.ShortName = val
+}
+
+// SetInn sets the value of Inn.
+func (s *Organization) SetInn(val Inn) {
+	s.Inn = val
+}
+
+// SetOkpo sets the value of Okpo.
+func (s *Organization) SetOkpo(val Okpo) {
+	s.Okpo = val
+}
+
+// SetOgrn sets the value of Ogrn.
+func (s *Organization) SetOgrn(val Ogrn) {
+	s.Ogrn = val
+}
+
+// SetKpp sets the value of Kpp.
+func (s *Organization) SetKpp(val Kpp) {
+	s.Kpp = val
+}
+
+// SetTaxCode sets the value of TaxCode.
+func (s *Organization) SetTaxCode(val TaxCode) {
+	s.TaxCode = val
+}
+
+// SetAddress sets the value of Address.
+func (s *Organization) SetAddress(val string) {
+	s.Address = val
+}
+
+// SetAvatarURL sets the value of AvatarURL.
+func (s *Organization) SetAvatarURL(val URL) {
+	s.AvatarURL = val
+}
+
+// SetEmails sets the value of Emails.
+func (s *Organization) SetEmails(val []ContactInfo) {
+	s.Emails = val
+}
+
+// SetPhones sets the value of Phones.
+func (s *Organization) SetPhones(val []ContactInfo) {
+	s.Phones = val
+}
+
+// SetMessengers sets the value of Messengers.
+func (s *Organization) SetMessengers(val []ContactInfo) {
+	s.Messengers = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Organization) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// SetUpdatedAt sets the value of UpdatedAt.
+func (s *Organization) SetUpdatedAt(val time.Time) {
+	s.UpdatedAt = val
+}
+
+type Password string
+
+type Phone string
+
+// 0: Invalid
+// 1: User
+// 2: Admin.
+// Ref: #
+type Role int
+
+const (
+	Role1 Role = 1
+	Role2 Role = 2
+)
+
+// AllValues returns all Role values.
+func (Role) AllValues() []Role {
+	return []Role{
+		Role1,
+		Role2,
+	}
+}
+
+type TaxCode string
+
+type URL string
+
+// Ref: #
+type User struct {
+	ID            int             `json:"id"`
+	Email         Email           `json:"email"`
+	Phone         Phone           `json:"phone"`
+	FirstName     Name            `json:"first_name"`
+	LastName      Name            `json:"last_name"`
+	MiddleName    Name            `json:"middle_name"`
+	AvatarURL     URL             `json:"avatar_url"`
+	Verified      bool            `json:"verified"`
+	EmailVerified bool            `json:"email_verified"`
+	Role          Role            `json:"role"`
+	IsContractor  bool            `json:"is_contractor"`
+	IsBanned      bool            `json:"is_banned"`
+	Organization  OptOrganization `json:"organization"`
+	CreatedAt     time.Time       `json:"created_at"`
+	UpdatedAt     time.Time       `json:"updated_at"`
+}
+
+// GetID returns the value of ID.
+func (s *User) GetID() int {
+	return s.ID
+}
+
+// GetEmail returns the value of Email.
+func (s *User) GetEmail() Email {
+	return s.Email
+}
+
+// GetPhone returns the value of Phone.
+func (s *User) GetPhone() Phone {
+	return s.Phone
+}
+
+// GetFirstName returns the value of FirstName.
+func (s *User) GetFirstName() Name {
+	return s.FirstName
+}
+
+// GetLastName returns the value of LastName.
+func (s *User) GetLastName() Name {
+	return s.LastName
+}
+
+// GetMiddleName returns the value of MiddleName.
+func (s *User) GetMiddleName() Name {
+	return s.MiddleName
+}
+
+// GetAvatarURL returns the value of AvatarURL.
+func (s *User) GetAvatarURL() URL {
+	return s.AvatarURL
+}
+
+// GetVerified returns the value of Verified.
+func (s *User) GetVerified() bool {
+	return s.Verified
+}
+
+// GetEmailVerified returns the value of EmailVerified.
+func (s *User) GetEmailVerified() bool {
+	return s.EmailVerified
+}
+
+// GetRole returns the value of Role.
+func (s *User) GetRole() Role {
+	return s.Role
+}
+
+// GetIsContractor returns the value of IsContractor.
+func (s *User) GetIsContractor() bool {
+	return s.IsContractor
+}
+
+// GetIsBanned returns the value of IsBanned.
+func (s *User) GetIsBanned() bool {
+	return s.IsBanned
+}
+
+// GetOrganization returns the value of Organization.
+func (s *User) GetOrganization() OptOrganization {
+	return s.Organization
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *User) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// GetUpdatedAt returns the value of UpdatedAt.
+func (s *User) GetUpdatedAt() time.Time {
+	return s.UpdatedAt
+}
+
+// SetID sets the value of ID.
+func (s *User) SetID(val int) {
+	s.ID = val
+}
+
+// SetEmail sets the value of Email.
+func (s *User) SetEmail(val Email) {
+	s.Email = val
+}
+
+// SetPhone sets the value of Phone.
+func (s *User) SetPhone(val Phone) {
+	s.Phone = val
+}
+
+// SetFirstName sets the value of FirstName.
+func (s *User) SetFirstName(val Name) {
+	s.FirstName = val
+}
+
+// SetLastName sets the value of LastName.
+func (s *User) SetLastName(val Name) {
+	s.LastName = val
+}
+
+// SetMiddleName sets the value of MiddleName.
+func (s *User) SetMiddleName(val Name) {
+	s.MiddleName = val
+}
+
+// SetAvatarURL sets the value of AvatarURL.
+func (s *User) SetAvatarURL(val URL) {
+	s.AvatarURL = val
+}
+
+// SetVerified sets the value of Verified.
+func (s *User) SetVerified(val bool) {
+	s.Verified = val
+}
+
+// SetEmailVerified sets the value of EmailVerified.
+func (s *User) SetEmailVerified(val bool) {
+	s.EmailVerified = val
+}
+
+// SetRole sets the value of Role.
+func (s *User) SetRole(val Role) {
+	s.Role = val
+}
+
+// SetIsContractor sets the value of IsContractor.
+func (s *User) SetIsContractor(val bool) {
+	s.IsContractor = val
+}
+
+// SetIsBanned sets the value of IsBanned.
+func (s *User) SetIsBanned(val bool) {
+	s.IsBanned = val
+}
+
+// SetOrganization sets the value of Organization.
+func (s *User) SetOrganization(val OptOrganization) {
+	s.Organization = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *User) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// SetUpdatedAt sets the value of UpdatedAt.
+func (s *User) SetUpdatedAt(val time.Time) {
+	s.UpdatedAt = val
+}
+
 type V1AuthSigninPostOK struct {
-	AccessToken string `json:"access_token"`
+	Data V1AuthSigninPostOKData `json:"data"`
 }
 
-// GetAccessToken returns the value of AccessToken.
-func (s *V1AuthSigninPostOK) GetAccessToken() string {
-	return s.AccessToken
+// GetData returns the value of Data.
+func (s *V1AuthSigninPostOK) GetData() V1AuthSigninPostOKData {
+	return s.Data
 }
 
-// SetAccessToken sets the value of AccessToken.
-func (s *V1AuthSigninPostOK) SetAccessToken(val string) {
-	s.AccessToken = val
+// SetData sets the value of Data.
+func (s *V1AuthSigninPostOK) SetData(val V1AuthSigninPostOKData) {
+	s.Data = val
+}
+
+type V1AuthSigninPostOKData struct {
+	User User `json:"user"`
+}
+
+// GetUser returns the value of User.
+func (s *V1AuthSigninPostOKData) GetUser() User {
+	return s.User
+}
+
+// SetUser sets the value of User.
+func (s *V1AuthSigninPostOKData) SetUser(val User) {
+	s.User = val
 }
 
 // V1AuthSigninPostOKHeaders wraps V1AuthSigninPostOK with response headers.
@@ -174,42 +696,56 @@ func (s *V1AuthSigninPostOKHeaders) SetResponse(val V1AuthSigninPostOK) {
 func (*V1AuthSigninPostOKHeaders) v1AuthSigninPostRes() {}
 
 type V1AuthSigninPostReq struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    Email    `json:"email"`
+	Password Password `json:"password"`
 }
 
 // GetEmail returns the value of Email.
-func (s *V1AuthSigninPostReq) GetEmail() string {
+func (s *V1AuthSigninPostReq) GetEmail() Email {
 	return s.Email
 }
 
 // GetPassword returns the value of Password.
-func (s *V1AuthSigninPostReq) GetPassword() string {
+func (s *V1AuthSigninPostReq) GetPassword() Password {
 	return s.Password
 }
 
 // SetEmail sets the value of Email.
-func (s *V1AuthSigninPostReq) SetEmail(val string) {
+func (s *V1AuthSigninPostReq) SetEmail(val Email) {
 	s.Email = val
 }
 
 // SetPassword sets the value of Password.
-func (s *V1AuthSigninPostReq) SetPassword(val string) {
+func (s *V1AuthSigninPostReq) SetPassword(val Password) {
 	s.Password = val
 }
 
 type V1AuthSignupPostCreated struct {
-	AccessToken string `json:"access_token"`
+	Data V1AuthSignupPostCreatedData `json:"data"`
 }
 
-// GetAccessToken returns the value of AccessToken.
-func (s *V1AuthSignupPostCreated) GetAccessToken() string {
-	return s.AccessToken
+// GetData returns the value of Data.
+func (s *V1AuthSignupPostCreated) GetData() V1AuthSignupPostCreatedData {
+	return s.Data
 }
 
-// SetAccessToken sets the value of AccessToken.
-func (s *V1AuthSignupPostCreated) SetAccessToken(val string) {
-	s.AccessToken = val
+// SetData sets the value of Data.
+func (s *V1AuthSignupPostCreated) SetData(val V1AuthSignupPostCreatedData) {
+	s.Data = val
+}
+
+type V1AuthSignupPostCreatedData struct {
+	User User `json:"user"`
+}
+
+// GetUser returns the value of User.
+func (s *V1AuthSignupPostCreatedData) GetUser() User {
+	return s.User
+}
+
+// SetUser sets the value of User.
+func (s *V1AuthSignupPostCreatedData) SetUser(val User) {
+	s.User = val
 }
 
 // V1AuthSignupPostCreatedHeaders wraps V1AuthSignupPostCreated with response headers.
@@ -241,54 +777,54 @@ func (s *V1AuthSignupPostCreatedHeaders) SetResponse(val V1AuthSignupPostCreated
 func (*V1AuthSignupPostCreatedHeaders) v1AuthSignupPostRes() {}
 
 type V1AuthSignupPostReq struct {
-	Email        string    `json:"email"`
-	Phone        string    `json:"phone"`
-	Password     string    `json:"password"`
-	FirstName    string    `json:"first_name"`
-	LastName     string    `json:"last_name"`
-	MiddleName   string    `json:"middle_name"`
-	AvatarURL    OptString `json:"avatar_url"`
-	Inn          string    `json:"inn"`
-	IsContractor bool      `json:"is_contractor"`
+	Email        Email    `json:"email"`
+	Phone        Phone    `json:"phone"`
+	Password     Password `json:"password"`
+	FirstName    Name     `json:"first_name"`
+	LastName     Name     `json:"last_name"`
+	MiddleName   Name     `json:"middle_name"`
+	AvatarURL    OptURL   `json:"avatar_url"`
+	Inn          Inn      `json:"inn"`
+	IsContractor bool     `json:"is_contractor"`
 }
 
 // GetEmail returns the value of Email.
-func (s *V1AuthSignupPostReq) GetEmail() string {
+func (s *V1AuthSignupPostReq) GetEmail() Email {
 	return s.Email
 }
 
 // GetPhone returns the value of Phone.
-func (s *V1AuthSignupPostReq) GetPhone() string {
+func (s *V1AuthSignupPostReq) GetPhone() Phone {
 	return s.Phone
 }
 
 // GetPassword returns the value of Password.
-func (s *V1AuthSignupPostReq) GetPassword() string {
+func (s *V1AuthSignupPostReq) GetPassword() Password {
 	return s.Password
 }
 
 // GetFirstName returns the value of FirstName.
-func (s *V1AuthSignupPostReq) GetFirstName() string {
+func (s *V1AuthSignupPostReq) GetFirstName() Name {
 	return s.FirstName
 }
 
 // GetLastName returns the value of LastName.
-func (s *V1AuthSignupPostReq) GetLastName() string {
+func (s *V1AuthSignupPostReq) GetLastName() Name {
 	return s.LastName
 }
 
 // GetMiddleName returns the value of MiddleName.
-func (s *V1AuthSignupPostReq) GetMiddleName() string {
+func (s *V1AuthSignupPostReq) GetMiddleName() Name {
 	return s.MiddleName
 }
 
 // GetAvatarURL returns the value of AvatarURL.
-func (s *V1AuthSignupPostReq) GetAvatarURL() OptString {
+func (s *V1AuthSignupPostReq) GetAvatarURL() OptURL {
 	return s.AvatarURL
 }
 
 // GetInn returns the value of Inn.
-func (s *V1AuthSignupPostReq) GetInn() string {
+func (s *V1AuthSignupPostReq) GetInn() Inn {
 	return s.Inn
 }
 
@@ -298,42 +834,42 @@ func (s *V1AuthSignupPostReq) GetIsContractor() bool {
 }
 
 // SetEmail sets the value of Email.
-func (s *V1AuthSignupPostReq) SetEmail(val string) {
+func (s *V1AuthSignupPostReq) SetEmail(val Email) {
 	s.Email = val
 }
 
 // SetPhone sets the value of Phone.
-func (s *V1AuthSignupPostReq) SetPhone(val string) {
+func (s *V1AuthSignupPostReq) SetPhone(val Phone) {
 	s.Phone = val
 }
 
 // SetPassword sets the value of Password.
-func (s *V1AuthSignupPostReq) SetPassword(val string) {
+func (s *V1AuthSignupPostReq) SetPassword(val Password) {
 	s.Password = val
 }
 
 // SetFirstName sets the value of FirstName.
-func (s *V1AuthSignupPostReq) SetFirstName(val string) {
+func (s *V1AuthSignupPostReq) SetFirstName(val Name) {
 	s.FirstName = val
 }
 
 // SetLastName sets the value of LastName.
-func (s *V1AuthSignupPostReq) SetLastName(val string) {
+func (s *V1AuthSignupPostReq) SetLastName(val Name) {
 	s.LastName = val
 }
 
 // SetMiddleName sets the value of MiddleName.
-func (s *V1AuthSignupPostReq) SetMiddleName(val string) {
+func (s *V1AuthSignupPostReq) SetMiddleName(val Name) {
 	s.MiddleName = val
 }
 
 // SetAvatarURL sets the value of AvatarURL.
-func (s *V1AuthSignupPostReq) SetAvatarURL(val OptString) {
+func (s *V1AuthSignupPostReq) SetAvatarURL(val OptURL) {
 	s.AvatarURL = val
 }
 
 // SetInn sets the value of Inn.
-func (s *V1AuthSignupPostReq) SetInn(val string) {
+func (s *V1AuthSignupPostReq) SetInn(val Inn) {
 	s.Inn = val
 }
 

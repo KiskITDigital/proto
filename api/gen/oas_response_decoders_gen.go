@@ -49,6 +49,15 @@ func decodeV1AuthSigninPostResponse(resp *http.Response) (res V1AuthSigninPostRe
 				}
 				return res, err
 			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
+			}
 			var wrapper V1AuthSigninPostOKHeaders
 			wrapper.Response = response
 			h := uri.NewHeaderDecoder(resp.Header)
@@ -171,6 +180,15 @@ func decodeV1AuthSignupPostResponse(resp *http.Response) (res V1AuthSignupPostRe
 					Err:         err,
 				}
 				return res, err
+			}
+			// Validate response.
+			if err := func() error {
+				if err := response.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return res, errors.Wrap(err, "validate")
 			}
 			var wrapper V1AuthSignupPostCreatedHeaders
 			wrapper.Response = response

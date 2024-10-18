@@ -14,6 +14,7 @@ type Handler struct {
 
 type Service interface {
 	SignUp(ctx context.Context, params authService.SignUpParams) (authService.SignUpResult, error)
+	SignIn(ctx context.Context, params authService.SignInParams) (authService.SignInResult, error)
 }
 
 func New(logger *slog.Logger, svc Service) *Handler {

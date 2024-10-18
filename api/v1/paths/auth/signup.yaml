@@ -43,15 +43,20 @@ post:
         Set-Cookie:
           schema:
             type: string
-            example: refresh_token=7ff581a1-4dcf-4f53-a9cb-0ef408d4a7bb; Path=/; Max-Age=1727209098; HttpOnly; Secure; SameSite=Lax
+            example: ubrato_session=7ff581a1-4dcf-4f53-a9cb-0ef408d4a7bb; Path=/; Max-Age=1727209098; HttpOnly; Secure; SameSite=Lax
       content:
         application/json:
           schema:
             type: object
             required:
-              - access_token
+              - data
             properties:
-              access_token:
-                type: string
+              data:
+                type: object
+                required: 
+                  - user
+                properties:
+                  user:
+                    $ref: "../../schemas/User.yaml"
     default:
       $ref: "../../responses/Error.yaml"

@@ -8,6 +8,497 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
+func (s Email) Validate() error {
+	alias := (string)(s)
+	if err := (validate.String{
+		MinLength:    0,
+		MinLengthSet: false,
+		MaxLength:    0,
+		MaxLengthSet: false,
+		Email:        true,
+		Hostname:     false,
+		Regex:        nil,
+	}).Validate(string(alias)); err != nil {
+		return errors.Wrap(err, "string")
+	}
+	return nil
+}
+
+func (s Inn) Validate() error {
+	alias := (string)(s)
+	if err := (validate.String{
+		MinLength:    0,
+		MinLengthSet: false,
+		MaxLength:    0,
+		MaxLengthSet: false,
+		Email:        false,
+		Hostname:     false,
+		Regex:        regexMap["^\\d{10,12}$"],
+	}).Validate(string(alias)); err != nil {
+		return errors.Wrap(err, "string")
+	}
+	return nil
+}
+
+func (s Kpp) Validate() error {
+	alias := (string)(s)
+	if err := (validate.String{
+		MinLength:    0,
+		MinLengthSet: false,
+		MaxLength:    0,
+		MaxLengthSet: false,
+		Email:        false,
+		Hostname:     false,
+		Regex:        regexMap["^\\d{9}$"],
+	}).Validate(string(alias)); err != nil {
+		return errors.Wrap(err, "string")
+	}
+	return nil
+}
+
+func (s Name) Validate() error {
+	alias := (string)(s)
+	if err := (validate.String{
+		MinLength:    3,
+		MinLengthSet: true,
+		MaxLength:    0,
+		MaxLengthSet: false,
+		Email:        false,
+		Hostname:     false,
+		Regex:        regexMap["^[а-яА-ЯёЁ]+$"],
+	}).Validate(string(alias)); err != nil {
+		return errors.Wrap(err, "string")
+	}
+	return nil
+}
+
+func (s Ogrn) Validate() error {
+	alias := (string)(s)
+	if err := (validate.String{
+		MinLength:    0,
+		MinLengthSet: false,
+		MaxLength:    0,
+		MaxLengthSet: false,
+		Email:        false,
+		Hostname:     false,
+		Regex:        regexMap["^\\d{13}$"],
+	}).Validate(string(alias)); err != nil {
+		return errors.Wrap(err, "string")
+	}
+	return nil
+}
+
+func (s Okpo) Validate() error {
+	alias := (string)(s)
+	if err := (validate.String{
+		MinLength:    0,
+		MinLengthSet: false,
+		MaxLength:    0,
+		MaxLengthSet: false,
+		Email:        false,
+		Hostname:     false,
+		Regex:        regexMap["^\\d{8,10,14}$"],
+	}).Validate(string(alias)); err != nil {
+		return errors.Wrap(err, "string")
+	}
+	return nil
+}
+
+func (s *Organization) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.BrandName.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "brand_name",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.FullName.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "full_name",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.ShortName.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "short_name",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.Inn.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "inn",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.Okpo.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "okpo",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.Ogrn.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "ogrn",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.Kpp.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "kpp",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.TaxCode.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "tax_code",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.AvatarURL.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "avatar_url",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Emails == nil {
+			return errors.New("nil is invalid value")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "emails",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Phones == nil {
+			return errors.New("nil is invalid value")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "phones",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if s.Messengers == nil {
+			return errors.New("nil is invalid value")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "messengers",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s Password) Validate() error {
+	alias := (string)(s)
+	if err := (validate.String{
+		MinLength:    0,
+		MinLengthSet: false,
+		MaxLength:    0,
+		MaxLengthSet: false,
+		Email:        false,
+		Hostname:     false,
+		Regex:        regexMap["^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$"],
+	}).Validate(string(alias)); err != nil {
+		return errors.Wrap(err, "string")
+	}
+	return nil
+}
+
+func (s Phone) Validate() error {
+	alias := (string)(s)
+	if err := (validate.String{
+		MinLength:    0,
+		MinLengthSet: false,
+		MaxLength:    0,
+		MaxLengthSet: false,
+		Email:        false,
+		Hostname:     false,
+		Regex:        regexMap["^\\+?\\d{10,14}$"],
+	}).Validate(string(alias)); err != nil {
+		return errors.Wrap(err, "string")
+	}
+	return nil
+}
+
+func (s Role) Validate() error {
+	switch s {
+	case 1:
+		return nil
+	case 2:
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
+func (s TaxCode) Validate() error {
+	alias := (string)(s)
+	if err := (validate.String{
+		MinLength:    0,
+		MinLengthSet: false,
+		MaxLength:    0,
+		MaxLengthSet: false,
+		Email:        false,
+		Hostname:     false,
+		Regex:        regexMap["^\\d+$"],
+	}).Validate(string(alias)); err != nil {
+		return errors.Wrap(err, "string")
+	}
+	return nil
+}
+
+func (s URL) Validate() error {
+	alias := (string)(s)
+	if err := (validate.String{
+		MinLength:    0,
+		MinLengthSet: false,
+		MaxLength:    0,
+		MaxLengthSet: false,
+		Email:        false,
+		Hostname:     false,
+		Regex:        regexMap["^https?:\\/\\/[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$"],
+	}).Validate(string(alias)); err != nil {
+		return errors.Wrap(err, "string")
+	}
+	return nil
+}
+
+func (s *User) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Email.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "email",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.Phone.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "phone",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.FirstName.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "first_name",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.LastName.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "last_name",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.MiddleName.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "middle_name",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.AvatarURL.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "avatar_url",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.Role.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "role",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if value, ok := s.Organization.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "organization",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *V1AuthSigninPostOK) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Data.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "data",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *V1AuthSigninPostOKData) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.User.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "user",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *V1AuthSigninPostOKHeaders) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Response.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "Response",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
 func (s *V1AuthSigninPostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -15,21 +506,93 @@ func (s *V1AuthSigninPostReq) Validate() error {
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := (validate.String{
-			MinLength:    0,
-			MinLengthSet: false,
-			MaxLength:    0,
-			MaxLengthSet: false,
-			Email:        true,
-			Hostname:     false,
-			Regex:        nil,
-		}).Validate(string(s.Email)); err != nil {
-			return errors.Wrap(err, "string")
+		if err := s.Email.Validate(); err != nil {
+			return err
 		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "email",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.Password.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "password",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *V1AuthSignupPostCreated) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Data.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "data",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *V1AuthSignupPostCreatedData) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.User.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "user",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *V1AuthSignupPostCreatedHeaders) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Response.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "Response",
 			Error: err,
 		})
 	}
@@ -46,16 +609,8 @@ func (s *V1AuthSignupPostReq) Validate() error {
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := (validate.String{
-			MinLength:    0,
-			MinLengthSet: false,
-			MaxLength:    0,
-			MaxLengthSet: false,
-			Email:        true,
-			Hostname:     false,
-			Regex:        nil,
-		}).Validate(string(s.Email)); err != nil {
-			return errors.Wrap(err, "string")
+		if err := s.Email.Validate(); err != nil {
+			return err
 		}
 		return nil
 	}(); err != nil {
@@ -65,16 +620,8 @@ func (s *V1AuthSignupPostReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if err := (validate.String{
-			MinLength:    0,
-			MinLengthSet: false,
-			MaxLength:    0,
-			MaxLengthSet: false,
-			Email:        false,
-			Hostname:     false,
-			Regex:        regexMap["^\\+?\\d{10,14}$"],
-		}).Validate(string(s.Phone)); err != nil {
-			return errors.Wrap(err, "string")
+		if err := s.Phone.Validate(); err != nil {
+			return err
 		}
 		return nil
 	}(); err != nil {
@@ -84,16 +631,8 @@ func (s *V1AuthSignupPostReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if err := (validate.String{
-			MinLength:    0,
-			MinLengthSet: false,
-			MaxLength:    0,
-			MaxLengthSet: false,
-			Email:        false,
-			Hostname:     false,
-			Regex:        regexMap["^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$"],
-		}).Validate(string(s.Password)); err != nil {
-			return errors.Wrap(err, "string")
+		if err := s.Password.Validate(); err != nil {
+			return err
 		}
 		return nil
 	}(); err != nil {
@@ -103,16 +642,8 @@ func (s *V1AuthSignupPostReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if err := (validate.String{
-			MinLength:    3,
-			MinLengthSet: true,
-			MaxLength:    0,
-			MaxLengthSet: false,
-			Email:        false,
-			Hostname:     false,
-			Regex:        regexMap["^[а-яА-ЯёЁ]+$"],
-		}).Validate(string(s.FirstName)); err != nil {
-			return errors.Wrap(err, "string")
+		if err := s.FirstName.Validate(); err != nil {
+			return err
 		}
 		return nil
 	}(); err != nil {
@@ -122,16 +653,8 @@ func (s *V1AuthSignupPostReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if err := (validate.String{
-			MinLength:    3,
-			MinLengthSet: true,
-			MaxLength:    0,
-			MaxLengthSet: false,
-			Email:        false,
-			Hostname:     false,
-			Regex:        regexMap["^[а-яА-ЯёЁ]+$"],
-		}).Validate(string(s.LastName)); err != nil {
-			return errors.Wrap(err, "string")
+		if err := s.LastName.Validate(); err != nil {
+			return err
 		}
 		return nil
 	}(); err != nil {
@@ -141,16 +664,8 @@ func (s *V1AuthSignupPostReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if err := (validate.String{
-			MinLength:    3,
-			MinLengthSet: true,
-			MaxLength:    0,
-			MaxLengthSet: false,
-			Email:        false,
-			Hostname:     false,
-			Regex:        regexMap["^[а-яА-ЯёЁ]+$"],
-		}).Validate(string(s.MiddleName)); err != nil {
-			return errors.Wrap(err, "string")
+		if err := s.MiddleName.Validate(); err != nil {
+			return err
 		}
 		return nil
 	}(); err != nil {
@@ -162,16 +677,8 @@ func (s *V1AuthSignupPostReq) Validate() error {
 	if err := func() error {
 		if value, ok := s.AvatarURL.Get(); ok {
 			if err := func() error {
-				if err := (validate.String{
-					MinLength:    0,
-					MinLengthSet: false,
-					MaxLength:    0,
-					MaxLengthSet: false,
-					Email:        false,
-					Hostname:     false,
-					Regex:        regexMap["^https?:\\/\\/[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$"],
-				}).Validate(string(value)); err != nil {
-					return errors.Wrap(err, "string")
+				if err := value.Validate(); err != nil {
+					return err
 				}
 				return nil
 			}(); err != nil {
@@ -186,16 +693,8 @@ func (s *V1AuthSignupPostReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if err := (validate.String{
-			MinLength:    0,
-			MinLengthSet: false,
-			MaxLength:    0,
-			MaxLengthSet: false,
-			Email:        false,
-			Hostname:     false,
-			Regex:        regexMap["^\\d{10,12}$"],
-		}).Validate(string(s.Inn)); err != nil {
-			return errors.Wrap(err, "string")
+		if err := s.Inn.Validate(); err != nil {
+			return err
 		}
 		return nil
 	}(); err != nil {

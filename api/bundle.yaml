@@ -25,11 +25,9 @@ paths:
                 - password
               properties:
                 email:
-                  type: string
-                  format: email
+                  $ref: '#/components/schemas/email'
                 password:
-                  type: string
-                  format: password
+                  $ref: '#/components/schemas/password'
       responses:
         '200':
           description: Success
@@ -37,16 +35,21 @@ paths:
             Set-Cookie:
               schema:
                 type: string
-                example: refresh_token=7ff581a1-4dcf-4f53-a9cb-0ef408d4a7bb; Path=/; Max-Age=1727209098; HttpOnly; Secure; SameSite=Lax
+                example: ubrato_session=7ff581a1-4dcf-4f53-a9cb-0ef408d4a7bb; Path=/; Max-Age=1727209098; HttpOnly; Secure; SameSite=Lax
           content:
             application/json:
               schema:
                 type: object
                 required:
-                  - access_token
+                  - data
                 properties:
-                  access_token:
-                    type: string
+                  data:
+                    type: object
+                    required:
+                      - user
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/User'
         default:
           $ref: '#/components/responses/Error'
   /v1/auth/signup:
@@ -71,38 +74,21 @@ paths:
                 - is_contractor
               properties:
                 email:
-                  type: string
-                  format: email
+                  $ref: '#/components/schemas/email'
                 phone:
-                  type: string
-                  format: phone
-                  pattern: ^\+?\d{10,14}$
+                  $ref: '#/components/schemas/phone'
                 password:
-                  type: string
-                  format: password
-                  pattern: ^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$
+                  $ref: '#/components/schemas/password'
                 first_name:
-                  type: string
-                  minLength: 3
-                  pattern: ^[а-яА-ЯёЁ]+$
-                  example: Иван
+                  $ref: '#/components/schemas/name'
                 last_name:
-                  type: string
-                  minLength: 3
-                  pattern: ^[а-яА-ЯёЁ]+$
-                  example: Иванов
+                  $ref: '#/components/schemas/name'
                 middle_name:
-                  type: string
-                  minLength: 3
-                  pattern: ^[а-яА-ЯёЁ]+$
-                  example: Иванович
+                  $ref: '#/components/schemas/name'
                 avatar_url:
-                  type: string
-                  pattern: ^https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$
-                  example: https://s3.ubrato.ru/qwerty
+                  $ref: '#/components/schemas/url'
                 inn:
-                  type: string
-                  pattern: ^\d{10,12}$
+                  $ref: '#/components/schemas/inn'
                 is_contractor:
                   type: boolean
       responses:
@@ -112,20 +98,33 @@ paths:
             Set-Cookie:
               schema:
                 type: string
-                example: refresh_token=7ff581a1-4dcf-4f53-a9cb-0ef408d4a7bb; Path=/; Max-Age=1727209098; HttpOnly; Secure; SameSite=Lax
+                example: ubrato_session=7ff581a1-4dcf-4f53-a9cb-0ef408d4a7bb; Path=/; Max-Age=1727209098; HttpOnly; Secure; SameSite=Lax
           content:
             application/json:
               schema:
                 type: object
                 required:
-                  - access_token
+                  - data
                 properties:
-                  access_token:
-                    type: string
+                  data:
+                    type: object
+                    required:
+                      - user
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/User'
         default:
           $ref: '#/components/responses/Error'
 components:
   schemas:
+    email:
+      type: string
+      format: email
+      example: example@ubrato.ru
+    password:
+      type: string
+      format: password
+      pattern: ^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$
     Error:
       type: object
       required:
@@ -151,6 +150,165 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/Error'
+    phone:
+      type: string
+      format: phone
+      pattern: ^\+?\d{10,14}$
+    name:
+      type: string
+      minLength: 3
+      pattern: ^[а-яА-ЯёЁ]+$
+      example: Абоба
+    url:
+      type: string
+      pattern: ^https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$
+      example: https://s3.ubrato.ru/qwerty
+    role:
+      type: integer
+      enum:
+        - 1
+        - 2
+      description: |
+        0: Invalid
+        1: User
+        2: Admin
+    inn:
+      type: string
+      pattern: ^\d{10,12}$
+    okpo:
+      type: string
+      pattern: ^\d{8,10,14}$
+    ogrn:
+      type: string
+      pattern: ^\d{13}$
+    kpp:
+      type: string
+      pattern: ^\d{9}$
+    tax_code:
+      type: string
+      pattern: ^\d+$
+    Contact_info:
+      type: object
+      required:
+        - contact
+        - info
+      properties:
+        contact:
+          type: string
+          minLenght: 1
+        info:
+          type: string
+          minLenght: 1
+    Organization:
+      type: object
+      required:
+        - id
+        - brand_name
+        - full_name
+        - short_name
+        - inn
+        - okpo
+        - ogrn
+        - kpp
+        - tax_code
+        - address
+        - avatar_url
+        - emails
+        - phones
+        - messengers
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+        brand_name:
+          $ref: '#/components/schemas/name'
+        full_name:
+          $ref: '#/components/schemas/name'
+        short_name:
+          $ref: '#/components/schemas/name'
+        inn:
+          $ref: '#/components/schemas/inn'
+        okpo:
+          $ref: '#/components/schemas/okpo'
+        ogrn:
+          $ref: '#/components/schemas/ogrn'
+        kpp:
+          $ref: '#/components/schemas/kpp'
+        tax_code:
+          $ref: '#/components/schemas/tax_code'
+        address:
+          type: string
+        avatar_url:
+          $ref: '#/components/schemas/url'
+        emails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact_info'
+        phones:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact_info'
+        messengers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact_info'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    User:
+      type: object
+      required:
+        - id
+        - email
+        - phone
+        - first_name
+        - last_name
+        - middle_name
+        - avatar_url
+        - verified
+        - email_verified
+        - role
+        - is_contractor
+        - is_banned
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+        email:
+          $ref: '#/components/schemas/email'
+        phone:
+          $ref: '#/components/schemas/phone'
+        first_name:
+          $ref: '#/components/schemas/name'
+        last_name:
+          $ref: '#/components/schemas/name'
+        middle_name:
+          $ref: '#/components/schemas/name'
+        avatar_url:
+          $ref: '#/components/schemas/url'
+        verified:
+          type: boolean
+        email_verified:
+          type: boolean
+        role:
+          $ref: '#/components/schemas/role'
+        is_contractor:
+          type: boolean
+        is_banned:
+          type: boolean
+        organization:
+          $ref: '#/components/schemas/Organization'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
   responses:
     Error:
       description: Error

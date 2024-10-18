@@ -20,7 +20,7 @@ type Suggestion struct {
 type SuggestionData struct {
 	Name    SuggestionDataName    `json:"name"`
 	OKPO    string                `json:"okpo"`
-	ORGN    string                `json:"orgn"`
+	OGRN    string                `json:"ogrn"`
 	KPP     string                `json:"kpp"`
 	INN     string                `json:"inn"`
 	Address SuggestionDataAddress `json:"address"`
