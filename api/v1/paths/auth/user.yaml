@@ -1,0 +1,30 @@
+get:
+  tags:
+    - auth
+  summary: Get currently authenticated user
+  security:
+    - cookieAuth: []
+  responses:
+    '201':
+      description: Success
+      headers:
+        Set-Cookie:
+          schema:
+            type: string
+            example: ubrato_session=7ff581a1-4dcf-4f53-a9cb-0ef408d4a7bb; Path=/; Max-Age=1727209098; HttpOnly; Secure; SameSite=Lax
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required: 
+                  - user
+                properties:
+                  user:
+                    $ref: "../../schemas/User.yaml"
+    default:
+      $ref: "../../responses/Error.yaml"

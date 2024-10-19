@@ -8,3 +8,7 @@ type V1AuthSigninPostRes interface {
 type V1AuthSignupPostRes interface {
 	v1AuthSignupPostRes()
 }
+
+type V1AuthUserGetRes interface {
+	v1AuthUserGetRes()
+}

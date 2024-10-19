@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/cors"
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
 	"gitlab.ubrato.ru/ubrato/core/internal/config"
 )
@@ -20,6 +21,7 @@ type Server struct {
 func NewServer(logger *slog.Logger, cfg config.HTTP, router *Router) (*Server, error) {
 	apiServer, err := api.NewServer(
 		router,
+		router.Auth,
 		api.WithErrorHandler(router.HandleError),
 	)
 	if err != nil {
@@ -27,6 +29,8 @@ func NewServer(logger *slog.Logger, cfg config.HTTP, router *Router) (*Server, e
 	}
 
 	mux := chi.NewMux()
+	registerMiddleware(mux)
+
 	mux.Mount("/", apiServer)
 
 	registerSwaggerUIHandlers(logger, mux, cfg.SwaggerUIPath)
@@ -40,6 +44,23 @@ func NewServer(logger *slog.Logger, cfg config.HTTP, router *Router) (*Server, e
 	}
 
 	return server, nil
+}
+
+func newCORShandler() func(http.Handler) http.Handler {
+	return cors.Handler(cors.Options{
+		AllowedOrigins: []string{
+			"http://ubrato.ru",
+			"https://ubrato.ru",
+			"http://dev.ubrato.ru",
+			"https://dev.ubrato.ru",
+			"http://localhost",
+			"http://localhost:5174",
+			"http://localhost:5173",
+		},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: true,
+	})
 }
 
 func (s *Server) Start() error {

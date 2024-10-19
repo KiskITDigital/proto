@@ -1,4 +1,4 @@
-openapi: 3.1.0
+openapi: 3.0.3
 info:
   title: Ubrato core
   description: ubrato core oas
@@ -115,7 +115,47 @@ paths:
                         $ref: '#/components/schemas/User'
         default:
           $ref: '#/components/responses/Error'
+  /v1/auth/user:
+    get:
+      tags:
+        - auth
+      summary: Get currently authenticated user
+      security:
+        - cookieAuth: []
+      responses:
+        '201':
+          description: Success
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: ubrato_session=7ff581a1-4dcf-4f53-a9cb-0ef408d4a7bb; Path=/; Max-Age=1727209098; HttpOnly; Secure; SameSite=Lax
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - user
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/User'
+        default:
+          $ref: '#/components/responses/Error'
 components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: ubrato_session
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     email:
       type: string

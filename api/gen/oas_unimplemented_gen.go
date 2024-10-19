@@ -30,3 +30,12 @@ func (UnimplementedHandler) V1AuthSigninPost(ctx context.Context, req *V1AuthSig
 func (UnimplementedHandler) V1AuthSignupPost(ctx context.Context, req *V1AuthSignupPostReq) (r V1AuthSignupPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
+
+// V1AuthUserGet implements GET /v1/auth/user operation.
+//
+// Get currently authenticated user.
+//
+// GET /v1/auth/user
+func (UnimplementedHandler) V1AuthUserGet(ctx context.Context) (r V1AuthUserGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}

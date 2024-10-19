@@ -34,6 +34,20 @@ func (s *ContactInfo) SetInfo(val string) {
 	s.Info = val
 }
 
+type CookieAuth struct {
+	APIKey string
+}
+
+// GetAPIKey returns the value of APIKey.
+func (s *CookieAuth) GetAPIKey() string {
+	return s.APIKey
+}
+
+// SetAPIKey sets the value of APIKey.
+func (s *CookieAuth) SetAPIKey(val string) {
+	s.APIKey = val
+}
+
 type Email string
 
 // Ref: #
@@ -114,6 +128,7 @@ func (s *ErrorStatusCode) SetResponse(val WrappedError) {
 
 func (*ErrorStatusCode) v1AuthSigninPostRes() {}
 func (*ErrorStatusCode) v1AuthSignupPostRes() {}
+func (*ErrorStatusCode) v1AuthUserGetRes()    {}
 
 type Inn string
 
@@ -877,6 +892,62 @@ func (s *V1AuthSignupPostReq) SetInn(val Inn) {
 func (s *V1AuthSignupPostReq) SetIsContractor(val bool) {
 	s.IsContractor = val
 }
+
+type V1AuthUserGetCreated struct {
+	Data V1AuthUserGetCreatedData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1AuthUserGetCreated) GetData() V1AuthUserGetCreatedData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1AuthUserGetCreated) SetData(val V1AuthUserGetCreatedData) {
+	s.Data = val
+}
+
+type V1AuthUserGetCreatedData struct {
+	User User `json:"user"`
+}
+
+// GetUser returns the value of User.
+func (s *V1AuthUserGetCreatedData) GetUser() User {
+	return s.User
+}
+
+// SetUser sets the value of User.
+func (s *V1AuthUserGetCreatedData) SetUser(val User) {
+	s.User = val
+}
+
+// V1AuthUserGetCreatedHeaders wraps V1AuthUserGetCreated with response headers.
+type V1AuthUserGetCreatedHeaders struct {
+	SetCookie OptString
+	Response  V1AuthUserGetCreated
+}
+
+// GetSetCookie returns the value of SetCookie.
+func (s *V1AuthUserGetCreatedHeaders) GetSetCookie() OptString {
+	return s.SetCookie
+}
+
+// GetResponse returns the value of Response.
+func (s *V1AuthUserGetCreatedHeaders) GetResponse() V1AuthUserGetCreated {
+	return s.Response
+}
+
+// SetSetCookie sets the value of SetCookie.
+func (s *V1AuthUserGetCreatedHeaders) SetSetCookie(val OptString) {
+	s.SetCookie = val
+}
+
+// SetResponse sets the value of Response.
+func (s *V1AuthUserGetCreatedHeaders) SetResponse(val V1AuthUserGetCreated) {
+	s.Response = val
+}
+
+func (*V1AuthUserGetCreatedHeaders) v1AuthUserGetRes() {}
 
 // Ref: #
 type WrappedError struct {

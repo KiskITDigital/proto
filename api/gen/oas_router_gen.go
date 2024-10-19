@@ -48,9 +48,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/v1/auth/sign"
+		case '/': // Prefix: "/v1/auth/"
 			origElem := elem
-			if l := len("/v1/auth/sign"); len(elem) >= l && elem[0:l] == "/v1/auth/sign" {
+			if l := len("/v1/auth/"); len(elem) >= l && elem[0:l] == "/v1/auth/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -60,30 +60,66 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
-			case 'i': // Prefix: "in"
+			case 's': // Prefix: "sign"
 				origElem := elem
-				if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+				if l := len("sign"); len(elem) >= l && elem[0:l] == "sign" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "POST":
-						s.handleV1AuthSigninPostRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "POST")
+					break
+				}
+				switch elem[0] {
+				case 'i': // Prefix: "in"
+					origElem := elem
+					if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+						elem = elem[l:]
+					} else {
+						break
 					}
 
-					return
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleV1AuthSigninPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'u': // Prefix: "up"
+					origElem := elem
+					if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleV1AuthSignupPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
-			case 'u': // Prefix: "up"
+			case 'u': // Prefix: "user"
 				origElem := elem
-				if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
+				if l := len("user"); len(elem) >= l && elem[0:l] == "user" {
 					elem = elem[l:]
 				} else {
 					break
@@ -92,10 +128,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				if len(elem) == 0 {
 					// Leaf node.
 					switch r.Method {
-					case "POST":
-						s.handleV1AuthSignupPostRequest([0]string{}, elemIsEscaped, w, r)
+					case "GET":
+						s.handleV1AuthUserGetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
-						s.notAllowed(w, r, "POST")
+						s.notAllowed(w, r, "GET")
 					}
 
 					return
@@ -185,9 +221,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 			break
 		}
 		switch elem[0] {
-		case '/': // Prefix: "/v1/auth/sign"
+		case '/': // Prefix: "/v1/auth/"
 			origElem := elem
-			if l := len("/v1/auth/sign"); len(elem) >= l && elem[0:l] == "/v1/auth/sign" {
+			if l := len("/v1/auth/"); len(elem) >= l && elem[0:l] == "/v1/auth/" {
 				elem = elem[l:]
 			} else {
 				break
@@ -197,34 +233,74 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
-			case 'i': // Prefix: "in"
+			case 's': // Prefix: "sign"
 				origElem := elem
-				if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+				if l := len("sign"); len(elem) >= l && elem[0:l] == "sign" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "POST":
-						r.name = "V1AuthSigninPost"
-						r.summary = "Signin User"
-						r.operationID = ""
-						r.pathPattern = "/v1/auth/signin"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
+					break
+				}
+				switch elem[0] {
+				case 'i': // Prefix: "in"
+					origElem := elem
+					if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+						elem = elem[l:]
+					} else {
+						break
 					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "V1AuthSigninPost"
+							r.summary = "Signin User"
+							r.operationID = ""
+							r.pathPattern = "/v1/auth/signin"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'u': // Prefix: "up"
+					origElem := elem
+					if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "V1AuthSignupPost"
+							r.summary = "Signup User"
+							r.operationID = ""
+							r.pathPattern = "/v1/auth/signup"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
-			case 'u': // Prefix: "up"
+			case 'u': // Prefix: "user"
 				origElem := elem
-				if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
+				if l := len("user"); len(elem) >= l && elem[0:l] == "user" {
 					elem = elem[l:]
 				} else {
 					break
@@ -233,11 +309,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					// Leaf node.
 					switch method {
-					case "POST":
-						r.name = "V1AuthSignupPost"
-						r.summary = "Signup User"
+					case "GET":
+						r.name = "V1AuthUserGet"
+						r.summary = "Get currently authenticated user"
 						r.operationID = ""
-						r.pathPattern = "/v1/auth/signup"
+						r.pathPattern = "/v1/auth/user"
 						r.args = args
 						r.count = 0
 						return r, true
