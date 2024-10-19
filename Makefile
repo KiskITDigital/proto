@@ -34,13 +34,13 @@ generate.api: $(ogen)
 	docker run --rm -v `pwd`:/spec redocly/cli:1.25.3 bundle ./api/openapi.yaml > ./api/bundle.yaml
 
 .PHONY: migrate.postgres.create
-migrate.postgres.create:
+migrate.postgres.create: $(goose)
 	$(goose) create $(name) sql -dir $(POSTGRES_MIGRATIONS_PATH)
 
 .PHONY: migrate.postgres.up
-migrate.postgres.up:
+migrate.postgres.up: $(goose)
 	$(goose) postgres $(POSTGRES_DSN) up -dir $(POSTGRES_MIGRATIONS_PATH)
 
 .PHONY: migrate.postgres.down
-migrate.postgres.down:
+migrate.postgres.down: $(goose)
 	$(goose) postgres $(POSTGRES_DSN) down-to 0 -dir $(POSTGRES_MIGRATIONS_PATH)

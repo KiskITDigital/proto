@@ -13,6 +13,15 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// V1AuthRefreshPost implements POST /v1/auth/refresh operation.
+//
+// Get new access token.
+//
+// POST /v1/auth/refresh
+func (UnimplementedHandler) V1AuthRefreshPost(ctx context.Context, params V1AuthRefreshPostParams) (r V1AuthRefreshPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1AuthSigninPost implements POST /v1/auth/signin operation.
 //
 // Signin User.

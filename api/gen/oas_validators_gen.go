@@ -430,6 +430,75 @@ func (s *User) Validate() error {
 	return nil
 }
 
+func (s *V1AuthRefreshPostOK) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Data.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "data",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *V1AuthRefreshPostOKData) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.User.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "user",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *V1AuthRefreshPostOKHeaders) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Response.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "Response",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
 func (s *V1AuthSigninPostOK) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -709,7 +778,7 @@ func (s *V1AuthSignupPostReq) Validate() error {
 	return nil
 }
 
-func (s *V1AuthUserGetCreated) Validate() error {
+func (s *V1AuthUserGetOK) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -732,7 +801,7 @@ func (s *V1AuthUserGetCreated) Validate() error {
 	return nil
 }
 
-func (s *V1AuthUserGetCreatedData) Validate() error {
+func (s *V1AuthUserGetOKData) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -746,29 +815,6 @@ func (s *V1AuthUserGetCreatedData) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "user",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
-func (s *V1AuthUserGetCreatedHeaders) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.Response.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "Response",
 			Error: err,
 		})
 	}

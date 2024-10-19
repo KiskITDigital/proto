@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"gitlab.ubrato.ru/ubrato/core/internal/gateway/dadata"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/token"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 	"golang.org/x/exp/rand"
@@ -16,6 +17,7 @@ type Service struct {
 	organizationStore OrganizationStore
 	sessionStore      SessionStore
 	dadataGateway     DadataGateway
+	tokenAuthorizer   TokenAuthorizer
 }
 
 const (
@@ -41,11 +43,18 @@ type OrganizationStore interface {
 }
 
 type SessionStore interface {
-	Create(ctx context.Context, qe store.QueryExecutor, session store.SessionCreateParams) (models.Session, error)
+	Create(ctx context.Context, qe store.QueryExecutor, params store.SessionCreateParams) (models.Session, error)
+	Get(ctx context.Context, qe store.QueryExecutor, params store.SessionGetParams) (models.Session, error)
+	Update(ctx context.Context, qe store.QueryExecutor, params store.SessionUpdateParams) (models.Session, error)
 }
 
 type DadataGateway interface {
 	FindByINN(ctx context.Context, INN string) (dadata.FindByInnResponse, error)
+}
+
+type TokenAuthorizer interface {
+	GenerateToken(payload token.Payload) (string, error)
+	GetRefreshTokenDurationLifetime() time.Duration
 }
 
 func New(
@@ -54,6 +63,7 @@ func New(
 	organizationStore OrganizationStore,
 	sessionStore SessionStore,
 	dadataGateway DadataGateway,
+	tokenAuthorizer TokenAuthorizer,
 ) *Service {
 	return &Service{
 		psql:              psql,
@@ -61,6 +71,7 @@ func New(
 		organizationStore: organizationStore,
 		sessionStore:      sessionStore,
 		dadataGateway:     dadataGateway,
+		tokenAuthorizer:   tokenAuthorizer,
 	}
 }
 

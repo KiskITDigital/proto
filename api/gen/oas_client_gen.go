@@ -15,6 +15,7 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
 	"go.opentelemetry.io/otel/trace"
 
+	"github.com/ogen-go/ogen/conv"
 	ht "github.com/ogen-go/ogen/http"
 	"github.com/ogen-go/ogen/ogenerrors"
 	"github.com/ogen-go/ogen/uri"
@@ -22,6 +23,12 @@ import (
 
 // Invoker invokes operations described by OpenAPI v3 specification.
 type Invoker interface {
+	// V1AuthRefreshPost invokes POST /v1/auth/refresh operation.
+	//
+	// Get new access token.
+	//
+	// POST /v1/auth/refresh
+	V1AuthRefreshPost(ctx context.Context, params V1AuthRefreshPostParams) (V1AuthRefreshPostRes, error)
 	// V1AuthSigninPost invokes POST /v1/auth/signin operation.
 	//
 	// Signin User.
@@ -90,6 +97,126 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 		return c.serverURL
 	}
 	return u
+}
+
+// V1AuthRefreshPost invokes POST /v1/auth/refresh operation.
+//
+// Get new access token.
+//
+// POST /v1/auth/refresh
+func (c *Client) V1AuthRefreshPost(ctx context.Context, params V1AuthRefreshPostParams) (V1AuthRefreshPostRes, error) {
+	res, err := c.sendV1AuthRefreshPost(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1AuthRefreshPost(ctx context.Context, params V1AuthRefreshPostParams) (res V1AuthRefreshPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/auth/refresh"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1AuthRefreshPost",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/auth/refresh"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "EncodeCookieParams"
+	cookie := uri.NewCookieEncoder(r)
+	{
+		// Encode "ubrato_session" parameter.
+		cfg := uri.CookieParameterEncodingConfig{
+			Name:    "ubrato_session",
+			Explode: true,
+		}
+
+		if err := cookie.EncodeParam(cfg, func(e uri.Encoder) error {
+			return e.EncodeValue(conv.StringToString(params.UbratoSession))
+		}); err != nil {
+			return res, errors.Wrap(err, "encode cookie")
+		}
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:CookieAuth"
+			switch err := c.securityCookieAuth(ctx, "V1AuthRefreshPost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"CookieAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1AuthRefreshPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
 }
 
 // V1AuthSigninPost invokes POST /v1/auth/signin operation.
@@ -299,14 +426,14 @@ func (c *Client) sendV1AuthUserGet(ctx context.Context) (res V1AuthUserGetRes, e
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			stage = "Security:CookieAuth"
-			switch err := c.securityCookieAuth(ctx, "V1AuthUserGet", r); {
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1AuthUserGet", r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
 				// Skip this security.
 			default:
-				return res, errors.Wrap(err, "security \"CookieAuth\"")
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
 			}
 		}
 

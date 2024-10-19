@@ -47,9 +47,12 @@ paths:
                     type: object
                     required:
                       - user
+                      - access_token
                     properties:
                       user:
                         $ref: '#/components/schemas/User'
+                      access_token:
+                        type: string
         default:
           $ref: '#/components/responses/Error'
   /v1/auth/signup:
@@ -110,9 +113,12 @@ paths:
                     type: object
                     required:
                       - user
+                      - access_token
                     properties:
                       user:
                         $ref: '#/components/schemas/User'
+                      access_token:
+                        type: string
         default:
           $ref: '#/components/responses/Error'
   /v1/auth/user:
@@ -121,9 +127,41 @@ paths:
         - auth
       summary: Get currently authenticated user
       security:
+        - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - user
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/User'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/auth/refresh:
+    post:
+      tags:
+        - auth
+      summary: Get new access token
+      parameters:
+        - name: ubrato_session
+          in: cookie
+          required: true
+          description: The session ID for the user.
+          schema:
+            type: string
+      security:
         - cookieAuth: []
       responses:
-        '201':
+        '200':
           description: Success
           headers:
             Set-Cookie:
@@ -141,9 +179,12 @@ paths:
                     type: object
                     required:
                       - user
+                      - access_token
                     properties:
                       user:
                         $ref: '#/components/schemas/User'
+                      access_token:
+                        type: string
         default:
           $ref: '#/components/responses/Error'
 components:

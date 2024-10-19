@@ -3,15 +3,9 @@ get:
     - auth
   summary: Get currently authenticated user
   security:
-    - cookieAuth: []
+    - bearerAuth: []
   responses:
-    '201':
-      description: Success
-      headers:
-        Set-Cookie:
-          schema:
-            type: string
-            example: ubrato_session=7ff581a1-4dcf-4f53-a9cb-0ef408d4a7bb; Path=/; Max-Age=1727209098; HttpOnly; Secure; SameSite=Lax
+    '200':
       content:
         application/json:
           schema:

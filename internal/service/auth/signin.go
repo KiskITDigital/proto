@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/token"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 	"golang.org/x/crypto/bcrypt"
@@ -18,8 +19,9 @@ type SignInParams struct {
 }
 
 type SignInResult struct {
-	User    models.User
-	Session models.Session
+	User        models.User
+	Session     models.Session
+	AccessToken string
 }
 
 func (s *Service) SignIn(ctx context.Context, params SignInParams) (SignInResult, error) {
@@ -42,8 +44,18 @@ func (s *Service) SignIn(ctx context.Context, params SignInParams) (SignInResult
 		return SignInResult{}, fmt.Errorf("create session: %w", err)
 	}
 
+	rawToken, err := s.tokenAuthorizer.GenerateToken(token.Payload{
+		UserID:         user.ID,
+		OrganizationID: user.Organization.ID,
+		Role:           int(user.Role),
+	})
+	if err != nil {
+		return SignInResult{}, fmt.Errorf("generate access token: %w", err)
+	}
+
 	return SignInResult{
-		User:    user,
-		Session: session,
+		User:        user,
+		Session:     session,
+		AccessToken: rawToken,
 	}, nil
 }

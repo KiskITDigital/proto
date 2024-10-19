@@ -6,16 +6,12 @@ import (
 	"net/http"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
-	"gitlab.ubrato.ru/ubrato/core/internal/service/auth"
 )
 
-func (h *Handler) V1AuthSigninPost(ctx context.Context, req *api.V1AuthSigninPostReq) (api.V1AuthSigninPostRes, error) {
-	resp, err := h.svc.SignIn(ctx, auth.SignInParams{
-		Email:    string(req.Email),
-		Password: string(req.Password),
-	})
+func (h *Handler) V1AuthRefreshPost(ctx context.Context, params api.V1AuthRefreshPostParams) (api.V1AuthRefreshPostRes, error) {
+	resp, err := h.svc.Refresh(ctx, params.UbratoSession)
 	if err != nil {
-		return nil, fmt.Errorf("sign in: %w", err)
+		return nil, fmt.Errorf("refresh session: %w", err)
 	}
 
 	cookie := http.Cookie{
@@ -28,10 +24,10 @@ func (h *Handler) V1AuthSigninPost(ctx context.Context, req *api.V1AuthSigninPos
 		SameSite: http.SameSiteNoneMode,
 	}
 
-	return &api.V1AuthSigninPostOKHeaders{
+	return &api.V1AuthRefreshPostOKHeaders{
 		SetCookie: api.NewOptString(cookie.String()),
-		Response: api.V1AuthSigninPostOK{
-			Data: api.V1AuthSigninPostOKData{
+		Response: api.V1AuthRefreshPostOK{
+			Data: api.V1AuthRefreshPostOKData{
 				User:        ConvertUserModelToApi(resp.User),
 				AccessToken: resp.AccessToken,
 			},

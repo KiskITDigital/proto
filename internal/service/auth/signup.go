@@ -7,6 +7,7 @@ import (
 
 	"github.com/google/uuid"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/crypto"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/token"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
@@ -25,8 +26,9 @@ type SignUpParams struct {
 }
 
 type SignUpResult struct {
-	User    models.User
-	Session models.Session
+	User        models.User
+	Session     models.Session
+	AccessToken string
 }
 
 func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult, error) {
@@ -89,6 +91,17 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 		}
 
 		result.Session = session
+
+		rawToken, err := s.tokenAuthorizer.GenerateToken(token.Payload{
+			UserID:         user.ID,
+			OrganizationID: user.Organization.ID,
+			Role:           int(user.Role),
+		})
+		if err != nil {
+			return fmt.Errorf("generate access token: %w", err)
+		}
+
+		result.AccessToken = rawToken
 
 		return nil
 	})

@@ -55,8 +55,11 @@ post:
                 type: object
                 required: 
                   - user
+                  - access_token
                 properties:
                   user:
                     $ref: "../../schemas/User.yaml"
+                  access_token:
+                    type: string
     default:
       $ref: "../../responses/Error.yaml"

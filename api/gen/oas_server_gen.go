@@ -8,6 +8,12 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// V1AuthRefreshPost implements POST /v1/auth/refresh operation.
+	//
+	// Get new access token.
+	//
+	// POST /v1/auth/refresh
+	V1AuthRefreshPost(ctx context.Context, params V1AuthRefreshPostParams) (V1AuthRefreshPostRes, error)
 	// V1AuthSigninPost implements POST /v1/auth/signin operation.
 	//
 	// Signin User.

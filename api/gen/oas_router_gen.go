@@ -60,6 +60,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
+			case 'r': // Prefix: "refresh"
+				origElem := elem
+				if l := len("refresh"); len(elem) >= l && elem[0:l] == "refresh" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "POST":
+						s.handleV1AuthRefreshPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "POST")
+					}
+
+					return
+				}
+
+				elem = origElem
 			case 's': // Prefix: "sign"
 				origElem := elem
 				if l := len("sign"); len(elem) >= l && elem[0:l] == "sign" {
@@ -233,6 +254,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
+			case 'r': // Prefix: "refresh"
+				origElem := elem
+				if l := len("refresh"); len(elem) >= l && elem[0:l] == "refresh" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "POST":
+						r.name = "V1AuthRefreshPost"
+						r.summary = "Get new access token"
+						r.operationID = ""
+						r.pathPattern = "/v1/auth/refresh"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+
+				elem = origElem
 			case 's': // Prefix: "sign"
 				origElem := elem
 				if l := len("sign"); len(elem) >= l && elem[0:l] == "sign" {

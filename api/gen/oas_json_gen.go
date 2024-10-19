@@ -1496,6 +1496,211 @@ func (s *User) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
+func (s *V1AuthRefreshPostOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *V1AuthRefreshPostOK) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("data")
+		s.Data.Encode(e)
+	}
+}
+
+var jsonFieldsNameOfV1AuthRefreshPostOK = [1]string{
+	0: "data",
+}
+
+// Decode decodes V1AuthRefreshPostOK from json.
+func (s *V1AuthRefreshPostOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode V1AuthRefreshPostOK to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "data":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				if err := s.Data.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"data\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode V1AuthRefreshPostOK")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfV1AuthRefreshPostOK) {
+					name = jsonFieldsNameOfV1AuthRefreshPostOK[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *V1AuthRefreshPostOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *V1AuthRefreshPostOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *V1AuthRefreshPostOKData) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *V1AuthRefreshPostOKData) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("user")
+		s.User.Encode(e)
+	}
+	{
+		e.FieldStart("access_token")
+		e.Str(s.AccessToken)
+	}
+}
+
+var jsonFieldsNameOfV1AuthRefreshPostOKData = [2]string{
+	0: "user",
+	1: "access_token",
+}
+
+// Decode decodes V1AuthRefreshPostOKData from json.
+func (s *V1AuthRefreshPostOKData) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode V1AuthRefreshPostOKData to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "user":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				if err := s.User.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"user\"")
+			}
+		case "access_token":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.AccessToken = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"access_token\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode V1AuthRefreshPostOKData")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfV1AuthRefreshPostOKData) {
+					name = jsonFieldsNameOfV1AuthRefreshPostOKData[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *V1AuthRefreshPostOKData) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *V1AuthRefreshPostOKData) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
 func (s *V1AuthSigninPostOK) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -1602,10 +1807,15 @@ func (s *V1AuthSigninPostOKData) encodeFields(e *jx.Encoder) {
 		e.FieldStart("user")
 		s.User.Encode(e)
 	}
+	{
+		e.FieldStart("access_token")
+		e.Str(s.AccessToken)
+	}
 }
 
-var jsonFieldsNameOfV1AuthSigninPostOKData = [1]string{
+var jsonFieldsNameOfV1AuthSigninPostOKData = [2]string{
 	0: "user",
+	1: "access_token",
 }
 
 // Decode decodes V1AuthSigninPostOKData from json.
@@ -1627,6 +1837,18 @@ func (s *V1AuthSigninPostOKData) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"user\"")
 			}
+		case "access_token":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.AccessToken = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"access_token\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -1637,7 +1859,7 @@ func (s *V1AuthSigninPostOKData) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000001,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -1899,10 +2121,15 @@ func (s *V1AuthSignupPostCreatedData) encodeFields(e *jx.Encoder) {
 		e.FieldStart("user")
 		s.User.Encode(e)
 	}
+	{
+		e.FieldStart("access_token")
+		e.Str(s.AccessToken)
+	}
 }
 
-var jsonFieldsNameOfV1AuthSignupPostCreatedData = [1]string{
+var jsonFieldsNameOfV1AuthSignupPostCreatedData = [2]string{
 	0: "user",
+	1: "access_token",
 }
 
 // Decode decodes V1AuthSignupPostCreatedData from json.
@@ -1924,6 +2151,18 @@ func (s *V1AuthSignupPostCreatedData) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"user\"")
 			}
+		case "access_token":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.AccessToken = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"access_token\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -1934,7 +2173,7 @@ func (s *V1AuthSignupPostCreatedData) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000001,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -2200,28 +2439,28 @@ func (s *V1AuthSignupPostReq) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
-func (s *V1AuthUserGetCreated) Encode(e *jx.Encoder) {
+func (s *V1AuthUserGetOK) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *V1AuthUserGetCreated) encodeFields(e *jx.Encoder) {
+func (s *V1AuthUserGetOK) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("data")
 		s.Data.Encode(e)
 	}
 }
 
-var jsonFieldsNameOfV1AuthUserGetCreated = [1]string{
+var jsonFieldsNameOfV1AuthUserGetOK = [1]string{
 	0: "data",
 }
 
-// Decode decodes V1AuthUserGetCreated from json.
-func (s *V1AuthUserGetCreated) Decode(d *jx.Decoder) error {
+// Decode decodes V1AuthUserGetOK from json.
+func (s *V1AuthUserGetOK) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode V1AuthUserGetCreated to nil")
+		return errors.New("invalid: unable to decode V1AuthUserGetOK to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -2242,7 +2481,7 @@ func (s *V1AuthUserGetCreated) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode V1AuthUserGetCreated")
+		return errors.Wrap(err, "decode V1AuthUserGetOK")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -2259,8 +2498,8 @@ func (s *V1AuthUserGetCreated) Decode(d *jx.Decoder) error {
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfV1AuthUserGetCreated) {
-					name = jsonFieldsNameOfV1AuthUserGetCreated[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfV1AuthUserGetOK) {
+					name = jsonFieldsNameOfV1AuthUserGetOK[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -2281,41 +2520,41 @@ func (s *V1AuthUserGetCreated) Decode(d *jx.Decoder) error {
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *V1AuthUserGetCreated) MarshalJSON() ([]byte, error) {
+func (s *V1AuthUserGetOK) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1AuthUserGetCreated) UnmarshalJSON(data []byte) error {
+func (s *V1AuthUserGetOK) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
 // Encode implements json.Marshaler.
-func (s *V1AuthUserGetCreatedData) Encode(e *jx.Encoder) {
+func (s *V1AuthUserGetOKData) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *V1AuthUserGetCreatedData) encodeFields(e *jx.Encoder) {
+func (s *V1AuthUserGetOKData) encodeFields(e *jx.Encoder) {
 	{
 		e.FieldStart("user")
 		s.User.Encode(e)
 	}
 }
 
-var jsonFieldsNameOfV1AuthUserGetCreatedData = [1]string{
+var jsonFieldsNameOfV1AuthUserGetOKData = [1]string{
 	0: "user",
 }
 
-// Decode decodes V1AuthUserGetCreatedData from json.
-func (s *V1AuthUserGetCreatedData) Decode(d *jx.Decoder) error {
+// Decode decodes V1AuthUserGetOKData from json.
+func (s *V1AuthUserGetOKData) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode V1AuthUserGetCreatedData to nil")
+		return errors.New("invalid: unable to decode V1AuthUserGetOKData to nil")
 	}
 	var requiredBitSet [1]uint8
 
@@ -2336,7 +2575,7 @@ func (s *V1AuthUserGetCreatedData) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode V1AuthUserGetCreatedData")
+		return errors.Wrap(err, "decode V1AuthUserGetOKData")
 	}
 	// Validate required fields.
 	var failures []validate.FieldError
@@ -2353,8 +2592,8 @@ func (s *V1AuthUserGetCreatedData) Decode(d *jx.Decoder) error {
 				bitIdx := bits.TrailingZeros8(result)
 				fieldIdx := i*8 + bitIdx
 				var name string
-				if fieldIdx < len(jsonFieldsNameOfV1AuthUserGetCreatedData) {
-					name = jsonFieldsNameOfV1AuthUserGetCreatedData[fieldIdx]
+				if fieldIdx < len(jsonFieldsNameOfV1AuthUserGetOKData) {
+					name = jsonFieldsNameOfV1AuthUserGetOKData[fieldIdx]
 				} else {
 					name = strconv.Itoa(fieldIdx)
 				}
@@ -2375,14 +2614,14 @@ func (s *V1AuthUserGetCreatedData) Decode(d *jx.Decoder) error {
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *V1AuthUserGetCreatedData) MarshalJSON() ([]byte, error) {
+func (s *V1AuthUserGetOKData) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1AuthUserGetCreatedData) UnmarshalJSON(data []byte) error {
+func (s *V1AuthUserGetOKData) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

@@ -8,3 +8,12 @@ type SessionCreateParams struct {
 	IPAddress string
 	ExpiresAt time.Time
 }
+
+type SessionGetParams struct {
+	ID string
+}
+
+type SessionUpdateParams struct {
+	ID        string
+	ExpiresAt time.Time
+}

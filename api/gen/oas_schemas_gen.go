@@ -8,6 +8,20 @@ import (
 	"github.com/go-faster/jx"
 )
 
+type BearerAuth struct {
+	Token string
+}
+
+// GetToken returns the value of Token.
+func (s *BearerAuth) GetToken() string {
+	return s.Token
+}
+
+// SetToken sets the value of Token.
+func (s *BearerAuth) SetToken(val string) {
+	s.Token = val
+}
+
 // Ref: #
 type ContactInfo struct {
 	Contact string `json:"contact"`
@@ -126,9 +140,10 @@ func (s *ErrorStatusCode) SetResponse(val WrappedError) {
 	s.Response = val
 }
 
-func (*ErrorStatusCode) v1AuthSigninPostRes() {}
-func (*ErrorStatusCode) v1AuthSignupPostRes() {}
-func (*ErrorStatusCode) v1AuthUserGetRes()    {}
+func (*ErrorStatusCode) v1AuthRefreshPostRes() {}
+func (*ErrorStatusCode) v1AuthSigninPostRes()  {}
+func (*ErrorStatusCode) v1AuthSignupPostRes()  {}
+func (*ErrorStatusCode) v1AuthUserGetRes()     {}
 
 type Inn string
 
@@ -654,6 +669,73 @@ func (s *User) SetUpdatedAt(val time.Time) {
 	s.UpdatedAt = val
 }
 
+type V1AuthRefreshPostOK struct {
+	Data V1AuthRefreshPostOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1AuthRefreshPostOK) GetData() V1AuthRefreshPostOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1AuthRefreshPostOK) SetData(val V1AuthRefreshPostOKData) {
+	s.Data = val
+}
+
+type V1AuthRefreshPostOKData struct {
+	User        User   `json:"user"`
+	AccessToken string `json:"access_token"`
+}
+
+// GetUser returns the value of User.
+func (s *V1AuthRefreshPostOKData) GetUser() User {
+	return s.User
+}
+
+// GetAccessToken returns the value of AccessToken.
+func (s *V1AuthRefreshPostOKData) GetAccessToken() string {
+	return s.AccessToken
+}
+
+// SetUser sets the value of User.
+func (s *V1AuthRefreshPostOKData) SetUser(val User) {
+	s.User = val
+}
+
+// SetAccessToken sets the value of AccessToken.
+func (s *V1AuthRefreshPostOKData) SetAccessToken(val string) {
+	s.AccessToken = val
+}
+
+// V1AuthRefreshPostOKHeaders wraps V1AuthRefreshPostOK with response headers.
+type V1AuthRefreshPostOKHeaders struct {
+	SetCookie OptString
+	Response  V1AuthRefreshPostOK
+}
+
+// GetSetCookie returns the value of SetCookie.
+func (s *V1AuthRefreshPostOKHeaders) GetSetCookie() OptString {
+	return s.SetCookie
+}
+
+// GetResponse returns the value of Response.
+func (s *V1AuthRefreshPostOKHeaders) GetResponse() V1AuthRefreshPostOK {
+	return s.Response
+}
+
+// SetSetCookie sets the value of SetCookie.
+func (s *V1AuthRefreshPostOKHeaders) SetSetCookie(val OptString) {
+	s.SetCookie = val
+}
+
+// SetResponse sets the value of Response.
+func (s *V1AuthRefreshPostOKHeaders) SetResponse(val V1AuthRefreshPostOK) {
+	s.Response = val
+}
+
+func (*V1AuthRefreshPostOKHeaders) v1AuthRefreshPostRes() {}
+
 type V1AuthSigninPostOK struct {
 	Data V1AuthSigninPostOKData `json:"data"`
 }
@@ -669,7 +751,8 @@ func (s *V1AuthSigninPostOK) SetData(val V1AuthSigninPostOKData) {
 }
 
 type V1AuthSigninPostOKData struct {
-	User User `json:"user"`
+	User        User   `json:"user"`
+	AccessToken string `json:"access_token"`
 }
 
 // GetUser returns the value of User.
@@ -677,9 +760,19 @@ func (s *V1AuthSigninPostOKData) GetUser() User {
 	return s.User
 }
 
+// GetAccessToken returns the value of AccessToken.
+func (s *V1AuthSigninPostOKData) GetAccessToken() string {
+	return s.AccessToken
+}
+
 // SetUser sets the value of User.
 func (s *V1AuthSigninPostOKData) SetUser(val User) {
 	s.User = val
+}
+
+// SetAccessToken sets the value of AccessToken.
+func (s *V1AuthSigninPostOKData) SetAccessToken(val string) {
+	s.AccessToken = val
 }
 
 // V1AuthSigninPostOKHeaders wraps V1AuthSigninPostOK with response headers.
@@ -750,7 +843,8 @@ func (s *V1AuthSignupPostCreated) SetData(val V1AuthSignupPostCreatedData) {
 }
 
 type V1AuthSignupPostCreatedData struct {
-	User User `json:"user"`
+	User        User   `json:"user"`
+	AccessToken string `json:"access_token"`
 }
 
 // GetUser returns the value of User.
@@ -758,9 +852,19 @@ func (s *V1AuthSignupPostCreatedData) GetUser() User {
 	return s.User
 }
 
+// GetAccessToken returns the value of AccessToken.
+func (s *V1AuthSignupPostCreatedData) GetAccessToken() string {
+	return s.AccessToken
+}
+
 // SetUser sets the value of User.
 func (s *V1AuthSignupPostCreatedData) SetUser(val User) {
 	s.User = val
+}
+
+// SetAccessToken sets the value of AccessToken.
+func (s *V1AuthSignupPostCreatedData) SetAccessToken(val string) {
+	s.AccessToken = val
 }
 
 // V1AuthSignupPostCreatedHeaders wraps V1AuthSignupPostCreated with response headers.
@@ -893,61 +997,35 @@ func (s *V1AuthSignupPostReq) SetIsContractor(val bool) {
 	s.IsContractor = val
 }
 
-type V1AuthUserGetCreated struct {
-	Data V1AuthUserGetCreatedData `json:"data"`
+type V1AuthUserGetOK struct {
+	Data V1AuthUserGetOKData `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1AuthUserGetCreated) GetData() V1AuthUserGetCreatedData {
+func (s *V1AuthUserGetOK) GetData() V1AuthUserGetOKData {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1AuthUserGetCreated) SetData(val V1AuthUserGetCreatedData) {
+func (s *V1AuthUserGetOK) SetData(val V1AuthUserGetOKData) {
 	s.Data = val
 }
 
-type V1AuthUserGetCreatedData struct {
+func (*V1AuthUserGetOK) v1AuthUserGetRes() {}
+
+type V1AuthUserGetOKData struct {
 	User User `json:"user"`
 }
 
 // GetUser returns the value of User.
-func (s *V1AuthUserGetCreatedData) GetUser() User {
+func (s *V1AuthUserGetOKData) GetUser() User {
 	return s.User
 }
 
 // SetUser sets the value of User.
-func (s *V1AuthUserGetCreatedData) SetUser(val User) {
+func (s *V1AuthUserGetOKData) SetUser(val User) {
 	s.User = val
 }
-
-// V1AuthUserGetCreatedHeaders wraps V1AuthUserGetCreated with response headers.
-type V1AuthUserGetCreatedHeaders struct {
-	SetCookie OptString
-	Response  V1AuthUserGetCreated
-}
-
-// GetSetCookie returns the value of SetCookie.
-func (s *V1AuthUserGetCreatedHeaders) GetSetCookie() OptString {
-	return s.SetCookie
-}
-
-// GetResponse returns the value of Response.
-func (s *V1AuthUserGetCreatedHeaders) GetResponse() V1AuthUserGetCreated {
-	return s.Response
-}
-
-// SetSetCookie sets the value of SetCookie.
-func (s *V1AuthUserGetCreatedHeaders) SetSetCookie(val OptString) {
-	s.SetCookie = val
-}
-
-// SetResponse sets the value of Response.
-func (s *V1AuthUserGetCreatedHeaders) SetResponse(val V1AuthUserGetCreated) {
-	s.Response = val
-}
-
-func (*V1AuthUserGetCreatedHeaders) v1AuthUserGetRes() {}
 
 // Ref: #
 type WrappedError struct {

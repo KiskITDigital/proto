@@ -15,7 +15,8 @@ paths:
     $ref: "./v1/paths/auth/signup.yaml"
   /v1/auth/user:
     $ref: "./v1/paths/auth/user.yaml"
-  #   $ref: "./v1/paths/auth/refresh.yaml"
+  /v1/auth/refresh:
+    $ref: "./v1/paths/auth/refresh.yaml"
   # /v1/auth/reset-password:
   #   $ref: "./v1/paths/auth/reset-password.yaml"
   # /v1/auth/confirm-email:
