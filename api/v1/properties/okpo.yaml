@@ -1,2 +1,2 @@
 type: string
-pattern: ^\d{8,10,14}$
+pattern: ^\d{8}$|^\d{10}$|^\d{14}$

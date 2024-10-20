@@ -107,7 +107,7 @@ func (s Okpo) Validate() error {
 		MaxLengthSet: false,
 		Email:        false,
 		Hostname:     false,
-		Regex:        regexMap["^\\d{8,10,14}$"],
+		Regex:        regexMap["^\\d{8}$|^\\d{10}$|^\\d{14}$"],
 	}).Validate(string(alias)); err != nil {
 		return errors.Wrap(err, "string")
 	}

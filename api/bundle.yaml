@@ -671,7 +671,7 @@ components:
       pattern: ^\d{10,12}$
     okpo:
       type: string
-      pattern: ^\d{8,10,14}$
+      pattern: ^\d{8}$|^\d{10}$|^\d{14}$
     ogrn:
       type: string
       pattern: ^\d{13}$
@@ -681,6 +681,7 @@ components:
     tax_code:
       type: string
       pattern: ^\d+$
+      example: '1234'
     Contact_info:
       type: object
       required:
