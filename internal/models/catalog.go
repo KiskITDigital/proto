@@ -8,8 +8,8 @@ type CatalogService struct {
 	Name     string
 }
 
-func ConvertModelCatalogServiceToApi(c CatalogService) api.ServicesItem {
-	return api.ServicesItem{
+func ConvertModelCatalogServiceToApi(c CatalogService) api.Service {
+	return api.Service{
 		ID:       c.ID,
 		ParentID: api.OptInt{Value: c.ParentID, Set: c.ParentID != 0},
 		Name:     c.Name,
@@ -26,8 +26,8 @@ type CatalogObject struct {
 
 type CatalogObjects []CatalogObject
 
-func ConvertModelCatalogObjectToApi(c CatalogObject) api.ObjectsItem {
-	return api.ObjectsItem{
+func ConvertModelCatalogObjectToApi(c CatalogObject) api.Object {
+	return api.Object{
 		ID:       c.ID,
 		ParentID: api.OptInt{Value: c.ParentID, Set: c.ParentID != 0},
 		Name:     c.Name,

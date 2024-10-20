@@ -301,6 +301,43 @@ paths:
                         $ref: '#/components/schemas/Services'
         default:
           $ref: '#/components/responses/Error'
+    post:
+      tags:
+        - catalog
+      summary: Create catalog service
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                parent_id:
+                  type: integer
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - objects
+                    properties:
+                      objects:
+                        $ref: '#/components/schemas/Service'
+        default:
+          $ref: '#/components/responses/Error'
   /v1/catalog/objects:
     get:
       tags:
@@ -322,6 +359,120 @@ paths:
                     properties:
                       objects:
                         $ref: '#/components/schemas/Objects'
+        default:
+          $ref: '#/components/responses/Error'
+    post:
+      tags:
+        - catalog
+      summary: Create catalog object
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                parent_id:
+                  type: integer
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - objects
+                    properties:
+                      objects:
+                        $ref: '#/components/schemas/Object'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/catalog/cities:
+    post:
+      tags:
+        - catalog
+      summary: Add city to catalog
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - region_id
+              properties:
+                name:
+                  type: string
+                region_id:
+                  type: integer
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - city
+                    properties:
+                      city:
+                        $ref: '#/components/schemas/City'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/catalog/regions:
+    post:
+      tags:
+        - catalog
+      summary: Add region to catalog
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - region
+                    properties:
+                      region:
+                        $ref: '#/components/schemas/Region'
         default:
           $ref: '#/components/responses/Error'
 components:
@@ -527,34 +678,38 @@ components:
         updated_at:
           type: string
           format: date-time
+    Service:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        parent_id:
+          type: integer
+        name:
+          type: string
     Services:
       type: array
       items:
-        type: object
-        required:
-          - id
-          - name
-        properties:
-          id:
-            type: integer
-          parent_id:
-            type: integer
-          name:
-            type: string
+        $ref: '#/components/schemas/Service'
+    Object:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        parent_id:
+          type: integer
+        name:
+          type: string
     Objects:
       type: array
       items:
-        type: object
-        required:
-          - id
-          - name
-        properties:
-          id:
-            type: integer
-          parent_id:
-            type: integer
-          name:
-            type: string
+        $ref: '#/components/schemas/Object'
     Tender:
       type: object
       required:
@@ -624,6 +779,30 @@ components:
         work_end:
           type: string
           format: date-time
+    Region:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: Москва и Московская область
+    City:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: Москва
+        region:
+          $ref: '#/components/schemas/Region'
   responses:
     Error:
       description: Error

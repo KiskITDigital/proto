@@ -204,7 +204,7 @@ func (s *TenderStore) GetByID(ctx context.Context, qe store.QueryExecutor, id in
 		&createdTender.IsContractPrice,
 		&createdTender.IsNDSPrice,
 		&createdTender.City.Name,
-		&createdTender.Region.Name,
+		&createdTender.City.Region.Name,
 		&createdTender.FloorSpace,
 		&createdTender.Description,
 		&createdTender.Wishes,

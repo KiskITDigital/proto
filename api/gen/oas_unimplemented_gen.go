@@ -49,6 +49,15 @@ func (UnimplementedHandler) V1AuthUserGet(ctx context.Context) (r V1AuthUserGetR
 	return r, ht.ErrNotImplemented
 }
 
+// V1CatalogCitiesPost implements POST /v1/catalog/cities operation.
+//
+// Add city to catalog.
+//
+// POST /v1/catalog/cities
+func (UnimplementedHandler) V1CatalogCitiesPost(ctx context.Context, req *V1CatalogCitiesPostReq) (r V1CatalogCitiesPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1CatalogObjectsGet implements GET /v1/catalog/objects operation.
 //
 // Get a list of all available objects.
@@ -58,12 +67,39 @@ func (UnimplementedHandler) V1CatalogObjectsGet(ctx context.Context) (r V1Catalo
 	return r, ht.ErrNotImplemented
 }
 
+// V1CatalogObjectsPost implements POST /v1/catalog/objects operation.
+//
+// Create catalog object.
+//
+// POST /v1/catalog/objects
+func (UnimplementedHandler) V1CatalogObjectsPost(ctx context.Context, req *V1CatalogObjectsPostReq) (r V1CatalogObjectsPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1CatalogRegionsPost implements POST /v1/catalog/regions operation.
+//
+// Add region to catalog.
+//
+// POST /v1/catalog/regions
+func (UnimplementedHandler) V1CatalogRegionsPost(ctx context.Context, req *V1CatalogRegionsPostReq) (r V1CatalogRegionsPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1CatalogServicesGet implements GET /v1/catalog/services operation.
 //
 // Get a list of all available services.
 //
 // GET /v1/catalog/services
 func (UnimplementedHandler) V1CatalogServicesGet(ctx context.Context) (r V1CatalogServicesGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1CatalogServicesPost implements POST /v1/catalog/services operation.
+//
+// Create catalog service.
+//
+// POST /v1/catalog/services
+func (UnimplementedHandler) V1CatalogServicesPost(ctx context.Context, req *V1CatalogServicesPostReq) (r V1CatalogServicesPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

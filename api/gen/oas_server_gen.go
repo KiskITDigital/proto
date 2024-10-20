@@ -32,18 +32,42 @@ type Handler interface {
 	//
 	// GET /v1/auth/user
 	V1AuthUserGet(ctx context.Context) (V1AuthUserGetRes, error)
+	// V1CatalogCitiesPost implements POST /v1/catalog/cities operation.
+	//
+	// Add city to catalog.
+	//
+	// POST /v1/catalog/cities
+	V1CatalogCitiesPost(ctx context.Context, req *V1CatalogCitiesPostReq) (V1CatalogCitiesPostRes, error)
 	// V1CatalogObjectsGet implements GET /v1/catalog/objects operation.
 	//
 	// Get a list of all available objects.
 	//
 	// GET /v1/catalog/objects
 	V1CatalogObjectsGet(ctx context.Context) (V1CatalogObjectsGetRes, error)
+	// V1CatalogObjectsPost implements POST /v1/catalog/objects operation.
+	//
+	// Create catalog object.
+	//
+	// POST /v1/catalog/objects
+	V1CatalogObjectsPost(ctx context.Context, req *V1CatalogObjectsPostReq) (V1CatalogObjectsPostRes, error)
+	// V1CatalogRegionsPost implements POST /v1/catalog/regions operation.
+	//
+	// Add region to catalog.
+	//
+	// POST /v1/catalog/regions
+	V1CatalogRegionsPost(ctx context.Context, req *V1CatalogRegionsPostReq) (V1CatalogRegionsPostRes, error)
 	// V1CatalogServicesGet implements GET /v1/catalog/services operation.
 	//
 	// Get a list of all available services.
 	//
 	// GET /v1/catalog/services
 	V1CatalogServicesGet(ctx context.Context) (V1CatalogServicesGetRes, error)
+	// V1CatalogServicesPost implements POST /v1/catalog/services operation.
+	//
+	// Create catalog service.
+	//
+	// POST /v1/catalog/services
+	V1CatalogServicesPost(ctx context.Context, req *V1CatalogServicesPostReq) (V1CatalogServicesPostRes, error)
 	// V1TendersCreatePost implements POST /v1/tenders/create operation.
 	//
 	// Create tender.

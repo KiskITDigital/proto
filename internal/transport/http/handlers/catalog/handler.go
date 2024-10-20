@@ -5,6 +5,7 @@ import (
 	"log/slog"
 
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
+	catalogService "gitlab.ubrato.ru/ubrato/core/internal/service/catalog"
 )
 
 type Handler struct {
@@ -15,6 +16,8 @@ type Handler struct {
 type Service interface {
 	GetObjects(ctx context.Context) (models.CatalogObjects, error)
 	GetServices(ctx context.Context) (models.CatalogServices, error)
+	CreateCity(ctx context.Context, params catalogService.CreateCityParams) (models.City, error)
+	CreateRegion(ctx context.Context, params catalogService.CreateRegionParams) (models.Region, error)
 }
 
 func New(logger *slog.Logger, svc Service) *Handler {

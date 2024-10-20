@@ -11,7 +11,6 @@ type Tender struct {
 	ID              int
 	Name            string
 	City            City
-	Region          Region
 	Organization    Organization
 	Price           float64
 	IsContractPrice bool
@@ -32,13 +31,32 @@ type Tender struct {
 }
 
 type City struct {
-	ID   int
-	Name string
+	ID     int
+	Name   string
+	Region Region
+}
+
+func ConvertCityModelToApi(city City) api.City {
+	return api.City{
+		ID:   city.ID,
+		Name: city.Name,
+		Region: api.OptRegion{
+			Value: ConvertRegionModelToApi(city.Region),
+			Set:   city.Region.ID != 0,
+		},
+	}
 }
 
 type Region struct {
 	ID   int
 	Name string
+}
+
+func ConvertRegionModelToApi(region Region) api.Region {
+	return api.Region{
+		ID:   region.ID,
+		Name: region.Name,
+	}
 }
 
 type TenderObject struct {
@@ -59,7 +77,7 @@ func ConvertTenderModelToApi(tender Tender) api.Tender {
 		Name:            tender.Name,
 		City:            tender.City.Name,
 		Organization:    api.OptOrganization{Value: ConvertOrganizationModelToApi(tender.Organization), Set: tender.Organization.ID != 0},
-		Region:          tender.Region.Name,
+		Region:          tender.City.Region.Name,
 		Price:           tender.Price,
 		IsContractPrice: tender.IsContractPrice,
 		IsNdsPrice:      tender.IsNDSPrice,
@@ -83,16 +101,16 @@ func ConvertTenderModelToApi(tender Tender) api.Tender {
 	}
 }
 
-func ConvertTenderServiceModelToApi(service TenderService) api.ServicesItem {
-	return api.ServicesItem{
+func ConvertTenderServiceModelToApi(service TenderService) api.Service {
+	return api.Service{
 		ID:       service.ID,
 		ParentID: api.OptInt{Value: service.ParentID, Set: service.ParentID != 0},
 		Name:     service.Name,
 	}
 }
 
-func ConvertTenderObjectModelToApi(object TenderObject) api.ObjectsItem {
-	return api.ObjectsItem{
+func ConvertTenderObjectModelToApi(object TenderObject) api.Object {
+	return api.Object{
 		ID:       object.ID,
 		ParentID: api.OptInt{Value: object.ParentID, Set: object.ParentID != 0},
 		Name:     object.Name,

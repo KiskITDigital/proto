@@ -186,6 +186,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
+				case 'c': // Prefix: "cities"
+					origElem := elem
+					if l := len("cities"); len(elem) >= l && elem[0:l] == "cities" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleV1CatalogCitiesPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
 				case 'o': // Prefix: "objects"
 					origElem := elem
 					if l := len("objects"); len(elem) >= l && elem[0:l] == "objects" {
@@ -199,8 +220,31 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						switch r.Method {
 						case "GET":
 							s.handleV1CatalogObjectsGetRequest([0]string{}, elemIsEscaped, w, r)
+						case "POST":
+							s.handleV1CatalogObjectsPostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "GET")
+							s.notAllowed(w, r, "GET,POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'r': // Prefix: "regions"
+					origElem := elem
+					if l := len("regions"); len(elem) >= l && elem[0:l] == "regions" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleV1CatalogRegionsPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
 						}
 
 						return
@@ -220,8 +264,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						switch r.Method {
 						case "GET":
 							s.handleV1CatalogServicesGetRequest([0]string{}, elemIsEscaped, w, r)
+						case "POST":
+							s.handleV1CatalogServicesPostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "GET")
+							s.notAllowed(w, r, "GET,POST")
 						}
 
 						return
@@ -489,6 +535,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
+				case 'c': // Prefix: "cities"
+					origElem := elem
+					if l := len("cities"); len(elem) >= l && elem[0:l] == "cities" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "V1CatalogCitiesPost"
+							r.summary = "Add city to catalog"
+							r.operationID = ""
+							r.pathPattern = "/v1/catalog/cities"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
 				case 'o': // Prefix: "objects"
 					origElem := elem
 					if l := len("objects"); len(elem) >= l && elem[0:l] == "objects" {
@@ -505,6 +576,39 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.summary = "Get a list of all available objects"
 							r.operationID = ""
 							r.pathPattern = "/v1/catalog/objects"
+							r.args = args
+							r.count = 0
+							return r, true
+						case "POST":
+							r.name = "V1CatalogObjectsPost"
+							r.summary = "Create catalog object"
+							r.operationID = ""
+							r.pathPattern = "/v1/catalog/objects"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'r': // Prefix: "regions"
+					origElem := elem
+					if l := len("regions"); len(elem) >= l && elem[0:l] == "regions" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "V1CatalogRegionsPost"
+							r.summary = "Add region to catalog"
+							r.operationID = ""
+							r.pathPattern = "/v1/catalog/regions"
 							r.args = args
 							r.count = 0
 							return r, true
@@ -528,6 +632,14 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						case "GET":
 							r.name = "V1CatalogServicesGet"
 							r.summary = "Get a list of all available services"
+							r.operationID = ""
+							r.pathPattern = "/v1/catalog/services"
+							r.args = args
+							r.count = 0
+							return r, true
+						case "POST":
+							r.name = "V1CatalogServicesPost"
+							r.summary = "Create catalog service"
 							r.operationID = ""
 							r.pathPattern = "/v1/catalog/services"
 							r.args = args

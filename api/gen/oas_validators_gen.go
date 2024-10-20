@@ -75,7 +75,7 @@ func (s Name) Validate() error {
 }
 
 func (s Objects) Validate() error {
-	alias := ([]ObjectsItem)(s)
+	alias := ([]Object)(s)
 	if alias == nil {
 		return errors.New("nil is invalid value")
 	}
@@ -302,7 +302,7 @@ func (s Role) Validate() error {
 }
 
 func (s Services) Validate() error {
-	alias := ([]ServicesItem)(s)
+	alias := ([]Service)(s)
 	if alias == nil {
 		return errors.New("nil is invalid value")
 	}

@@ -20,3 +20,40 @@ get:
                     $ref: "../../schemas/catalog/Objects.yaml"
     default:
       $ref: "../../responses/Error.yaml"
+post:
+  tags:
+    - catalog
+  summary: Create catalog object
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+            parent_id:
+              type: integer
+  responses:
+    '201':
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required: 
+                  - objects
+                properties:
+                  objects:
+                    $ref: "../../schemas/catalog/Object.yaml"
+    default:
+      $ref: "../../responses/Error.yaml"

@@ -47,18 +47,42 @@ type Invoker interface {
 	//
 	// GET /v1/auth/user
 	V1AuthUserGet(ctx context.Context) (V1AuthUserGetRes, error)
+	// V1CatalogCitiesPost invokes POST /v1/catalog/cities operation.
+	//
+	// Add city to catalog.
+	//
+	// POST /v1/catalog/cities
+	V1CatalogCitiesPost(ctx context.Context, request *V1CatalogCitiesPostReq) (V1CatalogCitiesPostRes, error)
 	// V1CatalogObjectsGet invokes GET /v1/catalog/objects operation.
 	//
 	// Get a list of all available objects.
 	//
 	// GET /v1/catalog/objects
 	V1CatalogObjectsGet(ctx context.Context) (V1CatalogObjectsGetRes, error)
+	// V1CatalogObjectsPost invokes POST /v1/catalog/objects operation.
+	//
+	// Create catalog object.
+	//
+	// POST /v1/catalog/objects
+	V1CatalogObjectsPost(ctx context.Context, request *V1CatalogObjectsPostReq) (V1CatalogObjectsPostRes, error)
+	// V1CatalogRegionsPost invokes POST /v1/catalog/regions operation.
+	//
+	// Add region to catalog.
+	//
+	// POST /v1/catalog/regions
+	V1CatalogRegionsPost(ctx context.Context, request *V1CatalogRegionsPostReq) (V1CatalogRegionsPostRes, error)
 	// V1CatalogServicesGet invokes GET /v1/catalog/services operation.
 	//
 	// Get a list of all available services.
 	//
 	// GET /v1/catalog/services
 	V1CatalogServicesGet(ctx context.Context) (V1CatalogServicesGetRes, error)
+	// V1CatalogServicesPost invokes POST /v1/catalog/services operation.
+	//
+	// Create catalog service.
+	//
+	// POST /v1/catalog/services
+	V1CatalogServicesPost(ctx context.Context, request *V1CatalogServicesPostReq) (V1CatalogServicesPostRes, error)
 	// V1TendersCreatePost invokes POST /v1/tenders/create operation.
 	//
 	// Create tender.
@@ -489,6 +513,113 @@ func (c *Client) sendV1AuthUserGet(ctx context.Context) (res V1AuthUserGetRes, e
 	return result, nil
 }
 
+// V1CatalogCitiesPost invokes POST /v1/catalog/cities operation.
+//
+// Add city to catalog.
+//
+// POST /v1/catalog/cities
+func (c *Client) V1CatalogCitiesPost(ctx context.Context, request *V1CatalogCitiesPostReq) (V1CatalogCitiesPostRes, error) {
+	res, err := c.sendV1CatalogCitiesPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendV1CatalogCitiesPost(ctx context.Context, request *V1CatalogCitiesPostReq) (res V1CatalogCitiesPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/catalog/cities"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1CatalogCitiesPost",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/catalog/cities"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1CatalogCitiesPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1CatalogCitiesPost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1CatalogCitiesPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // V1CatalogObjectsGet invokes GET /v1/catalog/objects operation.
 //
 // Get a list of all available objects.
@@ -560,6 +691,220 @@ func (c *Client) sendV1CatalogObjectsGet(ctx context.Context) (res V1CatalogObje
 	return result, nil
 }
 
+// V1CatalogObjectsPost invokes POST /v1/catalog/objects operation.
+//
+// Create catalog object.
+//
+// POST /v1/catalog/objects
+func (c *Client) V1CatalogObjectsPost(ctx context.Context, request *V1CatalogObjectsPostReq) (V1CatalogObjectsPostRes, error) {
+	res, err := c.sendV1CatalogObjectsPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendV1CatalogObjectsPost(ctx context.Context, request *V1CatalogObjectsPostReq) (res V1CatalogObjectsPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/catalog/objects"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1CatalogObjectsPost",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/catalog/objects"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1CatalogObjectsPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1CatalogObjectsPost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1CatalogObjectsPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1CatalogRegionsPost invokes POST /v1/catalog/regions operation.
+//
+// Add region to catalog.
+//
+// POST /v1/catalog/regions
+func (c *Client) V1CatalogRegionsPost(ctx context.Context, request *V1CatalogRegionsPostReq) (V1CatalogRegionsPostRes, error) {
+	res, err := c.sendV1CatalogRegionsPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendV1CatalogRegionsPost(ctx context.Context, request *V1CatalogRegionsPostReq) (res V1CatalogRegionsPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/catalog/regions"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1CatalogRegionsPost",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/catalog/regions"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1CatalogRegionsPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1CatalogRegionsPost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1CatalogRegionsPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // V1CatalogServicesGet invokes GET /v1/catalog/services operation.
 //
 // Get a list of all available services.
@@ -624,6 +969,113 @@ func (c *Client) sendV1CatalogServicesGet(ctx context.Context) (res V1CatalogSer
 
 	stage = "DecodeResponse"
 	result, err := decodeV1CatalogServicesGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1CatalogServicesPost invokes POST /v1/catalog/services operation.
+//
+// Create catalog service.
+//
+// POST /v1/catalog/services
+func (c *Client) V1CatalogServicesPost(ctx context.Context, request *V1CatalogServicesPostReq) (V1CatalogServicesPostRes, error) {
+	res, err := c.sendV1CatalogServicesPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendV1CatalogServicesPost(ctx context.Context, request *V1CatalogServicesPostReq) (res V1CatalogServicesPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/catalog/services"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1CatalogServicesPost",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/catalog/services"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1CatalogServicesPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1CatalogServicesPost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1CatalogServicesPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

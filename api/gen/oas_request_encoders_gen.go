@@ -39,6 +39,62 @@ func encodeV1AuthSignupPostRequest(
 	return nil
 }
 
+func encodeV1CatalogCitiesPostRequest(
+	req *V1CatalogCitiesPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeV1CatalogObjectsPostRequest(
+	req *V1CatalogObjectsPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeV1CatalogRegionsPostRequest(
+	req *V1CatalogRegionsPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeV1CatalogServicesPostRequest(
+	req *V1CatalogServicesPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeV1TendersCreatePostRequest(
 	req *V1TendersCreatePostReq,
 	r *http.Request,

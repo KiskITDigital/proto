@@ -37,6 +37,8 @@ type Tenders interface {
 type Catalog interface {
 	V1CatalogObjectsGet(ctx context.Context) (api.V1CatalogObjectsGetRes, error)
 	V1CatalogServicesGet(ctx context.Context) (api.V1CatalogServicesGetRes, error)
+	V1CatalogCitiesPost(ctx context.Context, req *api.V1CatalogCitiesPostReq) (api.V1CatalogCitiesPostRes, error)
+	V1CatalogRegionsPost(ctx context.Context, req *api.V1CatalogRegionsPostReq) (api.V1CatalogRegionsPostRes, error)
 }
 
 type RouterParams struct {

@@ -1,0 +1,36 @@
+post:
+  tags:
+    - catalog
+  summary: Add region to catalog
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+  responses:
+    '201':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required: 
+                  - region
+                properties:
+                  region:
+                    $ref: "../../schemas/Region.yaml"
+    default:
+      $ref: "../../responses/Error.yaml"

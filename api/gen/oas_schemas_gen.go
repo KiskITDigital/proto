@@ -23,6 +23,43 @@ func (s *BearerAuth) SetToken(val string) {
 }
 
 // Ref: #
+type City struct {
+	ID     int       `json:"id"`
+	Name   string    `json:"name"`
+	Region OptRegion `json:"region"`
+}
+
+// GetID returns the value of ID.
+func (s *City) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *City) GetName() string {
+	return s.Name
+}
+
+// GetRegion returns the value of Region.
+func (s *City) GetRegion() OptRegion {
+	return s.Region
+}
+
+// SetID sets the value of ID.
+func (s *City) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *City) SetName(val string) {
+	s.Name = val
+}
+
+// SetRegion sets the value of Region.
+func (s *City) SetRegion(val OptRegion) {
+	s.Region = val
+}
+
+// Ref: #
 type ContactInfo struct {
 	Contact string `json:"contact"`
 	Info    string `json:"info"`
@@ -140,13 +177,17 @@ func (s *ErrorStatusCode) SetResponse(val WrappedError) {
 	s.Response = val
 }
 
-func (*ErrorStatusCode) v1AuthRefreshPostRes()    {}
-func (*ErrorStatusCode) v1AuthSigninPostRes()     {}
-func (*ErrorStatusCode) v1AuthSignupPostRes()     {}
-func (*ErrorStatusCode) v1AuthUserGetRes()        {}
-func (*ErrorStatusCode) v1CatalogObjectsGetRes()  {}
-func (*ErrorStatusCode) v1CatalogServicesGetRes() {}
-func (*ErrorStatusCode) v1TendersCreatePostRes()  {}
+func (*ErrorStatusCode) v1AuthRefreshPostRes()     {}
+func (*ErrorStatusCode) v1AuthSigninPostRes()      {}
+func (*ErrorStatusCode) v1AuthSignupPostRes()      {}
+func (*ErrorStatusCode) v1AuthUserGetRes()         {}
+func (*ErrorStatusCode) v1CatalogCitiesPostRes()   {}
+func (*ErrorStatusCode) v1CatalogObjectsGetRes()   {}
+func (*ErrorStatusCode) v1CatalogObjectsPostRes()  {}
+func (*ErrorStatusCode) v1CatalogRegionsPostRes()  {}
+func (*ErrorStatusCode) v1CatalogServicesGetRes()  {}
+func (*ErrorStatusCode) v1CatalogServicesPostRes() {}
+func (*ErrorStatusCode) v1TendersCreatePostRes()   {}
 
 type Inn string
 
@@ -154,43 +195,44 @@ type Kpp string
 
 type Name string
 
-type Objects []ObjectsItem
-
-type ObjectsItem struct {
+// Ref: #
+type Object struct {
 	ID       int    `json:"id"`
 	ParentID OptInt `json:"parent_id"`
 	Name     string `json:"name"`
 }
 
 // GetID returns the value of ID.
-func (s *ObjectsItem) GetID() int {
+func (s *Object) GetID() int {
 	return s.ID
 }
 
 // GetParentID returns the value of ParentID.
-func (s *ObjectsItem) GetParentID() OptInt {
+func (s *Object) GetParentID() OptInt {
 	return s.ParentID
 }
 
 // GetName returns the value of Name.
-func (s *ObjectsItem) GetName() string {
+func (s *Object) GetName() string {
 	return s.Name
 }
 
 // SetID sets the value of ID.
-func (s *ObjectsItem) SetID(val int) {
+func (s *Object) SetID(val int) {
 	s.ID = val
 }
 
 // SetParentID sets the value of ParentID.
-func (s *ObjectsItem) SetParentID(val OptInt) {
+func (s *Object) SetParentID(val OptInt) {
 	s.ParentID = val
 }
 
 // SetName sets the value of Name.
-func (s *ObjectsItem) SetName(val string) {
+func (s *Object) SetName(val string) {
 	s.Name = val
 }
+
+type Objects []Object
 
 type Ogrn string
 
@@ -282,6 +324,52 @@ func (o OptOrganization) Get() (v Organization, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptOrganization) Or(d Organization) Organization {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptRegion returns new OptRegion with value set to v.
+func NewOptRegion(v Region) OptRegion {
+	return OptRegion{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptRegion is optional Region.
+type OptRegion struct {
+	Value Region
+	Set   bool
+}
+
+// IsSet returns true if OptRegion was set.
+func (o OptRegion) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptRegion) Reset() {
+	var v Region
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptRegion) SetTo(v Region) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptRegion) Get() (v Region, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptRegion) Or(d Region) Region {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -564,6 +652,32 @@ type Password string
 
 type Phone string
 
+// Ref: #
+type Region struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+// GetID returns the value of ID.
+func (s *Region) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *Region) GetName() string {
+	return s.Name
+}
+
+// SetID sets the value of ID.
+func (s *Region) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *Region) SetName(val string) {
+	s.Name = val
+}
+
 // 0: Invalid
 // 1: User
 // 2: Admin.
@@ -583,43 +697,44 @@ func (Role) AllValues() []Role {
 	}
 }
 
-type Services []ServicesItem
-
-type ServicesItem struct {
+// Ref: #
+type Service struct {
 	ID       int    `json:"id"`
 	ParentID OptInt `json:"parent_id"`
 	Name     string `json:"name"`
 }
 
 // GetID returns the value of ID.
-func (s *ServicesItem) GetID() int {
+func (s *Service) GetID() int {
 	return s.ID
 }
 
 // GetParentID returns the value of ParentID.
-func (s *ServicesItem) GetParentID() OptInt {
+func (s *Service) GetParentID() OptInt {
 	return s.ParentID
 }
 
 // GetName returns the value of Name.
-func (s *ServicesItem) GetName() string {
+func (s *Service) GetName() string {
 	return s.Name
 }
 
 // SetID sets the value of ID.
-func (s *ServicesItem) SetID(val int) {
+func (s *Service) SetID(val int) {
 	s.ID = val
 }
 
 // SetParentID sets the value of ParentID.
-func (s *ServicesItem) SetParentID(val OptInt) {
+func (s *Service) SetParentID(val OptInt) {
 	s.ParentID = val
 }
 
 // SetName sets the value of Name.
-func (s *ServicesItem) SetName(val string) {
+func (s *Service) SetName(val string) {
 	s.Name = val
 }
+
+type Services []Service
 
 type TaxCode string
 
@@ -1367,6 +1482,61 @@ func (s *V1AuthUserGetOKData) SetUser(val User) {
 	s.User = val
 }
 
+type V1CatalogCitiesPostCreated struct {
+	Data V1CatalogCitiesPostCreatedData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1CatalogCitiesPostCreated) GetData() V1CatalogCitiesPostCreatedData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1CatalogCitiesPostCreated) SetData(val V1CatalogCitiesPostCreatedData) {
+	s.Data = val
+}
+
+func (*V1CatalogCitiesPostCreated) v1CatalogCitiesPostRes() {}
+
+type V1CatalogCitiesPostCreatedData struct {
+	City City `json:"city"`
+}
+
+// GetCity returns the value of City.
+func (s *V1CatalogCitiesPostCreatedData) GetCity() City {
+	return s.City
+}
+
+// SetCity sets the value of City.
+func (s *V1CatalogCitiesPostCreatedData) SetCity(val City) {
+	s.City = val
+}
+
+type V1CatalogCitiesPostReq struct {
+	Name     string `json:"name"`
+	RegionID int    `json:"region_id"`
+}
+
+// GetName returns the value of Name.
+func (s *V1CatalogCitiesPostReq) GetName() string {
+	return s.Name
+}
+
+// GetRegionID returns the value of RegionID.
+func (s *V1CatalogCitiesPostReq) GetRegionID() int {
+	return s.RegionID
+}
+
+// SetName sets the value of Name.
+func (s *V1CatalogCitiesPostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetRegionID sets the value of RegionID.
+func (s *V1CatalogCitiesPostReq) SetRegionID(val int) {
+	s.RegionID = val
+}
+
 type V1CatalogObjectsGetOK struct {
 	Data V1CatalogObjectsGetOKData `json:"data"`
 }
@@ -1397,6 +1567,105 @@ func (s *V1CatalogObjectsGetOKData) SetObjects(val Objects) {
 	s.Objects = val
 }
 
+type V1CatalogObjectsPostCreated struct {
+	Data V1CatalogObjectsPostCreatedData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1CatalogObjectsPostCreated) GetData() V1CatalogObjectsPostCreatedData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1CatalogObjectsPostCreated) SetData(val V1CatalogObjectsPostCreatedData) {
+	s.Data = val
+}
+
+func (*V1CatalogObjectsPostCreated) v1CatalogObjectsPostRes() {}
+
+type V1CatalogObjectsPostCreatedData struct {
+	Objects Object `json:"objects"`
+}
+
+// GetObjects returns the value of Objects.
+func (s *V1CatalogObjectsPostCreatedData) GetObjects() Object {
+	return s.Objects
+}
+
+// SetObjects sets the value of Objects.
+func (s *V1CatalogObjectsPostCreatedData) SetObjects(val Object) {
+	s.Objects = val
+}
+
+type V1CatalogObjectsPostReq struct {
+	Name     string `json:"name"`
+	ParentID OptInt `json:"parent_id"`
+}
+
+// GetName returns the value of Name.
+func (s *V1CatalogObjectsPostReq) GetName() string {
+	return s.Name
+}
+
+// GetParentID returns the value of ParentID.
+func (s *V1CatalogObjectsPostReq) GetParentID() OptInt {
+	return s.ParentID
+}
+
+// SetName sets the value of Name.
+func (s *V1CatalogObjectsPostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetParentID sets the value of ParentID.
+func (s *V1CatalogObjectsPostReq) SetParentID(val OptInt) {
+	s.ParentID = val
+}
+
+type V1CatalogRegionsPostCreated struct {
+	Data V1CatalogRegionsPostCreatedData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1CatalogRegionsPostCreated) GetData() V1CatalogRegionsPostCreatedData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1CatalogRegionsPostCreated) SetData(val V1CatalogRegionsPostCreatedData) {
+	s.Data = val
+}
+
+func (*V1CatalogRegionsPostCreated) v1CatalogRegionsPostRes() {}
+
+type V1CatalogRegionsPostCreatedData struct {
+	Region Region `json:"region"`
+}
+
+// GetRegion returns the value of Region.
+func (s *V1CatalogRegionsPostCreatedData) GetRegion() Region {
+	return s.Region
+}
+
+// SetRegion sets the value of Region.
+func (s *V1CatalogRegionsPostCreatedData) SetRegion(val Region) {
+	s.Region = val
+}
+
+type V1CatalogRegionsPostReq struct {
+	Name string `json:"name"`
+}
+
+// GetName returns the value of Name.
+func (s *V1CatalogRegionsPostReq) GetName() string {
+	return s.Name
+}
+
+// SetName sets the value of Name.
+func (s *V1CatalogRegionsPostReq) SetName(val string) {
+	s.Name = val
+}
+
 type V1CatalogServicesGetOK struct {
 	Data V1CatalogServicesGetOKData `json:"data"`
 }
@@ -1425,6 +1694,61 @@ func (s *V1CatalogServicesGetOKData) GetServices() Services {
 // SetServices sets the value of Services.
 func (s *V1CatalogServicesGetOKData) SetServices(val Services) {
 	s.Services = val
+}
+
+type V1CatalogServicesPostCreated struct {
+	Data V1CatalogServicesPostCreatedData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1CatalogServicesPostCreated) GetData() V1CatalogServicesPostCreatedData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1CatalogServicesPostCreated) SetData(val V1CatalogServicesPostCreatedData) {
+	s.Data = val
+}
+
+func (*V1CatalogServicesPostCreated) v1CatalogServicesPostRes() {}
+
+type V1CatalogServicesPostCreatedData struct {
+	Objects Service `json:"objects"`
+}
+
+// GetObjects returns the value of Objects.
+func (s *V1CatalogServicesPostCreatedData) GetObjects() Service {
+	return s.Objects
+}
+
+// SetObjects sets the value of Objects.
+func (s *V1CatalogServicesPostCreatedData) SetObjects(val Service) {
+	s.Objects = val
+}
+
+type V1CatalogServicesPostReq struct {
+	Name     string `json:"name"`
+	ParentID OptInt `json:"parent_id"`
+}
+
+// GetName returns the value of Name.
+func (s *V1CatalogServicesPostReq) GetName() string {
+	return s.Name
+}
+
+// GetParentID returns the value of ParentID.
+func (s *V1CatalogServicesPostReq) GetParentID() OptInt {
+	return s.ParentID
+}
+
+// SetName sets the value of Name.
+func (s *V1CatalogServicesPostReq) SetName(val string) {
+	s.Name = val
+}
+
+// SetParentID sets the value of ParentID.
+func (s *V1CatalogServicesPostReq) SetParentID(val OptInt) {
+	s.ParentID = val
 }
 
 type V1TendersCreatePostCreated struct {

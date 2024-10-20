@@ -17,12 +17,28 @@ type V1AuthUserGetRes interface {
 	v1AuthUserGetRes()
 }
 
+type V1CatalogCitiesPostRes interface {
+	v1CatalogCitiesPostRes()
+}
+
 type V1CatalogObjectsGetRes interface {
 	v1CatalogObjectsGetRes()
 }
 
+type V1CatalogObjectsPostRes interface {
+	v1CatalogObjectsPostRes()
+}
+
+type V1CatalogRegionsPostRes interface {
+	v1CatalogRegionsPostRes()
+}
+
 type V1CatalogServicesGetRes interface {
 	v1CatalogServicesGetRes()
+}
+
+type V1CatalogServicesPostRes interface {
+	v1CatalogServicesPostRes()
 }
 
 type V1TendersCreatePostRes interface {

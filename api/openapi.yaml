@@ -23,6 +23,10 @@ paths:
     $ref: "./v1/paths/catalog/services.yaml"
   /v1/catalog/objects:
     $ref: "./v1/paths/catalog/objects.yaml"
+  /v1/catalog/cities:
+    $ref: "./v1/paths/catalog/cities.yaml"
+  /v1/catalog/regions:
+    $ref: "./v1/paths/catalog/regions.yaml"
 components:
   securitySchemes:
     cookieAuth:
