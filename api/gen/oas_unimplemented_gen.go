@@ -49,6 +49,24 @@ func (UnimplementedHandler) V1AuthUserGet(ctx context.Context) (r V1AuthUserGetR
 	return r, ht.ErrNotImplemented
 }
 
+// V1CatalogObjectsGet implements GET /v1/catalog/objects operation.
+//
+// Get a list of all available objects.
+//
+// GET /v1/catalog/objects
+func (UnimplementedHandler) V1CatalogObjectsGet(ctx context.Context) (r V1CatalogObjectsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1CatalogServicesGet implements GET /v1/catalog/services operation.
+//
+// Get a list of all available services.
+//
+// GET /v1/catalog/services
+func (UnimplementedHandler) V1CatalogServicesGet(ctx context.Context) (r V1CatalogServicesGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1TendersCreatePost implements POST /v1/tenders/create operation.
 //
 // Create tender.

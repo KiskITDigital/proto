@@ -174,6 +174,63 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
+			case 'c': // Prefix: "catalog/"
+				origElem := elem
+				if l := len("catalog/"); len(elem) >= l && elem[0:l] == "catalog/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'o': // Prefix: "objects"
+					origElem := elem
+					if l := len("objects"); len(elem) >= l && elem[0:l] == "objects" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleV1CatalogObjectsGetRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 's': // Prefix: "services"
+					origElem := elem
+					if l := len("services"); len(elem) >= l && elem[0:l] == "services" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleV1CatalogServicesGetRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+					elem = origElem
+				}
+
+				elem = origElem
 			case 't': // Prefix: "tenders/create"
 				origElem := elem
 				if l := len("tenders/create"); len(elem) >= l && elem[0:l] == "tenders/create" {
@@ -408,6 +465,71 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							r.summary = "Get currently authenticated user"
 							r.operationID = ""
 							r.pathPattern = "/v1/auth/user"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				}
+
+				elem = origElem
+			case 'c': // Prefix: "catalog/"
+				origElem := elem
+				if l := len("catalog/"); len(elem) >= l && elem[0:l] == "catalog/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'o': // Prefix: "objects"
+					origElem := elem
+					if l := len("objects"); len(elem) >= l && elem[0:l] == "objects" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = "V1CatalogObjectsGet"
+							r.summary = "Get a list of all available objects"
+							r.operationID = ""
+							r.pathPattern = "/v1/catalog/objects"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 's': // Prefix: "services"
+					origElem := elem
+					if l := len("services"); len(elem) >= l && elem[0:l] == "services" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = "V1CatalogServicesGet"
+							r.summary = "Get a list of all available services"
+							r.operationID = ""
+							r.pathPattern = "/v1/catalog/services"
 							r.args = args
 							r.count = 0
 							return r, true

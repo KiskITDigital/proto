@@ -278,6 +278,52 @@ paths:
                         $ref: '#/components/schemas/Tender'
         default:
           $ref: '#/components/responses/Error'
+  /v1/catalog/services:
+    get:
+      tags:
+        - catalog
+      summary: Get a list of all available services
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - services
+                    properties:
+                      services:
+                        $ref: '#/components/schemas/Services'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/catalog/objects:
+    get:
+      tags:
+        - catalog
+      summary: Get a list of all available objects
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - objects
+                    properties:
+                      objects:
+                        $ref: '#/components/schemas/Objects'
+        default:
+          $ref: '#/components/responses/Error'
 components:
   securitySchemes:
     cookieAuth:
@@ -481,6 +527,34 @@ components:
         updated_at:
           type: string
           format: date-time
+    Services:
+      type: array
+      items:
+        type: object
+        required:
+          - id
+          - name
+        properties:
+          id:
+            type: integer
+          parent_id:
+            type: integer
+          name:
+            type: string
+    Objects:
+      type: array
+      items:
+        type: object
+        required:
+          - id
+          - name
+        properties:
+          id:
+            type: integer
+          parent_id:
+            type: integer
+          name:
+            type: string
     Tender:
       type: object
       required:
@@ -533,33 +607,9 @@ components:
             $ref: '#/components/schemas/url'
           maxItems: 8
         services:
-          type: array
-          items:
-            type: object
-            required:
-              - id
-              - name
-            properties:
-              id:
-                type: integer
-              parent_id:
-                type: integer
-              name:
-                type: string
+          $ref: '#/components/schemas/Services'
         objects:
-          type: array
-          items:
-            type: object
-            required:
-              - id
-              - name
-            properties:
-              id:
-                type: integer
-              parent_id:
-                type: integer
-              name:
-                type: string
+          $ref: '#/components/schemas/Objects'
         reception_start:
           type: string
           format: date-time

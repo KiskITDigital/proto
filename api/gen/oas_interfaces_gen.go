@@ -17,6 +17,14 @@ type V1AuthUserGetRes interface {
 	v1AuthUserGetRes()
 }
 
+type V1CatalogObjectsGetRes interface {
+	v1CatalogObjectsGetRes()
+}
+
+type V1CatalogServicesGetRes interface {
+	v1CatalogServicesGetRes()
+}
+
 type V1TendersCreatePostRes interface {
 	v1TendersCreatePostRes()
 }

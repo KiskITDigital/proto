@@ -49,33 +49,9 @@ properties:
       $ref: "../properties/url.yaml"
     maxItems: 8
   services:
-    type: array
-    items:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-        parent_id:
-          type: integer
-        name:
-          type: string
+    $ref: "catalog/Services.yaml"
   objects:
-    type: array
-    items:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-        parent_id:
-          type: integer
-        name:
-          type: string
+    $ref: "catalog/Objects.yaml"
   reception_start:
     type: string
     format: date-time

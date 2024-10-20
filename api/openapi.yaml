@@ -19,8 +19,10 @@ paths:
     $ref: "./v1/paths/auth/refresh.yaml"
   /v1/tenders/create:
     $ref: "./v1/paths/tenders.yaml"
-  # /v1/auth/confirm-email:
-  #   $ref: "./v1/paths/auth/confirm-email.yaml"
+  /v1/catalog/services:
+    $ref: "./v1/paths/catalog/services.yaml"
+  /v1/catalog/objects:
+    $ref: "./v1/paths/catalog/objects.yaml"
 components:
   securitySchemes:
     cookieAuth:

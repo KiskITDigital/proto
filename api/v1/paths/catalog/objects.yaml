@@ -1,0 +1,22 @@
+get:
+  tags:
+    - catalog
+  summary: Get a list of all available objects
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required: 
+                  - objects
+                properties:
+                  objects:
+                    $ref: "../../schemas/catalog/Objects.yaml"
+    default:
+      $ref: "../../responses/Error.yaml"

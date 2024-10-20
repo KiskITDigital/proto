@@ -1,0 +1,22 @@
+get:
+  tags:
+    - catalog
+  summary: Get a list of all available services
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required: 
+                  - services
+                properties:
+                  services:
+                    $ref: "../../schemas/catalog/Services.yaml"
+    default:
+      $ref: "../../responses/Error.yaml"

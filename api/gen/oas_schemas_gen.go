@@ -140,17 +140,57 @@ func (s *ErrorStatusCode) SetResponse(val WrappedError) {
 	s.Response = val
 }
 
-func (*ErrorStatusCode) v1AuthRefreshPostRes()   {}
-func (*ErrorStatusCode) v1AuthSigninPostRes()    {}
-func (*ErrorStatusCode) v1AuthSignupPostRes()    {}
-func (*ErrorStatusCode) v1AuthUserGetRes()       {}
-func (*ErrorStatusCode) v1TendersCreatePostRes() {}
+func (*ErrorStatusCode) v1AuthRefreshPostRes()    {}
+func (*ErrorStatusCode) v1AuthSigninPostRes()     {}
+func (*ErrorStatusCode) v1AuthSignupPostRes()     {}
+func (*ErrorStatusCode) v1AuthUserGetRes()        {}
+func (*ErrorStatusCode) v1CatalogObjectsGetRes()  {}
+func (*ErrorStatusCode) v1CatalogServicesGetRes() {}
+func (*ErrorStatusCode) v1TendersCreatePostRes()  {}
 
 type Inn string
 
 type Kpp string
 
 type Name string
+
+type Objects []ObjectsItem
+
+type ObjectsItem struct {
+	ID       int    `json:"id"`
+	ParentID OptInt `json:"parent_id"`
+	Name     string `json:"name"`
+}
+
+// GetID returns the value of ID.
+func (s *ObjectsItem) GetID() int {
+	return s.ID
+}
+
+// GetParentID returns the value of ParentID.
+func (s *ObjectsItem) GetParentID() OptInt {
+	return s.ParentID
+}
+
+// GetName returns the value of Name.
+func (s *ObjectsItem) GetName() string {
+	return s.Name
+}
+
+// SetID sets the value of ID.
+func (s *ObjectsItem) SetID(val int) {
+	s.ID = val
+}
+
+// SetParentID sets the value of ParentID.
+func (s *ObjectsItem) SetParentID(val OptInt) {
+	s.ParentID = val
+}
+
+// SetName sets the value of Name.
+func (s *ObjectsItem) SetName(val string) {
+	s.Name = val
+}
 
 type Ogrn string
 
@@ -543,25 +583,63 @@ func (Role) AllValues() []Role {
 	}
 }
 
+type Services []ServicesItem
+
+type ServicesItem struct {
+	ID       int    `json:"id"`
+	ParentID OptInt `json:"parent_id"`
+	Name     string `json:"name"`
+}
+
+// GetID returns the value of ID.
+func (s *ServicesItem) GetID() int {
+	return s.ID
+}
+
+// GetParentID returns the value of ParentID.
+func (s *ServicesItem) GetParentID() OptInt {
+	return s.ParentID
+}
+
+// GetName returns the value of Name.
+func (s *ServicesItem) GetName() string {
+	return s.Name
+}
+
+// SetID sets the value of ID.
+func (s *ServicesItem) SetID(val int) {
+	s.ID = val
+}
+
+// SetParentID sets the value of ParentID.
+func (s *ServicesItem) SetParentID(val OptInt) {
+	s.ParentID = val
+}
+
+// SetName sets the value of Name.
+func (s *ServicesItem) SetName(val string) {
+	s.Name = val
+}
+
 type TaxCode string
 
 // Ref: #
 type Tender struct {
-	ID              int                  `json:"id"`
-	Name            string               `json:"name"`
-	City            string               `json:"city"`
-	Organization    OptOrganization      `json:"organization"`
-	Region          string               `json:"region"`
-	Price           float64              `json:"price"`
-	IsContractPrice bool                 `json:"is_contract_price"`
-	IsNdsPrice      bool                 `json:"is_nds_price"`
-	FloorSpace      int                  `json:"floor_space"`
-	Description     string               `json:"description"`
-	Wishes          string               `json:"wishes"`
-	Specification   URL                  `json:"specification"`
-	Attachments     []URL                `json:"attachments"`
-	Services        []TenderServicesItem `json:"services"`
-	Objects         []TenderObjectsItem  `json:"objects"`
+	ID              int             `json:"id"`
+	Name            string          `json:"name"`
+	City            string          `json:"city"`
+	Organization    OptOrganization `json:"organization"`
+	Region          string          `json:"region"`
+	Price           float64         `json:"price"`
+	IsContractPrice bool            `json:"is_contract_price"`
+	IsNdsPrice      bool            `json:"is_nds_price"`
+	FloorSpace      int             `json:"floor_space"`
+	Description     string          `json:"description"`
+	Wishes          string          `json:"wishes"`
+	Specification   URL             `json:"specification"`
+	Attachments     []URL           `json:"attachments"`
+	Services        Services        `json:"services"`
+	Objects         Objects         `json:"objects"`
 	// Дата начала приема заявок.
 	ReceptionStart time.Time `json:"reception_start"`
 	// Дата окончания приема заявок.
@@ -636,12 +714,12 @@ func (s *Tender) GetAttachments() []URL {
 }
 
 // GetServices returns the value of Services.
-func (s *Tender) GetServices() []TenderServicesItem {
+func (s *Tender) GetServices() Services {
 	return s.Services
 }
 
 // GetObjects returns the value of Objects.
-func (s *Tender) GetObjects() []TenderObjectsItem {
+func (s *Tender) GetObjects() Objects {
 	return s.Objects
 }
 
@@ -731,12 +809,12 @@ func (s *Tender) SetAttachments(val []URL) {
 }
 
 // SetServices sets the value of Services.
-func (s *Tender) SetServices(val []TenderServicesItem) {
+func (s *Tender) SetServices(val Services) {
 	s.Services = val
 }
 
 // SetObjects sets the value of Objects.
-func (s *Tender) SetObjects(val []TenderObjectsItem) {
+func (s *Tender) SetObjects(val Objects) {
 	s.Objects = val
 }
 
@@ -758,78 +836,6 @@ func (s *Tender) SetWorkStart(val time.Time) {
 // SetWorkEnd sets the value of WorkEnd.
 func (s *Tender) SetWorkEnd(val time.Time) {
 	s.WorkEnd = val
-}
-
-type TenderObjectsItem struct {
-	ID       int    `json:"id"`
-	ParentID OptInt `json:"parent_id"`
-	Name     string `json:"name"`
-}
-
-// GetID returns the value of ID.
-func (s *TenderObjectsItem) GetID() int {
-	return s.ID
-}
-
-// GetParentID returns the value of ParentID.
-func (s *TenderObjectsItem) GetParentID() OptInt {
-	return s.ParentID
-}
-
-// GetName returns the value of Name.
-func (s *TenderObjectsItem) GetName() string {
-	return s.Name
-}
-
-// SetID sets the value of ID.
-func (s *TenderObjectsItem) SetID(val int) {
-	s.ID = val
-}
-
-// SetParentID sets the value of ParentID.
-func (s *TenderObjectsItem) SetParentID(val OptInt) {
-	s.ParentID = val
-}
-
-// SetName sets the value of Name.
-func (s *TenderObjectsItem) SetName(val string) {
-	s.Name = val
-}
-
-type TenderServicesItem struct {
-	ID       int    `json:"id"`
-	ParentID OptInt `json:"parent_id"`
-	Name     string `json:"name"`
-}
-
-// GetID returns the value of ID.
-func (s *TenderServicesItem) GetID() int {
-	return s.ID
-}
-
-// GetParentID returns the value of ParentID.
-func (s *TenderServicesItem) GetParentID() OptInt {
-	return s.ParentID
-}
-
-// GetName returns the value of Name.
-func (s *TenderServicesItem) GetName() string {
-	return s.Name
-}
-
-// SetID sets the value of ID.
-func (s *TenderServicesItem) SetID(val int) {
-	s.ID = val
-}
-
-// SetParentID sets the value of ParentID.
-func (s *TenderServicesItem) SetParentID(val OptInt) {
-	s.ParentID = val
-}
-
-// SetName sets the value of Name.
-func (s *TenderServicesItem) SetName(val string) {
-	s.Name = val
 }
 
 type URL string
@@ -1359,6 +1365,66 @@ func (s *V1AuthUserGetOKData) GetUser() User {
 // SetUser sets the value of User.
 func (s *V1AuthUserGetOKData) SetUser(val User) {
 	s.User = val
+}
+
+type V1CatalogObjectsGetOK struct {
+	Data V1CatalogObjectsGetOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1CatalogObjectsGetOK) GetData() V1CatalogObjectsGetOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1CatalogObjectsGetOK) SetData(val V1CatalogObjectsGetOKData) {
+	s.Data = val
+}
+
+func (*V1CatalogObjectsGetOK) v1CatalogObjectsGetRes() {}
+
+type V1CatalogObjectsGetOKData struct {
+	Objects Objects `json:"objects"`
+}
+
+// GetObjects returns the value of Objects.
+func (s *V1CatalogObjectsGetOKData) GetObjects() Objects {
+	return s.Objects
+}
+
+// SetObjects sets the value of Objects.
+func (s *V1CatalogObjectsGetOKData) SetObjects(val Objects) {
+	s.Objects = val
+}
+
+type V1CatalogServicesGetOK struct {
+	Data V1CatalogServicesGetOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1CatalogServicesGetOK) GetData() V1CatalogServicesGetOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1CatalogServicesGetOK) SetData(val V1CatalogServicesGetOKData) {
+	s.Data = val
+}
+
+func (*V1CatalogServicesGetOK) v1CatalogServicesGetRes() {}
+
+type V1CatalogServicesGetOKData struct {
+	Services Services `json:"services"`
+}
+
+// GetServices returns the value of Services.
+func (s *V1CatalogServicesGetOKData) GetServices() Services {
+	return s.Services
+}
+
+// SetServices sets the value of Services.
+func (s *V1CatalogServicesGetOKData) SetServices(val Services) {
+	s.Services = val
 }
 
 type V1TendersCreatePostCreated struct {

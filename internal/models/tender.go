@@ -70,10 +70,10 @@ func ConvertTenderModelToApi(tender Tender) api.Tender {
 		Attachments: convert.Slice[[]string, []api.URL](
 			tender.Attachments, func(u string) api.URL { return api.URL(u) },
 		),
-		Services: convert.Slice[[]TenderService, []api.TenderServicesItem](
+		Services: convert.Slice[[]TenderService, api.Services](
 			tender.Services, ConvertTenderServiceModelToApi,
 		),
-		Objects: convert.Slice[[]TenderObject, []api.TenderObjectsItem](
+		Objects: convert.Slice[[]TenderObject, api.Objects](
 			tender.Objects, ConvertTenderObjectModelToApi,
 		),
 		ReceptionStart: tender.ReceptionStart,
@@ -83,16 +83,16 @@ func ConvertTenderModelToApi(tender Tender) api.Tender {
 	}
 }
 
-func ConvertTenderServiceModelToApi(service TenderService) api.TenderServicesItem {
-	return api.TenderServicesItem{
+func ConvertTenderServiceModelToApi(service TenderService) api.ServicesItem {
+	return api.ServicesItem{
 		ID:       service.ID,
 		ParentID: api.OptInt{Value: service.ParentID, Set: service.ParentID != 0},
 		Name:     service.Name,
 	}
 }
 
-func ConvertTenderObjectModelToApi(object TenderObject) api.TenderObjectsItem {
-	return api.TenderObjectsItem{
+func ConvertTenderObjectModelToApi(object TenderObject) api.ObjectsItem {
+	return api.ObjectsItem{
 		ID:       object.ID,
 		ParentID: api.OptInt{Value: object.ParentID, Set: object.ParentID != 0},
 		Name:     object.Name,

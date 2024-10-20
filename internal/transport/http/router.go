@@ -13,6 +13,7 @@ type Router struct {
 	Auth
 	Error
 	Tenders
+	Catalog
 }
 
 type Error interface {
@@ -33,10 +34,16 @@ type Tenders interface {
 	V1TendersCreatePost(ctx context.Context, req *api.V1TendersCreatePostReq) (api.V1TendersCreatePostRes, error)
 }
 
+type Catalog interface {
+	V1CatalogObjectsGet(ctx context.Context) (api.V1CatalogObjectsGetRes, error)
+	V1CatalogServicesGet(ctx context.Context) (api.V1CatalogServicesGetRes, error)
+}
+
 type RouterParams struct {
 	Error   Error
 	Auth    Auth
 	Tenders Tenders
+	Catalog Catalog
 }
 
 func NewRouter(params RouterParams) *Router {
@@ -44,5 +51,6 @@ func NewRouter(params RouterParams) *Router {
 		Auth:    params.Auth,
 		Error:   params.Error,
 		Tenders: params.Tenders,
+		Catalog: params.Catalog,
 	}
 }
