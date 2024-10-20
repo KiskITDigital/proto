@@ -188,6 +188,8 @@ func (*ErrorStatusCode) v1CatalogRegionsPostRes()  {}
 func (*ErrorStatusCode) v1CatalogServicesGetRes()  {}
 func (*ErrorStatusCode) v1CatalogServicesPostRes() {}
 func (*ErrorStatusCode) v1TendersCreatePostRes()   {}
+func (*ErrorStatusCode) v1TendersTenderIDGetRes()  {}
+func (*ErrorStatusCode) v1TendersTenderIDPutRes()  {}
 
 type Inn string
 
@@ -237,6 +239,144 @@ type Objects []Object
 type Ogrn string
 
 type Okpo string
+
+// NewOptBool returns new OptBool with value set to v.
+func NewOptBool(v bool) OptBool {
+	return OptBool{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptBool is optional bool.
+type OptBool struct {
+	Value bool
+	Set   bool
+}
+
+// IsSet returns true if OptBool was set.
+func (o OptBool) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptBool) Reset() {
+	var v bool
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptBool) SetTo(v bool) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptBool) Get() (v bool, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptBool) Or(d bool) bool {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptDateTime returns new OptDateTime with value set to v.
+func NewOptDateTime(v time.Time) OptDateTime {
+	return OptDateTime{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDateTime is optional time.Time.
+type OptDateTime struct {
+	Value time.Time
+	Set   bool
+}
+
+// IsSet returns true if OptDateTime was set.
+func (o OptDateTime) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDateTime) Reset() {
+	var v time.Time
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDateTime) SetTo(v time.Time) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDateTime) Get() (v time.Time, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDateTime) Or(d time.Time) time.Time {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptFloat64 returns new OptFloat64 with value set to v.
+func NewOptFloat64(v float64) OptFloat64 {
+	return OptFloat64{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptFloat64 is optional float64.
+type OptFloat64 struct {
+	Value float64
+	Set   bool
+}
+
+// IsSet returns true if OptFloat64 was set.
+func (o OptFloat64) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptFloat64) Reset() {
+	var v float64
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptFloat64) SetTo(v float64) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptFloat64) Get() (v float64, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptFloat64) Or(d float64) float64 {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
 
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {
@@ -742,12 +882,13 @@ type TaxCode string
 type Tender struct {
 	ID              int             `json:"id"`
 	Name            string          `json:"name"`
-	City            string          `json:"city"`
+	City            City            `json:"city"`
 	Organization    OptOrganization `json:"organization"`
 	Region          string          `json:"region"`
 	Price           float64         `json:"price"`
 	IsContractPrice bool            `json:"is_contract_price"`
 	IsNdsPrice      bool            `json:"is_nds_price"`
+	IsDraft         bool            `json:"is_draft"`
 	FloorSpace      int             `json:"floor_space"`
 	Description     string          `json:"description"`
 	Wishes          string          `json:"wishes"`
@@ -774,7 +915,7 @@ func (s *Tender) GetName() string {
 }
 
 // GetCity returns the value of City.
-func (s *Tender) GetCity() string {
+func (s *Tender) GetCity() City {
 	return s.City
 }
 
@@ -801,6 +942,11 @@ func (s *Tender) GetIsContractPrice() bool {
 // GetIsNdsPrice returns the value of IsNdsPrice.
 func (s *Tender) GetIsNdsPrice() bool {
 	return s.IsNdsPrice
+}
+
+// GetIsDraft returns the value of IsDraft.
+func (s *Tender) GetIsDraft() bool {
+	return s.IsDraft
 }
 
 // GetFloorSpace returns the value of FloorSpace.
@@ -869,7 +1015,7 @@ func (s *Tender) SetName(val string) {
 }
 
 // SetCity sets the value of City.
-func (s *Tender) SetCity(val string) {
+func (s *Tender) SetCity(val City) {
 	s.City = val
 }
 
@@ -896,6 +1042,11 @@ func (s *Tender) SetIsContractPrice(val bool) {
 // SetIsNdsPrice sets the value of IsNdsPrice.
 func (s *Tender) SetIsNdsPrice(val bool) {
 	s.IsNdsPrice = val
+}
+
+// SetIsDraft sets the value of IsDraft.
+func (s *Tender) SetIsDraft(val bool) {
+	s.IsDraft = val
 }
 
 // SetFloorSpace sets the value of FloorSpace.
@@ -1794,6 +1945,7 @@ type V1TendersCreatePostReq struct {
 	Attachments     []URL     `json:"attachments"`
 	Services        []int     `json:"services"`
 	Objects         []int     `json:"objects"`
+	IsDraft         OptBool   `json:"is_draft"`
 	// Дата начала приема заявок.
 	ReceptionStart time.Time `json:"reception_start"`
 	// Дата окончания приема заявок.
@@ -1860,6 +2012,11 @@ func (s *V1TendersCreatePostReq) GetServices() []int {
 // GetObjects returns the value of Objects.
 func (s *V1TendersCreatePostReq) GetObjects() []int {
 	return s.Objects
+}
+
+// GetIsDraft returns the value of IsDraft.
+func (s *V1TendersCreatePostReq) GetIsDraft() OptBool {
+	return s.IsDraft
 }
 
 // GetReceptionStart returns the value of ReceptionStart.
@@ -1942,6 +2099,11 @@ func (s *V1TendersCreatePostReq) SetObjects(val []int) {
 	s.Objects = val
 }
 
+// SetIsDraft sets the value of IsDraft.
+func (s *V1TendersCreatePostReq) SetIsDraft(val OptBool) {
+	s.IsDraft = val
+}
+
 // SetReceptionStart sets the value of ReceptionStart.
 func (s *V1TendersCreatePostReq) SetReceptionStart(val time.Time) {
 	s.ReceptionStart = val
@@ -1959,6 +2121,258 @@ func (s *V1TendersCreatePostReq) SetWorkStart(val time.Time) {
 
 // SetWorkEnd sets the value of WorkEnd.
 func (s *V1TendersCreatePostReq) SetWorkEnd(val time.Time) {
+	s.WorkEnd = val
+}
+
+type V1TendersTenderIDGetOK struct {
+	Data V1TendersTenderIDGetOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1TendersTenderIDGetOK) GetData() V1TendersTenderIDGetOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1TendersTenderIDGetOK) SetData(val V1TendersTenderIDGetOKData) {
+	s.Data = val
+}
+
+func (*V1TendersTenderIDGetOK) v1TendersTenderIDGetRes() {}
+
+type V1TendersTenderIDGetOKData struct {
+	Tender Tender `json:"tender"`
+}
+
+// GetTender returns the value of Tender.
+func (s *V1TendersTenderIDGetOKData) GetTender() Tender {
+	return s.Tender
+}
+
+// SetTender sets the value of Tender.
+func (s *V1TendersTenderIDGetOKData) SetTender(val Tender) {
+	s.Tender = val
+}
+
+type V1TendersTenderIDPutCreated struct {
+	Data V1TendersTenderIDPutCreatedData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1TendersTenderIDPutCreated) GetData() V1TendersTenderIDPutCreatedData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1TendersTenderIDPutCreated) SetData(val V1TendersTenderIDPutCreatedData) {
+	s.Data = val
+}
+
+func (*V1TendersTenderIDPutCreated) v1TendersTenderIDPutRes() {}
+
+type V1TendersTenderIDPutCreatedData struct {
+	Tender Tender `json:"tender"`
+}
+
+// GetTender returns the value of Tender.
+func (s *V1TendersTenderIDPutCreatedData) GetTender() Tender {
+	return s.Tender
+}
+
+// SetTender sets the value of Tender.
+func (s *V1TendersTenderIDPutCreatedData) SetTender(val Tender) {
+	s.Tender = val
+}
+
+type V1TendersTenderIDPutReq struct {
+	Name            OptString  `json:"name"`
+	City            OptInt     `json:"city"`
+	Price           OptFloat64 `json:"price"`
+	IsContractPrice OptBool    `json:"is_contract_price"`
+	IsNdsPrice      OptBool    `json:"is_nds_price"`
+	FloorSpace      OptInt     `json:"floor_space"`
+	Description     OptString  `json:"description"`
+	Wishes          OptString  `json:"wishes"`
+	Specification   OptURL     `json:"specification"`
+	Attachments     []URL      `json:"attachments"`
+	Services        []int      `json:"services"`
+	Objects         []int      `json:"objects"`
+	IsDraft         OptBool    `json:"is_draft"`
+	// Дата начала приема заявок.
+	ReceptionStart OptDateTime `json:"reception_start"`
+	// Дата окончания приема заявок.
+	ReceptionEnd OptDateTime `json:"reception_end"`
+	WorkStart    OptDateTime `json:"work_start"`
+	WorkEnd      OptDateTime `json:"work_end"`
+}
+
+// GetName returns the value of Name.
+func (s *V1TendersTenderIDPutReq) GetName() OptString {
+	return s.Name
+}
+
+// GetCity returns the value of City.
+func (s *V1TendersTenderIDPutReq) GetCity() OptInt {
+	return s.City
+}
+
+// GetPrice returns the value of Price.
+func (s *V1TendersTenderIDPutReq) GetPrice() OptFloat64 {
+	return s.Price
+}
+
+// GetIsContractPrice returns the value of IsContractPrice.
+func (s *V1TendersTenderIDPutReq) GetIsContractPrice() OptBool {
+	return s.IsContractPrice
+}
+
+// GetIsNdsPrice returns the value of IsNdsPrice.
+func (s *V1TendersTenderIDPutReq) GetIsNdsPrice() OptBool {
+	return s.IsNdsPrice
+}
+
+// GetFloorSpace returns the value of FloorSpace.
+func (s *V1TendersTenderIDPutReq) GetFloorSpace() OptInt {
+	return s.FloorSpace
+}
+
+// GetDescription returns the value of Description.
+func (s *V1TendersTenderIDPutReq) GetDescription() OptString {
+	return s.Description
+}
+
+// GetWishes returns the value of Wishes.
+func (s *V1TendersTenderIDPutReq) GetWishes() OptString {
+	return s.Wishes
+}
+
+// GetSpecification returns the value of Specification.
+func (s *V1TendersTenderIDPutReq) GetSpecification() OptURL {
+	return s.Specification
+}
+
+// GetAttachments returns the value of Attachments.
+func (s *V1TendersTenderIDPutReq) GetAttachments() []URL {
+	return s.Attachments
+}
+
+// GetServices returns the value of Services.
+func (s *V1TendersTenderIDPutReq) GetServices() []int {
+	return s.Services
+}
+
+// GetObjects returns the value of Objects.
+func (s *V1TendersTenderIDPutReq) GetObjects() []int {
+	return s.Objects
+}
+
+// GetIsDraft returns the value of IsDraft.
+func (s *V1TendersTenderIDPutReq) GetIsDraft() OptBool {
+	return s.IsDraft
+}
+
+// GetReceptionStart returns the value of ReceptionStart.
+func (s *V1TendersTenderIDPutReq) GetReceptionStart() OptDateTime {
+	return s.ReceptionStart
+}
+
+// GetReceptionEnd returns the value of ReceptionEnd.
+func (s *V1TendersTenderIDPutReq) GetReceptionEnd() OptDateTime {
+	return s.ReceptionEnd
+}
+
+// GetWorkStart returns the value of WorkStart.
+func (s *V1TendersTenderIDPutReq) GetWorkStart() OptDateTime {
+	return s.WorkStart
+}
+
+// GetWorkEnd returns the value of WorkEnd.
+func (s *V1TendersTenderIDPutReq) GetWorkEnd() OptDateTime {
+	return s.WorkEnd
+}
+
+// SetName sets the value of Name.
+func (s *V1TendersTenderIDPutReq) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetCity sets the value of City.
+func (s *V1TendersTenderIDPutReq) SetCity(val OptInt) {
+	s.City = val
+}
+
+// SetPrice sets the value of Price.
+func (s *V1TendersTenderIDPutReq) SetPrice(val OptFloat64) {
+	s.Price = val
+}
+
+// SetIsContractPrice sets the value of IsContractPrice.
+func (s *V1TendersTenderIDPutReq) SetIsContractPrice(val OptBool) {
+	s.IsContractPrice = val
+}
+
+// SetIsNdsPrice sets the value of IsNdsPrice.
+func (s *V1TendersTenderIDPutReq) SetIsNdsPrice(val OptBool) {
+	s.IsNdsPrice = val
+}
+
+// SetFloorSpace sets the value of FloorSpace.
+func (s *V1TendersTenderIDPutReq) SetFloorSpace(val OptInt) {
+	s.FloorSpace = val
+}
+
+// SetDescription sets the value of Description.
+func (s *V1TendersTenderIDPutReq) SetDescription(val OptString) {
+	s.Description = val
+}
+
+// SetWishes sets the value of Wishes.
+func (s *V1TendersTenderIDPutReq) SetWishes(val OptString) {
+	s.Wishes = val
+}
+
+// SetSpecification sets the value of Specification.
+func (s *V1TendersTenderIDPutReq) SetSpecification(val OptURL) {
+	s.Specification = val
+}
+
+// SetAttachments sets the value of Attachments.
+func (s *V1TendersTenderIDPutReq) SetAttachments(val []URL) {
+	s.Attachments = val
+}
+
+// SetServices sets the value of Services.
+func (s *V1TendersTenderIDPutReq) SetServices(val []int) {
+	s.Services = val
+}
+
+// SetObjects sets the value of Objects.
+func (s *V1TendersTenderIDPutReq) SetObjects(val []int) {
+	s.Objects = val
+}
+
+// SetIsDraft sets the value of IsDraft.
+func (s *V1TendersTenderIDPutReq) SetIsDraft(val OptBool) {
+	s.IsDraft = val
+}
+
+// SetReceptionStart sets the value of ReceptionStart.
+func (s *V1TendersTenderIDPutReq) SetReceptionStart(val OptDateTime) {
+	s.ReceptionStart = val
+}
+
+// SetReceptionEnd sets the value of ReceptionEnd.
+func (s *V1TendersTenderIDPutReq) SetReceptionEnd(val OptDateTime) {
+	s.ReceptionEnd = val
+}
+
+// SetWorkStart sets the value of WorkStart.
+func (s *V1TendersTenderIDPutReq) SetWorkStart(val OptDateTime) {
+	s.WorkStart = val
+}
+
+// SetWorkEnd sets the value of WorkEnd.
+func (s *V1TendersTenderIDPutReq) SetWorkEnd(val OptDateTime) {
 	s.WorkEnd = val
 }
 

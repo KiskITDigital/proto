@@ -1,4 +1,4 @@
-package postgres
+package organization
 
 import (
 	"context"
@@ -9,13 +9,6 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
-
-type OrganizationStore struct {
-}
-
-func NewOrganizationStore() *OrganizationStore {
-	return &OrganizationStore{}
-}
 
 func (s *OrganizationStore) Create(ctx context.Context, qe store.QueryExecutor, params store.OrganizationCreateParams) (models.Organization, error) {
 	builder := squirrel.

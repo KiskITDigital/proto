@@ -1,8 +1,8 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS tender_services (
-    tender_id BIGINT NOT NULL REFERENCES tenders(id),
-    service_id BIGINT NOT NULL REFERENCES services(id)
+    tender_id   BIGINT NOT NULL REFERENCES tenders(id),
+    service_id  BIGINT NOT NULL REFERENCES services(id)
 )
 -- +goose StatementEnd
 

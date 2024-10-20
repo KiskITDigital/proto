@@ -111,3 +111,21 @@ func (UnimplementedHandler) V1CatalogServicesPost(ctx context.Context, req *V1Ca
 func (UnimplementedHandler) V1TendersCreatePost(ctx context.Context, req *V1TendersCreatePostReq) (r V1TendersCreatePostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
+
+// V1TendersTenderIDGet implements GET /v1/tenders/{tenderID} operation.
+//
+// Get tender by id.
+//
+// GET /v1/tenders/{tenderID}
+func (UnimplementedHandler) V1TendersTenderIDGet(ctx context.Context, params V1TendersTenderIDGetParams) (r V1TendersTenderIDGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1TendersTenderIDPut implements PUT /v1/tenders/{tenderID} operation.
+//
+// Update tender by id.
+//
+// PUT /v1/tenders/{tenderID}
+func (UnimplementedHandler) V1TendersTenderIDPut(ctx context.Context, req *V1TendersTenderIDPutReq, params V1TendersTenderIDPutParams) (r V1TendersTenderIDPutRes, _ error) {
+	return r, ht.ErrNotImplemented
+}

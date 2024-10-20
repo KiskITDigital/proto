@@ -15,11 +15,14 @@ import (
 	tenderService "gitlab.ubrato.ru/ubrato/core/internal/service/tender"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 	"gitlab.ubrato.ru/ubrato/core/internal/store/postgres"
+	catalogStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/catalog"
+	organizationStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/organization"
+	tenderStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/tender"
 	"gitlab.ubrato.ru/ubrato/core/internal/transport/http"
 	authHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/auth"
 	catalogHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/catalog"
 	errorHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/error"
-	tendersHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/tenders"
+	tenderHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/tender"
 )
 
 func main() {
@@ -56,10 +59,10 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	psql := store.New(psqlDB)
 
 	userStore := postgres.NewUserStore()
-	organizationStore := postgres.NewOrganizationStore()
+	organizationStore := organizationStore.NewOrganizationStore()
 	sessionStore := postgres.NewSessionStore()
-	tenderStore := postgres.NewTenderStore()
-	catalogStore := postgres.NewCatalogStore()
+	tenderStore := tenderStore.NewTenderStore()
+	catalogStore := catalogStore.NewCatalogStore()
 
 	dadataGateway := dadataGateway.NewClient(cfg.Gateway.Dadata.APIKey)
 
@@ -90,7 +93,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	router := http.NewRouter(http.RouterParams{
 		Error:   errorHandler.New(logger),
 		Auth:    authHandler.New(logger, authService),
-		Tenders: tendersHandler.New(logger, tenderService),
+		Tenders: tenderHandler.New(logger, tenderService),
 		Catalog: catalogHandler.New(logger, catalogService),
 	})
 

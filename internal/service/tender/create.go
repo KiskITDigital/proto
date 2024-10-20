@@ -2,9 +2,11 @@ package tender
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/token"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
@@ -12,10 +14,10 @@ import (
 type CreateParams struct {
 	Name            string
 	CityID          int
-	OrganizationID  int
-	Price           float64
+	Price           int
 	IsContractPrice bool
 	IsNDSPrice      bool
+	IsDraft         bool
 	FloorSpace      int
 	Description     string
 	Wishes          string
@@ -35,14 +37,20 @@ func (s *Service) Create(ctx context.Context, params CreateParams) (models.Tende
 		err    error
 	)
 
+	token, ok := ctx.Value(models.AccessTokenKey).(token.Claims)
+	if !ok {
+		return models.Tender{}, errors.New("invalid token claims type")
+	}
+
 	err = s.psql.WithTransaction(ctx, func(qe store.QueryExecutor) error {
 		tender, err = s.tenderStore.Create(ctx, qe, store.TenderCreateParams{
 			Name:            params.Name,
 			CityID:          params.CityID,
-			OrganizationID:  params.OrganizationID,
+			OrganizationID:  token.OrganizationID,
 			Price:           params.Price,
 			IsContractPrice: params.IsContractPrice,
 			IsNDSPrice:      params.IsNDSPrice,
+			IsDraft:         params.IsDraft,
 			FloorSpace:      params.FloorSpace,
 			Description:     params.Description,
 			Wishes:          params.Wishes,

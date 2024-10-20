@@ -74,6 +74,18 @@ type Handler interface {
 	//
 	// POST /v1/tenders/create
 	V1TendersCreatePost(ctx context.Context, req *V1TendersCreatePostReq) (V1TendersCreatePostRes, error)
+	// V1TendersTenderIDGet implements GET /v1/tenders/{tenderID} operation.
+	//
+	// Get tender by id.
+	//
+	// GET /v1/tenders/{tenderID}
+	V1TendersTenderIDGet(ctx context.Context, params V1TendersTenderIDGetParams) (V1TendersTenderIDGetRes, error)
+	// V1TendersTenderIDPut implements PUT /v1/tenders/{tenderID} operation.
+	//
+	// Update tender by id.
+	//
+	// PUT /v1/tenders/{tenderID}
+	V1TendersTenderIDPut(ctx context.Context, req *V1TendersTenderIDPutReq, params V1TendersTenderIDPutParams) (V1TendersTenderIDPutRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

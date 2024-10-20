@@ -40,6 +40,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		s.notFound(w, r)
 		return
 	}
+	args := [1]string{}
 
 	// Static code generated router with unwrapped path search.
 	switch {
@@ -277,21 +278,58 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
-			case 't': // Prefix: "tenders/create"
+			case 't': // Prefix: "tenders/"
 				origElem := elem
-				if l := len("tenders/create"); len(elem) >= l && elem[0:l] == "tenders/create" {
+				if l := len("tenders/"); len(elem) >= l && elem[0:l] == "tenders/" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'c': // Prefix: "create"
+					origElem := elem
+					if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleV1TendersCreatePostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				}
+				// Param: "tenderID"
+				// Leaf parameter
+				args[0] = elem
+				elem = ""
+
+				if len(elem) == 0 {
 					// Leaf node.
 					switch r.Method {
-					case "POST":
-						s.handleV1TendersCreatePostRequest([0]string{}, elemIsEscaped, w, r)
+					case "GET":
+						s.handleV1TendersTenderIDGetRequest([1]string{
+							args[0],
+						}, elemIsEscaped, w, r)
+					case "PUT":
+						s.handleV1TendersTenderIDPutRequest([1]string{
+							args[0],
+						}, elemIsEscaped, w, r)
 					default:
-						s.notAllowed(w, r, "POST")
+						s.notAllowed(w, r, "GET,PUT")
 					}
 
 					return
@@ -313,7 +351,7 @@ type Route struct {
 	operationID string
 	pathPattern string
 	count       int
-	args        [0]string
+	args        [1]string
 }
 
 // Name returns ogen operation name.
@@ -654,24 +692,67 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				elem = origElem
-			case 't': // Prefix: "tenders/create"
+			case 't': // Prefix: "tenders/"
 				origElem := elem
-				if l := len("tenders/create"); len(elem) >= l && elem[0:l] == "tenders/create" {
+				if l := len("tenders/"); len(elem) >= l && elem[0:l] == "tenders/" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'c': // Prefix: "create"
+					origElem := elem
+					if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "V1TendersCreatePost"
+							r.summary = "Create tender"
+							r.operationID = ""
+							r.pathPattern = "/v1/tenders/create"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				}
+				// Param: "tenderID"
+				// Leaf parameter
+				args[0] = elem
+				elem = ""
+
+				if len(elem) == 0 {
 					// Leaf node.
 					switch method {
-					case "POST":
-						r.name = "V1TendersCreatePost"
-						r.summary = "Create tender"
+					case "GET":
+						r.name = "V1TendersTenderIDGet"
+						r.summary = "Get tender by id"
 						r.operationID = ""
-						r.pathPattern = "/v1/tenders/create"
+						r.pathPattern = "/v1/tenders/{tenderID}"
 						r.args = args
-						r.count = 0
+						r.count = 1
+						return r, true
+					case "PUT":
+						r.name = "V1TendersTenderIDPut"
+						r.summary = "Update tender by id"
+						r.operationID = ""
+						r.pathPattern = "/v1/tenders/{tenderID}"
+						r.args = args
+						r.count = 1
 						return r, true
 					default:
 						return

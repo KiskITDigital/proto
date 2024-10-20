@@ -32,6 +32,8 @@ type Auth interface {
 
 type Tenders interface {
 	V1TendersCreatePost(ctx context.Context, req *api.V1TendersCreatePostReq) (api.V1TendersCreatePostRes, error)
+	V1TendersTenderIDPut(ctx context.Context, req *api.V1TendersTenderIDPutReq, params api.V1TendersTenderIDPutParams) (api.V1TendersTenderIDPutRes, error)
+	V1TendersTenderIDGet(ctx context.Context, params api.V1TendersTenderIDGetParams) (api.V1TendersTenderIDGetRes, error)
 }
 
 type Catalog interface {

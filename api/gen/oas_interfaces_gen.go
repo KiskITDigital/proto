@@ -44,3 +44,11 @@ type V1CatalogServicesPostRes interface {
 type V1TendersCreatePostRes interface {
 	v1TendersCreatePostRes()
 }
+
+type V1TendersTenderIDGetRes interface {
+	v1TendersTenderIDGetRes()
+}
+
+type V1TendersTenderIDPutRes interface {
+	v1TendersTenderIDPutRes()
+}

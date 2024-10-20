@@ -25,6 +25,9 @@ type TenderStore interface {
 	GetByID(ctx context.Context, qe store.QueryExecutor, tenderID int) (models.Tender, error)
 	GetTenderServices(ctx context.Context, qe store.QueryExecutor, tenderID int) ([]models.TenderService, error)
 	GetTenderObjects(ctx context.Context, qe store.QueryExecutor, tenderID int) ([]models.TenderObject, error)
+	Update(ctx context.Context, qe store.QueryExecutor, params store.TenderUpdateParams) (models.Tender, error)
+	DeleteTenderObjects(ctx context.Context, qe store.QueryExecutor, params store.TenderObjectsDeleteParams) error
+	DeleteTenderServices(ctx context.Context, qe store.QueryExecutor, params store.TenderServicesDeleteParams) error
 }
 
 func New(

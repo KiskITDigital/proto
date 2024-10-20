@@ -245,6 +245,131 @@ paths:
                   type: array
                   items:
                     type: integer
+                is_draft:
+                  type: boolean
+                  default: false
+                reception_start:
+                  type: string
+                  format: date-time
+                  description: дата начала приема заявок
+                reception_end:
+                  type: string
+                  format: date-time
+                  description: дата окончания приема заявок
+                work_start:
+                  type: string
+                  format: date-time
+                work_end:
+                  type: string
+                  format: date-time
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - tender
+                    properties:
+                      tender:
+                        $ref: '#/components/schemas/Tender'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/tenders/{tenderID}:
+    get:
+      tags:
+        - tenders
+      summary: Get tender by id
+      parameters:
+        - name: tenderID
+          required: true
+          in: path
+          description: ID of tender
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - tender
+                    properties:
+                      tender:
+                        $ref: '#/components/schemas/Tender'
+        default:
+          $ref: '#/components/responses/Error'
+    put:
+      tags:
+        - tenders
+      summary: Update tender by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: tenderID
+          required: true
+          in: path
+          description: ID of tender
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                city:
+                  type: integer
+                price:
+                  type: number
+                is_contract_price:
+                  type: boolean
+                is_nds_price:
+                  type: boolean
+                floor_space:
+                  type: integer
+                description:
+                  type: string
+                wishes:
+                  type: string
+                specification:
+                  $ref: '#/components/schemas/url'
+                attachments:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/url'
+                  maxItems: 8
+                services:
+                  type: array
+                  items:
+                    type: integer
+                objects:
+                  type: array
+                  items:
+                    type: integer
+                is_draft:
+                  type: boolean
+                  default: false
                 reception_start:
                   type: string
                   format: date-time
@@ -678,6 +803,30 @@ components:
         updated_at:
           type: string
           format: date-time
+    Region:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: Москва и Московская область
+    City:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: Москва
+        region:
+          $ref: '#/components/schemas/Region'
     Service:
       type: object
       required:
@@ -720,6 +869,7 @@ components:
         - price
         - is_contract_price
         - is_nds_price
+        - is_draft
         - floor_space
         - description
         - wishes
@@ -737,7 +887,7 @@ components:
         name:
           type: string
         city:
-          type: string
+          $ref: '#/components/schemas/City'
         organization:
           $ref: '#/components/schemas/Organization'
         region:
@@ -747,6 +897,8 @@ components:
         is_contract_price:
           type: boolean
         is_nds_price:
+          type: boolean
+        is_draft:
           type: boolean
         floor_space:
           type: integer
@@ -779,30 +931,6 @@ components:
         work_end:
           type: string
           format: date-time
-    Region:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-          example: Москва и Московская область
-    City:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-          example: Москва
-        region:
-          $ref: '#/components/schemas/Region'
   responses:
     Error:
       description: Error

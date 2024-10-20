@@ -1,4 +1,4 @@
-package postgres
+package tender
 
 import (
 	"context"
@@ -11,142 +11,6 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
-type TenderStore struct {
-}
-
-func NewTenderStore() *TenderStore {
-	return &TenderStore{}
-}
-
-func (s *TenderStore) Create(ctx context.Context, qe store.QueryExecutor, params store.TenderCreateParams) (models.Tender, error) {
-	builder := squirrel.
-		Insert("tenders").
-		Columns(
-			"name",
-			"price",
-			"is_contract_price",
-			"is_nds_price",
-			"city_id",
-			"floor_space",
-			"description",
-			"wishes",
-			"specification",
-			"attachments",
-			"reception_start",
-			"reception_end",
-			"work_start",
-			"work_end",
-			"organization_id",
-		).
-		Values(
-			params.Name,
-			params.Price,
-			params.IsContractPrice,
-			params.IsNDSPrice,
-			params.CityID,
-			params.FloorSpace,
-			params.Description,
-			params.Wishes,
-			params.Specification,
-			pq.Array(params.Attachments),
-			params.ReceptionStart,
-			params.ReceptionEnd,
-			params.WorkStart,
-			params.WorkEnd,
-			params.OrganizationID,
-		).
-		Suffix(`
-			RETURNING
-				id,
-				name,
-				price,
-				is_contract_price,
-				is_nds_price,
-				city_id,
-				floor_space,
-				description,
-				wishes,
-				specification,
-				attachments,
-				verified,
-				reception_start,
-				reception_end,
-				work_start,
-				work_end,
-				organization_id
-		`).
-		PlaceholderFormat(squirrel.Dollar)
-
-	var createdTender models.Tender
-
-	err := builder.RunWith(qe).QueryRowContext(ctx).Scan(
-		&createdTender.ID,
-		&createdTender.Name,
-		&createdTender.Price,
-		&createdTender.IsContractPrice,
-		&createdTender.IsNDSPrice,
-		&createdTender.City.ID,
-		&createdTender.FloorSpace,
-		&createdTender.Description,
-		&createdTender.Wishes,
-		&createdTender.Specification,
-		pq.Array(&createdTender.Attachments),
-		&createdTender.Verified,
-		&createdTender.ReceptionStart,
-		&createdTender.ReceptionEnd,
-		&createdTender.WorkStart,
-		&createdTender.WorkEnd,
-		&createdTender.Organization.ID,
-	)
-	if err != nil {
-		return models.Tender{}, fmt.Errorf("query row: %w", err)
-	}
-
-	return createdTender, nil
-}
-
-func (s *TenderStore) AppendTenderServies(ctx context.Context, qe store.QueryExecutor, params store.TenderServicesCreateParams) error {
-	builder := squirrel.
-		Insert("tender_services").
-		Columns(
-			"tender_id",
-			"service_id",
-		).
-		PlaceholderFormat(squirrel.Dollar)
-
-	for _, serviceID := range params.ServicesIDs {
-		builder = builder.Values(params.TenderID, serviceID)
-	}
-
-	_, err := builder.RunWith(qe).ExecContext(ctx)
-	if err != nil {
-		return fmt.Errorf("exec query: %w", err)
-	}
-
-	return nil
-}
-
-func (s *TenderStore) AppendTenderObjects(ctx context.Context, qe store.QueryExecutor, params store.TenderObjectsCreateParams) error {
-	builder := squirrel.
-		Insert("tender_objects").
-		Columns(
-			"tender_id",
-			"object_id",
-		).
-		PlaceholderFormat(squirrel.Dollar)
-
-	for _, objectID := range params.ObjectsIDs {
-		builder = builder.Values(params.TenderID, objectID)
-	}
-
-	_, err := builder.RunWith(qe).ExecContext(ctx)
-	if err != nil {
-		return fmt.Errorf("exec query: %w", err)
-	}
-
-	return nil
-}
-
 func (s *TenderStore) GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Tender, error) {
 	builder := squirrel.
 		Select(
@@ -155,8 +19,11 @@ func (s *TenderStore) GetByID(ctx context.Context, qe store.QueryExecutor, id in
 			"t.price",
 			"t.is_contract_price",
 			"t.is_nds_price",
+			"t.is_draft",
 			"c.name",
+			"c.id",
 			"r.name",
+			"r.id",
 			"t.floor_space",
 			"t.description",
 			"t.wishes",
@@ -194,6 +61,8 @@ func (s *TenderStore) GetByID(ctx context.Context, qe store.QueryExecutor, id in
 
 	var (
 		createdTender models.Tender
+		description   sql.NullString
+		wishes        sql.NullString
 		AvatarURL     sql.NullString
 	)
 
@@ -203,11 +72,14 @@ func (s *TenderStore) GetByID(ctx context.Context, qe store.QueryExecutor, id in
 		&createdTender.Price,
 		&createdTender.IsContractPrice,
 		&createdTender.IsNDSPrice,
+		&createdTender.IsDraft,
 		&createdTender.City.Name,
+		&createdTender.City.ID,
 		&createdTender.City.Region.Name,
+		&createdTender.City.Region.ID,
 		&createdTender.FloorSpace,
-		&createdTender.Description,
-		&createdTender.Wishes,
+		&description,
+		&wishes,
 		&createdTender.Specification,
 		pq.Array(&createdTender.Attachments),
 		&createdTender.Verified,
@@ -238,6 +110,8 @@ func (s *TenderStore) GetByID(ctx context.Context, qe store.QueryExecutor, id in
 	}
 
 	createdTender.Organization.AvatarURL = AvatarURL.String
+	createdTender.Description = description.String
+	createdTender.Wishes = wishes.String
 
 	services, err := s.GetTenderServices(ctx, qe, createdTender.ID)
 	if err != nil {

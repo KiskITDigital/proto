@@ -1,9 +1,9 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE cities (
-    id BIGSERIAL PRIMARY KEY,
-    region_id BIGINT NOT NULL REFERENCES regions(id),
-    name TEXT
+    id          BIGSERIAL PRIMARY KEY,
+    region_id   BIGINT NOT NULL REFERENCES regions(id),
+    name        TEXT
 );
 -- +goose StatementEnd
 

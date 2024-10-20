@@ -12,9 +12,10 @@ type Tender struct {
 	Name            string
 	City            City
 	Organization    Organization
-	Price           float64
+	Price           int
 	IsContractPrice bool
 	IsNDSPrice      bool
+	IsDraft         bool
 	FloorSpace      int
 	Description     string
 	Wishes          string
@@ -75,12 +76,13 @@ func ConvertTenderModelToApi(tender Tender) api.Tender {
 	return api.Tender{
 		ID:              tender.ID,
 		Name:            tender.Name,
-		City:            tender.City.Name,
+		City:            ConvertCityModelToApi(tender.City),
 		Organization:    api.OptOrganization{Value: ConvertOrganizationModelToApi(tender.Organization), Set: tender.Organization.ID != 0},
 		Region:          tender.City.Region.Name,
-		Price:           tender.Price,
+		Price:           float64(tender.Price / 100),
 		IsContractPrice: tender.IsContractPrice,
 		IsNdsPrice:      tender.IsNDSPrice,
+		IsDraft:         tender.IsDraft,
 		FloorSpace:      tender.FloorSpace,
 		Description:     tender.Description,
 		Wishes:          tender.Wishes,

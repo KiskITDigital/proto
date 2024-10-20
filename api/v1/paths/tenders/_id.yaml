@@ -1,26 +1,56 @@
-post:
+get:
   tags:
     - tenders
-  summary: Create tender
+  summary: Get tender by id
+  parameters:
+    - name: tenderID
+      required: true
+      in: path
+      description: ID of tender
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required: 
+                  - tender
+                properties:
+                  tender:
+                    $ref: "../../schemas/Tender.yaml"
+    default:
+      $ref: "../../responses/Error.yaml"
+put:
+  tags:
+    - tenders
+  summary: Update tender by id
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: tenderID
+      required: true
+      in: path
+      description: ID of tender
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
   requestBody:
     required: true
     content:
       application/json:
         schema:
           type: object
-          required:
-            - name
-            - city
-            - price
-            - is_contract_price
-            - is_nds_price
-            - floor_space
-            - services
-            - objects
-            - reception_start
-            - reception_end
-            - work_start
-            - work_end
           properties:
             name:
               type: string
@@ -39,11 +69,11 @@ post:
             wishes:
               type: string
             specification:
-              $ref: "../properties/url.yaml"
+              $ref: "../../properties/url.yaml"
             attachments:
               type: array
               items:
-                $ref: "../properties/url.yaml"
+                $ref: "../../properties/url.yaml"
               maxItems: 8
             services:
               type: array
@@ -53,6 +83,9 @@ post:
               type: array
               items:
                 type: integer
+            is_draft:
+              type: boolean
+              default: false
             reception_start:
               type: string
               format: date-time
@@ -82,7 +115,7 @@ post:
                 required: 
                   - tender
                 properties:
-                  user:
+                  tender:
                     $ref: "../../schemas/Tender.yaml"
     default:
       $ref: "../../responses/Error.yaml"

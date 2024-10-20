@@ -55,6 +55,9 @@ post:
               type: array
               items:
                 type: integer
+            is_draft:
+              type: boolean
+              default: false
             reception_start:
               type: string
               format: date-time

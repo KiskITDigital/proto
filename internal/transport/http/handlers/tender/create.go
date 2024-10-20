@@ -1,30 +1,23 @@
-package tenders
+package tender
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
-	"gitlab.ubrato.ru/ubrato/core/internal/lib/token"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	tenderService "gitlab.ubrato.ru/ubrato/core/internal/service/tender"
 )
 
 func (h *Handler) V1TendersCreatePost(ctx context.Context, req *api.V1TendersCreatePostReq) (api.V1TendersCreatePostRes, error) {
-	token, ok := ctx.Value(models.AccessTokenKey).(token.Claims)
-	if !ok {
-		return nil, errors.New("invalid token claims type")
-	}
-
 	tender, err := h.svc.Create(ctx, tenderService.CreateParams{
 		Name:            req.GetName(),
 		CityID:          req.GetCity(),
-		OrganizationID:  token.OrganizationID,
-		Price:           req.GetPrice(),
+		Price:           int(req.GetPrice() * 100),
 		IsContractPrice: req.GetIsContractPrice(),
 		IsNDSPrice:      req.GetIsNdsPrice(),
+		IsDraft:         req.GetIsDraft().Value,
 		FloorSpace:      req.GetFloorSpace(),
 		Description:     req.GetDescription().Value,
 		Wishes:          req.GetWishes().Value,

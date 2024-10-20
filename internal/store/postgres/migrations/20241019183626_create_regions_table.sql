@@ -1,8 +1,8 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE regions (
-    id BIGSERIAL PRIMARY KEY,
-    name TEXT
+    id      BIGSERIAL PRIMARY KEY,
+    name    TEXT
 );
 -- +goose StatementEnd
 

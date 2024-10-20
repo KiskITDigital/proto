@@ -4,6 +4,9 @@ package api
 
 import (
 	"net/http"
+	"net/url"
+
+	"github.com/go-faster/errors"
 
 	"github.com/ogen-go/ogen/conv"
 	"github.com/ogen-go/ogen/middleware"
@@ -62,6 +65,172 @@ func decodeV1AuthRefreshPostParams(args [0]string, argsEscaped bool, r *http.Req
 		return params, &ogenerrors.DecodeParamError{
 			Name: "ubrato_session",
 			In:   "cookie",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1TendersTenderIDGetParams is parameters of GET /v1/tenders/{tenderID} operation.
+type V1TendersTenderIDGetParams struct {
+	// ID of tender.
+	TenderID int
+}
+
+func unpackV1TendersTenderIDGetParams(packed middleware.Parameters) (params V1TendersTenderIDGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "tenderID",
+			In:   "path",
+		}
+		params.TenderID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1TendersTenderIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1TendersTenderIDGetParams, _ error) {
+	// Decode path: tenderID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "tenderID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.TenderID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.TenderID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "tenderID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1TendersTenderIDPutParams is parameters of PUT /v1/tenders/{tenderID} operation.
+type V1TendersTenderIDPutParams struct {
+	// ID of tender.
+	TenderID int
+}
+
+func unpackV1TendersTenderIDPutParams(packed middleware.Parameters) (params V1TendersTenderIDPutParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "tenderID",
+			In:   "path",
+		}
+		params.TenderID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1TendersTenderIDPutParams(args [1]string, argsEscaped bool, r *http.Request) (params V1TendersTenderIDPutParams, _ error) {
+	// Decode path: tenderID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "tenderID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.TenderID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.TenderID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "tenderID",
+			In:   "path",
 			Err:  err,
 		}
 	}
