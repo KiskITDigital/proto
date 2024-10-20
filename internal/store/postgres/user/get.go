@@ -1,4 +1,4 @@
-package postgres
+package user
 
 import (
 	"context"
@@ -9,99 +9,6 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
-
-type UserStore struct {
-}
-
-func NewUserStore() *UserStore {
-	return &UserStore{}
-}
-
-func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params store.UserCreateParams) (models.User, error) {
-	builder := squirrel.
-		Insert("users").
-		Columns(
-			"organization_id",
-			"email",
-			"phone",
-			"password_hash",
-			"totp_salt",
-			"first_name",
-			"last_name",
-			"middle_name",
-			"avatar_url",
-			"verified",
-			"email_verified",
-			"role",
-			"is_contractor",
-		).
-		Values(
-			params.OrganizationID,
-			params.Email,
-			params.Phone,
-			params.PasswordHash,
-			params.TOTPSalt,
-			params.FirstName,
-			params.LastName,
-			params.MiddleName,
-			sql.NullString{Valid: params.AvatarURL != "", String: params.AvatarURL},
-			params.Verified,
-			params.EmailVerified,
-			params.Role,
-			params.IsContractor,
-		).
-		Suffix(`
-			RETURNING
-				id,
-				organization_id,
-				email,
-				phone,
-				password_hash,
-				totp_salt,
-				first_name,
-				last_name,
-				middle_name,
-				avatar_url,
-				verified,
-				email_verified,
-				role,
-				is_contractor,
-				created_at,
-				updated_at
-		`).
-		PlaceholderFormat(squirrel.Dollar)
-
-	var (
-		createdUser models.User
-		avatarURL   sql.NullString
-	)
-
-	err := builder.RunWith(qe).QueryRowContext(ctx).Scan(
-		&createdUser.ID,
-		&createdUser.Organization.ID,
-		&createdUser.Email,
-		&createdUser.Phone,
-		&createdUser.PasswordHash,
-		&createdUser.TOTPSalt,
-		&createdUser.FirstName,
-		&createdUser.LastName,
-		&createdUser.MiddleName,
-		&avatarURL,
-		&createdUser.Verified,
-		&createdUser.EmailVerified,
-		&createdUser.Role,
-		&createdUser.IsContractor,
-		&createdUser.CreatedAt,
-		&createdUser.UpdatedAt,
-	)
-	if err != nil {
-		return models.User{}, fmt.Errorf("query row: %w", err)
-	}
-
-	createdUser.AvatarURL = avatarURL.String
-
-	return createdUser, nil
-}
 
 func (s *UserStore) Get(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) (models.User, error) {
 	builder := squirrel.

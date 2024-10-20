@@ -17,7 +17,9 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/store/postgres"
 	catalogStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/catalog"
 	organizationStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/organization"
+	sessionStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/session"
 	tenderStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/tender"
+	userStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/user"
 	"gitlab.ubrato.ru/ubrato/core/internal/transport/http"
 	authHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/auth"
 	catalogHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/catalog"
@@ -58,9 +60,9 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	}
 	psql := store.New(psqlDB)
 
-	userStore := postgres.NewUserStore()
+	userStore := userStore.NewUserStore()
 	organizationStore := organizationStore.NewOrganizationStore()
-	sessionStore := postgres.NewSessionStore()
+	sessionStore := sessionStore.NewSessionStore()
 	tenderStore := tenderStore.NewTenderStore()
 	catalogStore := catalogStore.NewCatalogStore()
 
