@@ -5106,13 +5106,13 @@ func (s *V1CatalogServicesPostCreatedData) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *V1CatalogServicesPostCreatedData) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("objects")
-		s.Objects.Encode(e)
+		e.FieldStart("services")
+		s.Services.Encode(e)
 	}
 }
 
 var jsonFieldsNameOfV1CatalogServicesPostCreatedData = [1]string{
-	0: "objects",
+	0: "services",
 }
 
 // Decode decodes V1CatalogServicesPostCreatedData from json.
@@ -5124,15 +5124,15 @@ func (s *V1CatalogServicesPostCreatedData) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "objects":
+		case "services":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				if err := s.Objects.Decode(d); err != nil {
+				if err := s.Services.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"objects\"")
+				return errors.Wrap(err, "decode field \"services\"")
 			}
 		default:
 			return d.Skip()

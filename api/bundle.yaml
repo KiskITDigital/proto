@@ -332,9 +332,9 @@ paths:
                   data:
                     type: object
                     required:
-                      - objects
+                      - services
                     properties:
-                      objects:
+                      services:
                         $ref: '#/components/schemas/Service'
         default:
           $ref: '#/components/responses/Error'

@@ -18,6 +18,8 @@ type Service interface {
 	GetServices(ctx context.Context) (models.CatalogServices, error)
 	CreateCity(ctx context.Context, params catalogService.CreateCityParams) (models.City, error)
 	CreateRegion(ctx context.Context, params catalogService.CreateRegionParams) (models.Region, error)
+	CreateObject(ctx context.Context, params catalogService.CreateObjectParams) (models.CatalogObject, error)
+	CreateService(ctx context.Context, params catalogService.CreateServiceParams) (models.CatalogService, error)
 }
 
 func New(logger *slog.Logger, svc Service) *Handler {

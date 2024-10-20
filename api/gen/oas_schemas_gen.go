@@ -1713,17 +1713,17 @@ func (s *V1CatalogServicesPostCreated) SetData(val V1CatalogServicesPostCreatedD
 func (*V1CatalogServicesPostCreated) v1CatalogServicesPostRes() {}
 
 type V1CatalogServicesPostCreatedData struct {
-	Objects Service `json:"objects"`
+	Services Service `json:"services"`
 }
 
-// GetObjects returns the value of Objects.
-func (s *V1CatalogServicesPostCreatedData) GetObjects() Service {
-	return s.Objects
+// GetServices returns the value of Services.
+func (s *V1CatalogServicesPostCreatedData) GetServices() Service {
+	return s.Services
 }
 
-// SetObjects sets the value of Objects.
-func (s *V1CatalogServicesPostCreatedData) SetObjects(val Service) {
-	s.Objects = val
+// SetServices sets the value of Services.
+func (s *V1CatalogServicesPostCreatedData) SetServices(val Service) {
+	s.Services = val
 }
 
 type V1CatalogServicesPostReq struct {

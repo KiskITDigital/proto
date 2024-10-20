@@ -51,9 +51,9 @@ post:
               data:
                 type: object
                 required: 
-                  - objects
+                  - services
                 properties:
-                  objects:
+                  services:
                     $ref: "../../schemas/catalog/Service.yaml"
     default:
       $ref: "../../responses/Error.yaml"
