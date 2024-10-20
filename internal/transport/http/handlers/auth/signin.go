@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
+	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/service/auth"
 )
 
@@ -32,7 +33,7 @@ func (h *Handler) V1AuthSigninPost(ctx context.Context, req *api.V1AuthSigninPos
 		SetCookie: api.NewOptString(cookie.String()),
 		Response: api.V1AuthSigninPostOK{
 			Data: api.V1AuthSigninPostOKData{
-				User:        ConvertUserModelToApi(resp.User),
+				User:        models.ConvertUserModelToApi(resp.User),
 				AccessToken: resp.AccessToken,
 			},
 		},

@@ -32,6 +32,12 @@ type Handler interface {
 	//
 	// GET /v1/auth/user
 	V1AuthUserGet(ctx context.Context) (V1AuthUserGetRes, error)
+	// V1TendersCreatePost implements POST /v1/tenders/create operation.
+	//
+	// Create tender.
+	//
+	// POST /v1/tenders/create
+	V1TendersCreatePost(ctx context.Context, req *V1TendersCreatePostReq) (V1TendersCreatePostRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

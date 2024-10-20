@@ -17,8 +17,8 @@ paths:
     $ref: "./v1/paths/auth/user.yaml"
   /v1/auth/refresh:
     $ref: "./v1/paths/auth/refresh.yaml"
-  # /v1/auth/reset-password:
-  #   $ref: "./v1/paths/auth/reset-password.yaml"
+  /v1/tenders/create:
+    $ref: "./v1/paths/tenders.yaml"
   # /v1/auth/confirm-email:
   #   $ref: "./v1/paths/auth/confirm-email.yaml"
 components:

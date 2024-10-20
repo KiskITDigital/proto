@@ -52,3 +52,18 @@ func (ta *TokenAuthorizer) GenerateToken(payload Payload) (string, error) {
 
 	return ss, nil
 }
+
+func (ta *TokenAuthorizer) ValidateToken(rawToken string) (Claims, error) {
+	var claims Claims
+	_, err := jwt.ParseWithClaims(rawToken, &claims, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(ta.cfg.Secret), nil
+	})
+	if err != nil {
+		return Claims{}, fmt.Errorf("validate token: %w", err)
+	}
+
+	return claims, nil
+}

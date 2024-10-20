@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
+	"gitlab.ubrato.ru/ubrato/core/internal/models"
 )
 
 func (h *Handler) V1AuthRefreshPost(ctx context.Context, params api.V1AuthRefreshPostParams) (api.V1AuthRefreshPostRes, error) {
@@ -28,7 +29,7 @@ func (h *Handler) V1AuthRefreshPost(ctx context.Context, params api.V1AuthRefres
 		SetCookie: api.NewOptString(cookie.String()),
 		Response: api.V1AuthRefreshPostOK{
 			Data: api.V1AuthRefreshPostOKData{
-				User:        ConvertUserModelToApi(resp.User),
+				User:        models.ConvertUserModelToApi(resp.User),
 				AccessToken: resp.AccessToken,
 			},
 		},

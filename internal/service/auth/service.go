@@ -55,6 +55,7 @@ type DadataGateway interface {
 type TokenAuthorizer interface {
 	GenerateToken(payload token.Payload) (string, error)
 	GetRefreshTokenDurationLifetime() time.Duration
+	ValidateToken(rawToken string) (token.Claims, error)
 }
 
 func New(

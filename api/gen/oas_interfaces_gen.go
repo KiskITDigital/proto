@@ -16,3 +16,7 @@ type V1AuthSignupPostRes interface {
 type V1AuthUserGetRes interface {
 	v1AuthUserGetRes()
 }
+
+type V1TendersCreatePostRes interface {
+	v1TendersCreatePostRes()
+}

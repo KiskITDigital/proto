@@ -48,3 +48,12 @@ func (UnimplementedHandler) V1AuthSignupPost(ctx context.Context, req *V1AuthSig
 func (UnimplementedHandler) V1AuthUserGet(ctx context.Context) (r V1AuthUserGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
+
+// V1TendersCreatePost implements POST /v1/tenders/create operation.
+//
+// Create tender.
+//
+// POST /v1/tenders/create
+func (UnimplementedHandler) V1TendersCreatePost(ctx context.Context, req *V1TendersCreatePostReq) (r V1TendersCreatePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}

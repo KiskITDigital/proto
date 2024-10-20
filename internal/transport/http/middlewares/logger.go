@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"log/slog"
 	"net/http"
 	"time"
@@ -12,8 +11,6 @@ import (
 func Logger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ww := middleware.NewWrapResponseWriter(w, r.ProtoMajor)
-
-		fmt.Println(r.Context().Value(middleware.RequestIDKey))
 
 		slog.Debug("starting request processing",
 			slog.String("method", r.Method),

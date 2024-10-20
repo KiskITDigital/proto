@@ -12,6 +12,7 @@ var _ api.Handler = new(Router)
 type Router struct {
 	Auth
 	Error
+	Tenders
 }
 
 type Error interface {
@@ -28,14 +29,20 @@ type Auth interface {
 	HandleBearerAuth(ctx context.Context, operationName string, t api.BearerAuth) (context.Context, error)
 }
 
+type Tenders interface {
+	V1TendersCreatePost(ctx context.Context, req *api.V1TendersCreatePostReq) (api.V1TendersCreatePostRes, error)
+}
+
 type RouterParams struct {
-	Error Error
-	Auth  Auth
+	Error   Error
+	Auth    Auth
+	Tenders Tenders
 }
 
 func NewRouter(params RouterParams) *Router {
 	return &Router{
-		Auth:  params.Auth,
-		Error: params.Error,
+		Auth:    params.Auth,
+		Error:   params.Error,
+		Tenders: params.Tenders,
 	}
 }

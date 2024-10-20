@@ -1,0 +1,90 @@
+post:
+  tags:
+    - tenders
+  summary: Create tender
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+            - city
+            - price
+            - is_contract_price
+            - is_nds_price
+            - floor_space
+            - services
+            - objects
+            - reception_start
+            - reception_end
+            - work_start
+            - work_end
+          properties:
+            name:
+              type: string
+            city:
+              type: integer
+            price:
+              type: number
+            is_contract_price:
+              type: boolean
+            is_nds_price:
+              type: boolean
+            floor_space:
+              type: integer
+            description:
+              type: string
+            wishes:
+              type: string
+            specification:
+              $ref: "../properties/url.yaml"
+            attachments:
+              type: array
+              items:
+                $ref: "../properties/url.yaml"
+              maxItems: 8
+            services:
+              type: array
+              items:
+                type: integer
+            objects:
+              type: array
+              items:
+                type: integer
+            reception_start:
+              type: string
+              format: date-time
+              description: "дата начала приема заявок"
+            reception_end:
+              type: string
+              format: date-time
+              description: "дата окончания приема заявок"
+            work_start:
+              type: string
+              format: date-time
+            work_end:
+              type: string
+              format: date-time
+  responses:
+    '201':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required: 
+                  - tender
+                properties:
+                  tender:
+                    $ref: "../schemas/Tender.yaml"
+    default:
+      $ref: "../responses/Error.yaml"
