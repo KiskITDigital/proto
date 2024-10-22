@@ -20,6 +20,14 @@ prod-build:
     - docker build -f ./deployments/Dockerfile --build-arg GIT_VERSION=$CI_COMMIT_SHORT_SHA --pull -t "$CI_REGISTRY_IMAGE:latest" .
     - docker push "$CI_REGISTRY_IMAGE:latest"
 
+stage-build:
+  only: [stage]
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p "$CI_JOB_TOKEN" $CI_REGISTRY
+    - cp $PROD_CONFIG ./config.yaml
+    - docker build -f ./deployments/Dockerfile --build-arg GIT_VERSION=$CI_COMMIT_SHORT_SHA --pull -t "$CI_REGISTRY_IMAGE:stage" .
+    - docker push "$CI_REGISTRY_IMAGE:stage"
 
 tags-release-build:
   only: [tags]
@@ -41,4 +49,18 @@ prod-deploy:
   - chmod 700 ~/.ssh
   - cp $KNOWN_HOSTS ~/.ssh/known_hosts
   script:
-    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST -p $REMOTE_PORT "docker service update --with-registry-auth --image registry.ubrato.ru/ubrato/core:latest stack_core"
+    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST -p $REMOTE_PORT "docker service update --with-registry-auth --image CI_REGISTRY_IMAGE:latest stack_core"
+
+stage-deploy:
+  only: [stage]
+  stage: deploy
+  before_script:
+  - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+  - eval $(ssh-agent -s)
+  - chmod 400 "$SSH_PRIVATE_KEY"
+  - ssh-add "$SSH_PRIVATE_KEY"
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - cp $KNOWN_HOSTS ~/.ssh/known_hosts
+  script:
+    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST -p $REMOTE_PORT "docker service update --with-registry-auth --image CI_REGISTRY_IMAGE:stage stage_core"
