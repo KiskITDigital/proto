@@ -41,6 +41,10 @@ type V1CatalogServicesPostRes interface {
 	v1CatalogServicesPostRes()
 }
 
+type V1SurveyPostRes interface {
+	v1SurveyPostRes()
+}
+
 type V1TendersCreatePostRes interface {
 	v1TendersCreatePostRes()
 }
@@ -51,4 +55,8 @@ type V1TendersTenderIDGetRes interface {
 
 type V1TendersTenderIDPutRes interface {
 	v1TendersTenderIDPutRes()
+}
+
+type V1UsersUserIDGetRes interface {
+	v1UsersUserIDGetRes()
 }

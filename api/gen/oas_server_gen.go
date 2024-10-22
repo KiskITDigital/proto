@@ -68,6 +68,12 @@ type Handler interface {
 	//
 	// POST /v1/catalog/services
 	V1CatalogServicesPost(ctx context.Context, req *V1CatalogServicesPostReq) (V1CatalogServicesPostRes, error)
+	// V1SurveyPost implements POST /v1/survey operation.
+	//
+	// Response to survey.
+	//
+	// POST /v1/survey
+	V1SurveyPost(ctx context.Context, req *V1SurveyPostReq) (V1SurveyPostRes, error)
 	// V1TendersCreatePost implements POST /v1/tenders/create operation.
 	//
 	// Create tender.
@@ -86,6 +92,12 @@ type Handler interface {
 	//
 	// PUT /v1/tenders/{tenderID}
 	V1TendersTenderIDPut(ctx context.Context, req *V1TendersTenderIDPutReq, params V1TendersTenderIDPutParams) (V1TendersTenderIDPutRes, error)
+	// V1UsersUserIDGet implements GET /v1/users/{userID} operation.
+	//
+	// Get user by id.
+	//
+	// GET /v1/users/{userID}
+	V1UsersUserIDGet(ctx context.Context, params V1UsersUserIDGetParams) (V1UsersUserIDGetRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

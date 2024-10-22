@@ -23,6 +23,9 @@ paths:
   /v1/tenders/{tenderID}:
     $ref: "v1/paths/tenders/_id.yaml"
 
+  /v1/users/{userID}:
+    $ref: "v1/paths/users/_id.yaml"
+
   /v1/catalog/services:
     $ref: "v1/paths/catalog/services.yaml"
   /v1/catalog/objects:
@@ -31,6 +34,9 @@ paths:
     $ref: "v1/paths/catalog/cities.yaml"
   /v1/catalog/regions:
     $ref: "v1/paths/catalog/regions.yaml"
+
+  /v1/survey:
+    $ref: "v1/paths/survey.yaml"
 components:
   securitySchemes:
     cookieAuth:

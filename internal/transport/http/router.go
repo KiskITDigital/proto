@@ -14,6 +14,8 @@ type Router struct {
 	Error
 	Tenders
 	Catalog
+	Users
+	Survey
 }
 
 type Error interface {
@@ -36,6 +38,14 @@ type Tenders interface {
 	V1TendersTenderIDGet(ctx context.Context, params api.V1TendersTenderIDGetParams) (api.V1TendersTenderIDGetRes, error)
 }
 
+type Users interface {
+	V1UsersUserIDGet(ctx context.Context, params api.V1UsersUserIDGetParams) (api.V1UsersUserIDGetRes, error)
+}
+
+type Survey interface {
+	V1SurveyPost(ctx context.Context, req *api.V1SurveyPostReq) (api.V1SurveyPostRes, error)
+}
+
 type Catalog interface {
 	V1CatalogObjectsGet(ctx context.Context) (api.V1CatalogObjectsGetRes, error)
 	V1CatalogServicesGet(ctx context.Context) (api.V1CatalogServicesGetRes, error)
@@ -50,6 +60,8 @@ type RouterParams struct {
 	Auth    Auth
 	Tenders Tenders
 	Catalog Catalog
+	Users   Users
+	Survey  Survey
 }
 
 func NewRouter(params RouterParams) *Router {
@@ -58,5 +70,7 @@ func NewRouter(params RouterParams) *Router {
 		Error:   params.Error,
 		Tenders: params.Tenders,
 		Catalog: params.Catalog,
+		Users:   params.Users,
+		Survey:  params.Survey,
 	}
 }

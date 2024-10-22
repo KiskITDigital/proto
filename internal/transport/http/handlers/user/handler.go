@@ -1,0 +1,24 @@
+package user
+
+import (
+	"context"
+	"log/slog"
+
+	"gitlab.ubrato.ru/ubrato/core/internal/models"
+)
+
+type Handler struct {
+	logger *slog.Logger
+	svc    Service
+}
+
+type Service interface {
+	GetByID(ctx context.Context, tenderID int) (models.User, error)
+}
+
+func New(logger *slog.Logger, svc Service) *Handler {
+	return &Handler{
+		logger: logger,
+		svc:    svc,
+	}
+}

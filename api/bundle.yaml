@@ -403,6 +403,39 @@ paths:
                         $ref: '#/components/schemas/Tender'
         default:
           $ref: '#/components/responses/Error'
+  /v1/users/{userID}:
+    get:
+      tags:
+        - users
+      summary: Get user by id
+      parameters:
+        - name: userID
+          required: true
+          in: path
+          description: ID of user
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - user
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/User'
+        default:
+          $ref: '#/components/responses/Error'
   /v1/catalog/services:
     get:
       tags:
@@ -600,6 +633,34 @@ paths:
                         $ref: '#/components/schemas/Region'
         default:
           $ref: '#/components/responses/Error'
+  /v1/survey:
+    post:
+      tags:
+        - survey
+      summary: Response to survey
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - region_id
+              properties:
+                name:
+                  type: string
+                type:
+                  $ref: '#/components/schemas/survey'
+                phone:
+                  $ref: '#/components/schemas/phone'
+                question:
+                  type: string
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
 components:
   securitySchemes:
     cookieAuth:
@@ -682,7 +743,7 @@ components:
       type: string
       pattern: ^\d+$
       example: '1234'
-    Contact_info:
+    ContactInfo:
       type: object
       required:
         - contact
@@ -739,15 +800,15 @@ components:
         emails:
           type: array
           items:
-            $ref: '#/components/schemas/Contact_info'
+            $ref: '#/components/schemas/ContactInfo'
         phones:
           type: array
           items:
-            $ref: '#/components/schemas/Contact_info'
+            $ref: '#/components/schemas/ContactInfo'
         messengers:
           type: array
           items:
-            $ref: '#/components/schemas/Contact_info'
+            $ref: '#/components/schemas/ContactInfo'
         created_at:
           type: string
           format: date-time
@@ -932,6 +993,12 @@ components:
         work_end:
           type: string
           format: date-time
+    survey:
+      type: string
+      enum:
+        - registration
+        - verification
+        - feedback
   responses:
     Error:
       description: Error

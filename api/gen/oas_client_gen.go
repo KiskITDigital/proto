@@ -83,6 +83,12 @@ type Invoker interface {
 	//
 	// POST /v1/catalog/services
 	V1CatalogServicesPost(ctx context.Context, request *V1CatalogServicesPostReq) (V1CatalogServicesPostRes, error)
+	// V1SurveyPost invokes POST /v1/survey operation.
+	//
+	// Response to survey.
+	//
+	// POST /v1/survey
+	V1SurveyPost(ctx context.Context, request *V1SurveyPostReq) (V1SurveyPostRes, error)
 	// V1TendersCreatePost invokes POST /v1/tenders/create operation.
 	//
 	// Create tender.
@@ -101,6 +107,12 @@ type Invoker interface {
 	//
 	// PUT /v1/tenders/{tenderID}
 	V1TendersTenderIDPut(ctx context.Context, request *V1TendersTenderIDPutReq, params V1TendersTenderIDPutParams) (V1TendersTenderIDPutRes, error)
+	// V1UsersUserIDGet invokes GET /v1/users/{userID} operation.
+	//
+	// Get user by id.
+	//
+	// GET /v1/users/{userID}
+	V1UsersUserIDGet(ctx context.Context, params V1UsersUserIDGetParams) (V1UsersUserIDGetRes, error)
 }
 
 // Client implements OAS client.
@@ -1095,6 +1107,80 @@ func (c *Client) sendV1CatalogServicesPost(ctx context.Context, request *V1Catal
 	return result, nil
 }
 
+// V1SurveyPost invokes POST /v1/survey operation.
+//
+// Response to survey.
+//
+// POST /v1/survey
+func (c *Client) V1SurveyPost(ctx context.Context, request *V1SurveyPostReq) (V1SurveyPostRes, error) {
+	res, err := c.sendV1SurveyPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendV1SurveyPost(ctx context.Context, request *V1SurveyPostReq) (res V1SurveyPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/survey"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1SurveyPost",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/survey"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1SurveyPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1SurveyPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // V1TendersCreatePost invokes POST /v1/tenders/create operation.
 //
 // Create tender.
@@ -1409,6 +1495,95 @@ func (c *Client) sendV1TendersTenderIDPut(ctx context.Context, request *V1Tender
 
 	stage = "DecodeResponse"
 	result, err := decodeV1TendersTenderIDPutResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1UsersUserIDGet invokes GET /v1/users/{userID} operation.
+//
+// Get user by id.
+//
+// GET /v1/users/{userID}
+func (c *Client) V1UsersUserIDGet(ctx context.Context, params V1UsersUserIDGetParams) (V1UsersUserIDGetRes, error) {
+	res, err := c.sendV1UsersUserIDGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1UsersUserIDGet(ctx context.Context, params V1UsersUserIDGetParams) (res V1UsersUserIDGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/users/{userID}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1UsersUserIDGet",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/v1/users/"
+	{
+		// Encode "userID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "userID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.UserID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1UsersUserIDGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

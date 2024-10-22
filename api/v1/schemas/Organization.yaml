@@ -42,15 +42,15 @@ properties:
   emails:
     type: array
     items:
-      $ref: "Contact_info.yaml"
+      $ref: "ContactInfo.yaml"
   phones:
     type: array
     items:
-      $ref: "Contact_info.yaml"
+      $ref: "ContactInfo.yaml"
   messengers:
     type: array
     items:
-      $ref: "Contact_info.yaml"
+      $ref: "ContactInfo.yaml"
   created_at:
     type: string
     format: date-time

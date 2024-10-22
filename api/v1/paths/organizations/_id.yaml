@@ -1,0 +1,32 @@
+get:
+  tags:
+    - tenders
+  summary: Get organization by id
+  parameters:
+    - name: organizationID
+      required: true
+      in: path
+      description: ID of organization
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required: 
+                  - tender
+                properties:
+                  tender:
+                    $ref: "../../schemas/Tender.yaml"
+    default:
+      $ref: "../../responses/Error.yaml"

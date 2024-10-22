@@ -103,6 +103,15 @@ func (UnimplementedHandler) V1CatalogServicesPost(ctx context.Context, req *V1Ca
 	return r, ht.ErrNotImplemented
 }
 
+// V1SurveyPost implements POST /v1/survey operation.
+//
+// Response to survey.
+//
+// POST /v1/survey
+func (UnimplementedHandler) V1SurveyPost(ctx context.Context, req *V1SurveyPostReq) (r V1SurveyPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1TendersCreatePost implements POST /v1/tenders/create operation.
 //
 // Create tender.
@@ -127,5 +136,14 @@ func (UnimplementedHandler) V1TendersTenderIDGet(ctx context.Context, params V1T
 //
 // PUT /v1/tenders/{tenderID}
 func (UnimplementedHandler) V1TendersTenderIDPut(ctx context.Context, req *V1TendersTenderIDPutReq, params V1TendersTenderIDPutParams) (r V1TendersTenderIDPutRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1UsersUserIDGet implements GET /v1/users/{userID} operation.
+//
+// Get user by id.
+//
+// GET /v1/users/{userID}
+func (UnimplementedHandler) V1UsersUserIDGet(ctx context.Context, params V1UsersUserIDGetParams) (r V1UsersUserIDGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

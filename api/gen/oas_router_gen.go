@@ -278,6 +278,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
+			case 's': // Prefix: "survey"
+				origElem := elem
+				if l := len("survey"); len(elem) >= l && elem[0:l] == "survey" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "POST":
+						s.handleV1SurveyPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "POST")
+					}
+
+					return
+				}
+
+				elem = origElem
 			case 't': // Prefix: "tenders/"
 				origElem := elem
 				if l := len("tenders/"); len(elem) >= l && elem[0:l] == "tenders/" {
@@ -330,6 +351,34 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET,PUT")
+					}
+
+					return
+				}
+
+				elem = origElem
+			case 'u': // Prefix: "users/"
+				origElem := elem
+				if l := len("users/"); len(elem) >= l && elem[0:l] == "users/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				// Param: "userID"
+				// Leaf parameter
+				args[0] = elem
+				elem = ""
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "GET":
+						s.handleV1UsersUserIDGetRequest([1]string{
+							args[0],
+						}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET")
 					}
 
 					return
@@ -692,6 +741,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				elem = origElem
+			case 's': // Prefix: "survey"
+				origElem := elem
+				if l := len("survey"); len(elem) >= l && elem[0:l] == "survey" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "POST":
+						r.name = "V1SurveyPost"
+						r.summary = "Response to survey"
+						r.operationID = ""
+						r.pathPattern = "/v1/survey"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+
+				elem = origElem
 			case 't': // Prefix: "tenders/"
 				origElem := elem
 				if l := len("tenders/"); len(elem) >= l && elem[0:l] == "tenders/" {
@@ -751,6 +825,36 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.summary = "Update tender by id"
 						r.operationID = ""
 						r.pathPattern = "/v1/tenders/{tenderID}"
+						r.args = args
+						r.count = 1
+						return r, true
+					default:
+						return
+					}
+				}
+
+				elem = origElem
+			case 'u': // Prefix: "users/"
+				origElem := elem
+				if l := len("users/"); len(elem) >= l && elem[0:l] == "users/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				// Param: "userID"
+				// Leaf parameter
+				args[0] = elem
+				elem = ""
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "GET":
+						r.name = "V1UsersUserIDGet"
+						r.summary = "Get user by id"
+						r.operationID = ""
+						r.pathPattern = "/v1/users/{userID}"
 						r.args = args
 						r.count = 1
 						return r, true

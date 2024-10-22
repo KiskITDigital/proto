@@ -1,0 +1,27 @@
+post:
+  tags:
+    - survey
+  summary: Response to survey
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+            - region_id
+          properties:
+            name:
+              type: string
+            type:
+              $ref: "../properties/survey.yaml"
+            phone:
+              $ref: "../properties/phone.yaml"
+            question:
+              type: string
+  responses:
+    '200':
+      description: Success
+    default:
+      $ref: "../responses/Error.yaml"

@@ -13,6 +13,7 @@ import (
 	authService "gitlab.ubrato.ru/ubrato/core/internal/service/auth"
 	catalogService "gitlab.ubrato.ru/ubrato/core/internal/service/catalog"
 	tenderService "gitlab.ubrato.ru/ubrato/core/internal/service/tender"
+	userService "gitlab.ubrato.ru/ubrato/core/internal/service/user"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 	"gitlab.ubrato.ru/ubrato/core/internal/store/postgres"
 	catalogStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/catalog"
@@ -25,6 +26,7 @@ import (
 	catalogHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/catalog"
 	errorHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/error"
 	tenderHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/tender"
+	userHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/user"
 )
 
 func main() {
@@ -92,11 +94,17 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		catalogStore,
 	)
 
+	userService := userService.New(
+		psql,
+		userStore,
+	)
+
 	router := http.NewRouter(http.RouterParams{
 		Error:   errorHandler.New(logger),
 		Auth:    authHandler.New(logger, authService),
 		Tenders: tenderHandler.New(logger, tenderService),
 		Catalog: catalogHandler.New(logger, catalogService),
+		Users:   userHandler.New(logger, userService),
 	})
 
 	server, err := http.NewServer(logger, cfg.Transport.HTTP, router)
