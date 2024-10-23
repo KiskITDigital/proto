@@ -37,6 +37,7 @@ properties:
     $ref: "../properties/tax_code.yaml"
   address:
     type: string
+    example: 117312, г Москва, Академический р-н, ул Вавилова, д 19
   avatar_url:
     $ref: "../properties/url.yaml"
   emails:

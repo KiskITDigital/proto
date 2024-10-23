@@ -732,19 +732,22 @@ components:
     inn:
       type: string
       pattern: ^\d{10,12}$
+      example: 7707083893
     okpo:
       type: string
       pattern: ^\d{8}$|^\d{10}$|^\d{14}$
     ogrn:
       type: string
       pattern: ^\d{13}$
+      example: 1027700132195
     kpp:
       type: string
       pattern: ^\d{9}$
+      example: 773601001
     tax_code:
       type: string
       pattern: ^\d+$
-      example: '1234'
+      example: '7736'
     ContactInfo:
       type: object
       required:
@@ -797,6 +800,7 @@ components:
           $ref: '#/components/schemas/tax_code'
         address:
           type: string
+          example: 117312, г Москва, Академический р-н, ул Вавилова, д 19
         avatar_url:
           $ref: '#/components/schemas/url'
         emails:
