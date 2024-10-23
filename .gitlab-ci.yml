@@ -47,7 +47,7 @@ prod-deploy:
   - chmod 700 ~/.ssh
   - cp $KNOWN_HOSTS ~/.ssh/known_hosts
   script:
-    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST -p $REMOTE_PORT "docker service update --with-registry-auth --image CI_REGISTRY_IMAGE:latest stack_core"
+    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST -p $REMOTE_PORT "docker service update --with-registry-auth --image $CI_REGISTRY_IMAGE:latest stack_core"
 
 stage-deploy:
   only: [stage]
@@ -61,4 +61,4 @@ stage-deploy:
   - chmod 700 ~/.ssh
   - cp $KNOWN_HOSTS ~/.ssh/known_hosts
   script:
-    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST -p $REMOTE_PORT "docker service update --with-registry-auth --image CI_REGISTRY_IMAGE:stage stage_core"
+    - ssh -o StrictHostKeyChecking=no $REMOTE_USER@$REMOTE_HOST -p $REMOTE_PORT "docker service update --with-registry-auth --image $CI_REGISTRY_IMAGE:stage stage_core"
