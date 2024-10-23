@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"gitlab.ubrato.ru/ubrato/core/internal/broker"
 	"gitlab.ubrato.ru/ubrato/core/internal/gateway/dadata"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/token"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
@@ -18,6 +19,7 @@ type Service struct {
 	sessionStore      SessionStore
 	dadataGateway     DadataGateway
 	tokenAuthorizer   TokenAuthorizer
+	broker            Broker
 }
 
 const (
@@ -58,6 +60,10 @@ type TokenAuthorizer interface {
 	ValidateToken(rawToken string) (token.Claims, error)
 }
 
+type Broker interface {
+	Publish(ctx context.Context, subject broker.Topic, data []byte) error
+}
+
 func New(
 	psql DBTX,
 	userStore UserStore,
@@ -65,6 +71,8 @@ func New(
 	sessionStore SessionStore,
 	dadataGateway DadataGateway,
 	tokenAuthorizer TokenAuthorizer,
+	broker Broker,
+
 ) *Service {
 	return &Service{
 		psql:              psql,
@@ -73,6 +81,7 @@ func New(
 		sessionStore:      sessionStore,
 		dadataGateway:     dadataGateway,
 		tokenAuthorizer:   tokenAuthorizer,
+		broker:            broker,
 	}
 }
 

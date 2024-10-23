@@ -6,10 +6,15 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"gitlab.ubrato.ru/ubrato/core/internal/broker"
+	commandsv1 "gitlab.ubrato.ru/ubrato/core/internal/gen/amo-sync-pb/commands/v1"
+	modelsv1 "gitlab.ubrato.ru/ubrato/core/internal/gen/amo-sync-pb/models/v1"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/crypto"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/token"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 type SignUpParams struct {
@@ -107,6 +112,36 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 	})
 	if err != nil {
 		return SignUpResult{}, fmt.Errorf("run transaction: %w", err)
+	}
+
+	b, err := proto.Marshal(&commandsv1.CreateCompany{
+		Company: &modelsv1.Company{
+			ShortName:    result.User.Organization.ShortName,
+			FullName:     result.User.Organization.FullName,
+			Inn:          result.User.Organization.INN,
+			Kpp:          result.User.Organization.KPP,
+			Ogrn:         result.User.Organization.OGRN,
+			Okpo:         result.User.Organization.OKPO,
+			TaxCode:      result.User.Organization.TaxCode,
+			RegisteredAt: timestamppb.New(result.User.Organization.CreatedAt),
+		},
+		Contact: &modelsv1.Contact{
+			FirstName:  result.User.FirstName,
+			LastName:   result.User.LastName,
+			MiddleName: result.User.MiddleName,
+			Phone:      result.User.Phone,
+			Email:      result.User.Email,
+		},
+		CompanyExternalId: int64(result.User.Organization.ID),
+		ContactExternalId: int64(result.User.ID),
+	})
+	if err != nil {
+		return SignUpResult{}, fmt.Errorf("marhal proto: %w", err)
+	}
+
+	err = s.broker.Publish(ctx, broker.AmoCreateCompanyTopic, b)
+	if err != nil {
+		return SignUpResult{}, fmt.Errorf("sync amo: %w", err)
 	}
 
 	return result, nil

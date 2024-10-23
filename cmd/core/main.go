@@ -7,11 +7,13 @@ import (
 	"os/signal"
 	"syscall"
 
+	"gitlab.ubrato.ru/ubrato/core/internal/broker/jetstream"
 	"gitlab.ubrato.ru/ubrato/core/internal/config"
 	dadataGateway "gitlab.ubrato.ru/ubrato/core/internal/gateway/dadata"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/token"
 	authService "gitlab.ubrato.ru/ubrato/core/internal/service/auth"
 	catalogService "gitlab.ubrato.ru/ubrato/core/internal/service/catalog"
+	surveyService "gitlab.ubrato.ru/ubrato/core/internal/service/survey"
 	tenderService "gitlab.ubrato.ru/ubrato/core/internal/service/tender"
 	userService "gitlab.ubrato.ru/ubrato/core/internal/service/user"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
@@ -25,6 +27,7 @@ import (
 	authHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/auth"
 	catalogHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/catalog"
 	errorHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/error"
+	surveyHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/survey"
 	tenderHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/tender"
 	userHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/user"
 )
@@ -75,6 +78,11 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		return fmt.Errorf("init token authorizer: %w", err)
 	}
 
+	jetStream, err := jetstream.New(logger, cfg.Broker.Nats.Address)
+	if err != nil {
+		return fmt.Errorf("init jetstream: %w", err)
+	}
+
 	authService := authService.New(
 		psql,
 		userStore,
@@ -82,6 +90,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		sessionStore,
 		dadataGateway,
 		tokenAuthorizer,
+		jetStream,
 	)
 
 	tenderService := tenderService.New(
@@ -99,12 +108,18 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		userStore,
 	)
 
+	surveyService := surveyService.New(
+		psql,
+		jetStream,
+	)
+
 	router := http.NewRouter(http.RouterParams{
 		Error:   errorHandler.New(logger),
 		Auth:    authHandler.New(logger, authService),
 		Tenders: tenderHandler.New(logger, tenderService),
 		Catalog: catalogHandler.New(logger, catalogService),
 		Users:   userHandler.New(logger, userService),
+		Survey:  surveyHandler.New(logger, surveyService),
 	})
 
 	server, err := http.NewServer(logger, cfg.Transport.HTTP, router)

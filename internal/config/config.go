@@ -12,6 +12,7 @@ type Default struct {
 	Transport Transport `envPrefix:"TRANSPORT_"`
 	Gateway   Gateway   `envPrefix:"GATEWAY_"`
 	Auth      Auth      `envPrefix:"AUTH_"`
+	Broker    Broker    `envPrefix:"BROKER_"`
 }
 
 func ReadConfig() (Default, error) {
