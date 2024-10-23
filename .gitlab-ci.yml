@@ -16,7 +16,6 @@ prod-build:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p "$CI_JOB_TOKEN" $CI_REGISTRY
-    - cp $PROD_CONFIG ./config.yaml
     - docker build -f ./deployments/Dockerfile --build-arg GIT_VERSION=$CI_COMMIT_SHORT_SHA --pull -t "$CI_REGISTRY_IMAGE:latest" .
     - docker push "$CI_REGISTRY_IMAGE:latest"
 
@@ -25,7 +24,6 @@ stage-build:
   stage: build
   script:
     - docker login -u $CI_REGISTRY_USER -p "$CI_JOB_TOKEN" $CI_REGISTRY
-    - cp $PROD_CONFIG ./config.yaml
     - docker build -f ./deployments/Dockerfile --build-arg GIT_VERSION=$CI_COMMIT_SHORT_SHA --pull -t "$CI_REGISTRY_IMAGE:stage" .
     - docker push "$CI_REGISTRY_IMAGE:stage"
 
