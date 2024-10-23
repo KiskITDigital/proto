@@ -19,6 +19,7 @@ require (
 	go.uber.org/multierr v1.11.0
 	golang.org/x/crypto v0.28.0
 	golang.org/x/exp v0.0.0-20230725093048-515e97ebf090
+	google.golang.org/protobuf v1.35.1
 )
 
 require (

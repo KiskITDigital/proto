@@ -10,7 +10,9 @@ post:
           type: object
           required:
             - name
-            - region_id
+            - type
+            - phone
+            - question
           properties:
             name:
               type: string

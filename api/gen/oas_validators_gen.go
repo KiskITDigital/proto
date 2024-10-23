@@ -1064,15 +1064,8 @@ func (s *V1SurveyPostReq) Validate() error {
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if value, ok := s.Type.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
+		if err := s.Type.Validate(); err != nil {
+			return err
 		}
 		return nil
 	}(); err != nil {
@@ -1082,15 +1075,8 @@ func (s *V1SurveyPostReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if value, ok := s.Phone.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
+		if err := s.Phone.Validate(); err != nil {
+			return err
 		}
 		return nil
 	}(); err != nil {

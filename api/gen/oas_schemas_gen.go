@@ -473,52 +473,6 @@ func (o OptOrganization) Or(d Organization) Organization {
 	return d
 }
 
-// NewOptPhone returns new OptPhone with value set to v.
-func NewOptPhone(v Phone) OptPhone {
-	return OptPhone{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptPhone is optional Phone.
-type OptPhone struct {
-	Value Phone
-	Set   bool
-}
-
-// IsSet returns true if OptPhone was set.
-func (o OptPhone) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptPhone) Reset() {
-	var v Phone
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptPhone) SetTo(v Phone) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptPhone) Get() (v Phone, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptPhone) Or(d Phone) Phone {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewOptRegion returns new OptRegion with value set to v.
 func NewOptRegion(v Region) OptRegion {
 	return OptRegion{
@@ -605,52 +559,6 @@ func (o OptString) Get() (v string, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptString) Or(d string) string {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptSurvey returns new OptSurvey with value set to v.
-func NewOptSurvey(v Survey) OptSurvey {
-	return OptSurvey{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptSurvey is optional Survey.
-type OptSurvey struct {
-	Value Survey
-	Set   bool
-}
-
-// IsSet returns true if OptSurvey was set.
-func (o OptSurvey) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptSurvey) Reset() {
-	var v Survey
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptSurvey) SetTo(v Survey) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptSurvey) Get() (v Survey, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptSurvey) Or(d Survey) Survey {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -2052,10 +1960,10 @@ type V1SurveyPostOK struct{}
 func (*V1SurveyPostOK) v1SurveyPostRes() {}
 
 type V1SurveyPostReq struct {
-	Name     string    `json:"name"`
-	Type     OptSurvey `json:"type"`
-	Phone    OptPhone  `json:"phone"`
-	Question OptString `json:"question"`
+	Name     string `json:"name"`
+	Type     Survey `json:"type"`
+	Phone    Phone  `json:"phone"`
+	Question string `json:"question"`
 }
 
 // GetName returns the value of Name.
@@ -2064,17 +1972,17 @@ func (s *V1SurveyPostReq) GetName() string {
 }
 
 // GetType returns the value of Type.
-func (s *V1SurveyPostReq) GetType() OptSurvey {
+func (s *V1SurveyPostReq) GetType() Survey {
 	return s.Type
 }
 
 // GetPhone returns the value of Phone.
-func (s *V1SurveyPostReq) GetPhone() OptPhone {
+func (s *V1SurveyPostReq) GetPhone() Phone {
 	return s.Phone
 }
 
 // GetQuestion returns the value of Question.
-func (s *V1SurveyPostReq) GetQuestion() OptString {
+func (s *V1SurveyPostReq) GetQuestion() string {
 	return s.Question
 }
 
@@ -2084,17 +1992,17 @@ func (s *V1SurveyPostReq) SetName(val string) {
 }
 
 // SetType sets the value of Type.
-func (s *V1SurveyPostReq) SetType(val OptSurvey) {
+func (s *V1SurveyPostReq) SetType(val Survey) {
 	s.Type = val
 }
 
 // SetPhone sets the value of Phone.
-func (s *V1SurveyPostReq) SetPhone(val OptPhone) {
+func (s *V1SurveyPostReq) SetPhone(val Phone) {
 	s.Phone = val
 }
 
 // SetQuestion sets the value of Question.
-func (s *V1SurveyPostReq) SetQuestion(val OptString) {
+func (s *V1SurveyPostReq) SetQuestion(val string) {
 	s.Question = val
 }
 

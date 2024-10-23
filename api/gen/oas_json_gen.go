@@ -1036,39 +1036,6 @@ func (s *OptOrganization) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode encodes Phone as json.
-func (o OptPhone) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	o.Value.Encode(e)
-}
-
-// Decode decodes Phone from json.
-func (o *OptPhone) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptPhone to nil")
-	}
-	o.Set = true
-	if err := o.Value.Decode(d); err != nil {
-		return err
-	}
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptPhone) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptPhone) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
 // Encode encodes Region as json.
 func (o OptRegion) Encode(e *jx.Encoder) {
 	if !o.Set {
@@ -1133,39 +1100,6 @@ func (s OptString) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptString) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes Survey as json.
-func (o OptSurvey) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	e.Str(string(o.Value))
-}
-
-// Decode decodes Survey from json.
-func (o *OptSurvey) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptSurvey to nil")
-	}
-	o.Set = true
-	if err := o.Value.Decode(d); err != nil {
-		return err
-	}
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptSurvey) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptSurvey) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -5546,22 +5480,16 @@ func (s *V1SurveyPostReq) encodeFields(e *jx.Encoder) {
 		e.Str(s.Name)
 	}
 	{
-		if s.Type.Set {
-			e.FieldStart("type")
-			s.Type.Encode(e)
-		}
+		e.FieldStart("type")
+		s.Type.Encode(e)
 	}
 	{
-		if s.Phone.Set {
-			e.FieldStart("phone")
-			s.Phone.Encode(e)
-		}
+		e.FieldStart("phone")
+		s.Phone.Encode(e)
 	}
 	{
-		if s.Question.Set {
-			e.FieldStart("question")
-			s.Question.Encode(e)
-		}
+		e.FieldStart("question")
+		e.Str(s.Question)
 	}
 }
 
@@ -5594,8 +5522,8 @@ func (s *V1SurveyPostReq) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"name\"")
 			}
 		case "type":
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				s.Type.Reset()
 				if err := s.Type.Decode(d); err != nil {
 					return err
 				}
@@ -5604,8 +5532,8 @@ func (s *V1SurveyPostReq) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"type\"")
 			}
 		case "phone":
+			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				s.Phone.Reset()
 				if err := s.Phone.Decode(d); err != nil {
 					return err
 				}
@@ -5614,9 +5542,11 @@ func (s *V1SurveyPostReq) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"phone\"")
 			}
 		case "question":
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				s.Question.Reset()
-				if err := s.Question.Decode(d); err != nil {
+				v, err := d.Str()
+				s.Question = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -5633,7 +5563,7 @@ func (s *V1SurveyPostReq) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000001,
+		0b00001111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

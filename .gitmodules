@@ -1,0 +1,3 @@
+[submodule "amo-sync-proto"]
+	path = amo-sync-proto
+	url = git@gitlab.ubrato.ru:ubrato/amo-sync-proto.git
