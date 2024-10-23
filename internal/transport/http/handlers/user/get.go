@@ -11,7 +11,7 @@ import (
 func (h *Handler) V1UsersUserIDGet(ctx context.Context, params api.V1UsersUserIDGetParams) (api.V1UsersUserIDGetRes, error) {
 	user, err := h.svc.GetByID(ctx, params.UserID)
 	if err != nil {
-		return nil, fmt.Errorf("get user by id")
+		return nil, fmt.Errorf("get user with id: %d", params.UserID)
 	}
 
 	return &api.V1UsersUserIDGetOK{
