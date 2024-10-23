@@ -34,11 +34,11 @@ func (s *UserStore) Get(ctx context.Context, qe store.QueryExecutor, params stor
 		PlaceholderFormat(squirrel.Dollar)
 
 	if params.Email != "" {
-		builder.Where(squirrel.Eq{"email": params.Email})
+		builder = builder.Where(squirrel.Eq{"email": params.Email})
 	}
 
 	if params.ID != 0 {
-		builder.Where(squirrel.Eq{"id": params.ID})
+		builder = builder.Where(squirrel.Eq{"id": params.ID})
 	}
 
 	var (
@@ -114,11 +114,11 @@ func (s *UserStore) GetWithOrganiztion(ctx context.Context, qe store.QueryExecut
 		PlaceholderFormat(squirrel.Dollar)
 
 	if params.Email != "" {
-		builder.Where(squirrel.Eq{"u.email": params.Email})
+		builder = builder.Where(squirrel.Eq{"u.email": params.Email})
 	}
 
 	if params.ID != 0 {
-		builder.Where(squirrel.Eq{"u.id": params.ID})
+		builder = builder.Where(squirrel.Eq{"u.id": params.ID})
 	}
 
 	var (
