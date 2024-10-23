@@ -7,7 +7,7 @@ WORKDIR /src
 COPY . .
 
 RUN apk upgrade --no-cache && \
-    CGO_ENABLED=0 GOOS=linux go build -mod=readonly -a -installsuffix cgo -o admin ./cmd/core
+    CGO_ENABLED=0 GOOS=linux go build -mod=readonly -a -installsuffix cgo -o core ./cmd/core
 
 FROM alpine:3.20
 
