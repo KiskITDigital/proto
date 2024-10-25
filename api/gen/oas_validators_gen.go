@@ -311,11 +311,11 @@ func (s Services) Validate() error {
 
 func (s Survey) Validate() error {
 	switch s {
-	case "registration":
+	case "SURVEY_TYPE_REGISTRATION":
 		return nil
-	case "verification":
+	case "SURVEY_TYPE_VERIFICATION":
 		return nil
-	case "feedback":
+	case "SURVEY_TYPE_FEEDBACK":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)

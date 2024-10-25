@@ -1974,12 +1974,12 @@ func (s *Survey) Decode(d *jx.Decoder) error {
 	}
 	// Try to use constant string.
 	switch Survey(v) {
-	case SurveyRegistration:
-		*s = SurveyRegistration
-	case SurveyVerification:
-		*s = SurveyVerification
-	case SurveyFeedback:
-		*s = SurveyFeedback
+	case SurveySURVEYTYPEREGISTRATION:
+		*s = SurveySURVEYTYPEREGISTRATION
+	case SurveySURVEYTYPEVERIFICATION:
+		*s = SurveySURVEYTYPEVERIFICATION
+	case SurveySURVEYTYPEFEEDBACK:
+		*s = SurveySURVEYTYPEFEEDBACK
 	default:
 		*s = Survey(v)
 	}

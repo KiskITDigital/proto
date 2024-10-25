@@ -1002,9 +1002,9 @@ components:
     survey:
       type: string
       enum:
-        - registration
-        - verification
-        - feedback
+        - SURVEY_TYPE_REGISTRATION
+        - SURVEY_TYPE_VERIFICATION
+        - SURVEY_TYPE_FEEDBACK
   responses:
     Error:
       description: Error

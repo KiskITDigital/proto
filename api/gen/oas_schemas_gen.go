@@ -916,28 +916,28 @@ type Services []Service
 type Survey string
 
 const (
-	SurveyRegistration Survey = "registration"
-	SurveyVerification Survey = "verification"
-	SurveyFeedback     Survey = "feedback"
+	SurveySURVEYTYPEREGISTRATION Survey = "SURVEY_TYPE_REGISTRATION"
+	SurveySURVEYTYPEVERIFICATION Survey = "SURVEY_TYPE_VERIFICATION"
+	SurveySURVEYTYPEFEEDBACK     Survey = "SURVEY_TYPE_FEEDBACK"
 )
 
 // AllValues returns all Survey values.
 func (Survey) AllValues() []Survey {
 	return []Survey{
-		SurveyRegistration,
-		SurveyVerification,
-		SurveyFeedback,
+		SurveySURVEYTYPEREGISTRATION,
+		SurveySURVEYTYPEVERIFICATION,
+		SurveySURVEYTYPEFEEDBACK,
 	}
 }
 
 // MarshalText implements encoding.TextMarshaler.
 func (s Survey) MarshalText() ([]byte, error) {
 	switch s {
-	case SurveyRegistration:
+	case SurveySURVEYTYPEREGISTRATION:
 		return []byte(s), nil
-	case SurveyVerification:
+	case SurveySURVEYTYPEVERIFICATION:
 		return []byte(s), nil
-	case SurveyFeedback:
+	case SurveySURVEYTYPEFEEDBACK:
 		return []byte(s), nil
 	default:
 		return nil, errors.Errorf("invalid value: %q", s)
@@ -947,14 +947,14 @@ func (s Survey) MarshalText() ([]byte, error) {
 // UnmarshalText implements encoding.TextUnmarshaler.
 func (s *Survey) UnmarshalText(data []byte) error {
 	switch Survey(data) {
-	case SurveyRegistration:
-		*s = SurveyRegistration
+	case SurveySURVEYTYPEREGISTRATION:
+		*s = SurveySURVEYTYPEREGISTRATION
 		return nil
-	case SurveyVerification:
-		*s = SurveyVerification
+	case SurveySURVEYTYPEVERIFICATION:
+		*s = SurveySURVEYTYPEVERIFICATION
 		return nil
-	case SurveyFeedback:
-		*s = SurveyFeedback
+	case SurveySURVEYTYPEFEEDBACK:
+		*s = SurveySURVEYTYPEFEEDBACK
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
