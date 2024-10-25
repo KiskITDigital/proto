@@ -170,7 +170,7 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 		return SignUpResult{}, fmt.Errorf("marhal proto: %w", err)
 	}
 
-	err = s.broker.Publish(ctx, broker.AmoCreateCompanyTopic, b)
+	err = s.broker.Publish(ctx, broker.UbratoUserRegisteredSubject, b)
 	if err != nil {
 		return SignUpResult{}, fmt.Errorf("sync amo: %w", err)
 	}

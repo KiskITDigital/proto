@@ -30,5 +30,5 @@ func (s *Service) Response(ctx context.Context, params ResponseParams) error {
 		return fmt.Errorf("marshal proto: %w", err)
 	}
 
-	return s.broker.Publish(ctx, broker.AmoCreateLeadTopic, b)
+	return s.broker.Publish(ctx, broker.UbratoSurveySubmittedSubject, b)
 }
