@@ -10,7 +10,6 @@ type UserCreateParams struct {
 	LastName       string
 	MiddleName     string
 	AvatarURL      string
-	Verified       bool
 	EmailVerified  bool
 	Role           int
 	IsContractor   bool

@@ -48,15 +48,16 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 	err = s.psql.WithTransaction(ctx, func(qe store.QueryExecutor) error {
 		// FIXME: panic
 		organization, err := s.organizationStore.Create(ctx, qe, store.OrganizationCreateParams{
-			BrandName: resp.Suggestions[0].Data.Name.Short,
-			FullName:  resp.Suggestions[0].Data.Name.FullWithOpf,
-			ShortName: resp.Suggestions[0].Data.Name.ShortWithOpf,
-			INN:       resp.Suggestions[0].Data.INN,
-			OKPO:      resp.Suggestions[0].Data.OKPO,
-			OGRN:      resp.Suggestions[0].Data.OGRN,
-			KPP:       resp.Suggestions[0].Data.KPP,
-			TaxCode:   resp.Suggestions[0].Data.Address.Data.TaxOffice,
-			Address:   resp.Suggestions[0].Data.Address.UnrestrictedValue,
+			BrandName:    resp.Suggestions[0].Data.Name.Short,
+			FullName:     resp.Suggestions[0].Data.Name.FullWithOpf,
+			ShortName:    resp.Suggestions[0].Data.Name.ShortWithOpf,
+			IsContractor: params.IsContractor,
+			INN:          resp.Suggestions[0].Data.INN,
+			OKPO:         resp.Suggestions[0].Data.OKPO,
+			OGRN:         resp.Suggestions[0].Data.OGRN,
+			KPP:          resp.Suggestions[0].Data.KPP,
+			TaxCode:      resp.Suggestions[0].Data.Address.Data.TaxOffice,
+			Address:      resp.Suggestions[0].Data.Address.UnrestrictedValue,
 		})
 		if err != nil {
 			return fmt.Errorf("create organization: %w", err)
