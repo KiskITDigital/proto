@@ -7,11 +7,12 @@ import (
 
 	"github.com/google/uuid"
 	"gitlab.ubrato.ru/ubrato/core/internal/broker"
-	commandsv1 "gitlab.ubrato.ru/ubrato/core/internal/gen/amo-sync-pb/commands/v1"
-	modelsv1 "gitlab.ubrato.ru/ubrato/core/internal/gen/amo-sync-pb/models/v1"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/crypto"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/token"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
+	eventsv1 "gitlab.ubrato.ru/ubrato/core/internal/models/gen/proto/events/v1"
+	modelsv1 "gitlab.ubrato.ru/ubrato/core/internal/models/gen/proto/models/v1"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -114,26 +115,56 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 		return SignUpResult{}, fmt.Errorf("run transaction: %w", err)
 	}
 
-	b, err := proto.Marshal(&commandsv1.CreateCompany{
-		Company: &modelsv1.Company{
-			ShortName:    result.User.Organization.ShortName,
-			FullName:     result.User.Organization.FullName,
-			Inn:          result.User.Organization.INN,
-			Kpp:          result.User.Organization.KPP,
-			Ogrn:         result.User.Organization.OGRN,
-			Okpo:         result.User.Organization.OKPO,
-			TaxCode:      result.User.Organization.TaxCode,
-			RegisteredAt: timestamppb.New(result.User.Organization.CreatedAt),
+	b, err := proto.Marshal(&eventsv1.UserRegistered{
+		User: &modelsv1.User{
+			Id:            int64(result.User.ID),
+			Email:         result.User.Email,
+			Phone:         result.User.Phone,
+			FirstName:     result.User.FirstName,
+			LastName:      result.User.LastName,
+			MiddleName:    result.User.MiddleName,
+			AvatarUrl:     &result.User.AvatarURL,
+			EmailVerified: result.User.EmailVerified,
+			Role:          modelsv1.UserRole(result.User.Role),
+			Organization: &modelsv1.Organization{
+				Id:           int64(result.User.Organization.ID),
+				BrandName:    result.User.Organization.BrandName,
+				FullName:     result.User.Organization.FullName,
+				ShortName:    result.User.Organization.ShortName,
+				IsContractor: result.User.Organization.IsContractor,
+				Verified:     result.User.Organization.Verified,
+				IsBanned:     result.User.Organization.IsBanned,
+				Inn:          result.User.Organization.INN,
+				Okpo:         result.User.Organization.OKPO,
+				Ogrn:         result.User.Organization.OGRN,
+				Kpp:          result.User.Organization.KPP,
+				TaxCode:      result.User.Organization.TaxCode,
+				Address:      result.User.Organization.Address,
+				AvatarUrl:    &result.User.Organization.AvatarURL,
+				Emails: convert.Slice[models.ContactInfos, []*modelsv1.Contact](result.User.Organization.Emails, func(ci models.ContactInfo) *modelsv1.Contact {
+					return &modelsv1.Contact{
+						Contact: ci.Contact,
+						Info:    ci.Info,
+					}
+				}),
+				Phones: convert.Slice[models.ContactInfos, []*modelsv1.Contact](result.User.Organization.Phones, func(ci models.ContactInfo) *modelsv1.Contact {
+					return &modelsv1.Contact{
+						Contact: ci.Contact,
+						Info:    ci.Info,
+					}
+				}),
+				Messengers: convert.Slice[models.ContactInfos, []*modelsv1.Contact](result.User.Organization.Messengers, func(ci models.ContactInfo) *modelsv1.Contact {
+					return &modelsv1.Contact{
+						Contact: ci.Contact,
+						Info:    ci.Info,
+					}
+				}),
+				CreatedAt: timestamppb.New(result.User.Organization.CreatedAt),
+				UpdatedAt: timestamppb.New(result.User.Organization.UpdatedAt),
+			},
+			CreatedAt: timestamppb.New(result.User.CreatedAt),
+			UpdatedAt: timestamppb.New(result.User.UpdatedAt),
 		},
-		Contact: &modelsv1.Contact{
-			FirstName:  result.User.FirstName,
-			LastName:   result.User.LastName,
-			MiddleName: result.User.MiddleName,
-			Phone:      result.User.Phone,
-			Email:      result.User.Email,
-		},
-		CompanyExternalId: int64(result.User.Organization.ID),
-		ContactExternalId: int64(result.User.ID),
 	})
 	if err != nil {
 		return SignUpResult{}, fmt.Errorf("marhal proto: %w", err)

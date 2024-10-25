@@ -772,6 +772,9 @@ components:
         - ogrn
         - kpp
         - tax_code
+        - verified
+        - is_contractor
+        - is_banned
         - address
         - avatar_url
         - emails
@@ -798,6 +801,12 @@ components:
           $ref: '#/components/schemas/kpp'
         tax_code:
           $ref: '#/components/schemas/tax_code'
+        is_contractor:
+          type: boolean
+        is_banned:
+          type: boolean
+        verified:
+          type: boolean
         address:
           type: string
           example: 117312, г Москва, Академический р-н, ул Вавилова, д 19
@@ -831,11 +840,8 @@ components:
         - last_name
         - middle_name
         - avatar_url
-        - verified
         - email_verified
         - role
-        - is_contractor
-        - is_banned
         - created_at
         - updated_at
       properties:
@@ -853,16 +859,10 @@ components:
           $ref: '#/components/schemas/name'
         avatar_url:
           $ref: '#/components/schemas/url'
-        verified:
-          type: boolean
         email_verified:
           type: boolean
         role:
           $ref: '#/components/schemas/role'
-        is_contractor:
-          type: boolean
-        is_banned:
-          type: boolean
         organization:
           $ref: '#/components/schemas/Organization'
         created_at:

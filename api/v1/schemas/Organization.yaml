@@ -9,6 +9,9 @@ required:
   - ogrn
   - kpp
   - tax_code
+  - verified
+  - is_contractor
+  - is_banned
   - address
   - avatar_url
   - emails
@@ -35,6 +38,12 @@ properties:
     $ref: "../properties/kpp.yaml"
   tax_code:
     $ref: "../properties/tax_code.yaml"
+  is_contractor:
+    type: boolean
+  is_banned:
+    type: boolean
+  verified:
+    type: boolean
   address:
     type: string
     example: 117312, г Москва, Академический р-н, ул Вавилова, д 19

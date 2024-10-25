@@ -7,11 +7,8 @@ required:
   - last_name
   - middle_name
   - avatar_url
-  - verified
   - email_verified
   - role
-  - is_contractor
-  - is_banned
   - created_at
   - updated_at
 properties:
@@ -29,16 +26,10 @@ properties:
     $ref: "../properties/name.yaml"
   avatar_url:
     $ref: "../properties/url.yaml"
-  verified:
-    type: boolean
   email_verified:
     type: boolean
   role:
     $ref: "../properties/role.yaml"
-  is_contractor:
-    type: boolean
-  is_banned:
-    type: boolean
   organization:
     $ref: "./Organization.yaml"
   created_at:

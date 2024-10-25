@@ -5,11 +5,11 @@ TOOLS_PATH=bin/tools
 ogen=$(TOOLS_PATH)/ogen
 goose=$(TOOLS_PATH)/goose
 
-AMO_SYNC_PROTO_PATH=./amo-sync-proto
-AMO_SYNC_PROTO_OUT=./internal/gen/amo-sync-pb
-AMO_SYNC_PROTO_OUT_MODULE=gitlab.ubrato.ru/ubrato/core/internal/gen/amo-sync-pb
+PROTO_PATH=./proto
+PROTO_OUT=./internal/models/gen/proto
+PROTO_OUT_MODULE=gitlab.ubrato.ru/ubrato/core/internal/models/gen/proto
 
-include ./amo-sync-proto/proto.mk
+include ./proto/proto.mk
 
 POSTGRES_MIGRATIONS_PATH=./internal/store/postgres/migrations
 POSTGRES_DSN="host=$(STORE_POSTGRES_HOST) port=$(STORE_POSTGRES_PORT) user=$(STORE_POSTGRES_USER) password=$(STORE_POSTGRES_PASSWORD) dbname=$(STORE_POSTGRES_DATABASE) sslmode=disable"

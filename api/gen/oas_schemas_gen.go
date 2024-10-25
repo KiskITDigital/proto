@@ -613,22 +613,25 @@ func (o OptURL) Or(d URL) URL {
 
 // Ref: #
 type Organization struct {
-	ID         int           `json:"id"`
-	BrandName  Name          `json:"brand_name"`
-	FullName   Name          `json:"full_name"`
-	ShortName  Name          `json:"short_name"`
-	Inn        Inn           `json:"inn"`
-	Okpo       Okpo          `json:"okpo"`
-	Ogrn       Ogrn          `json:"ogrn"`
-	Kpp        Kpp           `json:"kpp"`
-	TaxCode    TaxCode       `json:"tax_code"`
-	Address    string        `json:"address"`
-	AvatarURL  URL           `json:"avatar_url"`
-	Emails     []ContactInfo `json:"emails"`
-	Phones     []ContactInfo `json:"phones"`
-	Messengers []ContactInfo `json:"messengers"`
-	CreatedAt  time.Time     `json:"created_at"`
-	UpdatedAt  time.Time     `json:"updated_at"`
+	ID           int           `json:"id"`
+	BrandName    Name          `json:"brand_name"`
+	FullName     Name          `json:"full_name"`
+	ShortName    Name          `json:"short_name"`
+	Inn          Inn           `json:"inn"`
+	Okpo         Okpo          `json:"okpo"`
+	Ogrn         Ogrn          `json:"ogrn"`
+	Kpp          Kpp           `json:"kpp"`
+	TaxCode      TaxCode       `json:"tax_code"`
+	IsContractor bool          `json:"is_contractor"`
+	IsBanned     bool          `json:"is_banned"`
+	Verified     bool          `json:"verified"`
+	Address      string        `json:"address"`
+	AvatarURL    URL           `json:"avatar_url"`
+	Emails       []ContactInfo `json:"emails"`
+	Phones       []ContactInfo `json:"phones"`
+	Messengers   []ContactInfo `json:"messengers"`
+	CreatedAt    time.Time     `json:"created_at"`
+	UpdatedAt    time.Time     `json:"updated_at"`
 }
 
 // GetID returns the value of ID.
@@ -674,6 +677,21 @@ func (s *Organization) GetKpp() Kpp {
 // GetTaxCode returns the value of TaxCode.
 func (s *Organization) GetTaxCode() TaxCode {
 	return s.TaxCode
+}
+
+// GetIsContractor returns the value of IsContractor.
+func (s *Organization) GetIsContractor() bool {
+	return s.IsContractor
+}
+
+// GetIsBanned returns the value of IsBanned.
+func (s *Organization) GetIsBanned() bool {
+	return s.IsBanned
+}
+
+// GetVerified returns the value of Verified.
+func (s *Organization) GetVerified() bool {
+	return s.Verified
 }
 
 // GetAddress returns the value of Address.
@@ -754,6 +772,21 @@ func (s *Organization) SetKpp(val Kpp) {
 // SetTaxCode sets the value of TaxCode.
 func (s *Organization) SetTaxCode(val TaxCode) {
 	s.TaxCode = val
+}
+
+// SetIsContractor sets the value of IsContractor.
+func (s *Organization) SetIsContractor(val bool) {
+	s.IsContractor = val
+}
+
+// SetIsBanned sets the value of IsBanned.
+func (s *Organization) SetIsBanned(val bool) {
+	s.IsBanned = val
+}
+
+// SetVerified sets the value of Verified.
+func (s *Organization) SetVerified(val bool) {
+	s.Verified = val
 }
 
 // SetAddress sets the value of Address.
@@ -1167,11 +1200,8 @@ type User struct {
 	LastName      Name            `json:"last_name"`
 	MiddleName    Name            `json:"middle_name"`
 	AvatarURL     URL             `json:"avatar_url"`
-	Verified      bool            `json:"verified"`
 	EmailVerified bool            `json:"email_verified"`
 	Role          Role            `json:"role"`
-	IsContractor  bool            `json:"is_contractor"`
-	IsBanned      bool            `json:"is_banned"`
 	Organization  OptOrganization `json:"organization"`
 	CreatedAt     time.Time       `json:"created_at"`
 	UpdatedAt     time.Time       `json:"updated_at"`
@@ -1212,11 +1242,6 @@ func (s *User) GetAvatarURL() URL {
 	return s.AvatarURL
 }
 
-// GetVerified returns the value of Verified.
-func (s *User) GetVerified() bool {
-	return s.Verified
-}
-
 // GetEmailVerified returns the value of EmailVerified.
 func (s *User) GetEmailVerified() bool {
 	return s.EmailVerified
@@ -1225,16 +1250,6 @@ func (s *User) GetEmailVerified() bool {
 // GetRole returns the value of Role.
 func (s *User) GetRole() Role {
 	return s.Role
-}
-
-// GetIsContractor returns the value of IsContractor.
-func (s *User) GetIsContractor() bool {
-	return s.IsContractor
-}
-
-// GetIsBanned returns the value of IsBanned.
-func (s *User) GetIsBanned() bool {
-	return s.IsBanned
 }
 
 // GetOrganization returns the value of Organization.
@@ -1287,11 +1302,6 @@ func (s *User) SetAvatarURL(val URL) {
 	s.AvatarURL = val
 }
 
-// SetVerified sets the value of Verified.
-func (s *User) SetVerified(val bool) {
-	s.Verified = val
-}
-
 // SetEmailVerified sets the value of EmailVerified.
 func (s *User) SetEmailVerified(val bool) {
 	s.EmailVerified = val
@@ -1300,16 +1310,6 @@ func (s *User) SetEmailVerified(val bool) {
 // SetRole sets the value of Role.
 func (s *User) SetRole(val Role) {
 	s.Role = val
-}
-
-// SetIsContractor sets the value of IsContractor.
-func (s *User) SetIsContractor(val bool) {
-	s.IsContractor = val
-}
-
-// SetIsBanned sets the value of IsBanned.
-func (s *User) SetIsBanned(val bool) {
-	s.IsBanned = val
 }
 
 // SetOrganization sets the value of Organization.

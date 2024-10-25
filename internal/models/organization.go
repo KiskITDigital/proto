@@ -35,37 +35,43 @@ func (a *ContactInfos) Scan(value interface{}) error {
 }
 
 type Organization struct {
-	ID         int
-	BrandName  string
-	FullName   string
-	ShortName  string
-	INN        string
-	OKPO       string
-	OGRN       string
-	KPP        string
-	TaxCode    string
-	Address    string
-	AvatarURL  string
-	Emails     ContactInfos
-	Phones     ContactInfos
-	Messengers ContactInfos
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
+	ID           int
+	BrandName    string
+	FullName     string
+	ShortName    string
+	INN          string
+	OKPO         string
+	OGRN         string
+	KPP          string
+	TaxCode      string
+	Address      string
+	AvatarURL    string
+	Verified     bool
+	IsContractor bool
+	IsBanned     bool
+	Emails       ContactInfos
+	Phones       ContactInfos
+	Messengers   ContactInfos
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 }
 
 func ConvertOrganizationModelToApi(organization Organization) api.Organization {
 	return api.Organization{
-		ID:        organization.ID,
-		BrandName: api.Name(organization.BrandName),
-		FullName:  api.Name(organization.FullName),
-		ShortName: api.Name(organization.ShortName),
-		Inn:       api.Inn(organization.INN),
-		Okpo:      api.Okpo(organization.OKPO),
-		Ogrn:      api.Ogrn(organization.OGRN),
-		Kpp:       api.Kpp(organization.KPP),
-		TaxCode:   api.TaxCode(organization.TaxCode),
-		Address:   organization.Address,
-		AvatarURL: api.URL(organization.AvatarURL),
+		ID:           organization.ID,
+		BrandName:    api.Name(organization.BrandName),
+		FullName:     api.Name(organization.FullName),
+		ShortName:    api.Name(organization.ShortName),
+		Verified:     organization.Verified,
+		IsContractor: organization.IsContractor,
+		IsBanned:     organization.IsBanned,
+		Inn:          api.Inn(organization.INN),
+		Okpo:         api.Okpo(organization.OKPO),
+		Ogrn:         api.Ogrn(organization.OGRN),
+		Kpp:          api.Kpp(organization.KPP),
+		TaxCode:      api.TaxCode(organization.TaxCode),
+		Address:      organization.Address,
+		AvatarURL:    api.URL(organization.AvatarURL),
 		Emails: convert.Slice[ContactInfos, []api.ContactInfo](
 			organization.Emails, ConvertContactInfoModelToApi,
 		),

@@ -23,10 +23,8 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 			"last_name",
 			"middle_name",
 			"avatar_url",
-			"verified",
 			"email_verified",
 			"role",
-			"is_contractor",
 		).
 		Values(
 			params.OrganizationID,
@@ -55,10 +53,8 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 				last_name,
 				middle_name,
 				avatar_url,
-				verified,
 				email_verified,
 				role,
-				is_contractor,
 				created_at,
 				updated_at
 		`).
@@ -80,10 +76,8 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 		&createdUser.LastName,
 		&createdUser.MiddleName,
 		&avatarURL,
-		&createdUser.Verified,
 		&createdUser.EmailVerified,
 		&createdUser.Role,
-		&createdUser.IsContractor,
 		&createdUser.CreatedAt,
 		&createdUser.UpdatedAt,
 	)

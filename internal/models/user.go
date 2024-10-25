@@ -24,10 +24,8 @@ type User struct {
 	LastName      string
 	MiddleName    string
 	AvatarURL     string
-	Verified      bool
 	EmailVerified bool
 	Role          UserRole
-	IsContractor  bool
 	IsBanned      bool
 	Organization  Organization
 	CreatedAt     time.Time
@@ -43,11 +41,8 @@ func ConvertUserModelToApi(user User) api.User {
 		LastName:      api.Name(user.LastName),
 		MiddleName:    api.Name(user.MiddleName),
 		AvatarURL:     api.URL(user.AvatarURL),
-		Verified:      user.Verified,
 		EmailVerified: user.EmailVerified,
 		Role:          api.Role(user.Role),
-		IsContractor:  user.IsContractor,
-		IsBanned:      user.IsBanned,
 		Organization: api.OptOrganization{
 			Value: api.Organization(ConvertOrganizationModelToApi(user.Organization)),
 			Set:   user.Organization.ID != 0,

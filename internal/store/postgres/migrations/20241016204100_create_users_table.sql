@@ -10,10 +10,8 @@ CREATE TABLE IF NOT EXISTS users (
     last_name       TEXT NOT NULL,
     middle_name     TEXT NOT NULL,
     avatar_url      TEXT NULL,
-    verified        BOOLEAN DEFAULT FALSE,
     email_verified  BOOLEAN DEFAULT FALSE,
     role            SMALLINT DEFAULT 1,
-    is_contractor   BOOLEAN DEFAULT FALSE,
     created_at      TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
