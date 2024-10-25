@@ -12,7 +12,6 @@ type UserCreateParams struct {
 	AvatarURL      string
 	EmailVerified  bool
 	Role           int
-	IsContractor   bool
 }
 
 type UserGetParams struct {

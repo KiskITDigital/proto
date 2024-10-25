@@ -38,7 +38,6 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 			sql.NullString{Valid: params.AvatarURL != "", String: params.AvatarURL},
 			params.EmailVerified,
 			params.Role,
-			params.IsContractor,
 		).
 		Suffix(`
 			RETURNING
