@@ -16,6 +16,7 @@ type Router struct {
 	Catalog
 	Users
 	Survey
+	Admin
 }
 
 type Error interface {
@@ -57,6 +58,18 @@ type Catalog interface {
 	V1CatalogServicesPost(ctx context.Context, req *api.V1CatalogServicesPostReq) (api.V1CatalogServicesPostRes, error)
 }
 
+type Admin interface {
+	V1AdminAuthRefreshPost(ctx context.Context, params api.V1AdminAuthRefreshPostParams) (api.V1AdminAuthRefreshPostRes, error)
+	V1AdminAuthSigninPost(ctx context.Context, req *api.V1AdminAuthSigninPostReq) (api.V1AdminAuthSigninPostRes, error)
+	V1AdminAuthUserGet(ctx context.Context) (api.V1AdminAuthUserGetRes, error)
+	V1AdminUsersGet(ctx context.Context) (api.V1AdminUsersGetRes, error)
+	V1AdminUsersPost(ctx context.Context, req *api.V1AdminUsersPostReq) (api.V1AdminUsersPostRes, error)
+	V1AdminUsersUserIDGet(ctx context.Context, params api.V1AdminUsersUserIDGetParams) (api.V1AdminUsersUserIDGetRes, error)
+
+	HandleAdminCookieAuth(ctx context.Context, operationName string, t api.AdminCookieAuth) (context.Context, error)
+	HandleAdminBearerAuth(ctx context.Context, operationName string, t api.AdminBearerAuth) (context.Context, error)
+}
+
 type RouterParams struct {
 	Error   Error
 	Auth    Auth
@@ -64,6 +77,7 @@ type RouterParams struct {
 	Catalog Catalog
 	Users   Users
 	Survey  Survey
+	Admin   Admin
 }
 
 func NewRouter(params RouterParams) *Router {
@@ -74,5 +88,6 @@ func NewRouter(params RouterParams) *Router {
 		Catalog: params.Catalog,
 		Users:   params.Users,
 		Survey:  params.Survey,
+		Admin:   params.Admin,
 	}
 }

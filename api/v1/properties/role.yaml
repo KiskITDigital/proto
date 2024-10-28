@@ -1,8 +1,6 @@
 type: integer
 enum:
   - 1
-  - 2
 description: |
   0: Invalid
   1: User
-  2: Admin

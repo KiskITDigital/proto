@@ -23,8 +23,7 @@ type Service struct {
 }
 
 const (
-	RefreshTokenLifetime = 7 * 24 * time.Hour
-	sessionLength        = 32
+	sessionLength = 32
 )
 
 var sessionRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!_-")

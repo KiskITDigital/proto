@@ -36,7 +36,7 @@ func (s *Service) Refresh(ctx context.Context, sessionToken string) (SignInResul
 		ExpiresAt: time.Now().Add(s.tokenAuthorizer.GetRefreshTokenDurationLifetime()),
 	})
 	if err != nil {
-		return SignInResult{}, fmt.Errorf("get session: %w", err)
+		return SignInResult{}, fmt.Errorf("update session: %w", err)
 	}
 
 	return SignInResult{

@@ -21,7 +21,7 @@ type Server struct {
 func NewServer(logger *slog.Logger, cfg config.HTTP, router *Router) (*Server, error) {
 	apiServer, err := api.NewServer(
 		router,
-		router.Auth,
+		router,
 		api.WithErrorHandler(router.HandleError),
 	)
 	if err != nil {

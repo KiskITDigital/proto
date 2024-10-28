@@ -61,9 +61,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
-			case 'a': // Prefix: "auth/"
+			case 'a': // Prefix: "a"
 				origElem := elem
-				if l := len("auth/"); len(elem) >= l && elem[0:l] == "auth/" {
+				if l := len("a"); len(elem) >= l && elem[0:l] == "a" {
 					elem = elem[l:]
 				} else {
 					break
@@ -73,30 +73,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
-				case 'r': // Prefix: "refresh"
+				case 'd': // Prefix: "dmin/"
 					origElem := elem
-					if l := len("refresh"); len(elem) >= l && elem[0:l] == "refresh" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleV1AuthRefreshPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
-						}
-
-						return
-					}
-
-					elem = origElem
-				case 's': // Prefix: "sign"
-					origElem := elem
-					if l := len("sign"); len(elem) >= l && elem[0:l] == "sign" {
+					if l := len("dmin/"); len(elem) >= l && elem[0:l] == "dmin/" {
 						elem = elem[l:]
 					} else {
 						break
@@ -106,69 +85,250 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 					switch elem[0] {
-					case 'i': // Prefix: "in"
+					case 'a': // Prefix: "auth/"
 						origElem := elem
-						if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+						if l := len("auth/"); len(elem) >= l && elem[0:l] == "auth/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleV1AuthSigninPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
+							break
+						}
+						switch elem[0] {
+						case 'r': // Prefix: "refresh"
+							origElem := elem
+							if l := len("refresh"); len(elem) >= l && elem[0:l] == "refresh" {
+								elem = elem[l:]
+							} else {
+								break
 							}
 
-							return
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleV1AdminAuthRefreshPostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 's': // Prefix: "signin"
+							origElem := elem
+							if l := len("signin"); len(elem) >= l && elem[0:l] == "signin" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleV1AdminAuthSigninPostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 'u': // Prefix: "user"
+							origElem := elem
+							if l := len("user"); len(elem) >= l && elem[0:l] == "user" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleV1AdminAuthUserGetRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
-					case 'u': // Prefix: "up"
+					case 'u': // Prefix: "users"
 						origElem := elem
-						if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
+						if l := len("users"); len(elem) >= l && elem[0:l] == "users" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
 							switch r.Method {
+							case "GET":
+								s.handleV1AdminUsersGetRequest([0]string{}, elemIsEscaped, w, r)
 							case "POST":
-								s.handleV1AuthSignupPostRequest([0]string{}, elemIsEscaped, w, r)
+								s.handleV1AdminUsersPostRequest([0]string{}, elemIsEscaped, w, r)
 							default:
-								s.notAllowed(w, r, "POST")
+								s.notAllowed(w, r, "GET,POST")
 							}
 
 							return
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+							origElem := elem
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "userID"
+							// Leaf parameter
+							args[0] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleV1AdminUsersUserIDGetRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
 					}
 
 					elem = origElem
-				case 'u': // Prefix: "user"
+				case 'u': // Prefix: "uth/"
 					origElem := elem
-					if l := len("user"); len(elem) >= l && elem[0:l] == "user" {
+					if l := len("uth/"); len(elem) >= l && elem[0:l] == "uth/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "GET":
-							s.handleV1AuthUserGetRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "GET")
+						break
+					}
+					switch elem[0] {
+					case 'r': // Prefix: "refresh"
+						origElem := elem
+						if l := len("refresh"); len(elem) >= l && elem[0:l] == "refresh" {
+							elem = elem[l:]
+						} else {
+							break
 						}
 
-						return
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleV1AuthRefreshPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 's': // Prefix: "sign"
+						origElem := elem
+						if l := len("sign"); len(elem) >= l && elem[0:l] == "sign" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'i': // Prefix: "in"
+							origElem := elem
+							if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleV1AuthSigninPostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 'u': // Prefix: "up"
+							origElem := elem
+							if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleV1AuthSignupPostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'u': // Prefix: "user"
+						origElem := elem
+						if l := len("user"); len(elem) >= l && elem[0:l] == "user" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleV1AuthUserGetRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
@@ -525,9 +685,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
-			case 'a': // Prefix: "auth/"
+			case 'a': // Prefix: "a"
 				origElem := elem
-				if l := len("auth/"); len(elem) >= l && elem[0:l] == "auth/" {
+				if l := len("a"); len(elem) >= l && elem[0:l] == "a" {
 					elem = elem[l:]
 				} else {
 					break
@@ -537,34 +697,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
-				case 'r': // Prefix: "refresh"
+				case 'd': // Prefix: "dmin/"
 					origElem := elem
-					if l := len("refresh"); len(elem) >= l && elem[0:l] == "refresh" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = "V1AuthRefreshPost"
-							r.summary = "Get new access token"
-							r.operationID = ""
-							r.pathPattern = "/v1/auth/refresh"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-					elem = origElem
-				case 's': // Prefix: "sign"
-					origElem := elem
-					if l := len("sign"); len(elem) >= l && elem[0:l] == "sign" {
+					if l := len("dmin/"); len(elem) >= l && elem[0:l] == "dmin/" {
 						elem = elem[l:]
 					} else {
 						break
@@ -574,81 +709,290 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 					switch elem[0] {
-					case 'i': // Prefix: "in"
+					case 'a': // Prefix: "auth/"
 						origElem := elem
-						if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+						if l := len("auth/"); len(elem) >= l && elem[0:l] == "auth/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = "V1AuthSigninPost"
-								r.summary = "Signin User"
-								r.operationID = ""
-								r.pathPattern = "/v1/auth/signin"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
+							break
+						}
+						switch elem[0] {
+						case 'r': // Prefix: "refresh"
+							origElem := elem
+							if l := len("refresh"); len(elem) >= l && elem[0:l] == "refresh" {
+								elem = elem[l:]
+							} else {
+								break
 							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = "V1AdminAuthRefreshPost"
+									r.summary = "Get new access token"
+									r.operationID = ""
+									r.pathPattern = "/v1/admin/auth/refresh"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 's': // Prefix: "signin"
+							origElem := elem
+							if l := len("signin"); len(elem) >= l && elem[0:l] == "signin" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = "V1AdminAuthSigninPost"
+									r.summary = "Signin"
+									r.operationID = ""
+									r.pathPattern = "/v1/admin/auth/signin"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'u': // Prefix: "user"
+							origElem := elem
+							if l := len("user"); len(elem) >= l && elem[0:l] == "user" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = "V1AdminAuthUserGet"
+									r.summary = "Get currently authenticated user"
+									r.operationID = ""
+									r.pathPattern = "/v1/admin/auth/user"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
-					case 'u': // Prefix: "up"
+					case 'u': // Prefix: "users"
 						origElem := elem
-						if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
+						if l := len("users"); len(elem) >= l && elem[0:l] == "users" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
 							switch method {
-							case "POST":
-								r.name = "V1AuthSignupPost"
-								r.summary = "Signup User"
+							case "GET":
+								r.name = "V1AdminUsersGet"
+								r.summary = "Get admin users"
 								r.operationID = ""
-								r.pathPattern = "/v1/auth/signup"
+								r.pathPattern = "/v1/admin/users"
+								r.args = args
+								r.count = 0
+								return r, true
+							case "POST":
+								r.name = "V1AdminUsersPost"
+								r.summary = "Create admin user"
+								r.operationID = ""
+								r.pathPattern = "/v1/admin/users"
 								r.args = args
 								r.count = 0
 								return r, true
 							default:
 								return
 							}
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+							origElem := elem
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "userID"
+							// Leaf parameter
+							args[0] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = "V1AdminUsersUserIDGet"
+									r.summary = "Get admin users by id"
+									r.operationID = ""
+									r.pathPattern = "/v1/admin/users/{userID}"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
 					}
 
 					elem = origElem
-				case 'u': // Prefix: "user"
+				case 'u': // Prefix: "uth/"
 					origElem := elem
-					if l := len("user"); len(elem) >= l && elem[0:l] == "user" {
+					if l := len("uth/"); len(elem) >= l && elem[0:l] == "uth/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "GET":
-							r.name = "V1AuthUserGet"
-							r.summary = "Get currently authenticated user"
-							r.operationID = ""
-							r.pathPattern = "/v1/auth/user"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
+						break
+					}
+					switch elem[0] {
+					case 'r': // Prefix: "refresh"
+						origElem := elem
+						if l := len("refresh"); len(elem) >= l && elem[0:l] == "refresh" {
+							elem = elem[l:]
+						} else {
+							break
 						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = "V1AuthRefreshPost"
+								r.summary = "Get new access token"
+								r.operationID = ""
+								r.pathPattern = "/v1/auth/refresh"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 's': // Prefix: "sign"
+						origElem := elem
+						if l := len("sign"); len(elem) >= l && elem[0:l] == "sign" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'i': // Prefix: "in"
+							origElem := elem
+							if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = "V1AuthSigninPost"
+									r.summary = "Signin User"
+									r.operationID = ""
+									r.pathPattern = "/v1/auth/signin"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'u': // Prefix: "up"
+							origElem := elem
+							if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = "V1AuthSignupPost"
+									r.summary = "Signup User"
+									r.operationID = ""
+									r.pathPattern = "/v1/auth/signup"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'u': // Prefix: "user"
+						origElem := elem
+						if l := len("user"); len(elem) >= l && elem[0:l] == "user" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = "V1AuthUserGet"
+								r.summary = "Get currently authenticated user"
+								r.operationID = ""
+								r.pathPattern = "/v1/auth/user"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
