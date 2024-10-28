@@ -103,6 +103,15 @@ func (UnimplementedHandler) V1CatalogServicesPost(ctx context.Context, req *V1Ca
 	return r, ht.ErrNotImplemented
 }
 
+// V1OrganizationsOrganizationIDTendersGet implements GET /v1/organizations/{organizationID}/tenders operation.
+//
+// If user in organization it also return all drafts.
+//
+// GET /v1/organizations/{organizationID}/tenders
+func (UnimplementedHandler) V1OrganizationsOrganizationIDTendersGet(ctx context.Context, params V1OrganizationsOrganizationIDTendersGetParams) (r V1OrganizationsOrganizationIDTendersGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1SurveyPost implements POST /v1/survey operation.
 //
 // Response to survey.

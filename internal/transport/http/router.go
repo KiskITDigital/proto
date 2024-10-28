@@ -37,6 +37,7 @@ type Tenders interface {
 	V1TendersTenderIDPut(ctx context.Context, req *api.V1TendersTenderIDPutReq, params api.V1TendersTenderIDPutParams) (api.V1TendersTenderIDPutRes, error)
 	V1TendersTenderIDGet(ctx context.Context, params api.V1TendersTenderIDGetParams) (api.V1TendersTenderIDGetRes, error)
 	V1TendersGet(ctx context.Context) (api.V1TendersGetRes, error)
+	V1OrganizationsOrganizationIDTendersGet(ctx context.Context, params api.V1OrganizationsOrganizationIDTendersGetParams) (api.V1OrganizationsOrganizationIDTendersGetRes, error)
 }
 
 type Users interface {

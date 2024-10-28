@@ -19,6 +19,7 @@ var (
 	CodeInternal           Code = "ERR_INTERNAL"
 	CodeNotPermitted       Code = "ERR_NOT_PERMITTED"
 	CodeValidate           Code = "ERR_VALIDATE"
+	CodeNotFound           Code = "ERR_NOT_FOUND"
 	CodeInitInProgress     Code = "ERR_INIT_IN_PROGRES"
 	CodeInvalidCredentials Code = "ERR_INVALID_CREDENTIALS"
 )

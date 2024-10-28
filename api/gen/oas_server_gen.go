@@ -68,6 +68,12 @@ type Handler interface {
 	//
 	// POST /v1/catalog/services
 	V1CatalogServicesPost(ctx context.Context, req *V1CatalogServicesPostReq) (V1CatalogServicesPostRes, error)
+	// V1OrganizationsOrganizationIDTendersGet implements GET /v1/organizations/{organizationID}/tenders operation.
+	//
+	// If user in organization it also return all drafts.
+	//
+	// GET /v1/organizations/{organizationID}/tenders
+	V1OrganizationsOrganizationIDTendersGet(ctx context.Context, params V1OrganizationsOrganizationIDTendersGetParams) (V1OrganizationsOrganizationIDTendersGetRes, error)
 	// V1SurveyPost implements POST /v1/survey operation.
 	//
 	// Response to survey.

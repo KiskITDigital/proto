@@ -2,55 +2,30 @@ package tender
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"time"
 
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/contextor"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
-	"gitlab.ubrato.ru/ubrato/core/internal/lib/token"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
+	"gitlab.ubrato.ru/ubrato/core/internal/service"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
-type UpdateParams struct {
-	ID              int
-	Name            models.Optional[string]
-	Price           models.Optional[int]
-	IsContractPrice models.Optional[bool]
-	IsNDSPrice      models.Optional[bool]
-	IsDraft         models.Optional[bool]
-	CityID          models.Optional[int]
-	FloorSpace      models.Optional[int]
-	Description     models.Optional[string]
-	Wishes          models.Optional[string]
-	Specification   models.Optional[string]
-	Attachments     models.Optional[[]string]
-	ServiceIDs      models.Optional[[]int]
-	ObjectIDs       models.Optional[[]int]
-	ReceptionStart  models.Optional[time.Time]
-	ReceptionEnd    models.Optional[time.Time]
-	WorkStart       models.Optional[time.Time]
-	WorkEnd         models.Optional[time.Time]
-}
-
-func (s *Service) Update(ctx context.Context, params UpdateParams) (models.Tender, error) {
+func (s *Service) Update(ctx context.Context, params service.TenderUpdateParams) (models.Tender, error) {
 	var (
 		tender models.Tender
 		err    error
 	)
 
-	token, ok := ctx.Value(models.AccessTokenKey).(token.Claims)
-	if !ok {
-		return models.Tender{}, errors.New("invalid token claims type")
-	}
+	organizationID := contextor.GetOrganizationID(ctx)
 
 	tender, err = s.tenderStore.GetByID(ctx, s.psql.DB(), params.ID)
 	if err != nil {
 		return models.Tender{}, fmt.Errorf("get tender: %w", err)
 	}
 
-	if tender.Organization.ID != token.OrganizationID {
+	if tender.Organization.ID != organizationID {
 		cerr.Wrap(cerr.ErrPermission, cerr.CodeNotPermitted, "not enough permissions to edit this tender", nil)
 	}
 

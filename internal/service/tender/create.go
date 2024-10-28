@@ -2,51 +2,27 @@ package tender
 
 import (
 	"context"
-	"errors"
 	"fmt"
-	"time"
 
-	"gitlab.ubrato.ru/ubrato/core/internal/lib/token"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/contextor"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
+	"gitlab.ubrato.ru/ubrato/core/internal/service"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
-type CreateParams struct {
-	Name            string
-	CityID          int
-	Price           int
-	IsContractPrice bool
-	IsNDSPrice      bool
-	IsDraft         bool
-	FloorSpace      int
-	Description     string
-	Wishes          string
-	Specification   string
-	Attachments     []string
-	ServiceIDs      []int
-	ObjectIDs       []int
-	ReceptionStart  time.Time
-	ReceptionEnd    time.Time
-	WorkStart       time.Time
-	WorkEnd         time.Time
-}
-
-func (s *Service) Create(ctx context.Context, params CreateParams) (models.Tender, error) {
+func (s *Service) Create(ctx context.Context, params service.TenderCreateParams) (models.Tender, error) {
 	var (
 		tender models.Tender
 		err    error
 	)
 
-	token, ok := ctx.Value(models.AccessTokenKey).(token.Claims)
-	if !ok {
-		return models.Tender{}, errors.New("invalid token claims type")
-	}
+	organizationID := contextor.GetOrganizationID(ctx)
 
 	err = s.psql.WithTransaction(ctx, func(qe store.QueryExecutor) error {
 		tender, err = s.tenderStore.Create(ctx, qe, store.TenderCreateParams{
 			Name:            params.Name,
 			CityID:          params.CityID,
-			OrganizationID:  token.OrganizationID,
+			OrganizationID:  organizationID,
 			Price:           params.Price,
 			IsContractPrice: params.IsContractPrice,
 			IsNDSPrice:      params.IsNDSPrice,

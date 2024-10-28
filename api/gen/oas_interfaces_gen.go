@@ -41,6 +41,10 @@ type V1CatalogServicesPostRes interface {
 	v1CatalogServicesPostRes()
 }
 
+type V1OrganizationsOrganizationIDTendersGetRes interface {
+	v1OrganizationsOrganizationIDTendersGetRes()
+}
+
 type V1SurveyPostRes interface {
 	v1SurveyPostRes()
 }

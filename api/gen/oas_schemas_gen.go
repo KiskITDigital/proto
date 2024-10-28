@@ -178,22 +178,23 @@ func (s *ErrorStatusCode) SetResponse(val WrappedError) {
 	s.Response = val
 }
 
-func (*ErrorStatusCode) v1AuthRefreshPostRes()     {}
-func (*ErrorStatusCode) v1AuthSigninPostRes()      {}
-func (*ErrorStatusCode) v1AuthSignupPostRes()      {}
-func (*ErrorStatusCode) v1AuthUserGetRes()         {}
-func (*ErrorStatusCode) v1CatalogCitiesPostRes()   {}
-func (*ErrorStatusCode) v1CatalogObjectsGetRes()   {}
-func (*ErrorStatusCode) v1CatalogObjectsPostRes()  {}
-func (*ErrorStatusCode) v1CatalogRegionsPostRes()  {}
-func (*ErrorStatusCode) v1CatalogServicesGetRes()  {}
-func (*ErrorStatusCode) v1CatalogServicesPostRes() {}
-func (*ErrorStatusCode) v1SurveyPostRes()          {}
-func (*ErrorStatusCode) v1TendersGetRes()          {}
-func (*ErrorStatusCode) v1TendersPostRes()         {}
-func (*ErrorStatusCode) v1TendersTenderIDGetRes()  {}
-func (*ErrorStatusCode) v1TendersTenderIDPutRes()  {}
-func (*ErrorStatusCode) v1UsersUserIDGetRes()      {}
+func (*ErrorStatusCode) v1AuthRefreshPostRes()                       {}
+func (*ErrorStatusCode) v1AuthSigninPostRes()                        {}
+func (*ErrorStatusCode) v1AuthSignupPostRes()                        {}
+func (*ErrorStatusCode) v1AuthUserGetRes()                           {}
+func (*ErrorStatusCode) v1CatalogCitiesPostRes()                     {}
+func (*ErrorStatusCode) v1CatalogObjectsGetRes()                     {}
+func (*ErrorStatusCode) v1CatalogObjectsPostRes()                    {}
+func (*ErrorStatusCode) v1CatalogRegionsPostRes()                    {}
+func (*ErrorStatusCode) v1CatalogServicesGetRes()                    {}
+func (*ErrorStatusCode) v1CatalogServicesPostRes()                   {}
+func (*ErrorStatusCode) v1OrganizationsOrganizationIDTendersGetRes() {}
+func (*ErrorStatusCode) v1SurveyPostRes()                            {}
+func (*ErrorStatusCode) v1TendersGetRes()                            {}
+func (*ErrorStatusCode) v1TendersPostRes()                           {}
+func (*ErrorStatusCode) v1TendersTenderIDGetRes()                    {}
+func (*ErrorStatusCode) v1TendersTenderIDPutRes()                    {}
+func (*ErrorStatusCode) v1UsersUserIDGetRes()                        {}
 
 type Inn string
 
@@ -1953,6 +1954,36 @@ func (s *V1CatalogServicesPostReq) SetName(val string) {
 // SetParentID sets the value of ParentID.
 func (s *V1CatalogServicesPostReq) SetParentID(val OptInt) {
 	s.ParentID = val
+}
+
+type V1OrganizationsOrganizationIDTendersGetOK struct {
+	Data V1OrganizationsOrganizationIDTendersGetOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1OrganizationsOrganizationIDTendersGetOK) GetData() V1OrganizationsOrganizationIDTendersGetOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1OrganizationsOrganizationIDTendersGetOK) SetData(val V1OrganizationsOrganizationIDTendersGetOKData) {
+	s.Data = val
+}
+
+func (*V1OrganizationsOrganizationIDTendersGetOK) v1OrganizationsOrganizationIDTendersGetRes() {}
+
+type V1OrganizationsOrganizationIDTendersGetOKData struct {
+	Tenders []Tender `json:"tenders"`
+}
+
+// GetTenders returns the value of Tenders.
+func (s *V1OrganizationsOrganizationIDTendersGetOKData) GetTenders() []Tender {
+	return s.Tenders
+}
+
+// SetTenders sets the value of Tenders.
+func (s *V1OrganizationsOrganizationIDTendersGetOKData) SetTenders(val []Tender) {
+	s.Tenders = val
 }
 
 // V1SurveyPostOK is response for V1SurveyPost operation.

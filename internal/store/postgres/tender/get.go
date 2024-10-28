@@ -132,7 +132,7 @@ func (s *TenderStore) GetByID(ctx context.Context, qe store.QueryExecutor, id in
 	return createdTender, nil
 }
 
-func (s *TenderStore) Get(ctx context.Context, qe store.QueryExecutor) ([]models.Tender, error) {
+func (s *TenderStore) Get(ctx context.Context, qe store.QueryExecutor, params store.TenderGetParams) ([]models.Tender, error) {
 	builder := squirrel.
 		Select(
 			"t.id",
@@ -178,6 +178,14 @@ func (s *TenderStore) Get(ctx context.Context, qe store.QueryExecutor) ([]models
 		Join("regions AS r ON r.id = c.region_id").
 		Join("organizations AS o ON o.id = t.organization_id").
 		PlaceholderFormat(squirrel.Dollar)
+
+	if params.OrganizationID.Set {
+		builder = builder.Where(squirrel.Eq{"t.organization_id": params.OrganizationID.Value})
+	}
+
+	if !params.WithDrafts {
+		builder = builder.Where(squirrel.Eq{"t.is_draft": false})
+	}
 
 	tenders := map[int]models.Tender{}
 

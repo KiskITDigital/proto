@@ -1,0 +1,36 @@
+get:
+  tags:
+    - tenders
+    - organizations
+  summary: Get all of organization tenders
+  parameters:
+    - name: organizationID
+      required: true
+      in: path
+      description: ID of organization
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+  description: if user in organization it also return all drafts
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required: 
+                  - tenders
+                properties:
+                  tenders:
+                    type: array
+                    items:
+                      $ref: "../../../schemas/Tender.yaml"
+    default:
+      $ref: "../../../responses/Error.yaml"

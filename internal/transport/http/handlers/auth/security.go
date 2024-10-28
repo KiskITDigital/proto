@@ -17,7 +17,9 @@ func (h *Handler) HandleBearerAuth(ctx context.Context, operationName string, t 
 		return ctx, err
 	}
 
-	ctx = context.WithValue(ctx, models.AccessTokenKey, claims)
+	ctx = context.WithValue(ctx, models.UserIDKey, claims.UserID)
+	ctx = context.WithValue(ctx, models.OrganizationIDKey, claims.OrganizationID)
+	ctx = context.WithValue(ctx, models.RoleKey, claims.Role)
 
 	return ctx, nil
 }

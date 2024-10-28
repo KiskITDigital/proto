@@ -5,7 +5,7 @@ import (
 	"log/slog"
 
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
-	tenderService "gitlab.ubrato.ru/ubrato/core/internal/service/tender"
+	"gitlab.ubrato.ru/ubrato/core/internal/service"
 )
 
 type Handler struct {
@@ -14,10 +14,10 @@ type Handler struct {
 }
 
 type Service interface {
-	Create(ctx context.Context, params tenderService.CreateParams) (models.Tender, error)
-	Update(ctx context.Context, params tenderService.UpdateParams) (models.Tender, error)
+	Create(ctx context.Context, params service.TenderCreateParams) (models.Tender, error)
+	Update(ctx context.Context, params service.TenderUpdateParams) (models.Tender, error)
 	GetByID(ctx context.Context, tenderID int) (models.Tender, error)
-	Get(ctx context.Context) ([]models.Tender, error)
+	Get(ctx context.Context, params service.TenderGetParams) ([]models.Tender, error)
 }
 
 func New(logger *slog.Logger, svc Service) *Handler {

@@ -461,6 +461,43 @@ paths:
                         $ref: '#/components/schemas/User'
         default:
           $ref: '#/components/responses/Error'
+  /v1/organizations/{organizationID}/tenders:
+    get:
+      tags:
+        - tenders
+        - organizations
+      summary: Get all of organization tenders
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      description: if user in organization it also return all drafts
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - tenders
+                    properties:
+                      tenders:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Tender'
+        default:
+          $ref: '#/components/responses/Error'
   /v1/catalog/services:
     get:
       tags:

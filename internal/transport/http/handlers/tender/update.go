@@ -8,11 +8,11 @@ import (
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
-	tenderService "gitlab.ubrato.ru/ubrato/core/internal/service/tender"
+	"gitlab.ubrato.ru/ubrato/core/internal/service"
 )
 
 func (h *Handler) V1TendersTenderIDPut(ctx context.Context, req *api.V1TendersTenderIDPutReq, params api.V1TendersTenderIDPutParams) (api.V1TendersTenderIDPutRes, error) {
-	tender, err := h.svc.Update(ctx, tenderService.UpdateParams{
+	tender, err := h.svc.Update(ctx, service.TenderUpdateParams{
 		ID:              params.TenderID,
 		Name:            models.Optional[string]{Value: req.GetName().Value, Set: req.GetName().Set},
 		Price:           models.Optional[int]{Value: int(req.GetPrice().Value * 100), Set: req.GetPrice().Set},

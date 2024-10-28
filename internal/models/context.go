@@ -3,6 +3,7 @@ package models
 type ctxKey int
 
 const (
-	AccessTokenKey ctxKey = iota
-	UserKey
+	UserIDKey ctxKey = iota
+	OrganizationIDKey
+	RoleKey
 )

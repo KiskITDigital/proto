@@ -7,11 +7,11 @@ import (
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
-	tenderService "gitlab.ubrato.ru/ubrato/core/internal/service/tender"
+	"gitlab.ubrato.ru/ubrato/core/internal/service"
 )
 
 func (h *Handler) V1TendersPost(ctx context.Context, req *api.V1TendersPostReq) (api.V1TendersPostRes, error) {
-	tender, err := h.svc.Create(ctx, tenderService.CreateParams{
+	tender, err := h.svc.Create(ctx, service.TenderCreateParams{
 		Name:            req.GetName(),
 		CityID:          req.GetCity(),
 		Price:           int(req.GetPrice() * 100),

@@ -1,4 +1,4 @@
-package store
+package service
 
 import (
 	"time"
@@ -6,28 +6,29 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 )
 
+type TenderGetParams struct {
+	OrganizationID models.Optional[int]
+	WithDrafts     bool
+}
+
 type TenderCreateParams struct {
 	Name            string
+	CityID          int
 	Price           int
 	IsContractPrice bool
 	IsNDSPrice      bool
 	IsDraft         bool
-	CityID          int
 	FloorSpace      int
 	Description     string
 	Wishes          string
 	Specification   string
 	Attachments     []string
+	ServiceIDs      []int
+	ObjectIDs       []int
 	ReceptionStart  time.Time
 	ReceptionEnd    time.Time
 	WorkStart       time.Time
 	WorkEnd         time.Time
-	OrganizationID  int
-}
-
-type TenderGetParams struct {
-	OrganizationID models.Optional[int]
-	WithDrafts     bool
 }
 
 type TenderUpdateParams struct {
@@ -43,28 +44,10 @@ type TenderUpdateParams struct {
 	Wishes          models.Optional[string]
 	Specification   models.Optional[string]
 	Attachments     models.Optional[[]string]
+	ServiceIDs      models.Optional[[]int]
+	ObjectIDs       models.Optional[[]int]
 	ReceptionStart  models.Optional[time.Time]
 	ReceptionEnd    models.Optional[time.Time]
 	WorkStart       models.Optional[time.Time]
 	WorkEnd         models.Optional[time.Time]
-}
-
-type TenderServicesCreateParams struct {
-	TenderID    int
-	ServicesIDs []int
-}
-
-type TenderObjectsCreateParams struct {
-	TenderID   int
-	ObjectsIDs []int
-}
-
-type TenderObjectsDeleteParams struct {
-	TenderID   int
-	ObjectsIDs []int
-}
-
-type TenderServicesDeleteParams struct {
-	TenderID    int
-	ServicesIDs []int
 }
