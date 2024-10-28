@@ -116,6 +116,11 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 	}
 
 	b, err := proto.Marshal(&eventsv1.UserRegistered{
+		Context: &modelsv1.EventContext{
+			Timestamp:      timestamppb.New(time.Now()),
+			UserId:         proto.Int64(int64(result.User.ID)),
+			OrganizationId: proto.Int64(int64(result.User.Organization.ID)),
+		},
 		User: &modelsv1.User{
 			Id:            int64(result.User.ID),
 			Email:         result.User.Email,
