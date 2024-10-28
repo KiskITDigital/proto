@@ -112,12 +112,21 @@ func (UnimplementedHandler) V1SurveyPost(ctx context.Context, req *V1SurveyPostR
 	return r, ht.ErrNotImplemented
 }
 
-// V1TendersCreatePost implements POST /v1/tenders/create operation.
+// V1TendersGet implements GET /v1/tenders operation.
+//
+// Get all tenders.
+//
+// GET /v1/tenders
+func (UnimplementedHandler) V1TendersGet(ctx context.Context) (r V1TendersGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1TendersPost implements POST /v1/tenders operation.
 //
 // Create tender.
 //
-// POST /v1/tenders/create
-func (UnimplementedHandler) V1TendersCreatePost(ctx context.Context, req *V1TendersCreatePostReq) (r V1TendersCreatePostRes, _ error) {
+// POST /v1/tenders
+func (UnimplementedHandler) V1TendersPost(ctx context.Context, req *V1TendersPostReq) (r V1TendersPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

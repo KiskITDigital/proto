@@ -480,8 +480,8 @@ func (s *Server) decodeV1SurveyPostRequest(r *http.Request) (
 	}
 }
 
-func (s *Server) decodeV1TendersCreatePostRequest(r *http.Request) (
-	req *V1TendersCreatePostReq,
+func (s *Server) decodeV1TendersPostRequest(r *http.Request) (
+	req *V1TendersPostReq,
 	close func() error,
 	rerr error,
 ) {
@@ -520,7 +520,7 @@ func (s *Server) decodeV1TendersCreatePostRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request V1TendersCreatePostReq
+		var request V1TendersPostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err

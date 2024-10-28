@@ -10,7 +10,7 @@ import (
 	tenderService "gitlab.ubrato.ru/ubrato/core/internal/service/tender"
 )
 
-func (h *Handler) V1TendersCreatePost(ctx context.Context, req *api.V1TendersCreatePostReq) (api.V1TendersCreatePostRes, error) {
+func (h *Handler) V1TendersPost(ctx context.Context, req *api.V1TendersPostReq) (api.V1TendersPostRes, error) {
 	tender, err := h.svc.Create(ctx, tenderService.CreateParams{
 		Name:            req.GetName(),
 		CityID:          req.GetCity(),
@@ -36,8 +36,8 @@ func (h *Handler) V1TendersCreatePost(ctx context.Context, req *api.V1TendersCre
 		return nil, fmt.Errorf("create tender: %w", err)
 	}
 
-	return &api.V1TendersCreatePostCreated{
-		Data: api.V1TendersCreatePostCreatedData{
+	return &api.V1TendersPostCreated{
+		Data: api.V1TendersPostCreatedData{
 			Tender: models.ConvertTenderModelToApi(tender),
 		},
 	}, nil

@@ -45,8 +45,12 @@ type V1SurveyPostRes interface {
 	v1SurveyPostRes()
 }
 
-type V1TendersCreatePostRes interface {
-	v1TendersCreatePostRes()
+type V1TendersGetRes interface {
+	v1TendersGetRes()
+}
+
+type V1TendersPostRes interface {
+	v1TendersPostRes()
 }
 
 type V1TendersTenderIDGetRes interface {

@@ -23,8 +23,9 @@ type TenderStore interface {
 	AppendTenderServies(ctx context.Context, qe store.QueryExecutor, params store.TenderServicesCreateParams) error
 	AppendTenderObjects(ctx context.Context, qe store.QueryExecutor, params store.TenderObjectsCreateParams) error
 	GetByID(ctx context.Context, qe store.QueryExecutor, tenderID int) (models.Tender, error)
-	GetTenderServices(ctx context.Context, qe store.QueryExecutor, tenderID int) ([]models.TenderService, error)
-	GetTenderObjects(ctx context.Context, qe store.QueryExecutor, tenderID int) ([]models.TenderObject, error)
+	Get(ctx context.Context, qe store.QueryExecutor) ([]models.Tender, error)
+	GetTendersServices(ctx context.Context, qe store.QueryExecutor, tenderIDs []int) ([]models.TenderService, error)
+	GetTendersObjects(ctx context.Context, qe store.QueryExecutor, tenderIDs []int) ([]models.TenderObject, error)
 	Update(ctx context.Context, qe store.QueryExecutor, params store.TenderUpdateParams) (models.Tender, error)
 	DeleteTenderObjects(ctx context.Context, qe store.QueryExecutor, params store.TenderObjectsDeleteParams) error
 	DeleteTenderServices(ctx context.Context, qe store.QueryExecutor, params store.TenderServicesDeleteParams) error

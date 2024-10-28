@@ -189,7 +189,8 @@ func (*ErrorStatusCode) v1CatalogRegionsPostRes()  {}
 func (*ErrorStatusCode) v1CatalogServicesGetRes()  {}
 func (*ErrorStatusCode) v1CatalogServicesPostRes() {}
 func (*ErrorStatusCode) v1SurveyPostRes()          {}
-func (*ErrorStatusCode) v1TendersCreatePostRes()   {}
+func (*ErrorStatusCode) v1TendersGetRes()          {}
+func (*ErrorStatusCode) v1TendersPostRes()         {}
 func (*ErrorStatusCode) v1TendersTenderIDGetRes()  {}
 func (*ErrorStatusCode) v1TendersTenderIDPutRes()  {}
 func (*ErrorStatusCode) v1UsersUserIDGetRes()      {}
@@ -2006,37 +2007,67 @@ func (s *V1SurveyPostReq) SetQuestion(val string) {
 	s.Question = val
 }
 
-type V1TendersCreatePostCreated struct {
-	Data V1TendersCreatePostCreatedData `json:"data"`
+type V1TendersGetOK struct {
+	Data V1TendersGetOKData `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1TendersCreatePostCreated) GetData() V1TendersCreatePostCreatedData {
+func (s *V1TendersGetOK) GetData() V1TendersGetOKData {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1TendersCreatePostCreated) SetData(val V1TendersCreatePostCreatedData) {
+func (s *V1TendersGetOK) SetData(val V1TendersGetOKData) {
 	s.Data = val
 }
 
-func (*V1TendersCreatePostCreated) v1TendersCreatePostRes() {}
+func (*V1TendersGetOK) v1TendersGetRes() {}
 
-type V1TendersCreatePostCreatedData struct {
+type V1TendersGetOKData struct {
+	Tenders []Tender `json:"tenders"`
+}
+
+// GetTenders returns the value of Tenders.
+func (s *V1TendersGetOKData) GetTenders() []Tender {
+	return s.Tenders
+}
+
+// SetTenders sets the value of Tenders.
+func (s *V1TendersGetOKData) SetTenders(val []Tender) {
+	s.Tenders = val
+}
+
+type V1TendersPostCreated struct {
+	Data V1TendersPostCreatedData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1TendersPostCreated) GetData() V1TendersPostCreatedData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1TendersPostCreated) SetData(val V1TendersPostCreatedData) {
+	s.Data = val
+}
+
+func (*V1TendersPostCreated) v1TendersPostRes() {}
+
+type V1TendersPostCreatedData struct {
 	Tender Tender `json:"tender"`
 }
 
 // GetTender returns the value of Tender.
-func (s *V1TendersCreatePostCreatedData) GetTender() Tender {
+func (s *V1TendersPostCreatedData) GetTender() Tender {
 	return s.Tender
 }
 
 // SetTender sets the value of Tender.
-func (s *V1TendersCreatePostCreatedData) SetTender(val Tender) {
+func (s *V1TendersPostCreatedData) SetTender(val Tender) {
 	s.Tender = val
 }
 
-type V1TendersCreatePostReq struct {
+type V1TendersPostReq struct {
 	Name            string    `json:"name"`
 	City            int       `json:"city"`
 	Price           float64   `json:"price"`
@@ -2059,172 +2090,172 @@ type V1TendersCreatePostReq struct {
 }
 
 // GetName returns the value of Name.
-func (s *V1TendersCreatePostReq) GetName() string {
+func (s *V1TendersPostReq) GetName() string {
 	return s.Name
 }
 
 // GetCity returns the value of City.
-func (s *V1TendersCreatePostReq) GetCity() int {
+func (s *V1TendersPostReq) GetCity() int {
 	return s.City
 }
 
 // GetPrice returns the value of Price.
-func (s *V1TendersCreatePostReq) GetPrice() float64 {
+func (s *V1TendersPostReq) GetPrice() float64 {
 	return s.Price
 }
 
 // GetIsContractPrice returns the value of IsContractPrice.
-func (s *V1TendersCreatePostReq) GetIsContractPrice() bool {
+func (s *V1TendersPostReq) GetIsContractPrice() bool {
 	return s.IsContractPrice
 }
 
 // GetIsNdsPrice returns the value of IsNdsPrice.
-func (s *V1TendersCreatePostReq) GetIsNdsPrice() bool {
+func (s *V1TendersPostReq) GetIsNdsPrice() bool {
 	return s.IsNdsPrice
 }
 
 // GetFloorSpace returns the value of FloorSpace.
-func (s *V1TendersCreatePostReq) GetFloorSpace() int {
+func (s *V1TendersPostReq) GetFloorSpace() int {
 	return s.FloorSpace
 }
 
 // GetDescription returns the value of Description.
-func (s *V1TendersCreatePostReq) GetDescription() OptString {
+func (s *V1TendersPostReq) GetDescription() OptString {
 	return s.Description
 }
 
 // GetWishes returns the value of Wishes.
-func (s *V1TendersCreatePostReq) GetWishes() OptString {
+func (s *V1TendersPostReq) GetWishes() OptString {
 	return s.Wishes
 }
 
 // GetSpecification returns the value of Specification.
-func (s *V1TendersCreatePostReq) GetSpecification() OptURL {
+func (s *V1TendersPostReq) GetSpecification() OptURL {
 	return s.Specification
 }
 
 // GetAttachments returns the value of Attachments.
-func (s *V1TendersCreatePostReq) GetAttachments() []URL {
+func (s *V1TendersPostReq) GetAttachments() []URL {
 	return s.Attachments
 }
 
 // GetServices returns the value of Services.
-func (s *V1TendersCreatePostReq) GetServices() []int {
+func (s *V1TendersPostReq) GetServices() []int {
 	return s.Services
 }
 
 // GetObjects returns the value of Objects.
-func (s *V1TendersCreatePostReq) GetObjects() []int {
+func (s *V1TendersPostReq) GetObjects() []int {
 	return s.Objects
 }
 
 // GetIsDraft returns the value of IsDraft.
-func (s *V1TendersCreatePostReq) GetIsDraft() OptBool {
+func (s *V1TendersPostReq) GetIsDraft() OptBool {
 	return s.IsDraft
 }
 
 // GetReceptionStart returns the value of ReceptionStart.
-func (s *V1TendersCreatePostReq) GetReceptionStart() time.Time {
+func (s *V1TendersPostReq) GetReceptionStart() time.Time {
 	return s.ReceptionStart
 }
 
 // GetReceptionEnd returns the value of ReceptionEnd.
-func (s *V1TendersCreatePostReq) GetReceptionEnd() time.Time {
+func (s *V1TendersPostReq) GetReceptionEnd() time.Time {
 	return s.ReceptionEnd
 }
 
 // GetWorkStart returns the value of WorkStart.
-func (s *V1TendersCreatePostReq) GetWorkStart() time.Time {
+func (s *V1TendersPostReq) GetWorkStart() time.Time {
 	return s.WorkStart
 }
 
 // GetWorkEnd returns the value of WorkEnd.
-func (s *V1TendersCreatePostReq) GetWorkEnd() time.Time {
+func (s *V1TendersPostReq) GetWorkEnd() time.Time {
 	return s.WorkEnd
 }
 
 // SetName sets the value of Name.
-func (s *V1TendersCreatePostReq) SetName(val string) {
+func (s *V1TendersPostReq) SetName(val string) {
 	s.Name = val
 }
 
 // SetCity sets the value of City.
-func (s *V1TendersCreatePostReq) SetCity(val int) {
+func (s *V1TendersPostReq) SetCity(val int) {
 	s.City = val
 }
 
 // SetPrice sets the value of Price.
-func (s *V1TendersCreatePostReq) SetPrice(val float64) {
+func (s *V1TendersPostReq) SetPrice(val float64) {
 	s.Price = val
 }
 
 // SetIsContractPrice sets the value of IsContractPrice.
-func (s *V1TendersCreatePostReq) SetIsContractPrice(val bool) {
+func (s *V1TendersPostReq) SetIsContractPrice(val bool) {
 	s.IsContractPrice = val
 }
 
 // SetIsNdsPrice sets the value of IsNdsPrice.
-func (s *V1TendersCreatePostReq) SetIsNdsPrice(val bool) {
+func (s *V1TendersPostReq) SetIsNdsPrice(val bool) {
 	s.IsNdsPrice = val
 }
 
 // SetFloorSpace sets the value of FloorSpace.
-func (s *V1TendersCreatePostReq) SetFloorSpace(val int) {
+func (s *V1TendersPostReq) SetFloorSpace(val int) {
 	s.FloorSpace = val
 }
 
 // SetDescription sets the value of Description.
-func (s *V1TendersCreatePostReq) SetDescription(val OptString) {
+func (s *V1TendersPostReq) SetDescription(val OptString) {
 	s.Description = val
 }
 
 // SetWishes sets the value of Wishes.
-func (s *V1TendersCreatePostReq) SetWishes(val OptString) {
+func (s *V1TendersPostReq) SetWishes(val OptString) {
 	s.Wishes = val
 }
 
 // SetSpecification sets the value of Specification.
-func (s *V1TendersCreatePostReq) SetSpecification(val OptURL) {
+func (s *V1TendersPostReq) SetSpecification(val OptURL) {
 	s.Specification = val
 }
 
 // SetAttachments sets the value of Attachments.
-func (s *V1TendersCreatePostReq) SetAttachments(val []URL) {
+func (s *V1TendersPostReq) SetAttachments(val []URL) {
 	s.Attachments = val
 }
 
 // SetServices sets the value of Services.
-func (s *V1TendersCreatePostReq) SetServices(val []int) {
+func (s *V1TendersPostReq) SetServices(val []int) {
 	s.Services = val
 }
 
 // SetObjects sets the value of Objects.
-func (s *V1TendersCreatePostReq) SetObjects(val []int) {
+func (s *V1TendersPostReq) SetObjects(val []int) {
 	s.Objects = val
 }
 
 // SetIsDraft sets the value of IsDraft.
-func (s *V1TendersCreatePostReq) SetIsDraft(val OptBool) {
+func (s *V1TendersPostReq) SetIsDraft(val OptBool) {
 	s.IsDraft = val
 }
 
 // SetReceptionStart sets the value of ReceptionStart.
-func (s *V1TendersCreatePostReq) SetReceptionStart(val time.Time) {
+func (s *V1TendersPostReq) SetReceptionStart(val time.Time) {
 	s.ReceptionStart = val
 }
 
 // SetReceptionEnd sets the value of ReceptionEnd.
-func (s *V1TendersCreatePostReq) SetReceptionEnd(val time.Time) {
+func (s *V1TendersPostReq) SetReceptionEnd(val time.Time) {
 	s.ReceptionEnd = val
 }
 
 // SetWorkStart sets the value of WorkStart.
-func (s *V1TendersCreatePostReq) SetWorkStart(val time.Time) {
+func (s *V1TendersPostReq) SetWorkStart(val time.Time) {
 	s.WorkStart = val
 }
 
 // SetWorkEnd sets the value of WorkEnd.
-func (s *V1TendersCreatePostReq) SetWorkEnd(val time.Time) {
+func (s *V1TendersPostReq) SetWorkEnd(val time.Time) {
 	s.WorkEnd = val
 }
 

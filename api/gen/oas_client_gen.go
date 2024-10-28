@@ -89,12 +89,18 @@ type Invoker interface {
 	//
 	// POST /v1/survey
 	V1SurveyPost(ctx context.Context, request *V1SurveyPostReq) (V1SurveyPostRes, error)
-	// V1TendersCreatePost invokes POST /v1/tenders/create operation.
+	// V1TendersGet invokes GET /v1/tenders operation.
+	//
+	// Get all tenders.
+	//
+	// GET /v1/tenders
+	V1TendersGet(ctx context.Context) (V1TendersGetRes, error)
+	// V1TendersPost invokes POST /v1/tenders operation.
 	//
 	// Create tender.
 	//
-	// POST /v1/tenders/create
-	V1TendersCreatePost(ctx context.Context, request *V1TendersCreatePostReq) (V1TendersCreatePostRes, error)
+	// POST /v1/tenders
+	V1TendersPost(ctx context.Context, request *V1TendersPostReq) (V1TendersPostRes, error)
 	// V1TendersTenderIDGet invokes GET /v1/tenders/{tenderID} operation.
 	//
 	// Get tender by id.
@@ -1181,20 +1187,20 @@ func (c *Client) sendV1SurveyPost(ctx context.Context, request *V1SurveyPostReq)
 	return result, nil
 }
 
-// V1TendersCreatePost invokes POST /v1/tenders/create operation.
+// V1TendersGet invokes GET /v1/tenders operation.
 //
-// Create tender.
+// Get all tenders.
 //
-// POST /v1/tenders/create
-func (c *Client) V1TendersCreatePost(ctx context.Context, request *V1TendersCreatePostReq) (V1TendersCreatePostRes, error) {
-	res, err := c.sendV1TendersCreatePost(ctx, request)
+// GET /v1/tenders
+func (c *Client) V1TendersGet(ctx context.Context) (V1TendersGetRes, error) {
+	res, err := c.sendV1TendersGet(ctx)
 	return res, err
 }
 
-func (c *Client) sendV1TendersCreatePost(ctx context.Context, request *V1TendersCreatePostReq) (res V1TendersCreatePostRes, err error) {
+func (c *Client) sendV1TendersGet(ctx context.Context) (res V1TendersGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/tenders/create"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/tenders"),
 	}
 
 	// Run stopwatch.
@@ -1209,7 +1215,7 @@ func (c *Client) sendV1TendersCreatePost(ctx context.Context, request *V1Tenders
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "V1TendersCreatePost",
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1TendersGet",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1227,7 +1233,78 @@ func (c *Client) sendV1TendersCreatePost(ctx context.Context, request *V1Tenders
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
-	pathParts[0] = "/v1/tenders/create"
+	pathParts[0] = "/v1/tenders"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1TendersGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1TendersPost invokes POST /v1/tenders operation.
+//
+// Create tender.
+//
+// POST /v1/tenders
+func (c *Client) V1TendersPost(ctx context.Context, request *V1TendersPostReq) (V1TendersPostRes, error) {
+	res, err := c.sendV1TendersPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendV1TendersPost(ctx context.Context, request *V1TendersPostReq) (res V1TendersPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/tenders"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1TendersPost",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/tenders"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
@@ -1235,7 +1312,7 @@ func (c *Client) sendV1TendersCreatePost(ctx context.Context, request *V1Tenders
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
-	if err := encodeV1TendersCreatePostRequest(request, r); err != nil {
+	if err := encodeV1TendersPostRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
 	}
 
@@ -1244,7 +1321,7 @@ func (c *Client) sendV1TendersCreatePost(ctx context.Context, request *V1Tenders
 		var satisfied bitset
 		{
 			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "V1TendersCreatePost", r); {
+			switch err := c.securityBearerAuth(ctx, "V1TendersPost", r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -1280,7 +1357,7 @@ func (c *Client) sendV1TendersCreatePost(ctx context.Context, request *V1Tenders
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeV1TendersCreatePostResponse(resp)
+	result, err := decodeV1TendersPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

@@ -1091,7 +1091,7 @@ func (s *V1SurveyPostReq) Validate() error {
 	return nil
 }
 
-func (s *V1TendersCreatePostCreated) Validate() error {
+func (s *V1TendersGetOK) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -1114,7 +1114,70 @@ func (s *V1TendersCreatePostCreated) Validate() error {
 	return nil
 }
 
-func (s *V1TendersCreatePostCreatedData) Validate() error {
+func (s *V1TendersGetOKData) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if s.Tenders == nil {
+			return errors.New("nil is invalid value")
+		}
+		var failures []validate.FieldError
+		for i, elem := range s.Tenders {
+			if err := func() error {
+				if err := elem.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				failures = append(failures, validate.FieldError{
+					Name:  fmt.Sprintf("[%d]", i),
+					Error: err,
+				})
+			}
+		}
+		if len(failures) > 0 {
+			return &validate.Error{Fields: failures}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "tenders",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *V1TendersPostCreated) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Data.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "data",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *V1TendersPostCreatedData) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}
@@ -1137,7 +1200,7 @@ func (s *V1TendersCreatePostCreatedData) Validate() error {
 	return nil
 }
 
-func (s *V1TendersCreatePostReq) Validate() error {
+func (s *V1TendersPostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}

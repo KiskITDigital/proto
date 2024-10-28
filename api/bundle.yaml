@@ -187,7 +187,7 @@ paths:
                         type: string
         default:
           $ref: '#/components/responses/Error'
-  /v1/tenders/create:
+  /v1/tenders:
     post:
       tags:
         - tenders
@@ -279,6 +279,31 @@ paths:
                     properties:
                       tender:
                         $ref: '#/components/schemas/Tender'
+        default:
+          $ref: '#/components/responses/Error'
+    get:
+      tags:
+        - tenders
+      summary: Get all tenders
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - tenders
+                    properties:
+                      tenders:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Tender'
         default:
           $ref: '#/components/responses/Error'
   /v1/tenders/{tenderID}:

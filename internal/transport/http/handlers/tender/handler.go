@@ -17,6 +17,7 @@ type Service interface {
 	Create(ctx context.Context, params tenderService.CreateParams) (models.Tender, error)
 	Update(ctx context.Context, params tenderService.UpdateParams) (models.Tender, error)
 	GetByID(ctx context.Context, tenderID int) (models.Tender, error)
+	Get(ctx context.Context) ([]models.Tender, error)
 }
 
 func New(logger *slog.Logger, svc Service) *Handler {

@@ -18,7 +18,7 @@ paths:
   /v1/auth/refresh:
     $ref: "v1/paths/auth/refresh.yaml"
 
-  /v1/tenders/create:
+  /v1/tenders:
     $ref: "v1/paths/tenders.yaml"
   /v1/tenders/{tenderID}:
     $ref: "v1/paths/tenders/_id.yaml"

@@ -3,7 +3,7 @@
 package api
 
 // setDefaults set default value of fields.
-func (s *V1TendersCreatePostReq) setDefaults() {
+func (s *V1TendersPostReq) setDefaults() {
 	{
 		val := bool(false)
 		s.IsDraft.SetTo(val)

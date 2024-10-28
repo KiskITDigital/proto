@@ -109,8 +109,8 @@ func encodeV1SurveyPostRequest(
 	return nil
 }
 
-func encodeV1TendersCreatePostRequest(
-	req *V1TendersCreatePostReq,
+func encodeV1TendersPostRequest(
+	req *V1TendersPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

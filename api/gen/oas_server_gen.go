@@ -74,12 +74,18 @@ type Handler interface {
 	//
 	// POST /v1/survey
 	V1SurveyPost(ctx context.Context, req *V1SurveyPostReq) (V1SurveyPostRes, error)
-	// V1TendersCreatePost implements POST /v1/tenders/create operation.
+	// V1TendersGet implements GET /v1/tenders operation.
+	//
+	// Get all tenders.
+	//
+	// GET /v1/tenders
+	V1TendersGet(ctx context.Context) (V1TendersGetRes, error)
+	// V1TendersPost implements POST /v1/tenders operation.
 	//
 	// Create tender.
 	//
-	// POST /v1/tenders/create
-	V1TendersCreatePost(ctx context.Context, req *V1TendersCreatePostReq) (V1TendersCreatePostRes, error)
+	// POST /v1/tenders
+	V1TendersPost(ctx context.Context, req *V1TendersPostReq) (V1TendersPostRes, error)
 	// V1TendersTenderIDGet implements GET /v1/tenders/{tenderID} operation.
 	//
 	// Get tender by id.

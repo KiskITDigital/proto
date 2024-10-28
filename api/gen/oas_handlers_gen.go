@@ -1451,19 +1451,111 @@ func (s *Server) handleV1SurveyPostRequest(args [0]string, argsEscaped bool, w h
 	}
 }
 
-// handleV1TendersCreatePostRequest handles POST /v1/tenders/create operation.
+// handleV1TendersGetRequest handles GET /v1/tenders operation.
 //
-// Create tender.
+// Get all tenders.
 //
-// POST /v1/tenders/create
-func (s *Server) handleV1TendersCreatePostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// GET /v1/tenders
+func (s *Server) handleV1TendersGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/tenders/create"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/tenders"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "V1TendersCreatePost",
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "V1TendersGet",
+		trace.WithAttributes(otelAttrs...),
+		serverSpanKind,
+	)
+	defer span.End()
+
+	// Add Labeler to context.
+	labeler := &Labeler{attrs: otelAttrs}
+	ctx = contextWithLabeler(ctx, labeler)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+		attrOpt := metric.WithAttributeSet(labeler.AttributeSet())
+
+		// Increment request counter.
+		s.requests.Add(ctx, 1, attrOpt)
+
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		s.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), attrOpt)
+	}()
+
+	var (
+		recordError = func(stage string, err error) {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			s.errors.Add(ctx, 1, metric.WithAttributeSet(labeler.AttributeSet()))
+		}
+		err error
+	)
+
+	var response V1TendersGetRes
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    "V1TendersGet",
+			OperationSummary: "Get all tenders",
+			OperationID:      "",
+			Body:             nil,
+			Params:           middleware.Parameters{},
+			Raw:              r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = struct{}
+			Response = V1TendersGetRes
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			nil,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1TendersGet(ctx)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1TendersGet(ctx)
+	}
+	if err != nil {
+		defer recordError("Internal", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	if err := encodeV1TendersGetResponse(response, w, span); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handleV1TendersPostRequest handles POST /v1/tenders operation.
+//
+// Create tender.
+//
+// POST /v1/tenders
+func (s *Server) handleV1TendersPostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/tenders"),
+	}
+
+	// Start a span for this request.
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "V1TendersPost",
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -1494,7 +1586,7 @@ func (s *Server) handleV1TendersCreatePostRequest(args [0]string, argsEscaped bo
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: "V1TendersCreatePost",
+			Name: "V1TendersPost",
 			ID:   "",
 		}
 	)
@@ -1502,7 +1594,7 @@ func (s *Server) handleV1TendersCreatePostRequest(args [0]string, argsEscaped bo
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityBearerAuth(ctx, "V1TendersCreatePost", r)
+			sctx, ok, err := s.securityBearerAuth(ctx, "V1TendersPost", r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -1542,7 +1634,7 @@ func (s *Server) handleV1TendersCreatePostRequest(args [0]string, argsEscaped bo
 			return
 		}
 	}
-	request, close, err := s.decodeV1TendersCreatePostRequest(r)
+	request, close, err := s.decodeV1TendersPostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -1558,11 +1650,11 @@ func (s *Server) handleV1TendersCreatePostRequest(args [0]string, argsEscaped bo
 		}
 	}()
 
-	var response V1TendersCreatePostRes
+	var response V1TendersPostRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    "V1TendersCreatePost",
+			OperationName:    "V1TendersPost",
 			OperationSummary: "Create tender",
 			OperationID:      "",
 			Body:             request,
@@ -1571,9 +1663,9 @@ func (s *Server) handleV1TendersCreatePostRequest(args [0]string, argsEscaped bo
 		}
 
 		type (
-			Request  = *V1TendersCreatePostReq
+			Request  = *V1TendersPostReq
 			Params   = struct{}
-			Response = V1TendersCreatePostRes
+			Response = V1TendersPostRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -1584,12 +1676,12 @@ func (s *Server) handleV1TendersCreatePostRequest(args [0]string, argsEscaped bo
 			mreq,
 			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.V1TendersCreatePost(ctx, request)
+				response, err = s.h.V1TendersPost(ctx, request)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.V1TendersCreatePost(ctx, request)
+		response, err = s.h.V1TendersPost(ctx, request)
 	}
 	if err != nil {
 		defer recordError("Internal", err)
@@ -1597,7 +1689,7 @@ func (s *Server) handleV1TendersCreatePostRequest(args [0]string, argsEscaped bo
 		return
 	}
 
-	if err := encodeV1TendersCreatePostResponse(response, w, span); err != nil {
+	if err := encodeV1TendersPostResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

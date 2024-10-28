@@ -299,61 +299,59 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
-			case 't': // Prefix: "tenders/"
+			case 't': // Prefix: "tenders"
 				origElem := elem
-				if l := len("tenders/"); len(elem) >= l && elem[0:l] == "tenders/" {
+				if l := len("tenders"); len(elem) >= l && elem[0:l] == "tenders" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					break
+					switch r.Method {
+					case "GET":
+						s.handleV1TendersGetRequest([0]string{}, elemIsEscaped, w, r)
+					case "POST":
+						s.handleV1TendersPostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
+
+					return
 				}
 				switch elem[0] {
-				case 'c': // Prefix: "create"
+				case '/': // Prefix: "/"
 					origElem := elem
-					if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
+					// Param: "tenderID"
+					// Leaf parameter
+					args[0] = elem
+					elem = ""
+
 					if len(elem) == 0 {
 						// Leaf node.
 						switch r.Method {
-						case "POST":
-							s.handleV1TendersCreatePostRequest([0]string{}, elemIsEscaped, w, r)
+						case "GET":
+							s.handleV1TendersTenderIDGetRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						case "PUT":
+							s.handleV1TendersTenderIDPutRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "POST")
+							s.notAllowed(w, r, "GET,PUT")
 						}
 
 						return
 					}
 
 					elem = origElem
-				}
-				// Param: "tenderID"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "GET":
-						s.handleV1TendersTenderIDGetRequest([1]string{
-							args[0],
-						}, elemIsEscaped, w, r)
-					case "PUT":
-						s.handleV1TendersTenderIDPutRequest([1]string{
-							args[0],
-						}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "GET,PUT")
-					}
-
-					return
 				}
 
 				elem = origElem
@@ -766,36 +764,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				elem = origElem
-			case 't': // Prefix: "tenders/"
+			case 't': // Prefix: "tenders"
 				origElem := elem
-				if l := len("tenders/"); len(elem) >= l && elem[0:l] == "tenders/" {
+				if l := len("tenders"); len(elem) >= l && elem[0:l] == "tenders" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					break
+					switch method {
+					case "GET":
+						r.name = "V1TendersGet"
+						r.summary = "Get all tenders"
+						r.operationID = ""
+						r.pathPattern = "/v1/tenders"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = "V1TendersPost"
+						r.summary = "Create tender"
+						r.operationID = ""
+						r.pathPattern = "/v1/tenders"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 				switch elem[0] {
-				case 'c': // Prefix: "create"
+				case '/': // Prefix: "/"
 					origElem := elem
-					if l := len("create"); len(elem) >= l && elem[0:l] == "create" {
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
+					// Param: "tenderID"
+					// Leaf parameter
+					args[0] = elem
+					elem = ""
+
 					if len(elem) == 0 {
 						// Leaf node.
 						switch method {
-						case "POST":
-							r.name = "V1TendersCreatePost"
-							r.summary = "Create tender"
+						case "GET":
+							r.name = "V1TendersTenderIDGet"
+							r.summary = "Get tender by id"
 							r.operationID = ""
-							r.pathPattern = "/v1/tenders/create"
+							r.pathPattern = "/v1/tenders/{tenderID}"
 							r.args = args
-							r.count = 0
+							r.count = 1
+							return r, true
+						case "PUT":
+							r.name = "V1TendersTenderIDPut"
+							r.summary = "Update tender by id"
+							r.operationID = ""
+							r.pathPattern = "/v1/tenders/{tenderID}"
+							r.args = args
+							r.count = 1
 							return r, true
 						default:
 							return
@@ -803,34 +833,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
-				}
-				// Param: "tenderID"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
-				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "GET":
-						r.name = "V1TendersTenderIDGet"
-						r.summary = "Get tender by id"
-						r.operationID = ""
-						r.pathPattern = "/v1/tenders/{tenderID}"
-						r.args = args
-						r.count = 1
-						return r, true
-					case "PUT":
-						r.name = "V1TendersTenderIDPut"
-						r.summary = "Update tender by id"
-						r.operationID = ""
-						r.pathPattern = "/v1/tenders/{tenderID}"
-						r.args = args
-						r.count = 1
-						return r, true
-					default:
-						return
-					}
 				}
 
 				elem = origElem

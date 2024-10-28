@@ -91,3 +91,28 @@ post:
                     $ref: "../schemas/Tender.yaml"
     default:
       $ref: "../responses/Error.yaml"
+get:
+  tags:
+    - tenders
+  summary: Get all tenders
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required: 
+                  - tenders
+                properties:
+                  tenders:
+                    type: array
+                    items:
+                      $ref: "../schemas/Tender.yaml"
+    default:
+      $ref: "../responses/Error.yaml"

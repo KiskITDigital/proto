@@ -64,12 +64,14 @@ type TenderObject struct {
 	ID       int
 	ParentID int
 	Name     string
+	TenderID int
 }
 
 type TenderService struct {
 	ID       int
 	ParentID int
 	Name     string
+	TenderID int
 }
 
 func ConvertTenderModelToApi(tender Tender) api.Tender {
