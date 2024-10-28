@@ -90,7 +90,7 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 			ID:        randSessionID(sessionLength),
 			UserID:    user.ID,
 			IPAddress: params.IPAddress,
-			ExpiresAt: time.Now().Add(RefreshTokenLifetime),
+			ExpiresAt: time.Now().Add(s.tokenAuthorizer.GetRefreshTokenDurationLifetime()),
 		})
 		if err != nil {
 			return fmt.Errorf("create session: %w", err)

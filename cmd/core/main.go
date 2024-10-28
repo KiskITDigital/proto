@@ -11,6 +11,7 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/config"
 	dadataGateway "gitlab.ubrato.ru/ubrato/core/internal/gateway/dadata"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/token"
+	adminService "gitlab.ubrato.ru/ubrato/core/internal/service/admin"
 	authService "gitlab.ubrato.ru/ubrato/core/internal/service/auth"
 	catalogService "gitlab.ubrato.ru/ubrato/core/internal/service/catalog"
 	surveyService "gitlab.ubrato.ru/ubrato/core/internal/service/survey"
@@ -18,12 +19,14 @@ import (
 	userService "gitlab.ubrato.ru/ubrato/core/internal/service/user"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 	"gitlab.ubrato.ru/ubrato/core/internal/store/postgres"
+	adminStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/admin"
 	catalogStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/catalog"
 	organizationStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/organization"
 	sessionStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/session"
 	tenderStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/tender"
 	userStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/user"
 	"gitlab.ubrato.ru/ubrato/core/internal/transport/http"
+	adminHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/admin"
 	authHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/auth"
 	catalogHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/catalog"
 	errorHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/error"
@@ -70,10 +73,16 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	sessionStore := sessionStore.NewSessionStore()
 	tenderStore := tenderStore.NewTenderStore()
 	catalogStore := catalogStore.NewCatalogStore()
+	adminStore := adminStore.New()
 
 	dadataGateway := dadataGateway.NewClient(cfg.Gateway.Dadata.APIKey)
 
 	tokenAuthorizer, err := token.NewTokenAuthorizer(cfg.Auth.JWT)
+	if err != nil {
+		return fmt.Errorf("init token authorizer: %w", err)
+	}
+
+	adminTokenAuthorizer, err := token.NewTokenAuthorizer(cfg.Auth.JWTAdmin)
 	if err != nil {
 		return fmt.Errorf("init token authorizer: %w", err)
 	}
@@ -113,6 +122,12 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		jetStream,
 	)
 
+	adminService := adminService.New(
+		psql,
+		adminStore,
+		adminTokenAuthorizer,
+	)
+
 	router := http.NewRouter(http.RouterParams{
 		Error:   errorHandler.New(logger),
 		Auth:    authHandler.New(logger, authService),
@@ -120,6 +135,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		Catalog: catalogHandler.New(logger, catalogService),
 		Users:   userHandler.New(logger, userService),
 		Survey:  surveyHandler.New(logger, surveyService),
+		Admin:   adminHandler.New(logger, adminService),
 	})
 
 	server, err := http.NewServer(logger, cfg.Transport.HTTP, router)

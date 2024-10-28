@@ -13,6 +13,60 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// V1AdminAuthRefreshPost implements POST /v1/admin/auth/refresh operation.
+//
+// Get new access token.
+//
+// POST /v1/admin/auth/refresh
+func (UnimplementedHandler) V1AdminAuthRefreshPost(ctx context.Context, params V1AdminAuthRefreshPostParams) (r V1AdminAuthRefreshPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1AdminAuthSigninPost implements POST /v1/admin/auth/signin operation.
+//
+// Signin.
+//
+// POST /v1/admin/auth/signin
+func (UnimplementedHandler) V1AdminAuthSigninPost(ctx context.Context, req *V1AdminAuthSigninPostReq) (r V1AdminAuthSigninPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1AdminAuthUserGet implements GET /v1/admin/auth/user operation.
+//
+// Get currently authenticated user.
+//
+// GET /v1/admin/auth/user
+func (UnimplementedHandler) V1AdminAuthUserGet(ctx context.Context) (r V1AdminAuthUserGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1AdminUsersGet implements GET /v1/admin/users operation.
+//
+// Get admin users.
+//
+// GET /v1/admin/users
+func (UnimplementedHandler) V1AdminUsersGet(ctx context.Context) (r V1AdminUsersGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1AdminUsersPost implements POST /v1/admin/users operation.
+//
+// Create admin user.
+//
+// POST /v1/admin/users
+func (UnimplementedHandler) V1AdminUsersPost(ctx context.Context, req *V1AdminUsersPostReq) (r V1AdminUsersPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1AdminUsersUserIDGet implements GET /v1/admin/users/{userID} operation.
+//
+// Get admin users by id.
+//
+// GET /v1/admin/users/{userID}
+func (UnimplementedHandler) V1AdminUsersUserIDGet(ctx context.Context, params V1AdminUsersUserIDGetParams) (r V1AdminUsersUserIDGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1AuthRefreshPost implements POST /v1/auth/refresh operation.
 //
 // Get new access token.

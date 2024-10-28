@@ -15,6 +15,145 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
+// V1AdminAuthRefreshPostParams is parameters of POST /v1/admin/auth/refresh operation.
+type V1AdminAuthRefreshPostParams struct {
+	// The session ID for the user.
+	UbratoAdminSession string
+}
+
+func unpackV1AdminAuthRefreshPostParams(packed middleware.Parameters) (params V1AdminAuthRefreshPostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "ubrato_admin_session",
+			In:   "cookie",
+		}
+		params.UbratoAdminSession = packed[key].(string)
+	}
+	return params
+}
+
+func decodeV1AdminAuthRefreshPostParams(args [0]string, argsEscaped bool, r *http.Request) (params V1AdminAuthRefreshPostParams, _ error) {
+	c := uri.NewCookieDecoder(r)
+	// Decode cookie: ubrato_admin_session.
+	if err := func() error {
+		cfg := uri.CookieParameterDecodingConfig{
+			Name:    "ubrato_admin_session",
+			Explode: true,
+		}
+		if err := c.HasParam(cfg); err == nil {
+			if err := c.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.UbratoAdminSession = c
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "ubrato_admin_session",
+			In:   "cookie",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1AdminUsersUserIDGetParams is parameters of GET /v1/admin/users/{userID} operation.
+type V1AdminUsersUserIDGetParams struct {
+	// ID of user.
+	UserID int
+}
+
+func unpackV1AdminUsersUserIDGetParams(packed middleware.Parameters) (params V1AdminUsersUserIDGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "userID",
+			In:   "path",
+		}
+		params.UserID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1AdminUsersUserIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1AdminUsersUserIDGetParams, _ error) {
+	// Decode path: userID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "userID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.UserID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.UserID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "userID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // V1AuthRefreshPostParams is parameters of POST /v1/auth/refresh operation.
 type V1AuthRefreshPostParams struct {
 	// The session ID for the user.

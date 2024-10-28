@@ -40,6 +40,17 @@ paths:
 
   /v1/survey:
     $ref: "v1/paths/survey.yaml"
+
+  /v1/admin/auth/signin:
+    $ref: "v1/paths/admin/auth/signin.yaml"
+  /v1/admin/auth/user:
+    $ref: "v1/paths/admin/auth/user.yaml"
+  /v1/admin/auth/refresh:
+    $ref: "v1/paths/admin/auth/refresh.yaml"
+  /v1/admin/users:
+    $ref: "v1/paths/admin/users.yaml"
+  /v1/admin/users/{userID}:
+    $ref: "v1/paths/admin/users/_id.yaml"
 components:
   securitySchemes:
     cookieAuth:
@@ -47,6 +58,14 @@ components:
       in: cookie
       name: ubrato_session
     bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    adminCookieAuth:
+      type: apiKey
+      in: cookie
+      name: ubrato_admin_session
+    adminBearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT

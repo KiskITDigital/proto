@@ -1,0 +1,40 @@
+post:
+  tags:
+    - admin
+  summary: Get new access token
+  parameters:
+    - name: ubrato_admin_session
+      in: cookie
+      required: true
+      description: The session ID for the user.
+      schema:
+        type: string
+  security:
+    - adminCookieAuth: []
+  responses:
+    '200':
+      description: Success
+      headers:
+        Set-Cookie:
+          schema:
+            type: string
+            example: ubrato_admin_session=7ff581a1-4dcf-4f53-a9cb-0ef408d4a7bb; Path=/; Max-Age=1727209098; HttpOnly; Secure; SameSite=Lax
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                required: 
+                  - user
+                  - access_token
+                properties:
+                  user:
+                    $ref: "../../../schemas/AdminUser.yaml"
+                  access_token:
+                    type: string
+    default:
+      $ref: "../../../responses/Error.yaml"

@@ -9,6 +9,166 @@ import (
 	"github.com/go-faster/jx"
 )
 
+type AdminBearerAuth struct {
+	Token string
+}
+
+// GetToken returns the value of Token.
+func (s *AdminBearerAuth) GetToken() string {
+	return s.Token
+}
+
+// SetToken sets the value of Token.
+func (s *AdminBearerAuth) SetToken(val string) {
+	s.Token = val
+}
+
+type AdminCookieAuth struct {
+	APIKey string
+}
+
+// GetAPIKey returns the value of APIKey.
+func (s *AdminCookieAuth) GetAPIKey() string {
+	return s.APIKey
+}
+
+// SetAPIKey sets the value of APIKey.
+func (s *AdminCookieAuth) SetAPIKey(val string) {
+	s.APIKey = val
+}
+
+// 0: Invalid
+// 1: Employee
+// 2: Admin
+// 3: SuperAdmin.
+// Ref: #
+type AdminRole int
+
+const (
+	AdminRole1 AdminRole = 1
+)
+
+// AllValues returns all AdminRole values.
+func (AdminRole) AllValues() []AdminRole {
+	return []AdminRole{
+		AdminRole1,
+	}
+}
+
+// Ref: #
+type AdminUser struct {
+	ID         int       `json:"id"`
+	Email      Email     `json:"email"`
+	Phone      Phone     `json:"phone"`
+	FirstName  Name      `json:"first_name"`
+	LastName   Name      `json:"last_name"`
+	MiddleName Name      `json:"middle_name"`
+	AvatarURL  OptURL    `json:"avatar_url"`
+	Role       AdminRole `json:"role"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
+}
+
+// GetID returns the value of ID.
+func (s *AdminUser) GetID() int {
+	return s.ID
+}
+
+// GetEmail returns the value of Email.
+func (s *AdminUser) GetEmail() Email {
+	return s.Email
+}
+
+// GetPhone returns the value of Phone.
+func (s *AdminUser) GetPhone() Phone {
+	return s.Phone
+}
+
+// GetFirstName returns the value of FirstName.
+func (s *AdminUser) GetFirstName() Name {
+	return s.FirstName
+}
+
+// GetLastName returns the value of LastName.
+func (s *AdminUser) GetLastName() Name {
+	return s.LastName
+}
+
+// GetMiddleName returns the value of MiddleName.
+func (s *AdminUser) GetMiddleName() Name {
+	return s.MiddleName
+}
+
+// GetAvatarURL returns the value of AvatarURL.
+func (s *AdminUser) GetAvatarURL() OptURL {
+	return s.AvatarURL
+}
+
+// GetRole returns the value of Role.
+func (s *AdminUser) GetRole() AdminRole {
+	return s.Role
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *AdminUser) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// GetUpdatedAt returns the value of UpdatedAt.
+func (s *AdminUser) GetUpdatedAt() time.Time {
+	return s.UpdatedAt
+}
+
+// SetID sets the value of ID.
+func (s *AdminUser) SetID(val int) {
+	s.ID = val
+}
+
+// SetEmail sets the value of Email.
+func (s *AdminUser) SetEmail(val Email) {
+	s.Email = val
+}
+
+// SetPhone sets the value of Phone.
+func (s *AdminUser) SetPhone(val Phone) {
+	s.Phone = val
+}
+
+// SetFirstName sets the value of FirstName.
+func (s *AdminUser) SetFirstName(val Name) {
+	s.FirstName = val
+}
+
+// SetLastName sets the value of LastName.
+func (s *AdminUser) SetLastName(val Name) {
+	s.LastName = val
+}
+
+// SetMiddleName sets the value of MiddleName.
+func (s *AdminUser) SetMiddleName(val Name) {
+	s.MiddleName = val
+}
+
+// SetAvatarURL sets the value of AvatarURL.
+func (s *AdminUser) SetAvatarURL(val OptURL) {
+	s.AvatarURL = val
+}
+
+// SetRole sets the value of Role.
+func (s *AdminUser) SetRole(val AdminRole) {
+	s.Role = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *AdminUser) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// SetUpdatedAt sets the value of UpdatedAt.
+func (s *AdminUser) SetUpdatedAt(val time.Time) {
+	s.UpdatedAt = val
+}
+
 type BearerAuth struct {
 	Token string
 }
@@ -178,6 +338,12 @@ func (s *ErrorStatusCode) SetResponse(val WrappedError) {
 	s.Response = val
 }
 
+func (*ErrorStatusCode) v1AdminAuthRefreshPostRes()                  {}
+func (*ErrorStatusCode) v1AdminAuthSigninPostRes()                   {}
+func (*ErrorStatusCode) v1AdminAuthUserGetRes()                      {}
+func (*ErrorStatusCode) v1AdminUsersGetRes()                         {}
+func (*ErrorStatusCode) v1AdminUsersPostRes()                        {}
+func (*ErrorStatusCode) v1AdminUsersUserIDGetRes()                   {}
 func (*ErrorStatusCode) v1AuthRefreshPostRes()                       {}
 func (*ErrorStatusCode) v1AuthSigninPostRes()                        {}
 func (*ErrorStatusCode) v1AuthSignupPostRes()                        {}
@@ -857,21 +1023,18 @@ func (s *Region) SetName(val string) {
 }
 
 // 0: Invalid
-// 1: User
-// 2: Admin.
+// 1: User.
 // Ref: #
 type Role int
 
 const (
 	Role1 Role = 1
-	Role2 Role = 2
 )
 
 // AllValues returns all Role values.
 func (Role) AllValues() []Role {
 	return []Role{
 		Role1,
-		Role2,
 	}
 }
 
@@ -1327,6 +1490,376 @@ func (s *User) SetCreatedAt(val time.Time) {
 // SetUpdatedAt sets the value of UpdatedAt.
 func (s *User) SetUpdatedAt(val time.Time) {
 	s.UpdatedAt = val
+}
+
+type V1AdminAuthRefreshPostOK struct {
+	Data V1AdminAuthRefreshPostOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1AdminAuthRefreshPostOK) GetData() V1AdminAuthRefreshPostOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1AdminAuthRefreshPostOK) SetData(val V1AdminAuthRefreshPostOKData) {
+	s.Data = val
+}
+
+type V1AdminAuthRefreshPostOKData struct {
+	User        AdminUser `json:"user"`
+	AccessToken string    `json:"access_token"`
+}
+
+// GetUser returns the value of User.
+func (s *V1AdminAuthRefreshPostOKData) GetUser() AdminUser {
+	return s.User
+}
+
+// GetAccessToken returns the value of AccessToken.
+func (s *V1AdminAuthRefreshPostOKData) GetAccessToken() string {
+	return s.AccessToken
+}
+
+// SetUser sets the value of User.
+func (s *V1AdminAuthRefreshPostOKData) SetUser(val AdminUser) {
+	s.User = val
+}
+
+// SetAccessToken sets the value of AccessToken.
+func (s *V1AdminAuthRefreshPostOKData) SetAccessToken(val string) {
+	s.AccessToken = val
+}
+
+// V1AdminAuthRefreshPostOKHeaders wraps V1AdminAuthRefreshPostOK with response headers.
+type V1AdminAuthRefreshPostOKHeaders struct {
+	SetCookie OptString
+	Response  V1AdminAuthRefreshPostOK
+}
+
+// GetSetCookie returns the value of SetCookie.
+func (s *V1AdminAuthRefreshPostOKHeaders) GetSetCookie() OptString {
+	return s.SetCookie
+}
+
+// GetResponse returns the value of Response.
+func (s *V1AdminAuthRefreshPostOKHeaders) GetResponse() V1AdminAuthRefreshPostOK {
+	return s.Response
+}
+
+// SetSetCookie sets the value of SetCookie.
+func (s *V1AdminAuthRefreshPostOKHeaders) SetSetCookie(val OptString) {
+	s.SetCookie = val
+}
+
+// SetResponse sets the value of Response.
+func (s *V1AdminAuthRefreshPostOKHeaders) SetResponse(val V1AdminAuthRefreshPostOK) {
+	s.Response = val
+}
+
+func (*V1AdminAuthRefreshPostOKHeaders) v1AdminAuthRefreshPostRes() {}
+
+type V1AdminAuthSigninPostOK struct {
+	Data V1AdminAuthSigninPostOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1AdminAuthSigninPostOK) GetData() V1AdminAuthSigninPostOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1AdminAuthSigninPostOK) SetData(val V1AdminAuthSigninPostOKData) {
+	s.Data = val
+}
+
+type V1AdminAuthSigninPostOKData struct {
+	User        AdminUser `json:"user"`
+	AccessToken string    `json:"access_token"`
+}
+
+// GetUser returns the value of User.
+func (s *V1AdminAuthSigninPostOKData) GetUser() AdminUser {
+	return s.User
+}
+
+// GetAccessToken returns the value of AccessToken.
+func (s *V1AdminAuthSigninPostOKData) GetAccessToken() string {
+	return s.AccessToken
+}
+
+// SetUser sets the value of User.
+func (s *V1AdminAuthSigninPostOKData) SetUser(val AdminUser) {
+	s.User = val
+}
+
+// SetAccessToken sets the value of AccessToken.
+func (s *V1AdminAuthSigninPostOKData) SetAccessToken(val string) {
+	s.AccessToken = val
+}
+
+// V1AdminAuthSigninPostOKHeaders wraps V1AdminAuthSigninPostOK with response headers.
+type V1AdminAuthSigninPostOKHeaders struct {
+	SetCookie OptString
+	Response  V1AdminAuthSigninPostOK
+}
+
+// GetSetCookie returns the value of SetCookie.
+func (s *V1AdminAuthSigninPostOKHeaders) GetSetCookie() OptString {
+	return s.SetCookie
+}
+
+// GetResponse returns the value of Response.
+func (s *V1AdminAuthSigninPostOKHeaders) GetResponse() V1AdminAuthSigninPostOK {
+	return s.Response
+}
+
+// SetSetCookie sets the value of SetCookie.
+func (s *V1AdminAuthSigninPostOKHeaders) SetSetCookie(val OptString) {
+	s.SetCookie = val
+}
+
+// SetResponse sets the value of Response.
+func (s *V1AdminAuthSigninPostOKHeaders) SetResponse(val V1AdminAuthSigninPostOK) {
+	s.Response = val
+}
+
+func (*V1AdminAuthSigninPostOKHeaders) v1AdminAuthSigninPostRes() {}
+
+type V1AdminAuthSigninPostReq struct {
+	Email    Email    `json:"email"`
+	Password Password `json:"password"`
+}
+
+// GetEmail returns the value of Email.
+func (s *V1AdminAuthSigninPostReq) GetEmail() Email {
+	return s.Email
+}
+
+// GetPassword returns the value of Password.
+func (s *V1AdminAuthSigninPostReq) GetPassword() Password {
+	return s.Password
+}
+
+// SetEmail sets the value of Email.
+func (s *V1AdminAuthSigninPostReq) SetEmail(val Email) {
+	s.Email = val
+}
+
+// SetPassword sets the value of Password.
+func (s *V1AdminAuthSigninPostReq) SetPassword(val Password) {
+	s.Password = val
+}
+
+type V1AdminAuthUserGetOK struct {
+	Data V1AdminAuthUserGetOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1AdminAuthUserGetOK) GetData() V1AdminAuthUserGetOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1AdminAuthUserGetOK) SetData(val V1AdminAuthUserGetOKData) {
+	s.Data = val
+}
+
+func (*V1AdminAuthUserGetOK) v1AdminAuthUserGetRes() {}
+
+type V1AdminAuthUserGetOKData struct {
+	User AdminUser `json:"user"`
+}
+
+// GetUser returns the value of User.
+func (s *V1AdminAuthUserGetOKData) GetUser() AdminUser {
+	return s.User
+}
+
+// SetUser sets the value of User.
+func (s *V1AdminAuthUserGetOKData) SetUser(val AdminUser) {
+	s.User = val
+}
+
+type V1AdminUsersGetOK struct {
+	Data V1AdminUsersGetOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1AdminUsersGetOK) GetData() V1AdminUsersGetOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1AdminUsersGetOK) SetData(val V1AdminUsersGetOKData) {
+	s.Data = val
+}
+
+func (*V1AdminUsersGetOK) v1AdminUsersGetRes() {}
+
+type V1AdminUsersGetOKData struct {
+	Users []AdminUser `json:"users"`
+}
+
+// GetUsers returns the value of Users.
+func (s *V1AdminUsersGetOKData) GetUsers() []AdminUser {
+	return s.Users
+}
+
+// SetUsers sets the value of Users.
+func (s *V1AdminUsersGetOKData) SetUsers(val []AdminUser) {
+	s.Users = val
+}
+
+type V1AdminUsersPostCreated struct {
+	Data V1AdminUsersPostCreatedData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1AdminUsersPostCreated) GetData() V1AdminUsersPostCreatedData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1AdminUsersPostCreated) SetData(val V1AdminUsersPostCreatedData) {
+	s.Data = val
+}
+
+func (*V1AdminUsersPostCreated) v1AdminUsersPostRes() {}
+
+type V1AdminUsersPostCreatedData struct {
+	User AdminUser `json:"user"`
+}
+
+// GetUser returns the value of User.
+func (s *V1AdminUsersPostCreatedData) GetUser() AdminUser {
+	return s.User
+}
+
+// SetUser sets the value of User.
+func (s *V1AdminUsersPostCreatedData) SetUser(val AdminUser) {
+	s.User = val
+}
+
+type V1AdminUsersPostReq struct {
+	Email      Email     `json:"email"`
+	Phone      Phone     `json:"phone"`
+	Password   Password  `json:"password"`
+	FirstName  Name      `json:"first_name"`
+	LastName   Name      `json:"last_name"`
+	MiddleName Name      `json:"middle_name"`
+	AvatarURL  OptURL    `json:"avatar_url"`
+	Role       AdminRole `json:"role"`
+}
+
+// GetEmail returns the value of Email.
+func (s *V1AdminUsersPostReq) GetEmail() Email {
+	return s.Email
+}
+
+// GetPhone returns the value of Phone.
+func (s *V1AdminUsersPostReq) GetPhone() Phone {
+	return s.Phone
+}
+
+// GetPassword returns the value of Password.
+func (s *V1AdminUsersPostReq) GetPassword() Password {
+	return s.Password
+}
+
+// GetFirstName returns the value of FirstName.
+func (s *V1AdminUsersPostReq) GetFirstName() Name {
+	return s.FirstName
+}
+
+// GetLastName returns the value of LastName.
+func (s *V1AdminUsersPostReq) GetLastName() Name {
+	return s.LastName
+}
+
+// GetMiddleName returns the value of MiddleName.
+func (s *V1AdminUsersPostReq) GetMiddleName() Name {
+	return s.MiddleName
+}
+
+// GetAvatarURL returns the value of AvatarURL.
+func (s *V1AdminUsersPostReq) GetAvatarURL() OptURL {
+	return s.AvatarURL
+}
+
+// GetRole returns the value of Role.
+func (s *V1AdminUsersPostReq) GetRole() AdminRole {
+	return s.Role
+}
+
+// SetEmail sets the value of Email.
+func (s *V1AdminUsersPostReq) SetEmail(val Email) {
+	s.Email = val
+}
+
+// SetPhone sets the value of Phone.
+func (s *V1AdminUsersPostReq) SetPhone(val Phone) {
+	s.Phone = val
+}
+
+// SetPassword sets the value of Password.
+func (s *V1AdminUsersPostReq) SetPassword(val Password) {
+	s.Password = val
+}
+
+// SetFirstName sets the value of FirstName.
+func (s *V1AdminUsersPostReq) SetFirstName(val Name) {
+	s.FirstName = val
+}
+
+// SetLastName sets the value of LastName.
+func (s *V1AdminUsersPostReq) SetLastName(val Name) {
+	s.LastName = val
+}
+
+// SetMiddleName sets the value of MiddleName.
+func (s *V1AdminUsersPostReq) SetMiddleName(val Name) {
+	s.MiddleName = val
+}
+
+// SetAvatarURL sets the value of AvatarURL.
+func (s *V1AdminUsersPostReq) SetAvatarURL(val OptURL) {
+	s.AvatarURL = val
+}
+
+// SetRole sets the value of Role.
+func (s *V1AdminUsersPostReq) SetRole(val AdminRole) {
+	s.Role = val
+}
+
+type V1AdminUsersUserIDGetOK struct {
+	Data V1AdminUsersUserIDGetOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1AdminUsersUserIDGetOK) GetData() V1AdminUsersUserIDGetOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1AdminUsersUserIDGetOK) SetData(val V1AdminUsersUserIDGetOKData) {
+	s.Data = val
+}
+
+func (*V1AdminUsersUserIDGetOK) v1AdminUsersUserIDGetRes() {}
+
+type V1AdminUsersUserIDGetOKData struct {
+	User AdminUser `json:"user"`
+}
+
+// GetUser returns the value of User.
+func (s *V1AdminUsersUserIDGetOKData) GetUser() AdminUser {
+	return s.User
+}
+
+// SetUser sets the value of User.
+func (s *V1AdminUsersUserIDGetOKData) SetUser(val AdminUser) {
+	s.User = val
 }
 
 type V1AuthRefreshPostOK struct {

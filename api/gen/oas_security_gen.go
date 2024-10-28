@@ -14,6 +14,10 @@ import (
 
 // SecurityHandler is handler for security parameters.
 type SecurityHandler interface {
+	// HandleAdminBearerAuth handles adminBearerAuth security.
+	HandleAdminBearerAuth(ctx context.Context, operationName string, t AdminBearerAuth) (context.Context, error)
+	// HandleAdminCookieAuth handles adminCookieAuth security.
+	HandleAdminCookieAuth(ctx context.Context, operationName string, t AdminCookieAuth) (context.Context, error)
 	// HandleBearerAuth handles bearerAuth security.
 	HandleBearerAuth(ctx context.Context, operationName string, t BearerAuth) (context.Context, error)
 	// HandleCookieAuth handles cookieAuth security.
@@ -35,6 +39,42 @@ func findAuthorization(h http.Header, prefix string) (string, bool) {
 	return "", false
 }
 
+func (s *Server) securityAdminBearerAuth(ctx context.Context, operationName string, req *http.Request) (context.Context, bool, error) {
+	var t AdminBearerAuth
+	token, ok := findAuthorization(req.Header, "Bearer")
+	if !ok {
+		return ctx, false, nil
+	}
+	t.Token = token
+	rctx, err := s.sec.HandleAdminBearerAuth(ctx, operationName, t)
+	if errors.Is(err, ogenerrors.ErrSkipServerSecurity) {
+		return nil, false, nil
+	} else if err != nil {
+		return nil, false, err
+	}
+	return rctx, true, err
+}
+func (s *Server) securityAdminCookieAuth(ctx context.Context, operationName string, req *http.Request) (context.Context, bool, error) {
+	var t AdminCookieAuth
+	const parameterName = "ubrato_admin_session"
+	var value string
+	switch cookie, err := req.Cookie(parameterName); {
+	case err == nil: // if NO error
+		value = cookie.Value
+	case errors.Is(err, http.ErrNoCookie):
+		return ctx, false, nil
+	default:
+		return nil, false, errors.Wrap(err, "get cookie value")
+	}
+	t.APIKey = value
+	rctx, err := s.sec.HandleAdminCookieAuth(ctx, operationName, t)
+	if errors.Is(err, ogenerrors.ErrSkipServerSecurity) {
+		return nil, false, nil
+	} else if err != nil {
+		return nil, false, err
+	}
+	return rctx, true, err
+}
 func (s *Server) securityBearerAuth(ctx context.Context, operationName string, req *http.Request) (context.Context, bool, error) {
 	var t BearerAuth
 	token, ok := findAuthorization(req.Header, "Bearer")
@@ -74,12 +114,35 @@ func (s *Server) securityCookieAuth(ctx context.Context, operationName string, r
 
 // SecuritySource is provider of security values (tokens, passwords, etc.).
 type SecuritySource interface {
+	// AdminBearerAuth provides adminBearerAuth security value.
+	AdminBearerAuth(ctx context.Context, operationName string) (AdminBearerAuth, error)
+	// AdminCookieAuth provides adminCookieAuth security value.
+	AdminCookieAuth(ctx context.Context, operationName string) (AdminCookieAuth, error)
 	// BearerAuth provides bearerAuth security value.
 	BearerAuth(ctx context.Context, operationName string) (BearerAuth, error)
 	// CookieAuth provides cookieAuth security value.
 	CookieAuth(ctx context.Context, operationName string) (CookieAuth, error)
 }
 
+func (s *Client) securityAdminBearerAuth(ctx context.Context, operationName string, req *http.Request) error {
+	t, err := s.sec.AdminBearerAuth(ctx, operationName)
+	if err != nil {
+		return errors.Wrap(err, "security source \"AdminBearerAuth\"")
+	}
+	req.Header.Set("Authorization", "Bearer "+t.Token)
+	return nil
+}
+func (s *Client) securityAdminCookieAuth(ctx context.Context, operationName string, req *http.Request) error {
+	t, err := s.sec.AdminCookieAuth(ctx, operationName)
+	if err != nil {
+		return errors.Wrap(err, "security source \"AdminCookieAuth\"")
+	}
+	req.AddCookie(&http.Cookie{
+		Name:  "ubrato_admin_session",
+		Value: t.APIKey,
+	})
+	return nil
+}
 func (s *Client) securityBearerAuth(ctx context.Context, operationName string, req *http.Request) error {
 	t, err := s.sec.BearerAuth(ctx, operationName)
 	if err != nil {

@@ -6,10 +6,10 @@ import (
 	"time"
 
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/crypto"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/token"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type SignInParams struct {
@@ -30,15 +30,16 @@ func (s *Service) SignIn(ctx context.Context, params SignInParams) (SignInResult
 		return SignInResult{}, fmt.Errorf("get user with organization: %w", err)
 	}
 
-	if err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(params.Password)); err != nil {
-		cerr.Wrap(err, cerr.CodeInvalidCredentials, "invalid email or password", nil)
+	err = crypto.CheckPassword(params.Password, user.PasswordHash)
+	if err != nil {
+		return SignInResult{}, cerr.Wrap(err, cerr.CodeInvalidCredentials, "invalid email or password", nil)
 	}
 
 	session, err := s.sessionStore.Create(ctx, s.psql.DB(), store.SessionCreateParams{
 		ID:        randSessionID(sessionLength),
 		UserID:    user.ID,
 		IPAddress: params.IPAddress,
-		ExpiresAt: time.Now().Add(RefreshTokenLifetime),
+		ExpiresAt: time.Now().Add(s.tokenAuthorizer.GetRefreshTokenDurationLifetime()),
 	})
 	if err != nil {
 		return SignInResult{}, fmt.Errorf("create session: %w", err)

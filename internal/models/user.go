@@ -11,7 +11,6 @@ type UserRole uint8
 const (
 	UserRoleInvalid = iota
 	UserRoleUser
-	UserRoleAdmin
 )
 
 type User struct {

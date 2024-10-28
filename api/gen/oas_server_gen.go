@@ -8,6 +8,42 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// V1AdminAuthRefreshPost implements POST /v1/admin/auth/refresh operation.
+	//
+	// Get new access token.
+	//
+	// POST /v1/admin/auth/refresh
+	V1AdminAuthRefreshPost(ctx context.Context, params V1AdminAuthRefreshPostParams) (V1AdminAuthRefreshPostRes, error)
+	// V1AdminAuthSigninPost implements POST /v1/admin/auth/signin operation.
+	//
+	// Signin.
+	//
+	// POST /v1/admin/auth/signin
+	V1AdminAuthSigninPost(ctx context.Context, req *V1AdminAuthSigninPostReq) (V1AdminAuthSigninPostRes, error)
+	// V1AdminAuthUserGet implements GET /v1/admin/auth/user operation.
+	//
+	// Get currently authenticated user.
+	//
+	// GET /v1/admin/auth/user
+	V1AdminAuthUserGet(ctx context.Context) (V1AdminAuthUserGetRes, error)
+	// V1AdminUsersGet implements GET /v1/admin/users operation.
+	//
+	// Get admin users.
+	//
+	// GET /v1/admin/users
+	V1AdminUsersGet(ctx context.Context) (V1AdminUsersGetRes, error)
+	// V1AdminUsersPost implements POST /v1/admin/users operation.
+	//
+	// Create admin user.
+	//
+	// POST /v1/admin/users
+	V1AdminUsersPost(ctx context.Context, req *V1AdminUsersPostReq) (V1AdminUsersPostRes, error)
+	// V1AdminUsersUserIDGet implements GET /v1/admin/users/{userID} operation.
+	//
+	// Get admin users by id.
+	//
+	// GET /v1/admin/users/{userID}
+	V1AdminUsersUserIDGet(ctx context.Context, params V1AdminUsersUserIDGetParams) (V1AdminUsersUserIDGetRes, error)
 	// V1AuthRefreshPost implements POST /v1/auth/refresh operation.
 	//
 	// Get new access token.
