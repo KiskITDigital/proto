@@ -1,7 +1,7 @@
 -- +goose Up
 CREATE TABLE IF NOT EXISTS admin.users (
     id BIGSERIAL PRIMARY KEY,
-    email TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
     phone TEXT NOT NULL,
     password_hash TEXT NOT NULL,
     first_name TEXT NOT NULL,
