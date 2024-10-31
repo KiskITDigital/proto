@@ -157,6 +157,15 @@ func (UnimplementedHandler) V1CatalogServicesPost(ctx context.Context, req *V1Ca
 	return r, ht.ErrNotImplemented
 }
 
+// V1OrganizationsGet implements GET /v1/organizations operation.
+//
+// Get all organizations.
+//
+// GET /v1/organizations
+func (UnimplementedHandler) V1OrganizationsGet(ctx context.Context) (r V1OrganizationsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1OrganizationsOrganizationIDTendersGet implements GET /v1/organizations/{organizationID}/tenders operation.
 //
 // If user in organization it also return all drafts.
