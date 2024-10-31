@@ -14,6 +14,7 @@ import (
 	adminService "gitlab.ubrato.ru/ubrato/core/internal/service/admin"
 	authService "gitlab.ubrato.ru/ubrato/core/internal/service/auth"
 	catalogService "gitlab.ubrato.ru/ubrato/core/internal/service/catalog"
+	organizationService "gitlab.ubrato.ru/ubrato/core/internal/service/organization"
 	surveyService "gitlab.ubrato.ru/ubrato/core/internal/service/survey"
 	tenderService "gitlab.ubrato.ru/ubrato/core/internal/service/tender"
 	userService "gitlab.ubrato.ru/ubrato/core/internal/service/user"
@@ -30,6 +31,7 @@ import (
 	authHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/auth"
 	catalogHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/catalog"
 	errorHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/error"
+	organizationHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/organization"
 	surveyHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/survey"
 	tenderHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/tender"
 	userHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/user"
@@ -128,14 +130,20 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		adminTokenAuthorizer,
 	)
 
+	organizationService := organizationService.New(
+		psql,
+		organizationStore,
+	)
+
 	router := http.NewRouter(http.RouterParams{
-		Error:   errorHandler.New(logger),
-		Auth:    authHandler.New(logger, authService),
-		Tenders: tenderHandler.New(logger, tenderService),
-		Catalog: catalogHandler.New(logger, catalogService),
-		Users:   userHandler.New(logger, userService),
-		Survey:  surveyHandler.New(logger, surveyService),
-		Admin:   adminHandler.New(logger, adminService),
+		Error:        errorHandler.New(logger),
+		Auth:         authHandler.New(logger, authService),
+		Tenders:      tenderHandler.New(logger, tenderService),
+		Catalog:      catalogHandler.New(logger, catalogService),
+		Users:        userHandler.New(logger, userService),
+		Survey:       surveyHandler.New(logger, surveyService),
+		Admin:        adminHandler.New(logger, adminService),
+		Organization: organizationHandler.New(logger, organizationService),
 	})
 
 	server, err := http.NewServer(logger, cfg.Transport.HTTP, router)

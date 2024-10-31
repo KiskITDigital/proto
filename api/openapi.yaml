@@ -28,6 +28,8 @@ paths:
 
   /v1/organizations/{organizationID}/tenders:
     $ref: "v1/paths/organizations/_id/tenders.yaml"
+  /v1/organizations:
+    $ref: "v1/paths/organizations.yaml"
 
   /v1/catalog/services:
     $ref: "v1/paths/catalog/services.yaml"

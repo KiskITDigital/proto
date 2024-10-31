@@ -438,47 +438,69 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
-			case 'o': // Prefix: "organizations/"
+			case 'o': // Prefix: "organizations"
 				origElem := elem
-				if l := len("organizations/"); len(elem) >= l && elem[0:l] == "organizations/" {
+				if l := len("organizations"); len(elem) >= l && elem[0:l] == "organizations" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
-				// Param: "organizationID"
-				// Match until "/"
-				idx := strings.IndexByte(elem, '/')
-				if idx < 0 {
-					idx = len(elem)
-				}
-				args[0] = elem[:idx]
-				elem = elem[idx:]
-
 				if len(elem) == 0 {
-					break
+					switch r.Method {
+					case "GET":
+						s.handleV1OrganizationsGetRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET")
+					}
+
+					return
 				}
 				switch elem[0] {
-				case '/': // Prefix: "/tenders"
+				case '/': // Prefix: "/"
 					origElem := elem
-					if l := len("/tenders"); len(elem) >= l && elem[0:l] == "/tenders" {
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
+					// Param: "organizationID"
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
 					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "GET":
-							s.handleV1OrganizationsOrganizationIDTendersGetRequest([1]string{
-								args[0],
-							}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "GET")
+						break
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/tenders"
+						origElem := elem
+						if l := len("/tenders"); len(elem) >= l && elem[0:l] == "/tenders" {
+							elem = elem[l:]
+						} else {
+							break
 						}
 
-						return
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleV1OrganizationsOrganizationIDTendersGetRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
@@ -1130,49 +1152,75 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				elem = origElem
-			case 'o': // Prefix: "organizations/"
+			case 'o': // Prefix: "organizations"
 				origElem := elem
-				if l := len("organizations/"); len(elem) >= l && elem[0:l] == "organizations/" {
+				if l := len("organizations"); len(elem) >= l && elem[0:l] == "organizations" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
-				// Param: "organizationID"
-				// Match until "/"
-				idx := strings.IndexByte(elem, '/')
-				if idx < 0 {
-					idx = len(elem)
-				}
-				args[0] = elem[:idx]
-				elem = elem[idx:]
-
 				if len(elem) == 0 {
-					break
+					switch method {
+					case "GET":
+						r.name = "V1OrganizationsGet"
+						r.summary = "Get all organizations"
+						r.operationID = ""
+						r.pathPattern = "/v1/organizations"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 				switch elem[0] {
-				case '/': // Prefix: "/tenders"
+				case '/': // Prefix: "/"
 					origElem := elem
-					if l := len("/tenders"); len(elem) >= l && elem[0:l] == "/tenders" {
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
+					// Param: "organizationID"
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
+
 					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "GET":
-							r.name = "V1OrganizationsOrganizationIDTendersGet"
-							r.summary = "Get all of organization tenders"
-							r.operationID = ""
-							r.pathPattern = "/v1/organizations/{organizationID}/tenders"
-							r.args = args
-							r.count = 1
-							return r, true
-						default:
-							return
+						break
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/tenders"
+						origElem := elem
+						if l := len("/tenders"); len(elem) >= l && elem[0:l] == "/tenders" {
+							elem = elem[l:]
+						} else {
+							break
 						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = "V1OrganizationsOrganizationIDTendersGet"
+								r.summary = "Get all of organization tenders"
+								r.operationID = ""
+								r.pathPattern = "/v1/organizations/{organizationID}/tenders"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem

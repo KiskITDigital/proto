@@ -498,6 +498,32 @@ paths:
                           $ref: '#/components/schemas/Tender'
         default:
           $ref: '#/components/responses/Error'
+  /v1/organizations:
+    get:
+      tags:
+        - organizations
+      summary: Get all organizations
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - organizations
+                    properties:
+                      organizations:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Organization'
+        default:
+          $ref: '#/components/responses/Error'
   /v1/catalog/services:
     get:
       tags:

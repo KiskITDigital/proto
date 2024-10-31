@@ -354,6 +354,7 @@ func (*ErrorStatusCode) v1CatalogObjectsPostRes()                    {}
 func (*ErrorStatusCode) v1CatalogRegionsPostRes()                    {}
 func (*ErrorStatusCode) v1CatalogServicesGetRes()                    {}
 func (*ErrorStatusCode) v1CatalogServicesPostRes()                   {}
+func (*ErrorStatusCode) v1OrganizationsGetRes()                      {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDTendersGetRes() {}
 func (*ErrorStatusCode) v1SurveyPostRes()                            {}
 func (*ErrorStatusCode) v1TendersGetRes()                            {}
@@ -2487,6 +2488,36 @@ func (s *V1CatalogServicesPostReq) SetName(val string) {
 // SetParentID sets the value of ParentID.
 func (s *V1CatalogServicesPostReq) SetParentID(val OptInt) {
 	s.ParentID = val
+}
+
+type V1OrganizationsGetOK struct {
+	Data V1OrganizationsGetOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1OrganizationsGetOK) GetData() V1OrganizationsGetOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1OrganizationsGetOK) SetData(val V1OrganizationsGetOKData) {
+	s.Data = val
+}
+
+func (*V1OrganizationsGetOK) v1OrganizationsGetRes() {}
+
+type V1OrganizationsGetOKData struct {
+	Organizations []Organization `json:"organizations"`
+}
+
+// GetOrganizations returns the value of Organizations.
+func (s *V1OrganizationsGetOKData) GetOrganizations() []Organization {
+	return s.Organizations
+}
+
+// SetOrganizations sets the value of Organizations.
+func (s *V1OrganizationsGetOKData) SetOrganizations(val []Organization) {
+	s.Organizations = val
 }
 
 type V1OrganizationsOrganizationIDTendersGetOK struct {

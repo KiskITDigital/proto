@@ -17,6 +17,7 @@ type Router struct {
 	Users
 	Survey
 	Admin
+	Organization
 }
 
 type Error interface {
@@ -70,24 +71,30 @@ type Admin interface {
 	HandleAdminBearerAuth(ctx context.Context, operationName string, t api.AdminBearerAuth) (context.Context, error)
 }
 
+type Organization interface {
+	V1OrganizationsGet(ctx context.Context) (api.V1OrganizationsGetRes, error)
+}
+
 type RouterParams struct {
-	Error   Error
-	Auth    Auth
-	Tenders Tenders
-	Catalog Catalog
-	Users   Users
-	Survey  Survey
-	Admin   Admin
+	Error        Error
+	Auth         Auth
+	Tenders      Tenders
+	Catalog      Catalog
+	Users        Users
+	Survey       Survey
+	Admin        Admin
+	Organization Organization
 }
 
 func NewRouter(params RouterParams) *Router {
 	return &Router{
-		Auth:    params.Auth,
-		Error:   params.Error,
-		Tenders: params.Tenders,
-		Catalog: params.Catalog,
-		Users:   params.Users,
-		Survey:  params.Survey,
-		Admin:   params.Admin,
+		Auth:         params.Auth,
+		Error:        params.Error,
+		Tenders:      params.Tenders,
+		Catalog:      params.Catalog,
+		Users:        params.Users,
+		Survey:       params.Survey,
+		Admin:        params.Admin,
+		Organization: params.Organization,
 	}
 }
