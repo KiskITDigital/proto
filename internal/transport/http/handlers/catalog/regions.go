@@ -18,8 +18,6 @@ func (h *Handler) V1CatalogRegionsPost(ctx context.Context, req *api.V1CatalogRe
 	}
 
 	return &api.V1CatalogRegionsPostCreated{
-		Data: api.V1CatalogRegionsPostCreatedData{
-			Region: models.ConvertRegionModelToApi(region),
-		},
+		Data: models.ConvertRegionModelToApi(region),
 	}, nil
 }

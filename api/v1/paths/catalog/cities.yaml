@@ -2,6 +2,11 @@ post:
   tags:
     - catalog
   summary: Add city to catalog
+  description: |-
+    Adds city to catalog
+
+    **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+    'Admin' or higher.
   security:
     - bearerAuth: []
   requestBody:

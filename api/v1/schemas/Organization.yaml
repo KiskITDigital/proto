@@ -13,7 +13,6 @@ required:
   - is_contractor
   - is_banned
   - address
-  - avatar_url
   - emails
   - phones
   - messengers
@@ -38,12 +37,6 @@ properties:
     $ref: "../properties/kpp.yaml"
   tax_code:
     $ref: "../properties/tax_code.yaml"
-  is_contractor:
-    type: boolean
-  is_banned:
-    type: boolean
-  verified:
-    type: boolean
   address:
     type: string
     example: 117312, г Москва, Академический р-н, ул Вавилова, д 19
@@ -61,6 +54,16 @@ properties:
     type: array
     items:
       $ref: "ContactInfo.yaml"
+  verification_status:
+    $ref: "../properties/verification_status.yaml"
+  is_contractor:
+    type: boolean
+  is_banned:
+    type: boolean
+  customer_info:
+    $ref: "CustomerInfo.yaml"
+  contractor_info:
+    $ref: "ContractorInfo.yaml"
   created_at:
     type: string
     format: date-time

@@ -15,8 +15,6 @@ func (h *Handler) V1UsersUserIDGet(ctx context.Context, params api.V1UsersUserID
 	}
 
 	return &api.V1UsersUserIDGetOK{
-		Data: api.V1UsersUserIDGetOKData{
-			User: models.ConvertUserModelToApi(user),
-		},
+		Data: models.ConvertUserModelToApi(user),
 	}, nil
 }

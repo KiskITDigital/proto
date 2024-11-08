@@ -19,17 +19,42 @@ paths:
     $ref: "v1/paths/auth/refresh.yaml"
 
   /v1/tenders:
-    $ref: "v1/paths/tenders.yaml"
+    $ref: "v1/paths/tenders/_index.yaml"
+  /v1/tenders/verifications:
+    $ref: "v1/paths/tenders/verifications.yaml"
   /v1/tenders/{tenderID}:
-    $ref: "v1/paths/tenders/_id.yaml"
+    $ref: "v1/paths/tenders/_id/_index.yaml"
+  /v1/tenders/{tenderID}/comments:
+    $ref: "v1/paths/tenders/_id/comments.yaml"
+  /v1/tenders/{tenderID}/respond:
+    $ref: "v1/paths/tenders/_id/respond.yaml"
 
+  /v1/users:
+    $ref: "v1/paths/users/_index.yaml"
+  /v1/users/confirm/email:
+    $ref: "v1/paths/users/confirm/email.yaml"
+  /v1/users/confirm/password:
+    $ref: "v1/paths/users/confirm/password.yaml"
+  /v1/users/request/email-verification:
+    $ref: "v1/paths/users/request/email_verification.yaml"
+  /v1/users/request/reset-password:
+    $ref: "v1/paths/users/request/reset_password.yaml"
   /v1/users/{userID}:
-    $ref: "v1/paths/users/_id.yaml"
+    $ref: "v1/paths/users/_id/_index.yaml"
 
   /v1/organizations/{organizationID}/tenders:
     $ref: "v1/paths/organizations/_id/tenders.yaml"
   /v1/organizations:
-    $ref: "v1/paths/organizations.yaml"
+    $ref: "v1/paths/organizations/_index.yaml"
+  /v1/organizations/verifications:
+    $ref: "v1/paths/organizations/verifications.yaml"
+  /v1/organizations/{organizationID}/verifications:
+    $ref: "v1/paths/organizations/_id/verifications.yaml"
+
+  /v1/verifications/{requestID}/aprove:
+    $ref: "v1/paths/verifications/_id/aprove.yaml"
+  /v1/verifications/{requestID}/deny:
+    $ref: "v1/paths/verifications/_id/deny.yaml"
 
   /v1/catalog/services:
     $ref: "v1/paths/catalog/services.yaml"
@@ -40,19 +65,14 @@ paths:
   /v1/catalog/regions:
     $ref: "v1/paths/catalog/regions.yaml"
 
-  /v1/survey:
-    $ref: "v1/paths/survey.yaml"
+  /v1/comments/verifications:
+    $ref: "v1/paths/comments/verifications.yaml"
 
-  /v1/admin/auth/signin:
-    $ref: "v1/paths/admin/auth/signin.yaml"
-  /v1/admin/auth/user:
-    $ref: "v1/paths/admin/auth/user.yaml"
-  /v1/admin/auth/refresh:
-    $ref: "v1/paths/admin/auth/refresh.yaml"
-  /v1/admin/users:
-    $ref: "v1/paths/admin/users.yaml"
-  /v1/admin/users/{userID}:
-    $ref: "v1/paths/admin/users/_id.yaml"
+  /v1/survey:
+    $ref: "v1/paths/survey/_index.yaml"
+
+  /v1/suggest/company:
+    $ref: "v1/paths/suggest/company.yaml"
 components:
   securitySchemes:
     cookieAuth:

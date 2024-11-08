@@ -11,7 +11,6 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/config"
 	dadataGateway "gitlab.ubrato.ru/ubrato/core/internal/gateway/dadata"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/token"
-	adminService "gitlab.ubrato.ru/ubrato/core/internal/service/admin"
 	authService "gitlab.ubrato.ru/ubrato/core/internal/service/auth"
 	catalogService "gitlab.ubrato.ru/ubrato/core/internal/service/catalog"
 	organizationService "gitlab.ubrato.ru/ubrato/core/internal/service/organization"
@@ -20,21 +19,22 @@ import (
 	userService "gitlab.ubrato.ru/ubrato/core/internal/service/user"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 	"gitlab.ubrato.ru/ubrato/core/internal/store/postgres"
-	adminStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/admin"
 	catalogStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/catalog"
 	organizationStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/organization"
 	sessionStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/session"
 	tenderStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/tender"
 	userStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/user"
 	"gitlab.ubrato.ru/ubrato/core/internal/transport/http"
-	adminHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/admin"
 	authHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/auth"
 	catalogHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/catalog"
+	commentHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/comment"
 	errorHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/error"
 	organizationHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/organization"
+	suggestHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/suggest"
 	surveyHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/survey"
 	tenderHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/tender"
 	userHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/user"
+	verificationHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/verification"
 )
 
 func main() {
@@ -75,16 +75,10 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	sessionStore := sessionStore.NewSessionStore()
 	tenderStore := tenderStore.NewTenderStore()
 	catalogStore := catalogStore.NewCatalogStore()
-	adminStore := adminStore.New()
 
 	dadataGateway := dadataGateway.NewClient(cfg.Gateway.Dadata.APIKey)
 
 	tokenAuthorizer, err := token.NewTokenAuthorizer(cfg.Auth.JWT)
-	if err != nil {
-		return fmt.Errorf("init token authorizer: %w", err)
-	}
-
-	adminTokenAuthorizer, err := token.NewTokenAuthorizer(cfg.Auth.JWTAdmin)
 	if err != nil {
 		return fmt.Errorf("init token authorizer: %w", err)
 	}
@@ -124,12 +118,6 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		jetStream,
 	)
 
-	adminService := adminService.New(
-		psql,
-		adminStore,
-		adminTokenAuthorizer,
-	)
-
 	organizationService := organizationService.New(
 		psql,
 		organizationStore,
@@ -142,8 +130,10 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		Catalog:      catalogHandler.New(logger, catalogService),
 		Users:        userHandler.New(logger, userService),
 		Survey:       surveyHandler.New(logger, surveyService),
-		Admin:        adminHandler.New(logger, adminService),
 		Organization: organizationHandler.New(logger, organizationService),
+		Comments:     commentHandler.New(logger, nil),
+		Suggest:      suggestHandler.New(logger, nil),
+		Verification: verificationHandler.New(logger, nil),
 	})
 
 	server, err := http.NewServer(logger, cfg.Transport.HTTP, router)

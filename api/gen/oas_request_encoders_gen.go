@@ -11,34 +11,6 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
-func encodeV1AdminAuthSigninPostRequest(
-	req *V1AdminAuthSigninPostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeV1AdminUsersPostRequest(
-	req *V1AdminUsersPostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
 func encodeV1AuthSigninPostRequest(
 	req *V1AuthSigninPostReq,
 	r *http.Request,
@@ -123,6 +95,20 @@ func encodeV1CatalogServicesPostRequest(
 	return nil
 }
 
+func encodeV1OrganizationsOrganizationIDVerificationsPostRequest(
+	req *V1OrganizationsOrganizationIDVerificationsPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeV1SurveyPostRequest(
 	req *V1SurveyPostReq,
 	r *http.Request,
@@ -151,8 +137,92 @@ func encodeV1TendersPostRequest(
 	return nil
 }
 
+func encodeV1TendersTenderIDCommentsPostRequest(
+	req *V1TendersTenderIDCommentsPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeV1TendersTenderIDPutRequest(
 	req *V1TendersTenderIDPutReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeV1TendersTenderIDRespondPostRequest(
+	req *V1TendersTenderIDRespondPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeV1UsersConfirmEmailPostRequest(
+	req *V1UsersConfirmEmailPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeV1UsersConfirmPasswordPostRequest(
+	req *V1UsersConfirmPasswordPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeV1UsersRequestEmailVerificationPostRequest(
+	req *V1UsersRequestEmailVerificationPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeV1UsersRequestResetPasswordPostRequest(
+	req *V1UsersRequestResetPasswordPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

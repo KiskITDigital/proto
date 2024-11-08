@@ -18,22 +18,18 @@ func (h *Handler) V1TendersTenderIDGet(ctx context.Context, params api.V1Tenders
 	}
 
 	return &api.V1TendersTenderIDGetOK{
-		Data: api.V1TendersTenderIDGetOKData{
-			Tender: models.ConvertTenderModelToApi(tender),
-		},
+		Data: models.ConvertTenderModelToApi(tender),
 	}, nil
 }
 
-func (h *Handler) V1TendersGet(ctx context.Context) (api.V1TendersGetRes, error) {
+func (h *Handler) V1TendersGet(ctx context.Context, params api.V1TendersGetParams) (api.V1TendersGetRes, error) {
 	tenders, err := h.svc.Get(ctx, service.TenderGetParams{})
 	if err != nil {
 		return nil, fmt.Errorf("get tender: %w", err)
 	}
 
 	return &api.V1TendersGetOK{
-		Data: api.V1TendersGetOKData{
-			Tenders: convert.Slice[[]models.Tender, []api.Tender](tenders, models.ConvertTenderModelToApi),
-		},
+		Data: convert.Slice[[]models.Tender, []api.Tender](tenders, models.ConvertTenderModelToApi),
 	}, nil
 }
 
@@ -52,8 +48,6 @@ func (h *Handler) V1OrganizationsOrganizationIDTendersGet(
 	}
 
 	return &api.V1OrganizationsOrganizationIDTendersGetOK{
-		Data: api.V1OrganizationsOrganizationIDTendersGetOKData{
-			Tenders: convert.Slice[[]models.Tender, []api.Tender](tenders, models.ConvertTenderModelToApi),
-		},
+		Data: convert.Slice[[]models.Tender, []api.Tender](tenders, models.ConvertTenderModelToApi),
 	}, nil
 }

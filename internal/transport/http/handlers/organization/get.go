@@ -10,7 +10,7 @@ import (
 	organizationService "gitlab.ubrato.ru/ubrato/core/internal/service/organization"
 )
 
-func (h *Handler) V1OrganizationsGet(ctx context.Context) (api.V1OrganizationsGetRes, error) {
+func (h *Handler) V1OrganizationsGet(ctx context.Context, params api.V1OrganizationsGetParams) (api.V1OrganizationsGetRes, error) {
 	organizations, err := h.svc.Get(ctx, organizationService.OrganizationGetParams{})
 	if err != nil {
 		return nil, fmt.Errorf("get organizations: %w", err)

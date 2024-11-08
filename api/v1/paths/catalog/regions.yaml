@@ -2,6 +2,11 @@ post:
   tags:
     - catalog
   summary: Add region to catalog
+  description: |-
+    Adds region to catalog
+
+    **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+    'Admin' or higher.
   security:
     - bearerAuth: []
   requestBody:
@@ -26,11 +31,6 @@ post:
               - data
             properties:
               data:
-                type: object
-                required: 
-                  - region
-                properties:
-                  region:
-                    $ref: "../../schemas/Region.yaml"
+                $ref: "../../schemas/Region.yaml"
     default:
       $ref: "../../responses/Error.yaml"

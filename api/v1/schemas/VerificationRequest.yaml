@@ -1,0 +1,37 @@
+type: object
+required:
+  - id
+  - object_type
+  - object
+  - content
+  - attachments
+  - status
+  - created_at
+properties:
+  id:
+    type: integer
+  reviewer:
+    $ref: "./User.yaml"
+  object_type:
+    $ref: "../properties/object_type.yaml"
+  object:
+    oneOf:
+      - $ref: "./Comment.yaml"
+      - $ref: "./Tender.yaml"
+      - $ref: "./Organization.yaml"
+  content:
+    type: string
+  attachments:
+    type: array
+    items:
+      type: string
+  status:
+    $ref: "../properties/verification_status.yaml"
+  review_comment:
+    type: string
+  created_at:
+    type: string
+    format: date-time
+  reviewed_at:
+    type: string
+    format: date-time

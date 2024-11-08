@@ -39,7 +39,7 @@ func ConvertUserModelToApi(user User) api.User {
 		FirstName:     api.Name(user.FirstName),
 		LastName:      api.Name(user.LastName),
 		MiddleName:    api.Name(user.MiddleName),
-		AvatarURL:     api.URL(user.AvatarURL),
+		AvatarURL:     api.NewOptURL(api.URL(user.AvatarURL)),
 		EmailVerified: user.EmailVerified,
 		Role:          api.Role(user.Role),
 		Organization: api.OptOrganization{

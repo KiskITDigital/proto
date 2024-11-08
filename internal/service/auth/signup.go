@@ -137,7 +137,6 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 				FullName:     result.User.Organization.FullName,
 				ShortName:    result.User.Organization.ShortName,
 				IsContractor: result.User.Organization.IsContractor,
-				Verified:     result.User.Organization.Verified,
 				IsBanned:     result.User.Organization.IsBanned,
 				Inn:          result.User.Organization.INN,
 				Okpo:         result.User.Organization.OKPO,

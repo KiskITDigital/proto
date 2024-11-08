@@ -6,14 +6,16 @@ required:
   - first_name
   - last_name
   - middle_name
-  - avatar_url
   - email_verified
   - role
+  - is_banned
   - created_at
   - updated_at
 properties:
   id:
     type: integer
+  organization:
+    $ref: "./Organization.yaml"
   email:
     $ref: "../properties/email.yaml"
   phone:
@@ -30,8 +32,8 @@ properties:
     type: boolean
   role:
     $ref: "../properties/role.yaml"
-  organization:
-    $ref: "./Organization.yaml"
+  is_banned:
+    type: boolean
   created_at:
     type: string
     format: date-time
