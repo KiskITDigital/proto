@@ -1,6 +1,6 @@
-type: integer
+type: string
 enum:
-  - 1
-description: |
-  0: Invalid
-  1: User
+  - user
+  - employee
+  - admin
+  - super_admin

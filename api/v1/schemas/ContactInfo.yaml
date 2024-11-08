@@ -5,7 +5,7 @@ required:
 properties:
   contact:
     type: string
-    minLenght: 1
+    minLength: 1
   info:
     type: string
-    minLenght: 1
+    minLength: 1

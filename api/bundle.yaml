@@ -138,12 +138,7 @@ paths:
                   - data
                 properties:
                   data:
-                    type: object
-                    required:
-                      - user
-                    properties:
-                      user:
-                        $ref: '#/components/schemas/User'
+                    $ref: '#/components/schemas/User'
         default:
           $ref: '#/components/responses/Error'
   /v1/auth/refresh:
@@ -188,10 +183,80 @@ paths:
         default:
           $ref: '#/components/responses/Error'
   /v1/tenders:
+    get:
+      tags:
+        - tenders
+      summary: Get tenders
+      description: |-
+        Returns all tenders
+
+        Для получения всех тендеров (включая неверифицированные)
+        **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+        'Employee' or higher.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: verified
+          in: query
+          description: Фильтрует результат и включает только верифицированные тендеры.
+          schema:
+            type: boolean
+            default: true
+        - name: offset
+          in: query
+          description: Сдвиг начала каждой страницы на указанное количество единиц.
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: Максимальное количество объектов, которое может вернуть запрос.
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+            default: 100
+        - name: sort
+          in: query
+          description: Определяет атрибут, по которому сортируются элементы.
+          schema:
+            type: string
+            enum:
+              - id
+            default: id
+        - name: direction
+          in: query
+          description: |-
+            Направление сортировки результатов.
+            Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+            default: ASC
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tender'
+        default:
+          $ref: '#/components/responses/Error'
     post:
       tags:
         - tenders
       summary: Create tender
+      description: Creates a new tender
       security:
         - bearerAuth: []
       requestBody:
@@ -273,18 +338,63 @@ paths:
                   - data
                 properties:
                   data:
-                    type: object
-                    required:
-                      - tender
-                    properties:
-                      tender:
-                        $ref: '#/components/schemas/Tender'
+                    $ref: '#/components/schemas/Tender'
         default:
           $ref: '#/components/responses/Error'
+  /v1/tenders/verifications:
     get:
       tags:
         - tenders
-      summary: Get all tenders
+      summary: Get verification requests
+      description: |-
+        Get verifications
+
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+        'Employee' or higher.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          description: Фильтрует результат по статусам.
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/verification_status'
+        - name: offset
+          in: query
+          description: Сдвиг начала каждой страницы на указанное количество единиц.
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: Максимальное количество объектов, которое может вернуть запрос.
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+            default: 100
+        - name: sort
+          in: query
+          description: Определяет атрибут, по которому сортируются элементы.
+          schema:
+            type: string
+            enum:
+              - id
+            default: id
+        - name: direction
+          in: query
+          description: |-
+            Направление сортировки результатов.
+            Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+            default: ASC
       responses:
         '200':
           description: Success
@@ -296,14 +406,9 @@ paths:
                   - data
                 properties:
                   data:
-                    type: object
-                    required:
-                      - tenders
-                    properties:
-                      tenders:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/Tender'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VerificationRequest'
         default:
           $ref: '#/components/responses/Error'
   /v1/tenders/{tenderID}:
@@ -311,6 +416,14 @@ paths:
       tags:
         - tenders
       summary: Get tender by id
+      description: |-
+        Returns tender by id
+
+        Для получения неверифицированного тендера
+        **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+        'Employee' or higher.
+      security:
+        - bearerAuth: []
       parameters:
         - name: tenderID
           required: true
@@ -331,12 +444,7 @@ paths:
                   - data
                 properties:
                   data:
-                    type: object
-                    required:
-                      - tender
-                    properties:
-                      tender:
-                        $ref: '#/components/schemas/Tender'
+                    $ref: '#/components/schemas/Tender'
         default:
           $ref: '#/components/responses/Error'
     put:
@@ -420,12 +528,276 @@ paths:
                   - data
                 properties:
                   data:
-                    type: object
-                    required:
-                      - tender
-                    properties:
-                      tender:
-                        $ref: '#/components/schemas/Tender'
+                    $ref: '#/components/schemas/Tender'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/tenders/{tenderID}/comments:
+    post:
+      tags:
+        - tenders
+      summary: Send comment for tender
+      description: Leaves comment under tender
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: tenderID
+          required: true
+          in: path
+          description: ID of tender
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
+    get:
+      tags:
+        - tenders
+      summary: Get comments
+      description: Get comments under tender
+      parameters:
+        - name: tenderID
+          required: true
+          in: path
+          description: ID of tender
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comment'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/tenders/{tenderID}/respond:
+    post:
+      tags:
+        - tenders
+      summary: Send comment for tender
+      description: Leaves comment under tender
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: tenderID
+          required: true
+          in: path
+          description: ID of tender
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - price
+                - is_nds
+              properties:
+                price:
+                  type: integer
+                is_nds:
+                  type: boolean
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/users:
+    get:
+      tags:
+        - users
+      summary: Get users
+      description: |-
+        Returns all users
+
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+        'Employee' or higher.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: role
+          in: query
+          description: Фильтрует результат по ролям пользователей.
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/role'
+        - name: offset
+          in: query
+          description: Сдвиг начала каждой страницы на указанное количество единиц.
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: Максимальное количество объектов, которое может вернуть запрос.
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+            default: 100
+        - name: sort
+          in: query
+          description: Определяет атрибут, по которому сортируются элементы.
+          schema:
+            type: string
+            enum:
+              - id
+            default: id
+        - name: direction
+          in: query
+          description: |-
+            Направление сортировки результатов.
+            Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+            default: ASC
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/users/confirm/email:
+    post:
+      tags:
+        - users
+      summary: Confirm email
+      description: Confirm email use a code from mail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+              properties:
+                user_id:
+                  type: integer
+                code:
+                  type: string
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/users/confirm/password:
+    post:
+      tags:
+        - users
+      summary: Confirm reset password
+      description: Confirm reset password use a code from mail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+                - password
+              properties:
+                user_id:
+                  type: integer
+                code:
+                  type: string
+                password:
+                  $ref: '#/components/schemas/password'
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/users/request/email-verification:
+    post:
+      tags:
+        - users
+      summary: Requesting email verify code
+      description: Requesting send verify code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  $ref: '#/components/schemas/email'
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/users/request/reset-password:
+    post:
+      tags:
+        - users
+      summary: Requesting reset password
+      description: Requesting send reset code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  $ref: '#/components/schemas/email'
+      responses:
+        '200':
+          description: Success
         default:
           $ref: '#/components/responses/Error'
   /v1/users/{userID}:
@@ -433,6 +805,13 @@ paths:
       tags:
         - users
       summary: Get user by id
+      description: |-
+        Returns user by id
+
+        **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+        'Employee' or higher.
+      security:
+        - bearerAuth: []
       parameters:
         - name: userID
           required: true
@@ -453,20 +832,17 @@ paths:
                   - data
                 properties:
                   data:
-                    type: object
-                    required:
-                      - user
-                    properties:
-                      user:
-                        $ref: '#/components/schemas/User'
+                    $ref: '#/components/schemas/User'
         default:
           $ref: '#/components/responses/Error'
   /v1/organizations/{organizationID}/tenders:
     get:
       tags:
-        - tenders
         - organizations
       summary: Get all of organization tenders
+      description: if user is in organization it also return all drafts
+      security:
+        - bearerAuth: []
       parameters:
         - name: organizationID
           required: true
@@ -476,7 +852,6 @@ paths:
             type: integer
             minimum: 1
           example: 1
-      description: if user in organization it also return all drafts
       responses:
         '200':
           description: Success
@@ -488,21 +863,63 @@ paths:
                   - data
                 properties:
                   data:
-                    type: object
-                    required:
-                      - tenders
-                    properties:
-                      tenders:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/Tender'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tender'
         default:
           $ref: '#/components/responses/Error'
   /v1/organizations:
     get:
       tags:
         - organizations
-      summary: Get all organizations
+      summary: Get organizations
+      description: |-
+        List all organizations
+
+        Для получения всех организаций (включая неверифицированные)
+        **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+        'Employee' or higher.
+      parameters:
+        - name: verified
+          in: query
+          description: Фильтрует результат и включает только верифицированные компании.
+          schema:
+            type: boolean
+            default: true
+        - name: offset
+          in: query
+          description: Сдвиг начала каждой страницы на указанное количество единиц.
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: Максимальное количество объектов, которое может вернуть запрос.
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+            default: 100
+        - name: sort
+          in: query
+          description: Определяет атрибут, по которому сортируются элементы.
+          schema:
+            type: string
+            enum:
+              - id
+            default: id
+        - name: direction
+          in: query
+          description: |-
+            Направление сортировки результатов.
+            Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+            default: ASC
       responses:
         '200':
           description: Success
@@ -524,13 +941,63 @@ paths:
                           $ref: '#/components/schemas/Organization'
         default:
           $ref: '#/components/responses/Error'
-  /v1/catalog/services:
+  /v1/organizations/verifications:
     get:
       tags:
-        - catalog
-      summary: Get a list of all available services
+        - organizations
+      summary: Get verification requests
+      description: |-
+        Get verifications
+
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+        'Employee' or higher.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          description: Фильтрует результат по статусам.
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/verification_status'
+        - name: offset
+          in: query
+          description: Сдвиг начала каждой страницы на указанное количество единиц.
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: Максимальное количество объектов, которое может вернуть запрос.
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+            default: 100
+        - name: sort
+          in: query
+          description: Определяет атрибут, по которому сортируются элементы.
+          schema:
+            type: string
+            enum:
+              - id
+            default: id
+        - name: direction
+          in: query
+          description: |-
+            Направление сортировки результатов.
+            Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+            default: ASC
       responses:
         '200':
+          description: Success
           content:
             application/json:
               schema:
@@ -541,16 +1008,179 @@ paths:
                   data:
                     type: object
                     required:
-                      - services
+                      - verifications
                     properties:
-                      services:
-                        $ref: '#/components/schemas/Services'
+                      verifications:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/VerificationRequest'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/organizations/{organizationID}/verifications:
+    post:
+      tags:
+        - organizations
+      summary: Send verification request
+      description: Ask verify organization
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - egrul
+                - company_card
+                - authority_proof
+                - company_constitution
+              properties:
+                egrul:
+                  type: string
+                  format: binary
+                company_card:
+                  type: string
+                  format: binary
+                authority_proof:
+                  type: string
+                  format: binary
+                company_constitution:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
+    get:
+      tags:
+        - organizations
+      summary: Get verification requests
+      description: Get organization verification history
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - verifications
+                    properties:
+                      verifications:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/VerificationRequest'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/verifications/{requestID}/aprove:
+    post:
+      tags:
+        - verifications
+      summary: Aprove verification request
+      description: |-
+        Aproving verification
+
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+        'Employee' or higher.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: requestID
+          required: true
+          in: path
+          description: ID of request
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/verifications/{requestID}/deny:
+    post:
+      tags:
+        - verifications
+      summary: Deny verification request
+      description: |-
+        Denying verification
+
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+        'Employee' or higher.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: requestID
+          required: true
+          in: path
+          description: ID of request
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/catalog/services:
+    get:
+      tags:
+        - catalog
+      summary: Get a list of all available services
+      description: Lists all available services
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Services'
         default:
           $ref: '#/components/responses/Error'
     post:
       tags:
         - catalog
       summary: Create catalog service
+      description: |-
+        Creates catalog service
+
+        **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+        'Admin' or higher.
       security:
         - bearerAuth: []
       requestBody:
@@ -576,12 +1206,7 @@ paths:
                   - data
                 properties:
                   data:
-                    type: object
-                    required:
-                      - services
-                    properties:
-                      services:
-                        $ref: '#/components/schemas/Service'
+                    $ref: '#/components/schemas/Service'
         default:
           $ref: '#/components/responses/Error'
   /v1/catalog/objects:
@@ -589,6 +1214,44 @@ paths:
       tags:
         - catalog
       summary: Get a list of all available objects
+      description: Lists all available objects
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: offset
+          in: query
+          description: Сдвиг начала каждой страницы на указанное количество единиц.
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: Максимальное количество объектов, которое может вернуть запрос.
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+            default: 100
+        - name: sort
+          in: query
+          description: Определяет атрибут, по которому сортируются элементы.
+          schema:
+            type: string
+            enum:
+              - id
+            default: id
+        - name: direction
+          in: query
+          description: |-
+            Направление сортировки результатов.
+            Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+            default: ASC
       responses:
         '200':
           content:
@@ -599,18 +1262,18 @@ paths:
                   - data
                 properties:
                   data:
-                    type: object
-                    required:
-                      - objects
-                    properties:
-                      objects:
-                        $ref: '#/components/schemas/Objects'
+                    $ref: '#/components/schemas/Objects'
         default:
           $ref: '#/components/responses/Error'
     post:
       tags:
         - catalog
       summary: Create catalog object
+      description: |-
+        Creates catalog object
+
+        **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+        'Admin' or higher.
       security:
         - bearerAuth: []
       requestBody:
@@ -636,12 +1299,7 @@ paths:
                   - data
                 properties:
                   data:
-                    type: object
-                    required:
-                      - objects
-                    properties:
-                      objects:
-                        $ref: '#/components/schemas/Object'
+                    $ref: '#/components/schemas/Object'
         default:
           $ref: '#/components/responses/Error'
   /v1/catalog/cities:
@@ -649,6 +1307,11 @@ paths:
       tags:
         - catalog
       summary: Add city to catalog
+      description: |-
+        Adds city to catalog
+
+        **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+        'Admin' or higher.
       security:
         - bearerAuth: []
       requestBody:
@@ -689,6 +1352,11 @@ paths:
       tags:
         - catalog
       summary: Add region to catalog
+      description: |-
+        Adds region to catalog
+
+        **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+        'Admin' or higher.
       security:
         - bearerAuth: []
       requestBody:
@@ -713,12 +1381,82 @@ paths:
                   - data
                 properties:
                   data:
+                    $ref: '#/components/schemas/Region'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/comments/verifications:
+    get:
+      tags:
+        - comments
+      summary: Get verification requests
+      description: |-
+        Get all verifications requests
+
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+        'Employee' or higher.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          description: Фильтрует результат по статусам.
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/verification_status'
+        - name: offset
+          in: query
+          description: Сдвиг начала каждой страницы на указанное количество единиц.
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: Максимальное количество объектов, которое может вернуть запрос.
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+            default: 100
+        - name: sort
+          in: query
+          description: Определяет атрибут, по которому сортируются элементы.
+          schema:
+            type: string
+            enum:
+              - id
+            default: id
+        - name: direction
+          in: query
+          description: |-
+            Направление сортировки результатов.
+            Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+            default: ASC
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
                     type: object
                     required:
-                      - region
+                      - verifications
                     properties:
-                      region:
-                        $ref: '#/components/schemas/Region'
+                      verifications:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/VerificationRequest'
         default:
           $ref: '#/components/responses/Error'
   /v1/survey:
@@ -726,6 +1464,9 @@ paths:
       tags:
         - survey
       summary: Response to survey
+      security:
+        - {}
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -751,99 +1492,22 @@ paths:
           description: Success
         default:
           $ref: '#/components/responses/Error'
-  /v1/admin/auth/signin:
-    post:
-      tags:
-        - admin
-      summary: Signin
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - email
-                - password
-              properties:
-                email:
-                  $ref: '#/components/schemas/email'
-                password:
-                  $ref: '#/components/schemas/password'
-      responses:
-        '200':
-          description: Success
-          headers:
-            Set-Cookie:
-              schema:
-                type: string
-                example: ubrato_admin_session=7ff581a1-4dcf-4f53-a9cb-0ef408d4a7bb; Path=/; Max-Age=1727209098; HttpOnly; Secure; SameSite=Lax
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - data
-                properties:
-                  data:
-                    type: object
-                    required:
-                      - user
-                      - access_token
-                    properties:
-                      user:
-                        $ref: '#/components/schemas/AdminUser'
-                      access_token:
-                        type: string
-        default:
-          $ref: '#/components/responses/Error'
-  /v1/admin/auth/user:
+  /v1/suggest/company:
     get:
       tags:
-        - admin
-      summary: Get currently authenticated user
-      security:
-        - adminBearerAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - data
-                properties:
-                  data:
-                    type: object
-                    required:
-                      - user
-                    properties:
-                      user:
-                        $ref: '#/components/schemas/AdminUser'
-        default:
-          $ref: '#/components/responses/Error'
-  /v1/admin/auth/refresh:
-    post:
-      tags:
-        - admin
-      summary: Get new access token
+        - suggest
+      summary: Suggest company
+      description: Suggests a company with provided INN
       parameters:
-        - name: ubrato_admin_session
-          in: cookie
+        - name: inn
           required: true
-          description: The session ID for the user.
+          in: query
+          description: INN of a company
           schema:
-            type: string
-      security:
-        - adminCookieAuth: []
+            $ref: '#/components/schemas/inn'
       responses:
         '200':
           description: Success
-          headers:
-            Set-Cookie:
-              schema:
-                type: string
-                example: ubrato_admin_session=7ff581a1-4dcf-4f53-a9cb-0ef408d4a7bb; Path=/; Max-Age=1727209098; HttpOnly; Secure; SameSite=Lax
           content:
             application/json:
               schema:
@@ -854,132 +1518,10 @@ paths:
                   data:
                     type: object
                     required:
-                      - user
-                      - access_token
+                      - name
                     properties:
-                      user:
-                        $ref: '#/components/schemas/AdminUser'
-                      access_token:
+                      name:
                         type: string
-        default:
-          $ref: '#/components/responses/Error'
-  /v1/admin/users:
-    get:
-      tags:
-        - admin
-      summary: Get admin users
-      security:
-        - adminBearerAuth: []
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - data
-                properties:
-                  data:
-                    type: object
-                    required:
-                      - users
-                    properties:
-                      users:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/AdminUser'
-        default:
-          $ref: '#/components/responses/Error'
-    post:
-      tags:
-        - admin
-      summary: Create admin user
-      security:
-        - adminBearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - email
-                - phone
-                - password
-                - first_name
-                - last_name
-                - middle_name
-                - role
-              properties:
-                email:
-                  $ref: '#/components/schemas/email'
-                phone:
-                  $ref: '#/components/schemas/phone'
-                password:
-                  $ref: '#/components/schemas/password'
-                first_name:
-                  $ref: '#/components/schemas/name'
-                last_name:
-                  $ref: '#/components/schemas/name'
-                middle_name:
-                  $ref: '#/components/schemas/name'
-                avatar_url:
-                  $ref: '#/components/schemas/url'
-                role:
-                  $ref: '#/components/schemas/admin_role'
-      responses:
-        '201':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - data
-                properties:
-                  data:
-                    type: object
-                    required:
-                      - user
-                    properties:
-                      user:
-                        $ref: '#/components/schemas/AdminUser'
-        default:
-          $ref: '#/components/responses/Error'
-  /v1/admin/users/{userID}:
-    get:
-      tags:
-        - admin
-      summary: Get admin users by id
-      security:
-        - adminBearerAuth: []
-      parameters:
-        - name: userID
-          required: true
-          in: path
-          description: ID of user
-          schema:
-            type: integer
-            minimum: 1
-          example: 1
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - data
-                properties:
-                  data:
-                    type: object
-                    required:
-                      - user
-                    properties:
-                      user:
-                        $ref: '#/components/schemas/AdminUser'
         default:
           $ref: '#/components/responses/Error'
 components:
@@ -1034,26 +1576,11 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/Error'
-    phone:
-      type: string
-      format: phone
-      pattern: ^\+?\d{10,14}$
     name:
       type: string
       minLength: 3
       pattern: ^[а-яА-ЯёЁ]+$
       example: Абоба
-    url:
-      type: string
-      pattern: ^https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$
-      example: https://s3.ubrato.ru/qwerty
-    role:
-      type: integer
-      enum:
-        - 1
-      description: |
-        0: Invalid
-        1: User
     inn:
       type: string
       pattern: ^\d{10,12}$
@@ -1073,6 +1600,10 @@ components:
       type: string
       pattern: ^\d+$
       example: '7736'
+    url:
+      type: string
+      pattern: ^https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$
+      example: https://s3.ubrato.ru/qwerty
     ContactInfo:
       type: object
       required:
@@ -1081,10 +1612,31 @@ components:
       properties:
         contact:
           type: string
-          minLenght: 1
+          minLength: 1
         info:
           type: string
-          minLenght: 1
+          minLength: 1
+    verification_status:
+      type: string
+      enum:
+        - unverified
+        - in_review
+        - declined
+        - approved
+    CustomerInfo:
+      type: object
+      required:
+        - todo
+      properties:
+        todo:
+          type: string
+    ContractorInfo:
+      type: object
+      required:
+        - todo
+      properties:
+        todo:
+          type: string
     Organization:
       type: object
       required:
@@ -1101,7 +1653,6 @@ components:
         - is_contractor
         - is_banned
         - address
-        - avatar_url
         - emails
         - phones
         - messengers
@@ -1126,12 +1677,6 @@ components:
           $ref: '#/components/schemas/kpp'
         tax_code:
           $ref: '#/components/schemas/tax_code'
-        is_contractor:
-          type: boolean
-        is_banned:
-          type: boolean
-        verified:
-          type: boolean
         address:
           type: string
           example: 117312, г Москва, Академический р-н, ул Вавилова, д 19
@@ -1149,12 +1694,33 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ContactInfo'
+        verification_status:
+          $ref: '#/components/schemas/verification_status'
+        is_contractor:
+          type: boolean
+        is_banned:
+          type: boolean
+        customer_info:
+          $ref: '#/components/schemas/CustomerInfo'
+        contractor_info:
+          $ref: '#/components/schemas/ContractorInfo'
         created_at:
           type: string
           format: date-time
         updated_at:
           type: string
           format: date-time
+    phone:
+      type: string
+      format: phone
+      pattern: ^\+?\d{10,14}$
+    role:
+      type: string
+      enum:
+        - user
+        - employee
+        - admin
+        - super_admin
     User:
       type: object
       required:
@@ -1164,14 +1730,16 @@ components:
         - first_name
         - last_name
         - middle_name
-        - avatar_url
         - email_verified
         - role
+        - is_banned
         - created_at
         - updated_at
       properties:
         id:
           type: integer
+        organization:
+          $ref: '#/components/schemas/Organization'
         email:
           $ref: '#/components/schemas/email'
         phone:
@@ -1188,8 +1756,8 @@ components:
           type: boolean
         role:
           $ref: '#/components/schemas/role'
-        organization:
-          $ref: '#/components/schemas/Organization'
+        is_banned:
+          type: boolean
         created_at:
           type: string
           format: date-time
@@ -1256,9 +1824,9 @@ components:
       type: object
       required:
         - id
+        - organization
         - name
         - city
-        - region
         - price
         - is_contract_price
         - is_nds_price
@@ -1274,17 +1842,19 @@ components:
         - reception_end
         - work_start
         - work_end
+        - created_at
+        - updated_at
       properties:
         id:
           type: integer
+        organization:
+          $ref: '#/components/schemas/Organization'
+        winner_organization:
+          $ref: '#/components/schemas/Organization'
         name:
           type: string
         city:
           $ref: '#/components/schemas/City'
-        organization:
-          $ref: '#/components/schemas/Organization'
-        region:
-          type: string
         price:
           type: number
         is_contract_price:
@@ -1324,56 +1894,83 @@ components:
         work_end:
           type: string
           format: date-time
-    survey:
-      type: string
-      enum:
-        - SURVEY_TYPE_REGISTRATION
-        - SURVEY_TYPE_VERIFICATION
-        - SURVEY_TYPE_FEEDBACK
-    admin_role:
-      type: integer
-      enum:
-        - 1
-      description: |
-        0: Invalid
-        1: Employee
-        2: Admin
-        3: SuperAdmin
-    AdminUser:
-      type: object
-      required:
-        - id
-        - email
-        - phone
-        - first_name
-        - last_name
-        - middle_name
-        - role
-        - created_at
-        - updated_at
-      properties:
-        id:
-          type: integer
-        email:
-          $ref: '#/components/schemas/email'
-        phone:
-          $ref: '#/components/schemas/phone'
-        first_name:
-          $ref: '#/components/schemas/name'
-        last_name:
-          $ref: '#/components/schemas/name'
-        middle_name:
-          $ref: '#/components/schemas/name'
-        avatar_url:
-          $ref: '#/components/schemas/url'
-        role:
-          $ref: '#/components/schemas/admin_role'
         created_at:
           type: string
           format: date-time
         updated_at:
           type: string
           format: date-time
+    object_type:
+      type: string
+      enum:
+        - organization
+        - comment
+        - tender
+    Comment:
+      type: object
+      required:
+        - id
+        - content
+        - verification_status
+        - created_at
+      properties:
+        id:
+          type: integer
+        content:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: string
+        verification_status:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    VerificationRequest:
+      type: object
+      required:
+        - id
+        - object_type
+        - object
+        - content
+        - attachments
+        - status
+        - created_at
+      properties:
+        id:
+          type: integer
+        reviewer:
+          $ref: '#/components/schemas/User'
+        object_type:
+          $ref: '#/components/schemas/object_type'
+        object:
+          oneOf:
+            - $ref: '#/components/schemas/Comment'
+            - $ref: '#/components/schemas/Tender'
+            - $ref: '#/components/schemas/Organization'
+        content:
+          type: string
+        attachments:
+          type: array
+          items:
+            type: string
+        status:
+          $ref: '#/components/schemas/verification_status'
+        review_comment:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        reviewed_at:
+          type: string
+          format: date-time
+    survey:
+      type: string
+      enum:
+        - SURVEY_TYPE_REGISTRATION
+        - SURVEY_TYPE_VERIFICATION
+        - SURVEY_TYPE_FEEDBACK
   responses:
     Error:
       description: Error

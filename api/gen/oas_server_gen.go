@@ -8,42 +8,6 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// V1AdminAuthRefreshPost implements POST /v1/admin/auth/refresh operation.
-	//
-	// Get new access token.
-	//
-	// POST /v1/admin/auth/refresh
-	V1AdminAuthRefreshPost(ctx context.Context, params V1AdminAuthRefreshPostParams) (V1AdminAuthRefreshPostRes, error)
-	// V1AdminAuthSigninPost implements POST /v1/admin/auth/signin operation.
-	//
-	// Signin.
-	//
-	// POST /v1/admin/auth/signin
-	V1AdminAuthSigninPost(ctx context.Context, req *V1AdminAuthSigninPostReq) (V1AdminAuthSigninPostRes, error)
-	// V1AdminAuthUserGet implements GET /v1/admin/auth/user operation.
-	//
-	// Get currently authenticated user.
-	//
-	// GET /v1/admin/auth/user
-	V1AdminAuthUserGet(ctx context.Context) (V1AdminAuthUserGetRes, error)
-	// V1AdminUsersGet implements GET /v1/admin/users operation.
-	//
-	// Get admin users.
-	//
-	// GET /v1/admin/users
-	V1AdminUsersGet(ctx context.Context) (V1AdminUsersGetRes, error)
-	// V1AdminUsersPost implements POST /v1/admin/users operation.
-	//
-	// Create admin user.
-	//
-	// POST /v1/admin/users
-	V1AdminUsersPost(ctx context.Context, req *V1AdminUsersPostReq) (V1AdminUsersPostRes, error)
-	// V1AdminUsersUserIDGet implements GET /v1/admin/users/{userID} operation.
-	//
-	// Get admin users by id.
-	//
-	// GET /v1/admin/users/{userID}
-	V1AdminUsersUserIDGet(ctx context.Context, params V1AdminUsersUserIDGetParams) (V1AdminUsersUserIDGetRes, error)
 	// V1AuthRefreshPost implements POST /v1/auth/refresh operation.
 	//
 	// Get new access token.
@@ -70,52 +34,98 @@ type Handler interface {
 	V1AuthUserGet(ctx context.Context) (V1AuthUserGetRes, error)
 	// V1CatalogCitiesPost implements POST /v1/catalog/cities operation.
 	//
-	// Add city to catalog.
+	// Adds city to catalog
+	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/cities
 	V1CatalogCitiesPost(ctx context.Context, req *V1CatalogCitiesPostReq) (V1CatalogCitiesPostRes, error)
 	// V1CatalogObjectsGet implements GET /v1/catalog/objects operation.
 	//
-	// Get a list of all available objects.
+	// Lists all available objects.
 	//
 	// GET /v1/catalog/objects
-	V1CatalogObjectsGet(ctx context.Context) (V1CatalogObjectsGetRes, error)
+	V1CatalogObjectsGet(ctx context.Context, params V1CatalogObjectsGetParams) (V1CatalogObjectsGetRes, error)
 	// V1CatalogObjectsPost implements POST /v1/catalog/objects operation.
 	//
-	// Create catalog object.
+	// Creates catalog object
+	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/objects
 	V1CatalogObjectsPost(ctx context.Context, req *V1CatalogObjectsPostReq) (V1CatalogObjectsPostRes, error)
 	// V1CatalogRegionsPost implements POST /v1/catalog/regions operation.
 	//
-	// Add region to catalog.
+	// Adds region to catalog
+	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/regions
 	V1CatalogRegionsPost(ctx context.Context, req *V1CatalogRegionsPostReq) (V1CatalogRegionsPostRes, error)
 	// V1CatalogServicesGet implements GET /v1/catalog/services operation.
 	//
-	// Get a list of all available services.
+	// Lists all available services.
 	//
 	// GET /v1/catalog/services
 	V1CatalogServicesGet(ctx context.Context) (V1CatalogServicesGetRes, error)
 	// V1CatalogServicesPost implements POST /v1/catalog/services operation.
 	//
-	// Create catalog service.
+	// Creates catalog service
+	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/services
 	V1CatalogServicesPost(ctx context.Context, req *V1CatalogServicesPostReq) (V1CatalogServicesPostRes, error)
+	// V1CommentsVerificationsGet implements GET /v1/comments/verifications operation.
+	//
+	// Get all verifications requests
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+	// 'Employee' or higher.
+	//
+	// GET /v1/comments/verifications
+	V1CommentsVerificationsGet(ctx context.Context, params V1CommentsVerificationsGetParams) (V1CommentsVerificationsGetRes, error)
 	// V1OrganizationsGet implements GET /v1/organizations operation.
 	//
-	// Get all organizations.
+	// List all organizations
+	// Для получения всех организаций (включая
+	// неверифицированные)
+	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// 'Employee' or higher.
 	//
 	// GET /v1/organizations
-	V1OrganizationsGet(ctx context.Context) (V1OrganizationsGetRes, error)
+	V1OrganizationsGet(ctx context.Context, params V1OrganizationsGetParams) (V1OrganizationsGetRes, error)
 	// V1OrganizationsOrganizationIDTendersGet implements GET /v1/organizations/{organizationID}/tenders operation.
 	//
-	// If user in organization it also return all drafts.
+	// If user is in organization it also return all drafts.
 	//
 	// GET /v1/organizations/{organizationID}/tenders
 	V1OrganizationsOrganizationIDTendersGet(ctx context.Context, params V1OrganizationsOrganizationIDTendersGetParams) (V1OrganizationsOrganizationIDTendersGetRes, error)
+	// V1OrganizationsOrganizationIDVerificationsGet implements GET /v1/organizations/{organizationID}/verifications operation.
+	//
+	// Get organization verification history.
+	//
+	// GET /v1/organizations/{organizationID}/verifications
+	V1OrganizationsOrganizationIDVerificationsGet(ctx context.Context, params V1OrganizationsOrganizationIDVerificationsGetParams) (V1OrganizationsOrganizationIDVerificationsGetRes, error)
+	// V1OrganizationsOrganizationIDVerificationsPost implements POST /v1/organizations/{organizationID}/verifications operation.
+	//
+	// Ask verify organization.
+	//
+	// POST /v1/organizations/{organizationID}/verifications
+	V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, req *V1OrganizationsOrganizationIDVerificationsPostReq, params V1OrganizationsOrganizationIDVerificationsPostParams) (V1OrganizationsOrganizationIDVerificationsPostRes, error)
+	// V1OrganizationsVerificationsGet implements GET /v1/organizations/verifications operation.
+	//
+	// Get verifications
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+	// 'Employee' or higher.
+	//
+	// GET /v1/organizations/verifications
+	V1OrganizationsVerificationsGet(ctx context.Context, params V1OrganizationsVerificationsGetParams) (V1OrganizationsVerificationsGetRes, error)
+	// V1SuggestCompanyGet implements GET /v1/suggest/company operation.
+	//
+	// Suggests a company with provided INN.
+	//
+	// GET /v1/suggest/company
+	V1SuggestCompanyGet(ctx context.Context, params V1SuggestCompanyGetParams) (V1SuggestCompanyGetRes, error)
 	// V1SurveyPost implements POST /v1/survey operation.
 	//
 	// Response to survey.
@@ -124,19 +134,38 @@ type Handler interface {
 	V1SurveyPost(ctx context.Context, req *V1SurveyPostReq) (V1SurveyPostRes, error)
 	// V1TendersGet implements GET /v1/tenders operation.
 	//
-	// Get all tenders.
+	// Returns all tenders
+	// Для получения всех тендеров (включая
+	// неверифицированные)
+	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// 'Employee' or higher.
 	//
 	// GET /v1/tenders
-	V1TendersGet(ctx context.Context) (V1TendersGetRes, error)
+	V1TendersGet(ctx context.Context, params V1TendersGetParams) (V1TendersGetRes, error)
 	// V1TendersPost implements POST /v1/tenders operation.
 	//
-	// Create tender.
+	// Creates a new tender.
 	//
 	// POST /v1/tenders
 	V1TendersPost(ctx context.Context, req *V1TendersPostReq) (V1TendersPostRes, error)
+	// V1TendersTenderIDCommentsGet implements GET /v1/tenders/{tenderID}/comments operation.
+	//
+	// Get comments under tender.
+	//
+	// GET /v1/tenders/{tenderID}/comments
+	V1TendersTenderIDCommentsGet(ctx context.Context, params V1TendersTenderIDCommentsGetParams) (V1TendersTenderIDCommentsGetRes, error)
+	// V1TendersTenderIDCommentsPost implements POST /v1/tenders/{tenderID}/comments operation.
+	//
+	// Leaves comment under tender.
+	//
+	// POST /v1/tenders/{tenderID}/comments
+	V1TendersTenderIDCommentsPost(ctx context.Context, req *V1TendersTenderIDCommentsPostReq, params V1TendersTenderIDCommentsPostParams) (V1TendersTenderIDCommentsPostRes, error)
 	// V1TendersTenderIDGet implements GET /v1/tenders/{tenderID} operation.
 	//
-	// Get tender by id.
+	// Returns tender by id
+	// Для получения неверифицированного тендера
+	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// 'Employee' or higher.
 	//
 	// GET /v1/tenders/{tenderID}
 	V1TendersTenderIDGet(ctx context.Context, params V1TendersTenderIDGetParams) (V1TendersTenderIDGetRes, error)
@@ -146,12 +175,76 @@ type Handler interface {
 	//
 	// PUT /v1/tenders/{tenderID}
 	V1TendersTenderIDPut(ctx context.Context, req *V1TendersTenderIDPutReq, params V1TendersTenderIDPutParams) (V1TendersTenderIDPutRes, error)
+	// V1TendersTenderIDRespondPost implements POST /v1/tenders/{tenderID}/respond operation.
+	//
+	// Leaves comment under tender.
+	//
+	// POST /v1/tenders/{tenderID}/respond
+	V1TendersTenderIDRespondPost(ctx context.Context, req *V1TendersTenderIDRespondPostReq, params V1TendersTenderIDRespondPostParams) (V1TendersTenderIDRespondPostRes, error)
+	// V1TendersVerificationsGet implements GET /v1/tenders/verifications operation.
+	//
+	// Get verifications
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+	// 'Employee' or higher.
+	//
+	// GET /v1/tenders/verifications
+	V1TendersVerificationsGet(ctx context.Context, params V1TendersVerificationsGetParams) (V1TendersVerificationsGetRes, error)
+	// V1UsersConfirmEmailPost implements POST /v1/users/confirm/email operation.
+	//
+	// Confirm email use a code from mail.
+	//
+	// POST /v1/users/confirm/email
+	V1UsersConfirmEmailPost(ctx context.Context, req *V1UsersConfirmEmailPostReq) (V1UsersConfirmEmailPostRes, error)
+	// V1UsersConfirmPasswordPost implements POST /v1/users/confirm/password operation.
+	//
+	// Confirm reset password use a code from mail.
+	//
+	// POST /v1/users/confirm/password
+	V1UsersConfirmPasswordPost(ctx context.Context, req *V1UsersConfirmPasswordPostReq) (V1UsersConfirmPasswordPostRes, error)
+	// V1UsersGet implements GET /v1/users operation.
+	//
+	// Returns all users
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+	// 'Employee' or higher.
+	//
+	// GET /v1/users
+	V1UsersGet(ctx context.Context, params V1UsersGetParams) (V1UsersGetRes, error)
+	// V1UsersRequestEmailVerificationPost implements POST /v1/users/request/email-verification operation.
+	//
+	// Requesting send verify code.
+	//
+	// POST /v1/users/request/email-verification
+	V1UsersRequestEmailVerificationPost(ctx context.Context, req *V1UsersRequestEmailVerificationPostReq) (V1UsersRequestEmailVerificationPostRes, error)
+	// V1UsersRequestResetPasswordPost implements POST /v1/users/request/reset-password operation.
+	//
+	// Requesting send reset code.
+	//
+	// POST /v1/users/request/reset-password
+	V1UsersRequestResetPasswordPost(ctx context.Context, req *V1UsersRequestResetPasswordPostReq) (V1UsersRequestResetPasswordPostRes, error)
 	// V1UsersUserIDGet implements GET /v1/users/{userID} operation.
 	//
-	// Get user by id.
+	// Returns user by id
+	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// 'Employee' or higher.
 	//
 	// GET /v1/users/{userID}
 	V1UsersUserIDGet(ctx context.Context, params V1UsersUserIDGetParams) (V1UsersUserIDGetRes, error)
+	// V1VerificationsRequestIDAprovePost implements POST /v1/verifications/{requestID}/aprove operation.
+	//
+	// Aproving verification
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+	// 'Employee' or higher.
+	//
+	// POST /v1/verifications/{requestID}/aprove
+	V1VerificationsRequestIDAprovePost(ctx context.Context, params V1VerificationsRequestIDAprovePostParams) (V1VerificationsRequestIDAprovePostRes, error)
+	// V1VerificationsRequestIDDenyPost implements POST /v1/verifications/{requestID}/deny operation.
+	//
+	// Denying verification
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+	// 'Employee' or higher.
+	//
+	// POST /v1/verifications/{requestID}/deny
+	V1VerificationsRequestIDDenyPost(ctx context.Context, params V1VerificationsRequestIDDenyPostParams) (V1VerificationsRequestIDDenyPostRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

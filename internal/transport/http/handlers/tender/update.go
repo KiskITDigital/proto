@@ -39,8 +39,6 @@ func (h *Handler) V1TendersTenderIDPut(ctx context.Context, req *api.V1TendersTe
 	}
 
 	return &api.V1TendersTenderIDPutCreated{
-		Data: api.V1TendersTenderIDPutCreatedData{
-			Tender: models.ConvertTenderModelToApi(tender),
-		},
+		Data: models.ConvertTenderModelToApi(tender),
 	}, nil
 }

@@ -1,0 +1,69 @@
+get:
+  tags:
+    - tenders
+  summary: Get verification requests
+  description: |-
+    Get verifications
+
+    **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+    'Employee' or higher.
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: status
+      in: query
+      description: Фильтрует результат по статусам.
+      schema:
+        type: array
+        items:
+          $ref: "../../properties/verification_status.yaml"
+    - name: offset
+      in: query
+      description: Сдвиг начала каждой страницы на указанное количество единиц.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    - name: limit
+      in: query
+      description: Максимальное количество объектов, которое может вернуть запрос.
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 100
+        default: 100
+    - name: sort
+      in: query
+      description: Определяет атрибут, по которому сортируются элементы.
+      schema:
+        type: string
+        enum:
+          - id
+        default: id
+    - name: direction
+      in: query
+      description: |-
+        Направление сортировки результатов.
+        Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
+      schema:
+        type: string
+        enum:
+          - ASC
+          - DESC
+        default: ASC
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: "../../schemas/VerificationRequest.yaml"
+    default:
+      $ref: "../../responses/Error.yaml"

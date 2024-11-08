@@ -13,60 +13,6 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// V1AdminAuthRefreshPost implements POST /v1/admin/auth/refresh operation.
-//
-// Get new access token.
-//
-// POST /v1/admin/auth/refresh
-func (UnimplementedHandler) V1AdminAuthRefreshPost(ctx context.Context, params V1AdminAuthRefreshPostParams) (r V1AdminAuthRefreshPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1AdminAuthSigninPost implements POST /v1/admin/auth/signin operation.
-//
-// Signin.
-//
-// POST /v1/admin/auth/signin
-func (UnimplementedHandler) V1AdminAuthSigninPost(ctx context.Context, req *V1AdminAuthSigninPostReq) (r V1AdminAuthSigninPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1AdminAuthUserGet implements GET /v1/admin/auth/user operation.
-//
-// Get currently authenticated user.
-//
-// GET /v1/admin/auth/user
-func (UnimplementedHandler) V1AdminAuthUserGet(ctx context.Context) (r V1AdminAuthUserGetRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1AdminUsersGet implements GET /v1/admin/users operation.
-//
-// Get admin users.
-//
-// GET /v1/admin/users
-func (UnimplementedHandler) V1AdminUsersGet(ctx context.Context) (r V1AdminUsersGetRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1AdminUsersPost implements POST /v1/admin/users operation.
-//
-// Create admin user.
-//
-// POST /v1/admin/users
-func (UnimplementedHandler) V1AdminUsersPost(ctx context.Context, req *V1AdminUsersPostReq) (r V1AdminUsersPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1AdminUsersUserIDGet implements GET /v1/admin/users/{userID} operation.
-//
-// Get admin users by id.
-//
-// GET /v1/admin/users/{userID}
-func (UnimplementedHandler) V1AdminUsersUserIDGet(ctx context.Context, params V1AdminUsersUserIDGetParams) (r V1AdminUsersUserIDGetRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // V1AuthRefreshPost implements POST /v1/auth/refresh operation.
 //
 // Get new access token.
@@ -105,7 +51,9 @@ func (UnimplementedHandler) V1AuthUserGet(ctx context.Context) (r V1AuthUserGetR
 
 // V1CatalogCitiesPost implements POST /v1/catalog/cities operation.
 //
-// Add city to catalog.
+// Adds city to catalog
+// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// 'Admin' or higher.
 //
 // POST /v1/catalog/cities
 func (UnimplementedHandler) V1CatalogCitiesPost(ctx context.Context, req *V1CatalogCitiesPostReq) (r V1CatalogCitiesPostRes, _ error) {
@@ -114,16 +62,18 @@ func (UnimplementedHandler) V1CatalogCitiesPost(ctx context.Context, req *V1Cata
 
 // V1CatalogObjectsGet implements GET /v1/catalog/objects operation.
 //
-// Get a list of all available objects.
+// Lists all available objects.
 //
 // GET /v1/catalog/objects
-func (UnimplementedHandler) V1CatalogObjectsGet(ctx context.Context) (r V1CatalogObjectsGetRes, _ error) {
+func (UnimplementedHandler) V1CatalogObjectsGet(ctx context.Context, params V1CatalogObjectsGetParams) (r V1CatalogObjectsGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
 // V1CatalogObjectsPost implements POST /v1/catalog/objects operation.
 //
-// Create catalog object.
+// Creates catalog object
+// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// 'Admin' or higher.
 //
 // POST /v1/catalog/objects
 func (UnimplementedHandler) V1CatalogObjectsPost(ctx context.Context, req *V1CatalogObjectsPostReq) (r V1CatalogObjectsPostRes, _ error) {
@@ -132,7 +82,9 @@ func (UnimplementedHandler) V1CatalogObjectsPost(ctx context.Context, req *V1Cat
 
 // V1CatalogRegionsPost implements POST /v1/catalog/regions operation.
 //
-// Add region to catalog.
+// Adds region to catalog
+// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// 'Admin' or higher.
 //
 // POST /v1/catalog/regions
 func (UnimplementedHandler) V1CatalogRegionsPost(ctx context.Context, req *V1CatalogRegionsPostReq) (r V1CatalogRegionsPostRes, _ error) {
@@ -141,7 +93,7 @@ func (UnimplementedHandler) V1CatalogRegionsPost(ctx context.Context, req *V1Cat
 
 // V1CatalogServicesGet implements GET /v1/catalog/services operation.
 //
-// Get a list of all available services.
+// Lists all available services.
 //
 // GET /v1/catalog/services
 func (UnimplementedHandler) V1CatalogServicesGet(ctx context.Context) (r V1CatalogServicesGetRes, _ error) {
@@ -150,28 +102,83 @@ func (UnimplementedHandler) V1CatalogServicesGet(ctx context.Context) (r V1Catal
 
 // V1CatalogServicesPost implements POST /v1/catalog/services operation.
 //
-// Create catalog service.
+// Creates catalog service
+// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// 'Admin' or higher.
 //
 // POST /v1/catalog/services
 func (UnimplementedHandler) V1CatalogServicesPost(ctx context.Context, req *V1CatalogServicesPostReq) (r V1CatalogServicesPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
+// V1CommentsVerificationsGet implements GET /v1/comments/verifications operation.
+//
+// Get all verifications requests
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+// 'Employee' or higher.
+//
+// GET /v1/comments/verifications
+func (UnimplementedHandler) V1CommentsVerificationsGet(ctx context.Context, params V1CommentsVerificationsGetParams) (r V1CommentsVerificationsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1OrganizationsGet implements GET /v1/organizations operation.
 //
-// Get all organizations.
+// List all organizations
+// Для получения всех организаций (включая
+// неверифицированные)
+// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// 'Employee' or higher.
 //
 // GET /v1/organizations
-func (UnimplementedHandler) V1OrganizationsGet(ctx context.Context) (r V1OrganizationsGetRes, _ error) {
+func (UnimplementedHandler) V1OrganizationsGet(ctx context.Context, params V1OrganizationsGetParams) (r V1OrganizationsGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
 // V1OrganizationsOrganizationIDTendersGet implements GET /v1/organizations/{organizationID}/tenders operation.
 //
-// If user in organization it also return all drafts.
+// If user is in organization it also return all drafts.
 //
 // GET /v1/organizations/{organizationID}/tenders
 func (UnimplementedHandler) V1OrganizationsOrganizationIDTendersGet(ctx context.Context, params V1OrganizationsOrganizationIDTendersGetParams) (r V1OrganizationsOrganizationIDTendersGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1OrganizationsOrganizationIDVerificationsGet implements GET /v1/organizations/{organizationID}/verifications operation.
+//
+// Get organization verification history.
+//
+// GET /v1/organizations/{organizationID}/verifications
+func (UnimplementedHandler) V1OrganizationsOrganizationIDVerificationsGet(ctx context.Context, params V1OrganizationsOrganizationIDVerificationsGetParams) (r V1OrganizationsOrganizationIDVerificationsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1OrganizationsOrganizationIDVerificationsPost implements POST /v1/organizations/{organizationID}/verifications operation.
+//
+// Ask verify organization.
+//
+// POST /v1/organizations/{organizationID}/verifications
+func (UnimplementedHandler) V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, req *V1OrganizationsOrganizationIDVerificationsPostReq, params V1OrganizationsOrganizationIDVerificationsPostParams) (r V1OrganizationsOrganizationIDVerificationsPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1OrganizationsVerificationsGet implements GET /v1/organizations/verifications operation.
+//
+// Get verifications
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+// 'Employee' or higher.
+//
+// GET /v1/organizations/verifications
+func (UnimplementedHandler) V1OrganizationsVerificationsGet(ctx context.Context, params V1OrganizationsVerificationsGetParams) (r V1OrganizationsVerificationsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1SuggestCompanyGet implements GET /v1/suggest/company operation.
+//
+// Suggests a company with provided INN.
+//
+// GET /v1/suggest/company
+func (UnimplementedHandler) V1SuggestCompanyGet(ctx context.Context, params V1SuggestCompanyGetParams) (r V1SuggestCompanyGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -186,25 +193,50 @@ func (UnimplementedHandler) V1SurveyPost(ctx context.Context, req *V1SurveyPostR
 
 // V1TendersGet implements GET /v1/tenders operation.
 //
-// Get all tenders.
+// Returns all tenders
+// Для получения всех тендеров (включая
+// неверифицированные)
+// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// 'Employee' or higher.
 //
 // GET /v1/tenders
-func (UnimplementedHandler) V1TendersGet(ctx context.Context) (r V1TendersGetRes, _ error) {
+func (UnimplementedHandler) V1TendersGet(ctx context.Context, params V1TendersGetParams) (r V1TendersGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
 // V1TendersPost implements POST /v1/tenders operation.
 //
-// Create tender.
+// Creates a new tender.
 //
 // POST /v1/tenders
 func (UnimplementedHandler) V1TendersPost(ctx context.Context, req *V1TendersPostReq) (r V1TendersPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
+// V1TendersTenderIDCommentsGet implements GET /v1/tenders/{tenderID}/comments operation.
+//
+// Get comments under tender.
+//
+// GET /v1/tenders/{tenderID}/comments
+func (UnimplementedHandler) V1TendersTenderIDCommentsGet(ctx context.Context, params V1TendersTenderIDCommentsGetParams) (r V1TendersTenderIDCommentsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1TendersTenderIDCommentsPost implements POST /v1/tenders/{tenderID}/comments operation.
+//
+// Leaves comment under tender.
+//
+// POST /v1/tenders/{tenderID}/comments
+func (UnimplementedHandler) V1TendersTenderIDCommentsPost(ctx context.Context, req *V1TendersTenderIDCommentsPostReq, params V1TendersTenderIDCommentsPostParams) (r V1TendersTenderIDCommentsPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1TendersTenderIDGet implements GET /v1/tenders/{tenderID} operation.
 //
-// Get tender by id.
+// Returns tender by id
+// Для получения неверифицированного тендера
+// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// 'Employee' or higher.
 //
 // GET /v1/tenders/{tenderID}
 func (UnimplementedHandler) V1TendersTenderIDGet(ctx context.Context, params V1TendersTenderIDGetParams) (r V1TendersTenderIDGetRes, _ error) {
@@ -220,11 +252,102 @@ func (UnimplementedHandler) V1TendersTenderIDPut(ctx context.Context, req *V1Ten
 	return r, ht.ErrNotImplemented
 }
 
+// V1TendersTenderIDRespondPost implements POST /v1/tenders/{tenderID}/respond operation.
+//
+// Leaves comment under tender.
+//
+// POST /v1/tenders/{tenderID}/respond
+func (UnimplementedHandler) V1TendersTenderIDRespondPost(ctx context.Context, req *V1TendersTenderIDRespondPostReq, params V1TendersTenderIDRespondPostParams) (r V1TendersTenderIDRespondPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1TendersVerificationsGet implements GET /v1/tenders/verifications operation.
+//
+// Get verifications
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+// 'Employee' or higher.
+//
+// GET /v1/tenders/verifications
+func (UnimplementedHandler) V1TendersVerificationsGet(ctx context.Context, params V1TendersVerificationsGetParams) (r V1TendersVerificationsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1UsersConfirmEmailPost implements POST /v1/users/confirm/email operation.
+//
+// Confirm email use a code from mail.
+//
+// POST /v1/users/confirm/email
+func (UnimplementedHandler) V1UsersConfirmEmailPost(ctx context.Context, req *V1UsersConfirmEmailPostReq) (r V1UsersConfirmEmailPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1UsersConfirmPasswordPost implements POST /v1/users/confirm/password operation.
+//
+// Confirm reset password use a code from mail.
+//
+// POST /v1/users/confirm/password
+func (UnimplementedHandler) V1UsersConfirmPasswordPost(ctx context.Context, req *V1UsersConfirmPasswordPostReq) (r V1UsersConfirmPasswordPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1UsersGet implements GET /v1/users operation.
+//
+// Returns all users
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+// 'Employee' or higher.
+//
+// GET /v1/users
+func (UnimplementedHandler) V1UsersGet(ctx context.Context, params V1UsersGetParams) (r V1UsersGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1UsersRequestEmailVerificationPost implements POST /v1/users/request/email-verification operation.
+//
+// Requesting send verify code.
+//
+// POST /v1/users/request/email-verification
+func (UnimplementedHandler) V1UsersRequestEmailVerificationPost(ctx context.Context, req *V1UsersRequestEmailVerificationPostReq) (r V1UsersRequestEmailVerificationPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1UsersRequestResetPasswordPost implements POST /v1/users/request/reset-password operation.
+//
+// Requesting send reset code.
+//
+// POST /v1/users/request/reset-password
+func (UnimplementedHandler) V1UsersRequestResetPasswordPost(ctx context.Context, req *V1UsersRequestResetPasswordPostReq) (r V1UsersRequestResetPasswordPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1UsersUserIDGet implements GET /v1/users/{userID} operation.
 //
-// Get user by id.
+// Returns user by id
+// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// 'Employee' or higher.
 //
 // GET /v1/users/{userID}
 func (UnimplementedHandler) V1UsersUserIDGet(ctx context.Context, params V1UsersUserIDGetParams) (r V1UsersUserIDGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1VerificationsRequestIDAprovePost implements POST /v1/verifications/{requestID}/aprove operation.
+//
+// Aproving verification
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+// 'Employee' or higher.
+//
+// POST /v1/verifications/{requestID}/aprove
+func (UnimplementedHandler) V1VerificationsRequestIDAprovePost(ctx context.Context, params V1VerificationsRequestIDAprovePostParams) (r V1VerificationsRequestIDAprovePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1VerificationsRequestIDDenyPost implements POST /v1/verifications/{requestID}/deny operation.
+//
+// Denying verification
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+// 'Employee' or higher.
+//
+// POST /v1/verifications/{requestID}/deny
+func (UnimplementedHandler) V1VerificationsRequestIDDenyPost(ctx context.Context, params V1VerificationsRequestIDDenyPostParams) (r V1VerificationsRequestIDDenyPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }

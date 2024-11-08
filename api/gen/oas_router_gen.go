@@ -61,9 +61,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
-			case 'a': // Prefix: "a"
+			case 'a': // Prefix: "auth/"
 				origElem := elem
-				if l := len("a"); len(elem) >= l && elem[0:l] == "a" {
+				if l := len("auth/"); len(elem) >= l && elem[0:l] == "auth/" {
 					elem = elem[l:]
 				} else {
 					break
@@ -73,154 +73,30 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
-				case 'd': // Prefix: "dmin/"
+				case 'r': // Prefix: "refresh"
 					origElem := elem
-					if l := len("dmin/"); len(elem) >= l && elem[0:l] == "dmin/" {
+					if l := len("refresh"); len(elem) >= l && elem[0:l] == "refresh" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'a': // Prefix: "auth/"
-						origElem := elem
-						if l := len("auth/"); len(elem) >= l && elem[0:l] == "auth/" {
-							elem = elem[l:]
-						} else {
-							break
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleV1AuthRefreshPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
 						}
 
-						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'r': // Prefix: "refresh"
-							origElem := elem
-							if l := len("refresh"); len(elem) >= l && elem[0:l] == "refresh" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleV1AdminAuthRefreshPostRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
-							}
-
-							elem = origElem
-						case 's': // Prefix: "signin"
-							origElem := elem
-							if l := len("signin"); len(elem) >= l && elem[0:l] == "signin" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleV1AdminAuthSigninPostRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
-							}
-
-							elem = origElem
-						case 'u': // Prefix: "user"
-							origElem := elem
-							if l := len("user"); len(elem) >= l && elem[0:l] == "user" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "GET":
-									s.handleV1AdminAuthUserGetRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "GET")
-								}
-
-								return
-							}
-
-							elem = origElem
-						}
-
-						elem = origElem
-					case 'u': // Prefix: "users"
-						origElem := elem
-						if l := len("users"); len(elem) >= l && elem[0:l] == "users" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							switch r.Method {
-							case "GET":
-								s.handleV1AdminUsersGetRequest([0]string{}, elemIsEscaped, w, r)
-							case "POST":
-								s.handleV1AdminUsersPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "GET,POST")
-							}
-
-							return
-						}
-						switch elem[0] {
-						case '/': // Prefix: "/"
-							origElem := elem
-							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							// Param: "userID"
-							// Leaf parameter
-							args[0] = elem
-							elem = ""
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "GET":
-									s.handleV1AdminUsersUserIDGetRequest([1]string{
-										args[0],
-									}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "GET")
-								}
-
-								return
-							}
-
-							elem = origElem
-						}
-
-						elem = origElem
+						return
 					}
 
 					elem = origElem
-				case 'u': // Prefix: "uth/"
+				case 's': // Prefix: "sign"
 					origElem := elem
-					if l := len("uth/"); len(elem) >= l && elem[0:l] == "uth/" {
+					if l := len("sign"); len(elem) >= l && elem[0:l] == "sign" {
 						elem = elem[l:]
 					} else {
 						break
@@ -230,9 +106,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 					switch elem[0] {
-					case 'r': // Prefix: "refresh"
+					case 'i': // Prefix: "in"
 						origElem := elem
-						if l := len("refresh"); len(elem) >= l && elem[0:l] == "refresh" {
+						if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
 							elem = elem[l:]
 						} else {
 							break
@@ -242,7 +118,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							// Leaf node.
 							switch r.Method {
 							case "POST":
-								s.handleV1AuthRefreshPostRequest([0]string{}, elemIsEscaped, w, r)
+								s.handleV1AuthSigninPostRequest([0]string{}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "POST")
 							}
@@ -251,66 +127,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
-					case 's': // Prefix: "sign"
+					case 'u': // Prefix: "up"
 						origElem := elem
-						if l := len("sign"); len(elem) >= l && elem[0:l] == "sign" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'i': // Prefix: "in"
-							origElem := elem
-							if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleV1AuthSigninPostRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
-							}
-
-							elem = origElem
-						case 'u': // Prefix: "up"
-							origElem := elem
-							if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "POST":
-									s.handleV1AuthSignupPostRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
-							}
-
-							elem = origElem
-						}
-
-						elem = origElem
-					case 'u': // Prefix: "user"
-						origElem := elem
-						if l := len("user"); len(elem) >= l && elem[0:l] == "user" {
+						if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
 							elem = elem[l:]
 						} else {
 							break
@@ -319,10 +138,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						if len(elem) == 0 {
 							// Leaf node.
 							switch r.Method {
-							case "GET":
-								s.handleV1AuthUserGetRequest([0]string{}, elemIsEscaped, w, r)
+							case "POST":
+								s.handleV1AuthSignupPostRequest([0]string{}, elemIsEscaped, w, r)
 							default:
-								s.notAllowed(w, r, "GET")
+								s.notAllowed(w, r, "POST")
 							}
 
 							return
@@ -332,12 +151,33 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					}
 
 					elem = origElem
+				case 'u': // Prefix: "user"
+					origElem := elem
+					if l := len("user"); len(elem) >= l && elem[0:l] == "user" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleV1AuthUserGetRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
-			case 'c': // Prefix: "catalog/"
+			case 'c': // Prefix: "c"
 				origElem := elem
-				if l := len("catalog/"); len(elem) >= l && elem[0:l] == "catalog/" {
+				if l := len("c"); len(elem) >= l && elem[0:l] == "c" {
 					elem = elem[l:]
 				} else {
 					break
@@ -347,30 +187,112 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
-				case 'c': // Prefix: "cities"
+				case 'a': // Prefix: "atalog/"
 					origElem := elem
-					if l := len("cities"); len(elem) >= l && elem[0:l] == "cities" {
+					if l := len("atalog/"); len(elem) >= l && elem[0:l] == "atalog/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleV1CatalogCitiesPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
+						break
+					}
+					switch elem[0] {
+					case 'c': // Prefix: "cities"
+						origElem := elem
+						if l := len("cities"); len(elem) >= l && elem[0:l] == "cities" {
+							elem = elem[l:]
+						} else {
+							break
 						}
 
-						return
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleV1CatalogCitiesPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'o': // Prefix: "objects"
+						origElem := elem
+						if l := len("objects"); len(elem) >= l && elem[0:l] == "objects" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleV1CatalogObjectsGetRequest([0]string{}, elemIsEscaped, w, r)
+							case "POST":
+								s.handleV1CatalogObjectsPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET,POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'r': // Prefix: "regions"
+						origElem := elem
+						if l := len("regions"); len(elem) >= l && elem[0:l] == "regions" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleV1CatalogRegionsPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 's': // Prefix: "services"
+						origElem := elem
+						if l := len("services"); len(elem) >= l && elem[0:l] == "services" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleV1CatalogServicesGetRequest([0]string{}, elemIsEscaped, w, r)
+							case "POST":
+								s.handleV1CatalogServicesPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET,POST")
+							}
+
+							return
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
-				case 'o': // Prefix: "objects"
+				case 'o': // Prefix: "omments/verifications"
 					origElem := elem
-					if l := len("objects"); len(elem) >= l && elem[0:l] == "objects" {
+					if l := len("omments/verifications"); len(elem) >= l && elem[0:l] == "omments/verifications" {
 						elem = elem[l:]
 					} else {
 						break
@@ -380,55 +302,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						// Leaf node.
 						switch r.Method {
 						case "GET":
-							s.handleV1CatalogObjectsGetRequest([0]string{}, elemIsEscaped, w, r)
-						case "POST":
-							s.handleV1CatalogObjectsPostRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleV1CommentsVerificationsGetRequest([0]string{}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "GET,POST")
-						}
-
-						return
-					}
-
-					elem = origElem
-				case 'r': // Prefix: "regions"
-					origElem := elem
-					if l := len("regions"); len(elem) >= l && elem[0:l] == "regions" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "POST":
-							s.handleV1CatalogRegionsPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "POST")
-						}
-
-						return
-					}
-
-					elem = origElem
-				case 's': // Prefix: "services"
-					origElem := elem
-					if l := len("services"); len(elem) >= l && elem[0:l] == "services" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "GET":
-							s.handleV1CatalogServicesGetRequest([0]string{}, elemIsEscaped, w, r)
-						case "POST":
-							s.handleV1CatalogServicesPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "GET,POST")
+							s.notAllowed(w, r, "GET")
 						}
 
 						return
@@ -465,6 +341,32 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'v': // Prefix: "verifications"
+						origElem := elem
+						if l := len("verifications"); len(elem) >= l && elem[0:l] == "verifications" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleV1OrganizationsVerificationsGetRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+						elem = origElem
+					}
 					// Param: "organizationID"
 					// Match until "/"
 					idx := strings.IndexByte(elem, '/')
@@ -478,26 +380,68 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/tenders"
+					case '/': // Prefix: "/"
 						origElem := elem
-						if l := len("/tenders"); len(elem) >= l && elem[0:l] == "/tenders" {
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "GET":
-								s.handleV1OrganizationsOrganizationIDTendersGetRequest([1]string{
-									args[0],
-								}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "GET")
+							break
+						}
+						switch elem[0] {
+						case 't': // Prefix: "tenders"
+							origElem := elem
+							if l := len("tenders"); len(elem) >= l && elem[0:l] == "tenders" {
+								elem = elem[l:]
+							} else {
+								break
 							}
 
-							return
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleV1OrganizationsOrganizationIDTendersGetRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 'v': // Prefix: "verifications"
+							origElem := elem
+							if l := len("verifications"); len(elem) >= l && elem[0:l] == "verifications" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleV1OrganizationsOrganizationIDVerificationsGetRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								case "POST":
+									s.handleV1OrganizationsOrganizationIDVerificationsPostRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET,POST")
+								}
+
+								return
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
@@ -507,24 +451,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
-			case 's': // Prefix: "survey"
+			case 's': // Prefix: "su"
 				origElem := elem
-				if l := len("survey"); len(elem) >= l && elem[0:l] == "survey" {
+				if l := len("su"); len(elem) >= l && elem[0:l] == "su" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch r.Method {
-					case "POST":
-						s.handleV1SurveyPostRequest([0]string{}, elemIsEscaped, w, r)
-					default:
-						s.notAllowed(w, r, "POST")
+					break
+				}
+				switch elem[0] {
+				case 'g': // Prefix: "ggest/company"
+					origElem := elem
+					if l := len("ggest/company"); len(elem) >= l && elem[0:l] == "ggest/company" {
+						elem = elem[l:]
+					} else {
+						break
 					}
 
-					return
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleV1SuggestCompanyGetRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'r': // Prefix: "rvey"
+					origElem := elem
+					if l := len("rvey"); len(elem) >= l && elem[0:l] == "rvey" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleV1SurveyPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
@@ -557,13 +537,42 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'v': // Prefix: "verifications"
+						origElem := elem
+						if l := len("verifications"); len(elem) >= l && elem[0:l] == "verifications" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleV1TendersVerificationsGetRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+						elem = origElem
+					}
 					// Param: "tenderID"
-					// Leaf parameter
-					args[0] = elem
-					elem = ""
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
 
 					if len(elem) == 0 {
-						// Leaf node.
 						switch r.Method {
 						case "GET":
 							s.handleV1TendersTenderIDGetRequest([1]string{
@@ -579,36 +588,329 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 						return
 					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+						origElem := elem
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'c': // Prefix: "comments"
+							origElem := elem
+							if l := len("comments"); len(elem) >= l && elem[0:l] == "comments" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleV1TendersTenderIDCommentsGetRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								case "POST":
+									s.handleV1TendersTenderIDCommentsPostRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET,POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 'r': // Prefix: "respond"
+							origElem := elem
+							if l := len("respond"); len(elem) >= l && elem[0:l] == "respond" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleV1TendersTenderIDRespondPostRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					}
 
 					elem = origElem
 				}
 
 				elem = origElem
-			case 'u': // Prefix: "users/"
+			case 'u': // Prefix: "users"
 				origElem := elem
-				if l := len("users/"); len(elem) >= l && elem[0:l] == "users/" {
+				if l := len("users"); len(elem) >= l && elem[0:l] == "users" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
-				// Param: "userID"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
 				if len(elem) == 0 {
-					// Leaf node.
 					switch r.Method {
 					case "GET":
-						s.handleV1UsersUserIDGetRequest([1]string{
-							args[0],
-						}, elemIsEscaped, w, r)
+						s.handleV1UsersGetRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
 					}
 
 					return
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+					origElem := elem
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'c': // Prefix: "confirm/"
+						origElem := elem
+						if l := len("confirm/"); len(elem) >= l && elem[0:l] == "confirm/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'e': // Prefix: "email"
+							origElem := elem
+							if l := len("email"); len(elem) >= l && elem[0:l] == "email" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleV1UsersConfirmEmailPostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 'p': // Prefix: "password"
+							origElem := elem
+							if l := len("password"); len(elem) >= l && elem[0:l] == "password" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleV1UsersConfirmPasswordPostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'r': // Prefix: "request/"
+						origElem := elem
+						if l := len("request/"); len(elem) >= l && elem[0:l] == "request/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'e': // Prefix: "email-verification"
+							origElem := elem
+							if l := len("email-verification"); len(elem) >= l && elem[0:l] == "email-verification" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleV1UsersRequestEmailVerificationPostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 'r': // Prefix: "reset-password"
+							origElem := elem
+							if l := len("reset-password"); len(elem) >= l && elem[0:l] == "reset-password" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "POST":
+									s.handleV1UsersRequestResetPasswordPostRequest([0]string{}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					}
+					// Param: "userID"
+					// Leaf parameter
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleV1UsersUserIDGetRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+					elem = origElem
+				}
+
+				elem = origElem
+			case 'v': // Prefix: "verifications/"
+				origElem := elem
+				if l := len("verifications/"); len(elem) >= l && elem[0:l] == "verifications/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				// Param: "requestID"
+				// Match until "/"
+				idx := strings.IndexByte(elem, '/')
+				if idx < 0 {
+					idx = len(elem)
+				}
+				args[0] = elem[:idx]
+				elem = elem[idx:]
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+					origElem := elem
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'a': // Prefix: "aprove"
+						origElem := elem
+						if l := len("aprove"); len(elem) >= l && elem[0:l] == "aprove" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleV1VerificationsRequestIDAprovePostRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'd': // Prefix: "deny"
+						origElem := elem
+						if l := len("deny"); len(elem) >= l && elem[0:l] == "deny" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "POST":
+								s.handleV1VerificationsRequestIDDenyPostRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
@@ -707,9 +1009,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
-			case 'a': // Prefix: "a"
+			case 'a': // Prefix: "auth/"
 				origElem := elem
-				if l := len("a"); len(elem) >= l && elem[0:l] == "a" {
+				if l := len("auth/"); len(elem) >= l && elem[0:l] == "auth/" {
 					elem = elem[l:]
 				} else {
 					break
@@ -719,9 +1021,34 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
-				case 'd': // Prefix: "dmin/"
+				case 'r': // Prefix: "refresh"
 					origElem := elem
-					if l := len("dmin/"); len(elem) >= l && elem[0:l] == "dmin/" {
+					if l := len("refresh"); len(elem) >= l && elem[0:l] == "refresh" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "V1AuthRefreshPost"
+							r.summary = "Get new access token"
+							r.operationID = ""
+							r.pathPattern = "/v1/auth/refresh"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 's': // Prefix: "sign"
+					origElem := elem
+					if l := len("sign"); len(elem) >= l && elem[0:l] == "sign" {
 						elem = elem[l:]
 					} else {
 						break
@@ -731,119 +1058,22 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 					switch elem[0] {
-					case 'a': // Prefix: "auth/"
+					case 'i': // Prefix: "in"
 						origElem := elem
-						if l := len("auth/"); len(elem) >= l && elem[0:l] == "auth/" {
+						if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'r': // Prefix: "refresh"
-							origElem := elem
-							if l := len("refresh"); len(elem) >= l && elem[0:l] == "refresh" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "POST":
-									r.name = "V1AdminAuthRefreshPost"
-									r.summary = "Get new access token"
-									r.operationID = ""
-									r.pathPattern = "/v1/admin/auth/refresh"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						case 's': // Prefix: "signin"
-							origElem := elem
-							if l := len("signin"); len(elem) >= l && elem[0:l] == "signin" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "POST":
-									r.name = "V1AdminAuthSigninPost"
-									r.summary = "Signin"
-									r.operationID = ""
-									r.pathPattern = "/v1/admin/auth/signin"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						case 'u': // Prefix: "user"
-							origElem := elem
-							if l := len("user"); len(elem) >= l && elem[0:l] == "user" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "GET":
-									r.name = "V1AdminAuthUserGet"
-									r.summary = "Get currently authenticated user"
-									r.operationID = ""
-									r.pathPattern = "/v1/admin/auth/user"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						}
-
-						elem = origElem
-					case 'u': // Prefix: "users"
-						origElem := elem
-						if l := len("users"); len(elem) >= l && elem[0:l] == "users" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
+							// Leaf node.
 							switch method {
-							case "GET":
-								r.name = "V1AdminUsersGet"
-								r.summary = "Get admin users"
-								r.operationID = ""
-								r.pathPattern = "/v1/admin/users"
-								r.args = args
-								r.count = 0
-								return r, true
 							case "POST":
-								r.name = "V1AdminUsersPost"
-								r.summary = "Create admin user"
+								r.name = "V1AuthSigninPost"
+								r.summary = "Signin User"
 								r.operationID = ""
-								r.pathPattern = "/v1/admin/users"
+								r.pathPattern = "/v1/auth/signin"
 								r.args = args
 								r.count = 0
 								return r, true
@@ -851,179 +1081,67 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								return
 							}
 						}
-						switch elem[0] {
-						case '/': // Prefix: "/"
-							origElem := elem
-							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-								elem = elem[l:]
-							} else {
-								break
+
+						elem = origElem
+					case 'u': // Prefix: "up"
+						origElem := elem
+						if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = "V1AuthSignupPost"
+								r.summary = "Signup User"
+								r.operationID = ""
+								r.pathPattern = "/v1/auth/signup"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
 							}
-
-							// Param: "userID"
-							// Leaf parameter
-							args[0] = elem
-							elem = ""
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "GET":
-									r.name = "V1AdminUsersUserIDGet"
-									r.summary = "Get admin users by id"
-									r.operationID = ""
-									r.pathPattern = "/v1/admin/users/{userID}"
-									r.args = args
-									r.count = 1
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
 						}
 
 						elem = origElem
 					}
 
 					elem = origElem
-				case 'u': // Prefix: "uth/"
+				case 'u': // Prefix: "user"
 					origElem := elem
-					if l := len("uth/"); len(elem) >= l && elem[0:l] == "uth/" {
+					if l := len("user"); len(elem) >= l && elem[0:l] == "user" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'r': // Prefix: "refresh"
-						origElem := elem
-						if l := len("refresh"); len(elem) >= l && elem[0:l] == "refresh" {
-							elem = elem[l:]
-						} else {
-							break
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = "V1AuthUserGet"
+							r.summary = "Get currently authenticated user"
+							r.operationID = ""
+							r.pathPattern = "/v1/auth/user"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
 						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = "V1AuthRefreshPost"
-								r.summary = "Get new access token"
-								r.operationID = ""
-								r.pathPattern = "/v1/auth/refresh"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-						elem = origElem
-					case 's': // Prefix: "sign"
-						origElem := elem
-						if l := len("sign"); len(elem) >= l && elem[0:l] == "sign" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'i': // Prefix: "in"
-							origElem := elem
-							if l := len("in"); len(elem) >= l && elem[0:l] == "in" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "POST":
-									r.name = "V1AuthSigninPost"
-									r.summary = "Signin User"
-									r.operationID = ""
-									r.pathPattern = "/v1/auth/signin"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						case 'u': // Prefix: "up"
-							origElem := elem
-							if l := len("up"); len(elem) >= l && elem[0:l] == "up" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "POST":
-									r.name = "V1AuthSignupPost"
-									r.summary = "Signup User"
-									r.operationID = ""
-									r.pathPattern = "/v1/auth/signup"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
-						}
-
-						elem = origElem
-					case 'u': // Prefix: "user"
-						origElem := elem
-						if l := len("user"); len(elem) >= l && elem[0:l] == "user" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "GET":
-								r.name = "V1AuthUserGet"
-								r.summary = "Get currently authenticated user"
-								r.operationID = ""
-								r.pathPattern = "/v1/auth/user"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-						elem = origElem
 					}
 
 					elem = origElem
 				}
 
 				elem = origElem
-			case 'c': // Prefix: "catalog/"
+			case 'c': // Prefix: "c"
 				origElem := elem
-				if l := len("catalog/"); len(elem) >= l && elem[0:l] == "catalog/" {
+				if l := len("c"); len(elem) >= l && elem[0:l] == "c" {
 					elem = elem[l:]
 				} else {
 					break
@@ -1033,34 +1151,140 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
-				case 'c': // Prefix: "cities"
+				case 'a': // Prefix: "atalog/"
 					origElem := elem
-					if l := len("cities"); len(elem) >= l && elem[0:l] == "cities" {
+					if l := len("atalog/"); len(elem) >= l && elem[0:l] == "atalog/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = "V1CatalogCitiesPost"
-							r.summary = "Add city to catalog"
-							r.operationID = ""
-							r.pathPattern = "/v1/catalog/cities"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
+						break
+					}
+					switch elem[0] {
+					case 'c': // Prefix: "cities"
+						origElem := elem
+						if l := len("cities"); len(elem) >= l && elem[0:l] == "cities" {
+							elem = elem[l:]
+						} else {
+							break
 						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = "V1CatalogCitiesPost"
+								r.summary = "Add city to catalog"
+								r.operationID = ""
+								r.pathPattern = "/v1/catalog/cities"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'o': // Prefix: "objects"
+						origElem := elem
+						if l := len("objects"); len(elem) >= l && elem[0:l] == "objects" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = "V1CatalogObjectsGet"
+								r.summary = "Get a list of all available objects"
+								r.operationID = ""
+								r.pathPattern = "/v1/catalog/objects"
+								r.args = args
+								r.count = 0
+								return r, true
+							case "POST":
+								r.name = "V1CatalogObjectsPost"
+								r.summary = "Create catalog object"
+								r.operationID = ""
+								r.pathPattern = "/v1/catalog/objects"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'r': // Prefix: "regions"
+						origElem := elem
+						if l := len("regions"); len(elem) >= l && elem[0:l] == "regions" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = "V1CatalogRegionsPost"
+								r.summary = "Add region to catalog"
+								r.operationID = ""
+								r.pathPattern = "/v1/catalog/regions"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 's': // Prefix: "services"
+						origElem := elem
+						if l := len("services"); len(elem) >= l && elem[0:l] == "services" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = "V1CatalogServicesGet"
+								r.summary = "Get a list of all available services"
+								r.operationID = ""
+								r.pathPattern = "/v1/catalog/services"
+								r.args = args
+								r.count = 0
+								return r, true
+							case "POST":
+								r.name = "V1CatalogServicesPost"
+								r.summary = "Create catalog service"
+								r.operationID = ""
+								r.pathPattern = "/v1/catalog/services"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
-				case 'o': // Prefix: "objects"
+				case 'o': // Prefix: "omments/verifications"
 					origElem := elem
-					if l := len("objects"); len(elem) >= l && elem[0:l] == "objects" {
+					if l := len("omments/verifications"); len(elem) >= l && elem[0:l] == "omments/verifications" {
 						elem = elem[l:]
 					} else {
 						break
@@ -1070,76 +1294,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "GET":
-							r.name = "V1CatalogObjectsGet"
-							r.summary = "Get a list of all available objects"
+							r.name = "V1CommentsVerificationsGet"
+							r.summary = "Get verification requests"
 							r.operationID = ""
-							r.pathPattern = "/v1/catalog/objects"
-							r.args = args
-							r.count = 0
-							return r, true
-						case "POST":
-							r.name = "V1CatalogObjectsPost"
-							r.summary = "Create catalog object"
-							r.operationID = ""
-							r.pathPattern = "/v1/catalog/objects"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-					elem = origElem
-				case 'r': // Prefix: "regions"
-					origElem := elem
-					if l := len("regions"); len(elem) >= l && elem[0:l] == "regions" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "POST":
-							r.name = "V1CatalogRegionsPost"
-							r.summary = "Add region to catalog"
-							r.operationID = ""
-							r.pathPattern = "/v1/catalog/regions"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-
-					elem = origElem
-				case 's': // Prefix: "services"
-					origElem := elem
-					if l := len("services"); len(elem) >= l && elem[0:l] == "services" {
-						elem = elem[l:]
-					} else {
-						break
-					}
-
-					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "GET":
-							r.name = "V1CatalogServicesGet"
-							r.summary = "Get a list of all available services"
-							r.operationID = ""
-							r.pathPattern = "/v1/catalog/services"
-							r.args = args
-							r.count = 0
-							return r, true
-						case "POST":
-							r.name = "V1CatalogServicesPost"
-							r.summary = "Create catalog service"
-							r.operationID = ""
-							r.pathPattern = "/v1/catalog/services"
+							r.pathPattern = "/v1/comments/verifications"
 							r.args = args
 							r.count = 0
 							return r, true
@@ -1164,7 +1322,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					switch method {
 					case "GET":
 						r.name = "V1OrganizationsGet"
-						r.summary = "Get all organizations"
+						r.summary = "Get organizations"
 						r.operationID = ""
 						r.pathPattern = "/v1/organizations"
 						r.args = args
@@ -1183,6 +1341,36 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'v': // Prefix: "verifications"
+						origElem := elem
+						if l := len("verifications"); len(elem) >= l && elem[0:l] == "verifications" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = "V1OrganizationsVerificationsGet"
+								r.summary = "Get verification requests"
+								r.operationID = ""
+								r.pathPattern = "/v1/organizations/verifications"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					}
 					// Param: "organizationID"
 					// Match until "/"
 					idx := strings.IndexByte(elem, '/')
@@ -1196,28 +1384,76 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/tenders"
+					case '/': // Prefix: "/"
 						origElem := elem
-						if l := len("/tenders"); len(elem) >= l && elem[0:l] == "/tenders" {
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
 						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "GET":
-								r.name = "V1OrganizationsOrganizationIDTendersGet"
-								r.summary = "Get all of organization tenders"
-								r.operationID = ""
-								r.pathPattern = "/v1/organizations/{organizationID}/tenders"
-								r.args = args
-								r.count = 1
-								return r, true
-							default:
-								return
+							break
+						}
+						switch elem[0] {
+						case 't': // Prefix: "tenders"
+							origElem := elem
+							if l := len("tenders"); len(elem) >= l && elem[0:l] == "tenders" {
+								elem = elem[l:]
+							} else {
+								break
 							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = "V1OrganizationsOrganizationIDTendersGet"
+									r.summary = "Get all of organization tenders"
+									r.operationID = ""
+									r.pathPattern = "/v1/organizations/{organizationID}/tenders"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'v': // Prefix: "verifications"
+							origElem := elem
+							if l := len("verifications"); len(elem) >= l && elem[0:l] == "verifications" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = "V1OrganizationsOrganizationIDVerificationsGet"
+									r.summary = "Get verification requests"
+									r.operationID = ""
+									r.pathPattern = "/v1/organizations/{organizationID}/verifications"
+									r.args = args
+									r.count = 1
+									return r, true
+								case "POST":
+									r.name = "V1OrganizationsOrganizationIDVerificationsPost"
+									r.summary = "Send verification request"
+									r.operationID = ""
+									r.pathPattern = "/v1/organizations/{organizationID}/verifications"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
@@ -1227,28 +1463,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				elem = origElem
-			case 's': // Prefix: "survey"
+			case 's': // Prefix: "su"
 				origElem := elem
-				if l := len("survey"); len(elem) >= l && elem[0:l] == "survey" {
+				if l := len("su"); len(elem) >= l && elem[0:l] == "su" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
 				if len(elem) == 0 {
-					// Leaf node.
-					switch method {
-					case "POST":
-						r.name = "V1SurveyPost"
-						r.summary = "Response to survey"
-						r.operationID = ""
-						r.pathPattern = "/v1/survey"
-						r.args = args
-						r.count = 0
-						return r, true
-					default:
-						return
+					break
+				}
+				switch elem[0] {
+				case 'g': // Prefix: "ggest/company"
+					origElem := elem
+					if l := len("ggest/company"); len(elem) >= l && elem[0:l] == "ggest/company" {
+						elem = elem[l:]
+					} else {
+						break
 					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = "V1SuggestCompanyGet"
+							r.summary = "Suggest company"
+							r.operationID = ""
+							r.pathPattern = "/v1/suggest/company"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'r': // Prefix: "rvey"
+					origElem := elem
+					if l := len("rvey"); len(elem) >= l && elem[0:l] == "rvey" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "V1SurveyPost"
+							r.summary = "Response to survey"
+							r.operationID = ""
+							r.pathPattern = "/v1/survey"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem
@@ -1264,7 +1540,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					switch method {
 					case "GET":
 						r.name = "V1TendersGet"
-						r.summary = "Get all tenders"
+						r.summary = "Get tenders"
 						r.operationID = ""
 						r.pathPattern = "/v1/tenders"
 						r.args = args
@@ -1291,13 +1567,46 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'v': // Prefix: "verifications"
+						origElem := elem
+						if l := len("verifications"); len(elem) >= l && elem[0:l] == "verifications" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = "V1TendersVerificationsGet"
+								r.summary = "Get verification requests"
+								r.operationID = ""
+								r.pathPattern = "/v1/tenders/verifications"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					}
 					// Param: "tenderID"
-					// Leaf parameter
-					args[0] = elem
-					elem = ""
+					// Match until "/"
+					idx := strings.IndexByte(elem, '/')
+					if idx < 0 {
+						idx = len(elem)
+					}
+					args[0] = elem[:idx]
+					elem = elem[idx:]
 
 					if len(elem) == 0 {
-						// Leaf node.
 						switch method {
 						case "GET":
 							r.name = "V1TendersTenderIDGet"
@@ -1319,38 +1628,363 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							return
 						}
 					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+						origElem := elem
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'c': // Prefix: "comments"
+							origElem := elem
+							if l := len("comments"); len(elem) >= l && elem[0:l] == "comments" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = "V1TendersTenderIDCommentsGet"
+									r.summary = "Get comments"
+									r.operationID = ""
+									r.pathPattern = "/v1/tenders/{tenderID}/comments"
+									r.args = args
+									r.count = 1
+									return r, true
+								case "POST":
+									r.name = "V1TendersTenderIDCommentsPost"
+									r.summary = "Send comment for tender"
+									r.operationID = ""
+									r.pathPattern = "/v1/tenders/{tenderID}/comments"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'r': // Prefix: "respond"
+							origElem := elem
+							if l := len("respond"); len(elem) >= l && elem[0:l] == "respond" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = "V1TendersTenderIDRespondPost"
+									r.summary = "Send comment for tender"
+									r.operationID = ""
+									r.pathPattern = "/v1/tenders/{tenderID}/respond"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					}
 
 					elem = origElem
 				}
 
 				elem = origElem
-			case 'u': // Prefix: "users/"
+			case 'u': // Prefix: "users"
 				origElem := elem
-				if l := len("users/"); len(elem) >= l && elem[0:l] == "users/" {
+				if l := len("users"); len(elem) >= l && elem[0:l] == "users" {
 					elem = elem[l:]
 				} else {
 					break
 				}
 
-				// Param: "userID"
-				// Leaf parameter
-				args[0] = elem
-				elem = ""
-
 				if len(elem) == 0 {
-					// Leaf node.
 					switch method {
 					case "GET":
-						r.name = "V1UsersUserIDGet"
-						r.summary = "Get user by id"
+						r.name = "V1UsersGet"
+						r.summary = "Get users"
 						r.operationID = ""
-						r.pathPattern = "/v1/users/{userID}"
+						r.pathPattern = "/v1/users"
 						r.args = args
-						r.count = 1
+						r.count = 0
 						return r, true
 					default:
 						return
 					}
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+					origElem := elem
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'c': // Prefix: "confirm/"
+						origElem := elem
+						if l := len("confirm/"); len(elem) >= l && elem[0:l] == "confirm/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'e': // Prefix: "email"
+							origElem := elem
+							if l := len("email"); len(elem) >= l && elem[0:l] == "email" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = "V1UsersConfirmEmailPost"
+									r.summary = "Confirm email"
+									r.operationID = ""
+									r.pathPattern = "/v1/users/confirm/email"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'p': // Prefix: "password"
+							origElem := elem
+							if l := len("password"); len(elem) >= l && elem[0:l] == "password" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = "V1UsersConfirmPasswordPost"
+									r.summary = "Confirm reset password"
+									r.operationID = ""
+									r.pathPattern = "/v1/users/confirm/password"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'r': // Prefix: "request/"
+						origElem := elem
+						if l := len("request/"); len(elem) >= l && elem[0:l] == "request/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case 'e': // Prefix: "email-verification"
+							origElem := elem
+							if l := len("email-verification"); len(elem) >= l && elem[0:l] == "email-verification" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = "V1UsersRequestEmailVerificationPost"
+									r.summary = "Requesting email verify code"
+									r.operationID = ""
+									r.pathPattern = "/v1/users/request/email-verification"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'r': // Prefix: "reset-password"
+							origElem := elem
+							if l := len("reset-password"); len(elem) >= l && elem[0:l] == "reset-password" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "POST":
+									r.name = "V1UsersRequestResetPasswordPost"
+									r.summary = "Requesting reset password"
+									r.operationID = ""
+									r.pathPattern = "/v1/users/request/reset-password"
+									r.args = args
+									r.count = 0
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					}
+					// Param: "userID"
+					// Leaf parameter
+					args[0] = elem
+					elem = ""
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = "V1UsersUserIDGet"
+							r.summary = "Get user by id"
+							r.operationID = ""
+							r.pathPattern = "/v1/users/{userID}"
+							r.args = args
+							r.count = 1
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				}
+
+				elem = origElem
+			case 'v': // Prefix: "verifications/"
+				origElem := elem
+				if l := len("verifications/"); len(elem) >= l && elem[0:l] == "verifications/" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				// Param: "requestID"
+				// Match until "/"
+				idx := strings.IndexByte(elem, '/')
+				if idx < 0 {
+					idx = len(elem)
+				}
+				args[0] = elem[:idx]
+				elem = elem[idx:]
+
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case '/': // Prefix: "/"
+					origElem := elem
+					if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'a': // Prefix: "aprove"
+						origElem := elem
+						if l := len("aprove"); len(elem) >= l && elem[0:l] == "aprove" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = "V1VerificationsRequestIDAprovePost"
+								r.summary = "Aprove verification request"
+								r.operationID = ""
+								r.pathPattern = "/v1/verifications/{requestID}/aprove"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'd': // Prefix: "deny"
+						origElem := elem
+						if l := len("deny"); len(elem) >= l && elem[0:l] == "deny" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "POST":
+								r.name = "V1VerificationsRequestIDDenyPost"
+								r.summary = "Deny verification request"
+								r.operationID = ""
+								r.pathPattern = "/v1/verifications/{requestID}/deny"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
 				}
 
 				elem = origElem

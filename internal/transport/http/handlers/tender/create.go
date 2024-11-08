@@ -37,8 +37,6 @@ func (h *Handler) V1TendersPost(ctx context.Context, req *api.V1TendersPostReq) 
 	}
 
 	return &api.V1TendersPostCreated{
-		Data: api.V1TendersPostCreatedData{
-			Tender: models.ConvertTenderModelToApi(tender),
-		},
+		Data: models.ConvertTenderModelToApi(tender),
 	}, nil
 }

@@ -2,6 +2,9 @@ get:
   tags:
     - catalog
   summary: Get a list of all available services
+  description: Lists all available services
+  security:
+    - bearerAuth: []
   responses:
     '200':
       content:
@@ -12,18 +15,18 @@ get:
               - data
             properties:
               data:
-                type: object
-                required: 
-                  - services
-                properties:
-                  services:
-                    $ref: "../../schemas/catalog/Services.yaml"
+                $ref: "../../schemas/catalog/Services.yaml"
     default:
       $ref: "../../responses/Error.yaml"
 post:
   tags:
     - catalog
   summary: Create catalog service
+  description: |-
+    Creates catalog service
+
+    **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+    'Admin' or higher.
   security:
     - bearerAuth: []
   requestBody:
@@ -49,11 +52,6 @@ post:
               - data
             properties:
               data:
-                type: object
-                required: 
-                  - services
-                properties:
-                  services:
-                    $ref: "../../schemas/catalog/Service.yaml"
+                $ref: "../../schemas/catalog/Service.yaml"
     default:
       $ref: "../../responses/Error.yaml"

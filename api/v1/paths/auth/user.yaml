@@ -14,11 +14,6 @@ get:
               - data
             properties:
               data:
-                type: object
-                required: 
-                  - user
-                properties:
-                  user:
-                    $ref: "../../schemas/User.yaml"
+                $ref: "../../schemas/User.yaml"
     default:
       $ref: "../../responses/Error.yaml"

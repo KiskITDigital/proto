@@ -1,0 +1,20 @@
+type: object
+required:
+  - id
+  - content
+  - verification_status
+  - created_at
+properties:
+  id:
+    type: integer
+  content:
+    type: string
+  attachments:
+    type: array
+    items:
+      type: string
+  verification_status:
+    type: string
+  created_at:
+    type: string
+    format: date-time

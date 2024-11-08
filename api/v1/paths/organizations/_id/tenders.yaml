@@ -1,8 +1,10 @@
 get:
   tags:
-    - tenders
     - organizations
   summary: Get all of organization tenders
+  description: if user is in organization it also return all drafts
+  security:
+  - bearerAuth: []
   parameters:
     - name: organizationID
       required: true
@@ -12,7 +14,6 @@ get:
         type: integer
         minimum: 1
       example: 1
-  description: if user in organization it also return all drafts
   responses:
     '200':
       description: Success
@@ -24,13 +25,8 @@ get:
               - data
             properties:
               data:
-                type: object
-                required: 
-                  - tenders
-                properties:
-                  tenders:
-                    type: array
-                    items:
-                      $ref: "../../../schemas/Tender.yaml"
+                type: array
+                items:
+                  $ref: "../../../schemas/Tender.yaml"
     default:
       $ref: "../../../responses/Error.yaml"

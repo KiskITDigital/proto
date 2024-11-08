@@ -9,166 +9,6 @@ import (
 	"github.com/go-faster/jx"
 )
 
-type AdminBearerAuth struct {
-	Token string
-}
-
-// GetToken returns the value of Token.
-func (s *AdminBearerAuth) GetToken() string {
-	return s.Token
-}
-
-// SetToken sets the value of Token.
-func (s *AdminBearerAuth) SetToken(val string) {
-	s.Token = val
-}
-
-type AdminCookieAuth struct {
-	APIKey string
-}
-
-// GetAPIKey returns the value of APIKey.
-func (s *AdminCookieAuth) GetAPIKey() string {
-	return s.APIKey
-}
-
-// SetAPIKey sets the value of APIKey.
-func (s *AdminCookieAuth) SetAPIKey(val string) {
-	s.APIKey = val
-}
-
-// 0: Invalid
-// 1: Employee
-// 2: Admin
-// 3: SuperAdmin.
-// Ref: #
-type AdminRole int
-
-const (
-	AdminRole1 AdminRole = 1
-)
-
-// AllValues returns all AdminRole values.
-func (AdminRole) AllValues() []AdminRole {
-	return []AdminRole{
-		AdminRole1,
-	}
-}
-
-// Ref: #
-type AdminUser struct {
-	ID         int       `json:"id"`
-	Email      Email     `json:"email"`
-	Phone      Phone     `json:"phone"`
-	FirstName  Name      `json:"first_name"`
-	LastName   Name      `json:"last_name"`
-	MiddleName Name      `json:"middle_name"`
-	AvatarURL  OptURL    `json:"avatar_url"`
-	Role       AdminRole `json:"role"`
-	CreatedAt  time.Time `json:"created_at"`
-	UpdatedAt  time.Time `json:"updated_at"`
-}
-
-// GetID returns the value of ID.
-func (s *AdminUser) GetID() int {
-	return s.ID
-}
-
-// GetEmail returns the value of Email.
-func (s *AdminUser) GetEmail() Email {
-	return s.Email
-}
-
-// GetPhone returns the value of Phone.
-func (s *AdminUser) GetPhone() Phone {
-	return s.Phone
-}
-
-// GetFirstName returns the value of FirstName.
-func (s *AdminUser) GetFirstName() Name {
-	return s.FirstName
-}
-
-// GetLastName returns the value of LastName.
-func (s *AdminUser) GetLastName() Name {
-	return s.LastName
-}
-
-// GetMiddleName returns the value of MiddleName.
-func (s *AdminUser) GetMiddleName() Name {
-	return s.MiddleName
-}
-
-// GetAvatarURL returns the value of AvatarURL.
-func (s *AdminUser) GetAvatarURL() OptURL {
-	return s.AvatarURL
-}
-
-// GetRole returns the value of Role.
-func (s *AdminUser) GetRole() AdminRole {
-	return s.Role
-}
-
-// GetCreatedAt returns the value of CreatedAt.
-func (s *AdminUser) GetCreatedAt() time.Time {
-	return s.CreatedAt
-}
-
-// GetUpdatedAt returns the value of UpdatedAt.
-func (s *AdminUser) GetUpdatedAt() time.Time {
-	return s.UpdatedAt
-}
-
-// SetID sets the value of ID.
-func (s *AdminUser) SetID(val int) {
-	s.ID = val
-}
-
-// SetEmail sets the value of Email.
-func (s *AdminUser) SetEmail(val Email) {
-	s.Email = val
-}
-
-// SetPhone sets the value of Phone.
-func (s *AdminUser) SetPhone(val Phone) {
-	s.Phone = val
-}
-
-// SetFirstName sets the value of FirstName.
-func (s *AdminUser) SetFirstName(val Name) {
-	s.FirstName = val
-}
-
-// SetLastName sets the value of LastName.
-func (s *AdminUser) SetLastName(val Name) {
-	s.LastName = val
-}
-
-// SetMiddleName sets the value of MiddleName.
-func (s *AdminUser) SetMiddleName(val Name) {
-	s.MiddleName = val
-}
-
-// SetAvatarURL sets the value of AvatarURL.
-func (s *AdminUser) SetAvatarURL(val OptURL) {
-	s.AvatarURL = val
-}
-
-// SetRole sets the value of Role.
-func (s *AdminUser) SetRole(val AdminRole) {
-	s.Role = val
-}
-
-// SetCreatedAt sets the value of CreatedAt.
-func (s *AdminUser) SetCreatedAt(val time.Time) {
-	s.CreatedAt = val
-}
-
-// SetUpdatedAt sets the value of UpdatedAt.
-func (s *AdminUser) SetUpdatedAt(val time.Time) {
-	s.UpdatedAt = val
-}
-
 type BearerAuth struct {
 	Token string
 }
@@ -221,6 +61,65 @@ func (s *City) SetRegion(val OptRegion) {
 }
 
 // Ref: #
+type Comment struct {
+	ID                 int       `json:"id"`
+	Content            string    `json:"content"`
+	Attachments        []string  `json:"attachments"`
+	VerificationStatus string    `json:"verification_status"`
+	CreatedAt          time.Time `json:"created_at"`
+}
+
+// GetID returns the value of ID.
+func (s *Comment) GetID() int {
+	return s.ID
+}
+
+// GetContent returns the value of Content.
+func (s *Comment) GetContent() string {
+	return s.Content
+}
+
+// GetAttachments returns the value of Attachments.
+func (s *Comment) GetAttachments() []string {
+	return s.Attachments
+}
+
+// GetVerificationStatus returns the value of VerificationStatus.
+func (s *Comment) GetVerificationStatus() string {
+	return s.VerificationStatus
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Comment) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetID sets the value of ID.
+func (s *Comment) SetID(val int) {
+	s.ID = val
+}
+
+// SetContent sets the value of Content.
+func (s *Comment) SetContent(val string) {
+	s.Content = val
+}
+
+// SetAttachments sets the value of Attachments.
+func (s *Comment) SetAttachments(val []string) {
+	s.Attachments = val
+}
+
+// SetVerificationStatus sets the value of VerificationStatus.
+func (s *Comment) SetVerificationStatus(val string) {
+	s.VerificationStatus = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Comment) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// Ref: #
 type ContactInfo struct {
 	Contact string `json:"contact"`
 	Info    string `json:"info"`
@@ -246,6 +145,21 @@ func (s *ContactInfo) SetInfo(val string) {
 	s.Info = val
 }
 
+// Ref: #
+type ContractorInfo struct {
+	Todo string `json:"todo"`
+}
+
+// GetTodo returns the value of Todo.
+func (s *ContractorInfo) GetTodo() string {
+	return s.Todo
+}
+
+// SetTodo sets the value of Todo.
+func (s *ContractorInfo) SetTodo(val string) {
+	s.Todo = val
+}
+
 type CookieAuth struct {
 	APIKey string
 }
@@ -258,6 +172,21 @@ func (s *CookieAuth) GetAPIKey() string {
 // SetAPIKey sets the value of APIKey.
 func (s *CookieAuth) SetAPIKey(val string) {
 	s.APIKey = val
+}
+
+// Ref: #
+type CustomerInfo struct {
+	Todo string `json:"todo"`
+}
+
+// GetTodo returns the value of Todo.
+func (s *CustomerInfo) GetTodo() string {
+	return s.Todo
+}
+
+// SetTodo sets the value of Todo.
+func (s *CustomerInfo) SetTodo(val string) {
+	s.Todo = val
 }
 
 type Email string
@@ -338,30 +267,40 @@ func (s *ErrorStatusCode) SetResponse(val WrappedError) {
 	s.Response = val
 }
 
-func (*ErrorStatusCode) v1AdminAuthRefreshPostRes()                  {}
-func (*ErrorStatusCode) v1AdminAuthSigninPostRes()                   {}
-func (*ErrorStatusCode) v1AdminAuthUserGetRes()                      {}
-func (*ErrorStatusCode) v1AdminUsersGetRes()                         {}
-func (*ErrorStatusCode) v1AdminUsersPostRes()                        {}
-func (*ErrorStatusCode) v1AdminUsersUserIDGetRes()                   {}
-func (*ErrorStatusCode) v1AuthRefreshPostRes()                       {}
-func (*ErrorStatusCode) v1AuthSigninPostRes()                        {}
-func (*ErrorStatusCode) v1AuthSignupPostRes()                        {}
-func (*ErrorStatusCode) v1AuthUserGetRes()                           {}
-func (*ErrorStatusCode) v1CatalogCitiesPostRes()                     {}
-func (*ErrorStatusCode) v1CatalogObjectsGetRes()                     {}
-func (*ErrorStatusCode) v1CatalogObjectsPostRes()                    {}
-func (*ErrorStatusCode) v1CatalogRegionsPostRes()                    {}
-func (*ErrorStatusCode) v1CatalogServicesGetRes()                    {}
-func (*ErrorStatusCode) v1CatalogServicesPostRes()                   {}
-func (*ErrorStatusCode) v1OrganizationsGetRes()                      {}
-func (*ErrorStatusCode) v1OrganizationsOrganizationIDTendersGetRes() {}
-func (*ErrorStatusCode) v1SurveyPostRes()                            {}
-func (*ErrorStatusCode) v1TendersGetRes()                            {}
-func (*ErrorStatusCode) v1TendersPostRes()                           {}
-func (*ErrorStatusCode) v1TendersTenderIDGetRes()                    {}
-func (*ErrorStatusCode) v1TendersTenderIDPutRes()                    {}
-func (*ErrorStatusCode) v1UsersUserIDGetRes()                        {}
+func (*ErrorStatusCode) v1AuthRefreshPostRes()                              {}
+func (*ErrorStatusCode) v1AuthSigninPostRes()                               {}
+func (*ErrorStatusCode) v1AuthSignupPostRes()                               {}
+func (*ErrorStatusCode) v1AuthUserGetRes()                                  {}
+func (*ErrorStatusCode) v1CatalogCitiesPostRes()                            {}
+func (*ErrorStatusCode) v1CatalogObjectsGetRes()                            {}
+func (*ErrorStatusCode) v1CatalogObjectsPostRes()                           {}
+func (*ErrorStatusCode) v1CatalogRegionsPostRes()                           {}
+func (*ErrorStatusCode) v1CatalogServicesGetRes()                           {}
+func (*ErrorStatusCode) v1CatalogServicesPostRes()                          {}
+func (*ErrorStatusCode) v1CommentsVerificationsGetRes()                     {}
+func (*ErrorStatusCode) v1OrganizationsGetRes()                             {}
+func (*ErrorStatusCode) v1OrganizationsOrganizationIDTendersGetRes()        {}
+func (*ErrorStatusCode) v1OrganizationsOrganizationIDVerificationsGetRes()  {}
+func (*ErrorStatusCode) v1OrganizationsOrganizationIDVerificationsPostRes() {}
+func (*ErrorStatusCode) v1OrganizationsVerificationsGetRes()                {}
+func (*ErrorStatusCode) v1SuggestCompanyGetRes()                            {}
+func (*ErrorStatusCode) v1SurveyPostRes()                                   {}
+func (*ErrorStatusCode) v1TendersGetRes()                                   {}
+func (*ErrorStatusCode) v1TendersPostRes()                                  {}
+func (*ErrorStatusCode) v1TendersTenderIDCommentsGetRes()                   {}
+func (*ErrorStatusCode) v1TendersTenderIDCommentsPostRes()                  {}
+func (*ErrorStatusCode) v1TendersTenderIDGetRes()                           {}
+func (*ErrorStatusCode) v1TendersTenderIDPutRes()                           {}
+func (*ErrorStatusCode) v1TendersTenderIDRespondPostRes()                   {}
+func (*ErrorStatusCode) v1TendersVerificationsGetRes()                      {}
+func (*ErrorStatusCode) v1UsersConfirmEmailPostRes()                        {}
+func (*ErrorStatusCode) v1UsersConfirmPasswordPostRes()                     {}
+func (*ErrorStatusCode) v1UsersGetRes()                                     {}
+func (*ErrorStatusCode) v1UsersRequestEmailVerificationPostRes()            {}
+func (*ErrorStatusCode) v1UsersRequestResetPasswordPostRes()                {}
+func (*ErrorStatusCode) v1UsersUserIDGetRes()                               {}
+func (*ErrorStatusCode) v1VerificationsRequestIDAprovePostRes()             {}
+func (*ErrorStatusCode) v1VerificationsRequestIDDenyPostRes()               {}
 
 type Inn string
 
@@ -404,6 +343,55 @@ func (s *Object) SetParentID(val OptInt) {
 // SetName sets the value of Name.
 func (s *Object) SetName(val string) {
 	s.Name = val
+}
+
+// Ref: #
+type ObjectType string
+
+const (
+	ObjectTypeOrganization ObjectType = "organization"
+	ObjectTypeComment      ObjectType = "comment"
+	ObjectTypeTender       ObjectType = "tender"
+)
+
+// AllValues returns all ObjectType values.
+func (ObjectType) AllValues() []ObjectType {
+	return []ObjectType{
+		ObjectTypeOrganization,
+		ObjectTypeComment,
+		ObjectTypeTender,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s ObjectType) MarshalText() ([]byte, error) {
+	switch s {
+	case ObjectTypeOrganization:
+		return []byte(s), nil
+	case ObjectTypeComment:
+		return []byte(s), nil
+	case ObjectTypeTender:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *ObjectType) UnmarshalText(data []byte) error {
+	switch ObjectType(data) {
+	case ObjectTypeOrganization:
+		*s = ObjectTypeOrganization
+		return nil
+	case ObjectTypeComment:
+		*s = ObjectTypeComment
+		return nil
+	case ObjectTypeTender:
+		*s = ObjectTypeTender
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 type Objects []Object
@@ -452,6 +440,98 @@ func (o OptBool) Get() (v bool, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptBool) Or(d bool) bool {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptContractorInfo returns new OptContractorInfo with value set to v.
+func NewOptContractorInfo(v ContractorInfo) OptContractorInfo {
+	return OptContractorInfo{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptContractorInfo is optional ContractorInfo.
+type OptContractorInfo struct {
+	Value ContractorInfo
+	Set   bool
+}
+
+// IsSet returns true if OptContractorInfo was set.
+func (o OptContractorInfo) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptContractorInfo) Reset() {
+	var v ContractorInfo
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptContractorInfo) SetTo(v ContractorInfo) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptContractorInfo) Get() (v ContractorInfo, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptContractorInfo) Or(d ContractorInfo) ContractorInfo {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCustomerInfo returns new OptCustomerInfo with value set to v.
+func NewOptCustomerInfo(v CustomerInfo) OptCustomerInfo {
+	return OptCustomerInfo{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCustomerInfo is optional CustomerInfo.
+type OptCustomerInfo struct {
+	Value CustomerInfo
+	Set   bool
+}
+
+// IsSet returns true if OptCustomerInfo was set.
+func (o OptCustomerInfo) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCustomerInfo) Reset() {
+	var v CustomerInfo
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCustomerInfo) SetTo(v CustomerInfo) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCustomerInfo) Get() (v CustomerInfo, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCustomerInfo) Or(d CustomerInfo) CustomerInfo {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -780,27 +860,765 @@ func (o OptURL) Or(d URL) URL {
 	return d
 }
 
+// NewOptUser returns new OptUser with value set to v.
+func NewOptUser(v User) OptUser {
+	return OptUser{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptUser is optional User.
+type OptUser struct {
+	Value User
+	Set   bool
+}
+
+// IsSet returns true if OptUser was set.
+func (o OptUser) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptUser) Reset() {
+	var v User
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptUser) SetTo(v User) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptUser) Get() (v User, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptUser) Or(d User) User {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptV1CatalogObjectsGetDirection returns new OptV1CatalogObjectsGetDirection with value set to v.
+func NewOptV1CatalogObjectsGetDirection(v V1CatalogObjectsGetDirection) OptV1CatalogObjectsGetDirection {
+	return OptV1CatalogObjectsGetDirection{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptV1CatalogObjectsGetDirection is optional V1CatalogObjectsGetDirection.
+type OptV1CatalogObjectsGetDirection struct {
+	Value V1CatalogObjectsGetDirection
+	Set   bool
+}
+
+// IsSet returns true if OptV1CatalogObjectsGetDirection was set.
+func (o OptV1CatalogObjectsGetDirection) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptV1CatalogObjectsGetDirection) Reset() {
+	var v V1CatalogObjectsGetDirection
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptV1CatalogObjectsGetDirection) SetTo(v V1CatalogObjectsGetDirection) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptV1CatalogObjectsGetDirection) Get() (v V1CatalogObjectsGetDirection, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptV1CatalogObjectsGetDirection) Or(d V1CatalogObjectsGetDirection) V1CatalogObjectsGetDirection {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptV1CatalogObjectsGetSort returns new OptV1CatalogObjectsGetSort with value set to v.
+func NewOptV1CatalogObjectsGetSort(v V1CatalogObjectsGetSort) OptV1CatalogObjectsGetSort {
+	return OptV1CatalogObjectsGetSort{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptV1CatalogObjectsGetSort is optional V1CatalogObjectsGetSort.
+type OptV1CatalogObjectsGetSort struct {
+	Value V1CatalogObjectsGetSort
+	Set   bool
+}
+
+// IsSet returns true if OptV1CatalogObjectsGetSort was set.
+func (o OptV1CatalogObjectsGetSort) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptV1CatalogObjectsGetSort) Reset() {
+	var v V1CatalogObjectsGetSort
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptV1CatalogObjectsGetSort) SetTo(v V1CatalogObjectsGetSort) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptV1CatalogObjectsGetSort) Get() (v V1CatalogObjectsGetSort, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptV1CatalogObjectsGetSort) Or(d V1CatalogObjectsGetSort) V1CatalogObjectsGetSort {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptV1CommentsVerificationsGetDirection returns new OptV1CommentsVerificationsGetDirection with value set to v.
+func NewOptV1CommentsVerificationsGetDirection(v V1CommentsVerificationsGetDirection) OptV1CommentsVerificationsGetDirection {
+	return OptV1CommentsVerificationsGetDirection{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptV1CommentsVerificationsGetDirection is optional V1CommentsVerificationsGetDirection.
+type OptV1CommentsVerificationsGetDirection struct {
+	Value V1CommentsVerificationsGetDirection
+	Set   bool
+}
+
+// IsSet returns true if OptV1CommentsVerificationsGetDirection was set.
+func (o OptV1CommentsVerificationsGetDirection) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptV1CommentsVerificationsGetDirection) Reset() {
+	var v V1CommentsVerificationsGetDirection
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptV1CommentsVerificationsGetDirection) SetTo(v V1CommentsVerificationsGetDirection) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptV1CommentsVerificationsGetDirection) Get() (v V1CommentsVerificationsGetDirection, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptV1CommentsVerificationsGetDirection) Or(d V1CommentsVerificationsGetDirection) V1CommentsVerificationsGetDirection {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptV1CommentsVerificationsGetSort returns new OptV1CommentsVerificationsGetSort with value set to v.
+func NewOptV1CommentsVerificationsGetSort(v V1CommentsVerificationsGetSort) OptV1CommentsVerificationsGetSort {
+	return OptV1CommentsVerificationsGetSort{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptV1CommentsVerificationsGetSort is optional V1CommentsVerificationsGetSort.
+type OptV1CommentsVerificationsGetSort struct {
+	Value V1CommentsVerificationsGetSort
+	Set   bool
+}
+
+// IsSet returns true if OptV1CommentsVerificationsGetSort was set.
+func (o OptV1CommentsVerificationsGetSort) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptV1CommentsVerificationsGetSort) Reset() {
+	var v V1CommentsVerificationsGetSort
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptV1CommentsVerificationsGetSort) SetTo(v V1CommentsVerificationsGetSort) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptV1CommentsVerificationsGetSort) Get() (v V1CommentsVerificationsGetSort, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptV1CommentsVerificationsGetSort) Or(d V1CommentsVerificationsGetSort) V1CommentsVerificationsGetSort {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptV1OrganizationsGetDirection returns new OptV1OrganizationsGetDirection with value set to v.
+func NewOptV1OrganizationsGetDirection(v V1OrganizationsGetDirection) OptV1OrganizationsGetDirection {
+	return OptV1OrganizationsGetDirection{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptV1OrganizationsGetDirection is optional V1OrganizationsGetDirection.
+type OptV1OrganizationsGetDirection struct {
+	Value V1OrganizationsGetDirection
+	Set   bool
+}
+
+// IsSet returns true if OptV1OrganizationsGetDirection was set.
+func (o OptV1OrganizationsGetDirection) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptV1OrganizationsGetDirection) Reset() {
+	var v V1OrganizationsGetDirection
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptV1OrganizationsGetDirection) SetTo(v V1OrganizationsGetDirection) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptV1OrganizationsGetDirection) Get() (v V1OrganizationsGetDirection, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptV1OrganizationsGetDirection) Or(d V1OrganizationsGetDirection) V1OrganizationsGetDirection {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptV1OrganizationsGetSort returns new OptV1OrganizationsGetSort with value set to v.
+func NewOptV1OrganizationsGetSort(v V1OrganizationsGetSort) OptV1OrganizationsGetSort {
+	return OptV1OrganizationsGetSort{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptV1OrganizationsGetSort is optional V1OrganizationsGetSort.
+type OptV1OrganizationsGetSort struct {
+	Value V1OrganizationsGetSort
+	Set   bool
+}
+
+// IsSet returns true if OptV1OrganizationsGetSort was set.
+func (o OptV1OrganizationsGetSort) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptV1OrganizationsGetSort) Reset() {
+	var v V1OrganizationsGetSort
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptV1OrganizationsGetSort) SetTo(v V1OrganizationsGetSort) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptV1OrganizationsGetSort) Get() (v V1OrganizationsGetSort, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptV1OrganizationsGetSort) Or(d V1OrganizationsGetSort) V1OrganizationsGetSort {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptV1OrganizationsVerificationsGetDirection returns new OptV1OrganizationsVerificationsGetDirection with value set to v.
+func NewOptV1OrganizationsVerificationsGetDirection(v V1OrganizationsVerificationsGetDirection) OptV1OrganizationsVerificationsGetDirection {
+	return OptV1OrganizationsVerificationsGetDirection{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptV1OrganizationsVerificationsGetDirection is optional V1OrganizationsVerificationsGetDirection.
+type OptV1OrganizationsVerificationsGetDirection struct {
+	Value V1OrganizationsVerificationsGetDirection
+	Set   bool
+}
+
+// IsSet returns true if OptV1OrganizationsVerificationsGetDirection was set.
+func (o OptV1OrganizationsVerificationsGetDirection) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptV1OrganizationsVerificationsGetDirection) Reset() {
+	var v V1OrganizationsVerificationsGetDirection
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptV1OrganizationsVerificationsGetDirection) SetTo(v V1OrganizationsVerificationsGetDirection) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptV1OrganizationsVerificationsGetDirection) Get() (v V1OrganizationsVerificationsGetDirection, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptV1OrganizationsVerificationsGetDirection) Or(d V1OrganizationsVerificationsGetDirection) V1OrganizationsVerificationsGetDirection {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptV1OrganizationsVerificationsGetSort returns new OptV1OrganizationsVerificationsGetSort with value set to v.
+func NewOptV1OrganizationsVerificationsGetSort(v V1OrganizationsVerificationsGetSort) OptV1OrganizationsVerificationsGetSort {
+	return OptV1OrganizationsVerificationsGetSort{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptV1OrganizationsVerificationsGetSort is optional V1OrganizationsVerificationsGetSort.
+type OptV1OrganizationsVerificationsGetSort struct {
+	Value V1OrganizationsVerificationsGetSort
+	Set   bool
+}
+
+// IsSet returns true if OptV1OrganizationsVerificationsGetSort was set.
+func (o OptV1OrganizationsVerificationsGetSort) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptV1OrganizationsVerificationsGetSort) Reset() {
+	var v V1OrganizationsVerificationsGetSort
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptV1OrganizationsVerificationsGetSort) SetTo(v V1OrganizationsVerificationsGetSort) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptV1OrganizationsVerificationsGetSort) Get() (v V1OrganizationsVerificationsGetSort, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptV1OrganizationsVerificationsGetSort) Or(d V1OrganizationsVerificationsGetSort) V1OrganizationsVerificationsGetSort {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptV1TendersGetDirection returns new OptV1TendersGetDirection with value set to v.
+func NewOptV1TendersGetDirection(v V1TendersGetDirection) OptV1TendersGetDirection {
+	return OptV1TendersGetDirection{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptV1TendersGetDirection is optional V1TendersGetDirection.
+type OptV1TendersGetDirection struct {
+	Value V1TendersGetDirection
+	Set   bool
+}
+
+// IsSet returns true if OptV1TendersGetDirection was set.
+func (o OptV1TendersGetDirection) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptV1TendersGetDirection) Reset() {
+	var v V1TendersGetDirection
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptV1TendersGetDirection) SetTo(v V1TendersGetDirection) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptV1TendersGetDirection) Get() (v V1TendersGetDirection, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptV1TendersGetDirection) Or(d V1TendersGetDirection) V1TendersGetDirection {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptV1TendersGetSort returns new OptV1TendersGetSort with value set to v.
+func NewOptV1TendersGetSort(v V1TendersGetSort) OptV1TendersGetSort {
+	return OptV1TendersGetSort{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptV1TendersGetSort is optional V1TendersGetSort.
+type OptV1TendersGetSort struct {
+	Value V1TendersGetSort
+	Set   bool
+}
+
+// IsSet returns true if OptV1TendersGetSort was set.
+func (o OptV1TendersGetSort) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptV1TendersGetSort) Reset() {
+	var v V1TendersGetSort
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptV1TendersGetSort) SetTo(v V1TendersGetSort) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptV1TendersGetSort) Get() (v V1TendersGetSort, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptV1TendersGetSort) Or(d V1TendersGetSort) V1TendersGetSort {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptV1TendersVerificationsGetDirection returns new OptV1TendersVerificationsGetDirection with value set to v.
+func NewOptV1TendersVerificationsGetDirection(v V1TendersVerificationsGetDirection) OptV1TendersVerificationsGetDirection {
+	return OptV1TendersVerificationsGetDirection{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptV1TendersVerificationsGetDirection is optional V1TendersVerificationsGetDirection.
+type OptV1TendersVerificationsGetDirection struct {
+	Value V1TendersVerificationsGetDirection
+	Set   bool
+}
+
+// IsSet returns true if OptV1TendersVerificationsGetDirection was set.
+func (o OptV1TendersVerificationsGetDirection) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptV1TendersVerificationsGetDirection) Reset() {
+	var v V1TendersVerificationsGetDirection
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptV1TendersVerificationsGetDirection) SetTo(v V1TendersVerificationsGetDirection) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptV1TendersVerificationsGetDirection) Get() (v V1TendersVerificationsGetDirection, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptV1TendersVerificationsGetDirection) Or(d V1TendersVerificationsGetDirection) V1TendersVerificationsGetDirection {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptV1TendersVerificationsGetSort returns new OptV1TendersVerificationsGetSort with value set to v.
+func NewOptV1TendersVerificationsGetSort(v V1TendersVerificationsGetSort) OptV1TendersVerificationsGetSort {
+	return OptV1TendersVerificationsGetSort{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptV1TendersVerificationsGetSort is optional V1TendersVerificationsGetSort.
+type OptV1TendersVerificationsGetSort struct {
+	Value V1TendersVerificationsGetSort
+	Set   bool
+}
+
+// IsSet returns true if OptV1TendersVerificationsGetSort was set.
+func (o OptV1TendersVerificationsGetSort) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptV1TendersVerificationsGetSort) Reset() {
+	var v V1TendersVerificationsGetSort
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptV1TendersVerificationsGetSort) SetTo(v V1TendersVerificationsGetSort) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptV1TendersVerificationsGetSort) Get() (v V1TendersVerificationsGetSort, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptV1TendersVerificationsGetSort) Or(d V1TendersVerificationsGetSort) V1TendersVerificationsGetSort {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptV1UsersGetDirection returns new OptV1UsersGetDirection with value set to v.
+func NewOptV1UsersGetDirection(v V1UsersGetDirection) OptV1UsersGetDirection {
+	return OptV1UsersGetDirection{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptV1UsersGetDirection is optional V1UsersGetDirection.
+type OptV1UsersGetDirection struct {
+	Value V1UsersGetDirection
+	Set   bool
+}
+
+// IsSet returns true if OptV1UsersGetDirection was set.
+func (o OptV1UsersGetDirection) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptV1UsersGetDirection) Reset() {
+	var v V1UsersGetDirection
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptV1UsersGetDirection) SetTo(v V1UsersGetDirection) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptV1UsersGetDirection) Get() (v V1UsersGetDirection, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptV1UsersGetDirection) Or(d V1UsersGetDirection) V1UsersGetDirection {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptV1UsersGetSort returns new OptV1UsersGetSort with value set to v.
+func NewOptV1UsersGetSort(v V1UsersGetSort) OptV1UsersGetSort {
+	return OptV1UsersGetSort{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptV1UsersGetSort is optional V1UsersGetSort.
+type OptV1UsersGetSort struct {
+	Value V1UsersGetSort
+	Set   bool
+}
+
+// IsSet returns true if OptV1UsersGetSort was set.
+func (o OptV1UsersGetSort) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptV1UsersGetSort) Reset() {
+	var v V1UsersGetSort
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptV1UsersGetSort) SetTo(v V1UsersGetSort) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptV1UsersGetSort) Get() (v V1UsersGetSort, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptV1UsersGetSort) Or(d V1UsersGetSort) V1UsersGetSort {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptVerificationStatus returns new OptVerificationStatus with value set to v.
+func NewOptVerificationStatus(v VerificationStatus) OptVerificationStatus {
+	return OptVerificationStatus{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptVerificationStatus is optional VerificationStatus.
+type OptVerificationStatus struct {
+	Value VerificationStatus
+	Set   bool
+}
+
+// IsSet returns true if OptVerificationStatus was set.
+func (o OptVerificationStatus) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptVerificationStatus) Reset() {
+	var v VerificationStatus
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptVerificationStatus) SetTo(v VerificationStatus) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptVerificationStatus) Get() (v VerificationStatus, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptVerificationStatus) Or(d VerificationStatus) VerificationStatus {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // Ref: #
 type Organization struct {
-	ID           int           `json:"id"`
-	BrandName    Name          `json:"brand_name"`
-	FullName     Name          `json:"full_name"`
-	ShortName    Name          `json:"short_name"`
-	Inn          Inn           `json:"inn"`
-	Okpo         Okpo          `json:"okpo"`
-	Ogrn         Ogrn          `json:"ogrn"`
-	Kpp          Kpp           `json:"kpp"`
-	TaxCode      TaxCode       `json:"tax_code"`
-	IsContractor bool          `json:"is_contractor"`
-	IsBanned     bool          `json:"is_banned"`
-	Verified     bool          `json:"verified"`
-	Address      string        `json:"address"`
-	AvatarURL    URL           `json:"avatar_url"`
-	Emails       []ContactInfo `json:"emails"`
-	Phones       []ContactInfo `json:"phones"`
-	Messengers   []ContactInfo `json:"messengers"`
-	CreatedAt    time.Time     `json:"created_at"`
-	UpdatedAt    time.Time     `json:"updated_at"`
+	ID                 int                   `json:"id"`
+	BrandName          Name                  `json:"brand_name"`
+	FullName           Name                  `json:"full_name"`
+	ShortName          Name                  `json:"short_name"`
+	Inn                Inn                   `json:"inn"`
+	Okpo               Okpo                  `json:"okpo"`
+	Ogrn               Ogrn                  `json:"ogrn"`
+	Kpp                Kpp                   `json:"kpp"`
+	TaxCode            TaxCode               `json:"tax_code"`
+	Address            string                `json:"address"`
+	AvatarURL          OptURL                `json:"avatar_url"`
+	Emails             []ContactInfo         `json:"emails"`
+	Phones             []ContactInfo         `json:"phones"`
+	Messengers         []ContactInfo         `json:"messengers"`
+	VerificationStatus OptVerificationStatus `json:"verification_status"`
+	IsContractor       bool                  `json:"is_contractor"`
+	IsBanned           bool                  `json:"is_banned"`
+	CustomerInfo       OptCustomerInfo       `json:"customer_info"`
+	ContractorInfo     OptContractorInfo     `json:"contractor_info"`
+	CreatedAt          time.Time             `json:"created_at"`
+	UpdatedAt          time.Time             `json:"updated_at"`
 }
 
 // GetID returns the value of ID.
@@ -848,28 +1666,13 @@ func (s *Organization) GetTaxCode() TaxCode {
 	return s.TaxCode
 }
 
-// GetIsContractor returns the value of IsContractor.
-func (s *Organization) GetIsContractor() bool {
-	return s.IsContractor
-}
-
-// GetIsBanned returns the value of IsBanned.
-func (s *Organization) GetIsBanned() bool {
-	return s.IsBanned
-}
-
-// GetVerified returns the value of Verified.
-func (s *Organization) GetVerified() bool {
-	return s.Verified
-}
-
 // GetAddress returns the value of Address.
 func (s *Organization) GetAddress() string {
 	return s.Address
 }
 
 // GetAvatarURL returns the value of AvatarURL.
-func (s *Organization) GetAvatarURL() URL {
+func (s *Organization) GetAvatarURL() OptURL {
 	return s.AvatarURL
 }
 
@@ -886,6 +1689,31 @@ func (s *Organization) GetPhones() []ContactInfo {
 // GetMessengers returns the value of Messengers.
 func (s *Organization) GetMessengers() []ContactInfo {
 	return s.Messengers
+}
+
+// GetVerificationStatus returns the value of VerificationStatus.
+func (s *Organization) GetVerificationStatus() OptVerificationStatus {
+	return s.VerificationStatus
+}
+
+// GetIsContractor returns the value of IsContractor.
+func (s *Organization) GetIsContractor() bool {
+	return s.IsContractor
+}
+
+// GetIsBanned returns the value of IsBanned.
+func (s *Organization) GetIsBanned() bool {
+	return s.IsBanned
+}
+
+// GetCustomerInfo returns the value of CustomerInfo.
+func (s *Organization) GetCustomerInfo() OptCustomerInfo {
+	return s.CustomerInfo
+}
+
+// GetContractorInfo returns the value of ContractorInfo.
+func (s *Organization) GetContractorInfo() OptContractorInfo {
+	return s.ContractorInfo
 }
 
 // GetCreatedAt returns the value of CreatedAt.
@@ -943,28 +1771,13 @@ func (s *Organization) SetTaxCode(val TaxCode) {
 	s.TaxCode = val
 }
 
-// SetIsContractor sets the value of IsContractor.
-func (s *Organization) SetIsContractor(val bool) {
-	s.IsContractor = val
-}
-
-// SetIsBanned sets the value of IsBanned.
-func (s *Organization) SetIsBanned(val bool) {
-	s.IsBanned = val
-}
-
-// SetVerified sets the value of Verified.
-func (s *Organization) SetVerified(val bool) {
-	s.Verified = val
-}
-
 // SetAddress sets the value of Address.
 func (s *Organization) SetAddress(val string) {
 	s.Address = val
 }
 
 // SetAvatarURL sets the value of AvatarURL.
-func (s *Organization) SetAvatarURL(val URL) {
+func (s *Organization) SetAvatarURL(val OptURL) {
 	s.AvatarURL = val
 }
 
@@ -981,6 +1794,31 @@ func (s *Organization) SetPhones(val []ContactInfo) {
 // SetMessengers sets the value of Messengers.
 func (s *Organization) SetMessengers(val []ContactInfo) {
 	s.Messengers = val
+}
+
+// SetVerificationStatus sets the value of VerificationStatus.
+func (s *Organization) SetVerificationStatus(val OptVerificationStatus) {
+	s.VerificationStatus = val
+}
+
+// SetIsContractor sets the value of IsContractor.
+func (s *Organization) SetIsContractor(val bool) {
+	s.IsContractor = val
+}
+
+// SetIsBanned sets the value of IsBanned.
+func (s *Organization) SetIsBanned(val bool) {
+	s.IsBanned = val
+}
+
+// SetCustomerInfo sets the value of CustomerInfo.
+func (s *Organization) SetCustomerInfo(val OptCustomerInfo) {
+	s.CustomerInfo = val
+}
+
+// SetContractorInfo sets the value of ContractorInfo.
+func (s *Organization) SetContractorInfo(val OptContractorInfo) {
+	s.ContractorInfo = val
 }
 
 // SetCreatedAt sets the value of CreatedAt.
@@ -1023,19 +1861,59 @@ func (s *Region) SetName(val string) {
 	s.Name = val
 }
 
-// 0: Invalid
-// 1: User.
 // Ref: #
-type Role int
+type Role string
 
 const (
-	Role1 Role = 1
+	RoleUser       Role = "user"
+	RoleEmployee   Role = "employee"
+	RoleAdmin      Role = "admin"
+	RoleSuperAdmin Role = "super_admin"
 )
 
 // AllValues returns all Role values.
 func (Role) AllValues() []Role {
 	return []Role{
-		Role1,
+		RoleUser,
+		RoleEmployee,
+		RoleAdmin,
+		RoleSuperAdmin,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s Role) MarshalText() ([]byte, error) {
+	switch s {
+	case RoleUser:
+		return []byte(s), nil
+	case RoleEmployee:
+		return []byte(s), nil
+	case RoleAdmin:
+		return []byte(s), nil
+	case RoleSuperAdmin:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *Role) UnmarshalText(data []byte) error {
+	switch Role(data) {
+	case RoleUser:
+		*s = RoleUser
+		return nil
+	case RoleEmployee:
+		*s = RoleEmployee
+		return nil
+	case RoleAdmin:
+		*s = RoleAdmin
+		return nil
+	case RoleSuperAdmin:
+		*s = RoleSuperAdmin
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
 	}
 }
 
@@ -1131,33 +2009,45 @@ type TaxCode string
 
 // Ref: #
 type Tender struct {
-	ID              int             `json:"id"`
-	Name            string          `json:"name"`
-	City            City            `json:"city"`
-	Organization    OptOrganization `json:"organization"`
-	Region          string          `json:"region"`
-	Price           float64         `json:"price"`
-	IsContractPrice bool            `json:"is_contract_price"`
-	IsNdsPrice      bool            `json:"is_nds_price"`
-	IsDraft         bool            `json:"is_draft"`
-	FloorSpace      int             `json:"floor_space"`
-	Description     string          `json:"description"`
-	Wishes          string          `json:"wishes"`
-	Specification   URL             `json:"specification"`
-	Attachments     []URL           `json:"attachments"`
-	Services        Services        `json:"services"`
-	Objects         Objects         `json:"objects"`
+	ID                 int             `json:"id"`
+	Organization       Organization    `json:"organization"`
+	WinnerOrganization OptOrganization `json:"winner_organization"`
+	Name               string          `json:"name"`
+	City               City            `json:"city"`
+	Price              float64         `json:"price"`
+	IsContractPrice    bool            `json:"is_contract_price"`
+	IsNdsPrice         bool            `json:"is_nds_price"`
+	IsDraft            bool            `json:"is_draft"`
+	FloorSpace         int             `json:"floor_space"`
+	Description        string          `json:"description"`
+	Wishes             string          `json:"wishes"`
+	Specification      URL             `json:"specification"`
+	Attachments        []URL           `json:"attachments"`
+	Services           Services        `json:"services"`
+	Objects            Objects         `json:"objects"`
 	// Дата начала приема заявок.
 	ReceptionStart time.Time `json:"reception_start"`
 	// Дата окончания приема заявок.
 	ReceptionEnd time.Time `json:"reception_end"`
 	WorkStart    time.Time `json:"work_start"`
 	WorkEnd      time.Time `json:"work_end"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
 }
 
 // GetID returns the value of ID.
 func (s *Tender) GetID() int {
 	return s.ID
+}
+
+// GetOrganization returns the value of Organization.
+func (s *Tender) GetOrganization() Organization {
+	return s.Organization
+}
+
+// GetWinnerOrganization returns the value of WinnerOrganization.
+func (s *Tender) GetWinnerOrganization() OptOrganization {
+	return s.WinnerOrganization
 }
 
 // GetName returns the value of Name.
@@ -1168,16 +2058,6 @@ func (s *Tender) GetName() string {
 // GetCity returns the value of City.
 func (s *Tender) GetCity() City {
 	return s.City
-}
-
-// GetOrganization returns the value of Organization.
-func (s *Tender) GetOrganization() OptOrganization {
-	return s.Organization
-}
-
-// GetRegion returns the value of Region.
-func (s *Tender) GetRegion() string {
-	return s.Region
 }
 
 // GetPrice returns the value of Price.
@@ -1255,9 +2135,29 @@ func (s *Tender) GetWorkEnd() time.Time {
 	return s.WorkEnd
 }
 
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Tender) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// GetUpdatedAt returns the value of UpdatedAt.
+func (s *Tender) GetUpdatedAt() time.Time {
+	return s.UpdatedAt
+}
+
 // SetID sets the value of ID.
 func (s *Tender) SetID(val int) {
 	s.ID = val
+}
+
+// SetOrganization sets the value of Organization.
+func (s *Tender) SetOrganization(val Organization) {
+	s.Organization = val
+}
+
+// SetWinnerOrganization sets the value of WinnerOrganization.
+func (s *Tender) SetWinnerOrganization(val OptOrganization) {
+	s.WinnerOrganization = val
 }
 
 // SetName sets the value of Name.
@@ -1268,16 +2168,6 @@ func (s *Tender) SetName(val string) {
 // SetCity sets the value of City.
 func (s *Tender) SetCity(val City) {
 	s.City = val
-}
-
-// SetOrganization sets the value of Organization.
-func (s *Tender) SetOrganization(val OptOrganization) {
-	s.Organization = val
-}
-
-// SetRegion sets the value of Region.
-func (s *Tender) SetRegion(val string) {
-	s.Region = val
 }
 
 // SetPrice sets the value of Price.
@@ -1355,20 +2245,31 @@ func (s *Tender) SetWorkEnd(val time.Time) {
 	s.WorkEnd = val
 }
 
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Tender) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// SetUpdatedAt sets the value of UpdatedAt.
+func (s *Tender) SetUpdatedAt(val time.Time) {
+	s.UpdatedAt = val
+}
+
 type URL string
 
 // Ref: #
 type User struct {
 	ID            int             `json:"id"`
+	Organization  OptOrganization `json:"organization"`
 	Email         Email           `json:"email"`
 	Phone         Phone           `json:"phone"`
 	FirstName     Name            `json:"first_name"`
 	LastName      Name            `json:"last_name"`
 	MiddleName    Name            `json:"middle_name"`
-	AvatarURL     URL             `json:"avatar_url"`
+	AvatarURL     OptURL          `json:"avatar_url"`
 	EmailVerified bool            `json:"email_verified"`
 	Role          Role            `json:"role"`
-	Organization  OptOrganization `json:"organization"`
+	IsBanned      bool            `json:"is_banned"`
 	CreatedAt     time.Time       `json:"created_at"`
 	UpdatedAt     time.Time       `json:"updated_at"`
 }
@@ -1376,6 +2277,11 @@ type User struct {
 // GetID returns the value of ID.
 func (s *User) GetID() int {
 	return s.ID
+}
+
+// GetOrganization returns the value of Organization.
+func (s *User) GetOrganization() OptOrganization {
+	return s.Organization
 }
 
 // GetEmail returns the value of Email.
@@ -1404,7 +2310,7 @@ func (s *User) GetMiddleName() Name {
 }
 
 // GetAvatarURL returns the value of AvatarURL.
-func (s *User) GetAvatarURL() URL {
+func (s *User) GetAvatarURL() OptURL {
 	return s.AvatarURL
 }
 
@@ -1418,9 +2324,9 @@ func (s *User) GetRole() Role {
 	return s.Role
 }
 
-// GetOrganization returns the value of Organization.
-func (s *User) GetOrganization() OptOrganization {
-	return s.Organization
+// GetIsBanned returns the value of IsBanned.
+func (s *User) GetIsBanned() bool {
+	return s.IsBanned
 }
 
 // GetCreatedAt returns the value of CreatedAt.
@@ -1436,6 +2342,11 @@ func (s *User) GetUpdatedAt() time.Time {
 // SetID sets the value of ID.
 func (s *User) SetID(val int) {
 	s.ID = val
+}
+
+// SetOrganization sets the value of Organization.
+func (s *User) SetOrganization(val OptOrganization) {
+	s.Organization = val
 }
 
 // SetEmail sets the value of Email.
@@ -1464,7 +2375,7 @@ func (s *User) SetMiddleName(val Name) {
 }
 
 // SetAvatarURL sets the value of AvatarURL.
-func (s *User) SetAvatarURL(val URL) {
+func (s *User) SetAvatarURL(val OptURL) {
 	s.AvatarURL = val
 }
 
@@ -1478,9 +2389,9 @@ func (s *User) SetRole(val Role) {
 	s.Role = val
 }
 
-// SetOrganization sets the value of Organization.
-func (s *User) SetOrganization(val OptOrganization) {
-	s.Organization = val
+// SetIsBanned sets the value of IsBanned.
+func (s *User) SetIsBanned(val bool) {
+	s.IsBanned = val
 }
 
 // SetCreatedAt sets the value of CreatedAt.
@@ -1491,376 +2402,6 @@ func (s *User) SetCreatedAt(val time.Time) {
 // SetUpdatedAt sets the value of UpdatedAt.
 func (s *User) SetUpdatedAt(val time.Time) {
 	s.UpdatedAt = val
-}
-
-type V1AdminAuthRefreshPostOK struct {
-	Data V1AdminAuthRefreshPostOKData `json:"data"`
-}
-
-// GetData returns the value of Data.
-func (s *V1AdminAuthRefreshPostOK) GetData() V1AdminAuthRefreshPostOKData {
-	return s.Data
-}
-
-// SetData sets the value of Data.
-func (s *V1AdminAuthRefreshPostOK) SetData(val V1AdminAuthRefreshPostOKData) {
-	s.Data = val
-}
-
-type V1AdminAuthRefreshPostOKData struct {
-	User        AdminUser `json:"user"`
-	AccessToken string    `json:"access_token"`
-}
-
-// GetUser returns the value of User.
-func (s *V1AdminAuthRefreshPostOKData) GetUser() AdminUser {
-	return s.User
-}
-
-// GetAccessToken returns the value of AccessToken.
-func (s *V1AdminAuthRefreshPostOKData) GetAccessToken() string {
-	return s.AccessToken
-}
-
-// SetUser sets the value of User.
-func (s *V1AdminAuthRefreshPostOKData) SetUser(val AdminUser) {
-	s.User = val
-}
-
-// SetAccessToken sets the value of AccessToken.
-func (s *V1AdminAuthRefreshPostOKData) SetAccessToken(val string) {
-	s.AccessToken = val
-}
-
-// V1AdminAuthRefreshPostOKHeaders wraps V1AdminAuthRefreshPostOK with response headers.
-type V1AdminAuthRefreshPostOKHeaders struct {
-	SetCookie OptString
-	Response  V1AdminAuthRefreshPostOK
-}
-
-// GetSetCookie returns the value of SetCookie.
-func (s *V1AdminAuthRefreshPostOKHeaders) GetSetCookie() OptString {
-	return s.SetCookie
-}
-
-// GetResponse returns the value of Response.
-func (s *V1AdminAuthRefreshPostOKHeaders) GetResponse() V1AdminAuthRefreshPostOK {
-	return s.Response
-}
-
-// SetSetCookie sets the value of SetCookie.
-func (s *V1AdminAuthRefreshPostOKHeaders) SetSetCookie(val OptString) {
-	s.SetCookie = val
-}
-
-// SetResponse sets the value of Response.
-func (s *V1AdminAuthRefreshPostOKHeaders) SetResponse(val V1AdminAuthRefreshPostOK) {
-	s.Response = val
-}
-
-func (*V1AdminAuthRefreshPostOKHeaders) v1AdminAuthRefreshPostRes() {}
-
-type V1AdminAuthSigninPostOK struct {
-	Data V1AdminAuthSigninPostOKData `json:"data"`
-}
-
-// GetData returns the value of Data.
-func (s *V1AdminAuthSigninPostOK) GetData() V1AdminAuthSigninPostOKData {
-	return s.Data
-}
-
-// SetData sets the value of Data.
-func (s *V1AdminAuthSigninPostOK) SetData(val V1AdminAuthSigninPostOKData) {
-	s.Data = val
-}
-
-type V1AdminAuthSigninPostOKData struct {
-	User        AdminUser `json:"user"`
-	AccessToken string    `json:"access_token"`
-}
-
-// GetUser returns the value of User.
-func (s *V1AdminAuthSigninPostOKData) GetUser() AdminUser {
-	return s.User
-}
-
-// GetAccessToken returns the value of AccessToken.
-func (s *V1AdminAuthSigninPostOKData) GetAccessToken() string {
-	return s.AccessToken
-}
-
-// SetUser sets the value of User.
-func (s *V1AdminAuthSigninPostOKData) SetUser(val AdminUser) {
-	s.User = val
-}
-
-// SetAccessToken sets the value of AccessToken.
-func (s *V1AdminAuthSigninPostOKData) SetAccessToken(val string) {
-	s.AccessToken = val
-}
-
-// V1AdminAuthSigninPostOKHeaders wraps V1AdminAuthSigninPostOK with response headers.
-type V1AdminAuthSigninPostOKHeaders struct {
-	SetCookie OptString
-	Response  V1AdminAuthSigninPostOK
-}
-
-// GetSetCookie returns the value of SetCookie.
-func (s *V1AdminAuthSigninPostOKHeaders) GetSetCookie() OptString {
-	return s.SetCookie
-}
-
-// GetResponse returns the value of Response.
-func (s *V1AdminAuthSigninPostOKHeaders) GetResponse() V1AdminAuthSigninPostOK {
-	return s.Response
-}
-
-// SetSetCookie sets the value of SetCookie.
-func (s *V1AdminAuthSigninPostOKHeaders) SetSetCookie(val OptString) {
-	s.SetCookie = val
-}
-
-// SetResponse sets the value of Response.
-func (s *V1AdminAuthSigninPostOKHeaders) SetResponse(val V1AdminAuthSigninPostOK) {
-	s.Response = val
-}
-
-func (*V1AdminAuthSigninPostOKHeaders) v1AdminAuthSigninPostRes() {}
-
-type V1AdminAuthSigninPostReq struct {
-	Email    Email    `json:"email"`
-	Password Password `json:"password"`
-}
-
-// GetEmail returns the value of Email.
-func (s *V1AdminAuthSigninPostReq) GetEmail() Email {
-	return s.Email
-}
-
-// GetPassword returns the value of Password.
-func (s *V1AdminAuthSigninPostReq) GetPassword() Password {
-	return s.Password
-}
-
-// SetEmail sets the value of Email.
-func (s *V1AdminAuthSigninPostReq) SetEmail(val Email) {
-	s.Email = val
-}
-
-// SetPassword sets the value of Password.
-func (s *V1AdminAuthSigninPostReq) SetPassword(val Password) {
-	s.Password = val
-}
-
-type V1AdminAuthUserGetOK struct {
-	Data V1AdminAuthUserGetOKData `json:"data"`
-}
-
-// GetData returns the value of Data.
-func (s *V1AdminAuthUserGetOK) GetData() V1AdminAuthUserGetOKData {
-	return s.Data
-}
-
-// SetData sets the value of Data.
-func (s *V1AdminAuthUserGetOK) SetData(val V1AdminAuthUserGetOKData) {
-	s.Data = val
-}
-
-func (*V1AdminAuthUserGetOK) v1AdminAuthUserGetRes() {}
-
-type V1AdminAuthUserGetOKData struct {
-	User AdminUser `json:"user"`
-}
-
-// GetUser returns the value of User.
-func (s *V1AdminAuthUserGetOKData) GetUser() AdminUser {
-	return s.User
-}
-
-// SetUser sets the value of User.
-func (s *V1AdminAuthUserGetOKData) SetUser(val AdminUser) {
-	s.User = val
-}
-
-type V1AdminUsersGetOK struct {
-	Data V1AdminUsersGetOKData `json:"data"`
-}
-
-// GetData returns the value of Data.
-func (s *V1AdminUsersGetOK) GetData() V1AdminUsersGetOKData {
-	return s.Data
-}
-
-// SetData sets the value of Data.
-func (s *V1AdminUsersGetOK) SetData(val V1AdminUsersGetOKData) {
-	s.Data = val
-}
-
-func (*V1AdminUsersGetOK) v1AdminUsersGetRes() {}
-
-type V1AdminUsersGetOKData struct {
-	Users []AdminUser `json:"users"`
-}
-
-// GetUsers returns the value of Users.
-func (s *V1AdminUsersGetOKData) GetUsers() []AdminUser {
-	return s.Users
-}
-
-// SetUsers sets the value of Users.
-func (s *V1AdminUsersGetOKData) SetUsers(val []AdminUser) {
-	s.Users = val
-}
-
-type V1AdminUsersPostCreated struct {
-	Data V1AdminUsersPostCreatedData `json:"data"`
-}
-
-// GetData returns the value of Data.
-func (s *V1AdminUsersPostCreated) GetData() V1AdminUsersPostCreatedData {
-	return s.Data
-}
-
-// SetData sets the value of Data.
-func (s *V1AdminUsersPostCreated) SetData(val V1AdminUsersPostCreatedData) {
-	s.Data = val
-}
-
-func (*V1AdminUsersPostCreated) v1AdminUsersPostRes() {}
-
-type V1AdminUsersPostCreatedData struct {
-	User AdminUser `json:"user"`
-}
-
-// GetUser returns the value of User.
-func (s *V1AdminUsersPostCreatedData) GetUser() AdminUser {
-	return s.User
-}
-
-// SetUser sets the value of User.
-func (s *V1AdminUsersPostCreatedData) SetUser(val AdminUser) {
-	s.User = val
-}
-
-type V1AdminUsersPostReq struct {
-	Email      Email     `json:"email"`
-	Phone      Phone     `json:"phone"`
-	Password   Password  `json:"password"`
-	FirstName  Name      `json:"first_name"`
-	LastName   Name      `json:"last_name"`
-	MiddleName Name      `json:"middle_name"`
-	AvatarURL  OptURL    `json:"avatar_url"`
-	Role       AdminRole `json:"role"`
-}
-
-// GetEmail returns the value of Email.
-func (s *V1AdminUsersPostReq) GetEmail() Email {
-	return s.Email
-}
-
-// GetPhone returns the value of Phone.
-func (s *V1AdminUsersPostReq) GetPhone() Phone {
-	return s.Phone
-}
-
-// GetPassword returns the value of Password.
-func (s *V1AdminUsersPostReq) GetPassword() Password {
-	return s.Password
-}
-
-// GetFirstName returns the value of FirstName.
-func (s *V1AdminUsersPostReq) GetFirstName() Name {
-	return s.FirstName
-}
-
-// GetLastName returns the value of LastName.
-func (s *V1AdminUsersPostReq) GetLastName() Name {
-	return s.LastName
-}
-
-// GetMiddleName returns the value of MiddleName.
-func (s *V1AdminUsersPostReq) GetMiddleName() Name {
-	return s.MiddleName
-}
-
-// GetAvatarURL returns the value of AvatarURL.
-func (s *V1AdminUsersPostReq) GetAvatarURL() OptURL {
-	return s.AvatarURL
-}
-
-// GetRole returns the value of Role.
-func (s *V1AdminUsersPostReq) GetRole() AdminRole {
-	return s.Role
-}
-
-// SetEmail sets the value of Email.
-func (s *V1AdminUsersPostReq) SetEmail(val Email) {
-	s.Email = val
-}
-
-// SetPhone sets the value of Phone.
-func (s *V1AdminUsersPostReq) SetPhone(val Phone) {
-	s.Phone = val
-}
-
-// SetPassword sets the value of Password.
-func (s *V1AdminUsersPostReq) SetPassword(val Password) {
-	s.Password = val
-}
-
-// SetFirstName sets the value of FirstName.
-func (s *V1AdminUsersPostReq) SetFirstName(val Name) {
-	s.FirstName = val
-}
-
-// SetLastName sets the value of LastName.
-func (s *V1AdminUsersPostReq) SetLastName(val Name) {
-	s.LastName = val
-}
-
-// SetMiddleName sets the value of MiddleName.
-func (s *V1AdminUsersPostReq) SetMiddleName(val Name) {
-	s.MiddleName = val
-}
-
-// SetAvatarURL sets the value of AvatarURL.
-func (s *V1AdminUsersPostReq) SetAvatarURL(val OptURL) {
-	s.AvatarURL = val
-}
-
-// SetRole sets the value of Role.
-func (s *V1AdminUsersPostReq) SetRole(val AdminRole) {
-	s.Role = val
-}
-
-type V1AdminUsersUserIDGetOK struct {
-	Data V1AdminUsersUserIDGetOKData `json:"data"`
-}
-
-// GetData returns the value of Data.
-func (s *V1AdminUsersUserIDGetOK) GetData() V1AdminUsersUserIDGetOKData {
-	return s.Data
-}
-
-// SetData sets the value of Data.
-func (s *V1AdminUsersUserIDGetOK) SetData(val V1AdminUsersUserIDGetOKData) {
-	s.Data = val
-}
-
-func (*V1AdminUsersUserIDGetOK) v1AdminUsersUserIDGetRes() {}
-
-type V1AdminUsersUserIDGetOKData struct {
-	User AdminUser `json:"user"`
-}
-
-// GetUser returns the value of User.
-func (s *V1AdminUsersUserIDGetOKData) GetUser() AdminUser {
-	return s.User
-}
-
-// SetUser sets the value of User.
-func (s *V1AdminUsersUserIDGetOKData) SetUser(val AdminUser) {
-	s.User = val
 }
 
 type V1AuthRefreshPostOK struct {
@@ -2192,34 +2733,20 @@ func (s *V1AuthSignupPostReq) SetIsContractor(val bool) {
 }
 
 type V1AuthUserGetOK struct {
-	Data V1AuthUserGetOKData `json:"data"`
+	Data User `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1AuthUserGetOK) GetData() V1AuthUserGetOKData {
+func (s *V1AuthUserGetOK) GetData() User {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1AuthUserGetOK) SetData(val V1AuthUserGetOKData) {
+func (s *V1AuthUserGetOK) SetData(val User) {
 	s.Data = val
 }
 
 func (*V1AuthUserGetOK) v1AuthUserGetRes() {}
-
-type V1AuthUserGetOKData struct {
-	User User `json:"user"`
-}
-
-// GetUser returns the value of User.
-func (s *V1AuthUserGetOKData) GetUser() User {
-	return s.User
-}
-
-// SetUser sets the value of User.
-func (s *V1AuthUserGetOKData) SetUser(val User) {
-	s.User = val
-}
 
 type V1CatalogCitiesPostCreated struct {
 	Data V1CatalogCitiesPostCreatedData `json:"data"`
@@ -2276,65 +2803,112 @@ func (s *V1CatalogCitiesPostReq) SetRegionID(val int) {
 	s.RegionID = val
 }
 
+type V1CatalogObjectsGetDirection string
+
+const (
+	V1CatalogObjectsGetDirectionASC  V1CatalogObjectsGetDirection = "ASC"
+	V1CatalogObjectsGetDirectionDESC V1CatalogObjectsGetDirection = "DESC"
+)
+
+// AllValues returns all V1CatalogObjectsGetDirection values.
+func (V1CatalogObjectsGetDirection) AllValues() []V1CatalogObjectsGetDirection {
+	return []V1CatalogObjectsGetDirection{
+		V1CatalogObjectsGetDirectionASC,
+		V1CatalogObjectsGetDirectionDESC,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s V1CatalogObjectsGetDirection) MarshalText() ([]byte, error) {
+	switch s {
+	case V1CatalogObjectsGetDirectionASC:
+		return []byte(s), nil
+	case V1CatalogObjectsGetDirectionDESC:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1CatalogObjectsGetDirection) UnmarshalText(data []byte) error {
+	switch V1CatalogObjectsGetDirection(data) {
+	case V1CatalogObjectsGetDirectionASC:
+		*s = V1CatalogObjectsGetDirectionASC
+		return nil
+	case V1CatalogObjectsGetDirectionDESC:
+		*s = V1CatalogObjectsGetDirectionDESC
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type V1CatalogObjectsGetOK struct {
-	Data V1CatalogObjectsGetOKData `json:"data"`
+	Data Objects `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1CatalogObjectsGetOK) GetData() V1CatalogObjectsGetOKData {
+func (s *V1CatalogObjectsGetOK) GetData() Objects {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1CatalogObjectsGetOK) SetData(val V1CatalogObjectsGetOKData) {
+func (s *V1CatalogObjectsGetOK) SetData(val Objects) {
 	s.Data = val
 }
 
 func (*V1CatalogObjectsGetOK) v1CatalogObjectsGetRes() {}
 
-type V1CatalogObjectsGetOKData struct {
-	Objects Objects `json:"objects"`
+type V1CatalogObjectsGetSort string
+
+const (
+	V1CatalogObjectsGetSortID V1CatalogObjectsGetSort = "id"
+)
+
+// AllValues returns all V1CatalogObjectsGetSort values.
+func (V1CatalogObjectsGetSort) AllValues() []V1CatalogObjectsGetSort {
+	return []V1CatalogObjectsGetSort{
+		V1CatalogObjectsGetSortID,
+	}
 }
 
-// GetObjects returns the value of Objects.
-func (s *V1CatalogObjectsGetOKData) GetObjects() Objects {
-	return s.Objects
+// MarshalText implements encoding.TextMarshaler.
+func (s V1CatalogObjectsGetSort) MarshalText() ([]byte, error) {
+	switch s {
+	case V1CatalogObjectsGetSortID:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
 }
 
-// SetObjects sets the value of Objects.
-func (s *V1CatalogObjectsGetOKData) SetObjects(val Objects) {
-	s.Objects = val
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1CatalogObjectsGetSort) UnmarshalText(data []byte) error {
+	switch V1CatalogObjectsGetSort(data) {
+	case V1CatalogObjectsGetSortID:
+		*s = V1CatalogObjectsGetSortID
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 type V1CatalogObjectsPostCreated struct {
-	Data V1CatalogObjectsPostCreatedData `json:"data"`
+	Data Object `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1CatalogObjectsPostCreated) GetData() V1CatalogObjectsPostCreatedData {
+func (s *V1CatalogObjectsPostCreated) GetData() Object {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1CatalogObjectsPostCreated) SetData(val V1CatalogObjectsPostCreatedData) {
+func (s *V1CatalogObjectsPostCreated) SetData(val Object) {
 	s.Data = val
 }
 
 func (*V1CatalogObjectsPostCreated) v1CatalogObjectsPostRes() {}
-
-type V1CatalogObjectsPostCreatedData struct {
-	Objects Object `json:"objects"`
-}
-
-// GetObjects returns the value of Objects.
-func (s *V1CatalogObjectsPostCreatedData) GetObjects() Object {
-	return s.Objects
-}
-
-// SetObjects sets the value of Objects.
-func (s *V1CatalogObjectsPostCreatedData) SetObjects(val Object) {
-	s.Objects = val
-}
 
 type V1CatalogObjectsPostReq struct {
 	Name     string `json:"name"`
@@ -2362,34 +2936,20 @@ func (s *V1CatalogObjectsPostReq) SetParentID(val OptInt) {
 }
 
 type V1CatalogRegionsPostCreated struct {
-	Data V1CatalogRegionsPostCreatedData `json:"data"`
+	Data Region `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1CatalogRegionsPostCreated) GetData() V1CatalogRegionsPostCreatedData {
+func (s *V1CatalogRegionsPostCreated) GetData() Region {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1CatalogRegionsPostCreated) SetData(val V1CatalogRegionsPostCreatedData) {
+func (s *V1CatalogRegionsPostCreated) SetData(val Region) {
 	s.Data = val
 }
 
 func (*V1CatalogRegionsPostCreated) v1CatalogRegionsPostRes() {}
-
-type V1CatalogRegionsPostCreatedData struct {
-	Region Region `json:"region"`
-}
-
-// GetRegion returns the value of Region.
-func (s *V1CatalogRegionsPostCreatedData) GetRegion() Region {
-	return s.Region
-}
-
-// SetRegion sets the value of Region.
-func (s *V1CatalogRegionsPostCreatedData) SetRegion(val Region) {
-	s.Region = val
-}
 
 type V1CatalogRegionsPostReq struct {
 	Name string `json:"name"`
@@ -2406,64 +2966,36 @@ func (s *V1CatalogRegionsPostReq) SetName(val string) {
 }
 
 type V1CatalogServicesGetOK struct {
-	Data V1CatalogServicesGetOKData `json:"data"`
+	Data Services `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1CatalogServicesGetOK) GetData() V1CatalogServicesGetOKData {
+func (s *V1CatalogServicesGetOK) GetData() Services {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1CatalogServicesGetOK) SetData(val V1CatalogServicesGetOKData) {
+func (s *V1CatalogServicesGetOK) SetData(val Services) {
 	s.Data = val
 }
 
 func (*V1CatalogServicesGetOK) v1CatalogServicesGetRes() {}
 
-type V1CatalogServicesGetOKData struct {
-	Services Services `json:"services"`
-}
-
-// GetServices returns the value of Services.
-func (s *V1CatalogServicesGetOKData) GetServices() Services {
-	return s.Services
-}
-
-// SetServices sets the value of Services.
-func (s *V1CatalogServicesGetOKData) SetServices(val Services) {
-	s.Services = val
-}
-
 type V1CatalogServicesPostCreated struct {
-	Data V1CatalogServicesPostCreatedData `json:"data"`
+	Data Service `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1CatalogServicesPostCreated) GetData() V1CatalogServicesPostCreatedData {
+func (s *V1CatalogServicesPostCreated) GetData() Service {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1CatalogServicesPostCreated) SetData(val V1CatalogServicesPostCreatedData) {
+func (s *V1CatalogServicesPostCreated) SetData(val Service) {
 	s.Data = val
 }
 
 func (*V1CatalogServicesPostCreated) v1CatalogServicesPostRes() {}
-
-type V1CatalogServicesPostCreatedData struct {
-	Services Service `json:"services"`
-}
-
-// GetServices returns the value of Services.
-func (s *V1CatalogServicesPostCreatedData) GetServices() Service {
-	return s.Services
-}
-
-// SetServices sets the value of Services.
-func (s *V1CatalogServicesPostCreatedData) SetServices(val Service) {
-	s.Services = val
-}
 
 type V1CatalogServicesPostReq struct {
 	Name     string `json:"name"`
@@ -2488,6 +3020,152 @@ func (s *V1CatalogServicesPostReq) SetName(val string) {
 // SetParentID sets the value of ParentID.
 func (s *V1CatalogServicesPostReq) SetParentID(val OptInt) {
 	s.ParentID = val
+}
+
+type V1CommentsVerificationsGetDirection string
+
+const (
+	V1CommentsVerificationsGetDirectionASC  V1CommentsVerificationsGetDirection = "ASC"
+	V1CommentsVerificationsGetDirectionDESC V1CommentsVerificationsGetDirection = "DESC"
+)
+
+// AllValues returns all V1CommentsVerificationsGetDirection values.
+func (V1CommentsVerificationsGetDirection) AllValues() []V1CommentsVerificationsGetDirection {
+	return []V1CommentsVerificationsGetDirection{
+		V1CommentsVerificationsGetDirectionASC,
+		V1CommentsVerificationsGetDirectionDESC,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s V1CommentsVerificationsGetDirection) MarshalText() ([]byte, error) {
+	switch s {
+	case V1CommentsVerificationsGetDirectionASC:
+		return []byte(s), nil
+	case V1CommentsVerificationsGetDirectionDESC:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1CommentsVerificationsGetDirection) UnmarshalText(data []byte) error {
+	switch V1CommentsVerificationsGetDirection(data) {
+	case V1CommentsVerificationsGetDirectionASC:
+		*s = V1CommentsVerificationsGetDirectionASC
+		return nil
+	case V1CommentsVerificationsGetDirectionDESC:
+		*s = V1CommentsVerificationsGetDirectionDESC
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type V1CommentsVerificationsGetOK struct {
+	Data V1CommentsVerificationsGetOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1CommentsVerificationsGetOK) GetData() V1CommentsVerificationsGetOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1CommentsVerificationsGetOK) SetData(val V1CommentsVerificationsGetOKData) {
+	s.Data = val
+}
+
+func (*V1CommentsVerificationsGetOK) v1CommentsVerificationsGetRes() {}
+
+type V1CommentsVerificationsGetOKData struct {
+	Verifications []VerificationRequest `json:"verifications"`
+}
+
+// GetVerifications returns the value of Verifications.
+func (s *V1CommentsVerificationsGetOKData) GetVerifications() []VerificationRequest {
+	return s.Verifications
+}
+
+// SetVerifications sets the value of Verifications.
+func (s *V1CommentsVerificationsGetOKData) SetVerifications(val []VerificationRequest) {
+	s.Verifications = val
+}
+
+type V1CommentsVerificationsGetSort string
+
+const (
+	V1CommentsVerificationsGetSortID V1CommentsVerificationsGetSort = "id"
+)
+
+// AllValues returns all V1CommentsVerificationsGetSort values.
+func (V1CommentsVerificationsGetSort) AllValues() []V1CommentsVerificationsGetSort {
+	return []V1CommentsVerificationsGetSort{
+		V1CommentsVerificationsGetSortID,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s V1CommentsVerificationsGetSort) MarshalText() ([]byte, error) {
+	switch s {
+	case V1CommentsVerificationsGetSortID:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1CommentsVerificationsGetSort) UnmarshalText(data []byte) error {
+	switch V1CommentsVerificationsGetSort(data) {
+	case V1CommentsVerificationsGetSortID:
+		*s = V1CommentsVerificationsGetSortID
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type V1OrganizationsGetDirection string
+
+const (
+	V1OrganizationsGetDirectionASC  V1OrganizationsGetDirection = "ASC"
+	V1OrganizationsGetDirectionDESC V1OrganizationsGetDirection = "DESC"
+)
+
+// AllValues returns all V1OrganizationsGetDirection values.
+func (V1OrganizationsGetDirection) AllValues() []V1OrganizationsGetDirection {
+	return []V1OrganizationsGetDirection{
+		V1OrganizationsGetDirectionASC,
+		V1OrganizationsGetDirectionDESC,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s V1OrganizationsGetDirection) MarshalText() ([]byte, error) {
+	switch s {
+	case V1OrganizationsGetDirectionASC:
+		return []byte(s), nil
+	case V1OrganizationsGetDirectionDESC:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1OrganizationsGetDirection) UnmarshalText(data []byte) error {
+	switch V1OrganizationsGetDirection(data) {
+	case V1OrganizationsGetDirectionASC:
+		*s = V1OrganizationsGetDirectionASC
+		return nil
+	case V1OrganizationsGetDirectionDESC:
+		*s = V1OrganizationsGetDirectionDESC
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 type V1OrganizationsGetOK struct {
@@ -2520,34 +3198,273 @@ func (s *V1OrganizationsGetOKData) SetOrganizations(val []Organization) {
 	s.Organizations = val
 }
 
+type V1OrganizationsGetSort string
+
+const (
+	V1OrganizationsGetSortID V1OrganizationsGetSort = "id"
+)
+
+// AllValues returns all V1OrganizationsGetSort values.
+func (V1OrganizationsGetSort) AllValues() []V1OrganizationsGetSort {
+	return []V1OrganizationsGetSort{
+		V1OrganizationsGetSortID,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s V1OrganizationsGetSort) MarshalText() ([]byte, error) {
+	switch s {
+	case V1OrganizationsGetSortID:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1OrganizationsGetSort) UnmarshalText(data []byte) error {
+	switch V1OrganizationsGetSort(data) {
+	case V1OrganizationsGetSortID:
+		*s = V1OrganizationsGetSortID
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type V1OrganizationsOrganizationIDTendersGetOK struct {
-	Data V1OrganizationsOrganizationIDTendersGetOKData `json:"data"`
+	Data []Tender `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1OrganizationsOrganizationIDTendersGetOK) GetData() V1OrganizationsOrganizationIDTendersGetOKData {
+func (s *V1OrganizationsOrganizationIDTendersGetOK) GetData() []Tender {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1OrganizationsOrganizationIDTendersGetOK) SetData(val V1OrganizationsOrganizationIDTendersGetOKData) {
+func (s *V1OrganizationsOrganizationIDTendersGetOK) SetData(val []Tender) {
 	s.Data = val
 }
 
 func (*V1OrganizationsOrganizationIDTendersGetOK) v1OrganizationsOrganizationIDTendersGetRes() {}
 
-type V1OrganizationsOrganizationIDTendersGetOKData struct {
-	Tenders []Tender `json:"tenders"`
+type V1OrganizationsOrganizationIDVerificationsGetOK struct {
+	Data V1OrganizationsOrganizationIDVerificationsGetOKData `json:"data"`
 }
 
-// GetTenders returns the value of Tenders.
-func (s *V1OrganizationsOrganizationIDTendersGetOKData) GetTenders() []Tender {
-	return s.Tenders
+// GetData returns the value of Data.
+func (s *V1OrganizationsOrganizationIDVerificationsGetOK) GetData() V1OrganizationsOrganizationIDVerificationsGetOKData {
+	return s.Data
 }
 
-// SetTenders sets the value of Tenders.
-func (s *V1OrganizationsOrganizationIDTendersGetOKData) SetTenders(val []Tender) {
-	s.Tenders = val
+// SetData sets the value of Data.
+func (s *V1OrganizationsOrganizationIDVerificationsGetOK) SetData(val V1OrganizationsOrganizationIDVerificationsGetOKData) {
+	s.Data = val
+}
+
+func (*V1OrganizationsOrganizationIDVerificationsGetOK) v1OrganizationsOrganizationIDVerificationsGetRes() {
+}
+
+type V1OrganizationsOrganizationIDVerificationsGetOKData struct {
+	Verifications []VerificationRequest `json:"verifications"`
+}
+
+// GetVerifications returns the value of Verifications.
+func (s *V1OrganizationsOrganizationIDVerificationsGetOKData) GetVerifications() []VerificationRequest {
+	return s.Verifications
+}
+
+// SetVerifications sets the value of Verifications.
+func (s *V1OrganizationsOrganizationIDVerificationsGetOKData) SetVerifications(val []VerificationRequest) {
+	s.Verifications = val
+}
+
+// V1OrganizationsOrganizationIDVerificationsPostOK is response for V1OrganizationsOrganizationIDVerificationsPost operation.
+type V1OrganizationsOrganizationIDVerificationsPostOK struct{}
+
+func (*V1OrganizationsOrganizationIDVerificationsPostOK) v1OrganizationsOrganizationIDVerificationsPostRes() {
+}
+
+type V1OrganizationsOrganizationIDVerificationsPostReq struct {
+	Egrul               string `json:"egrul"`
+	CompanyCard         string `json:"company_card"`
+	AuthorityProof      string `json:"authority_proof"`
+	CompanyConstitution string `json:"company_constitution"`
+}
+
+// GetEgrul returns the value of Egrul.
+func (s *V1OrganizationsOrganizationIDVerificationsPostReq) GetEgrul() string {
+	return s.Egrul
+}
+
+// GetCompanyCard returns the value of CompanyCard.
+func (s *V1OrganizationsOrganizationIDVerificationsPostReq) GetCompanyCard() string {
+	return s.CompanyCard
+}
+
+// GetAuthorityProof returns the value of AuthorityProof.
+func (s *V1OrganizationsOrganizationIDVerificationsPostReq) GetAuthorityProof() string {
+	return s.AuthorityProof
+}
+
+// GetCompanyConstitution returns the value of CompanyConstitution.
+func (s *V1OrganizationsOrganizationIDVerificationsPostReq) GetCompanyConstitution() string {
+	return s.CompanyConstitution
+}
+
+// SetEgrul sets the value of Egrul.
+func (s *V1OrganizationsOrganizationIDVerificationsPostReq) SetEgrul(val string) {
+	s.Egrul = val
+}
+
+// SetCompanyCard sets the value of CompanyCard.
+func (s *V1OrganizationsOrganizationIDVerificationsPostReq) SetCompanyCard(val string) {
+	s.CompanyCard = val
+}
+
+// SetAuthorityProof sets the value of AuthorityProof.
+func (s *V1OrganizationsOrganizationIDVerificationsPostReq) SetAuthorityProof(val string) {
+	s.AuthorityProof = val
+}
+
+// SetCompanyConstitution sets the value of CompanyConstitution.
+func (s *V1OrganizationsOrganizationIDVerificationsPostReq) SetCompanyConstitution(val string) {
+	s.CompanyConstitution = val
+}
+
+type V1OrganizationsVerificationsGetDirection string
+
+const (
+	V1OrganizationsVerificationsGetDirectionASC  V1OrganizationsVerificationsGetDirection = "ASC"
+	V1OrganizationsVerificationsGetDirectionDESC V1OrganizationsVerificationsGetDirection = "DESC"
+)
+
+// AllValues returns all V1OrganizationsVerificationsGetDirection values.
+func (V1OrganizationsVerificationsGetDirection) AllValues() []V1OrganizationsVerificationsGetDirection {
+	return []V1OrganizationsVerificationsGetDirection{
+		V1OrganizationsVerificationsGetDirectionASC,
+		V1OrganizationsVerificationsGetDirectionDESC,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s V1OrganizationsVerificationsGetDirection) MarshalText() ([]byte, error) {
+	switch s {
+	case V1OrganizationsVerificationsGetDirectionASC:
+		return []byte(s), nil
+	case V1OrganizationsVerificationsGetDirectionDESC:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1OrganizationsVerificationsGetDirection) UnmarshalText(data []byte) error {
+	switch V1OrganizationsVerificationsGetDirection(data) {
+	case V1OrganizationsVerificationsGetDirectionASC:
+		*s = V1OrganizationsVerificationsGetDirectionASC
+		return nil
+	case V1OrganizationsVerificationsGetDirectionDESC:
+		*s = V1OrganizationsVerificationsGetDirectionDESC
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type V1OrganizationsVerificationsGetOK struct {
+	Data V1OrganizationsVerificationsGetOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1OrganizationsVerificationsGetOK) GetData() V1OrganizationsVerificationsGetOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1OrganizationsVerificationsGetOK) SetData(val V1OrganizationsVerificationsGetOKData) {
+	s.Data = val
+}
+
+func (*V1OrganizationsVerificationsGetOK) v1OrganizationsVerificationsGetRes() {}
+
+type V1OrganizationsVerificationsGetOKData struct {
+	Verifications []VerificationRequest `json:"verifications"`
+}
+
+// GetVerifications returns the value of Verifications.
+func (s *V1OrganizationsVerificationsGetOKData) GetVerifications() []VerificationRequest {
+	return s.Verifications
+}
+
+// SetVerifications sets the value of Verifications.
+func (s *V1OrganizationsVerificationsGetOKData) SetVerifications(val []VerificationRequest) {
+	s.Verifications = val
+}
+
+type V1OrganizationsVerificationsGetSort string
+
+const (
+	V1OrganizationsVerificationsGetSortID V1OrganizationsVerificationsGetSort = "id"
+)
+
+// AllValues returns all V1OrganizationsVerificationsGetSort values.
+func (V1OrganizationsVerificationsGetSort) AllValues() []V1OrganizationsVerificationsGetSort {
+	return []V1OrganizationsVerificationsGetSort{
+		V1OrganizationsVerificationsGetSortID,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s V1OrganizationsVerificationsGetSort) MarshalText() ([]byte, error) {
+	switch s {
+	case V1OrganizationsVerificationsGetSortID:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1OrganizationsVerificationsGetSort) UnmarshalText(data []byte) error {
+	switch V1OrganizationsVerificationsGetSort(data) {
+	case V1OrganizationsVerificationsGetSortID:
+		*s = V1OrganizationsVerificationsGetSortID
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type V1SuggestCompanyGetOK struct {
+	Data V1SuggestCompanyGetOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1SuggestCompanyGetOK) GetData() V1SuggestCompanyGetOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1SuggestCompanyGetOK) SetData(val V1SuggestCompanyGetOKData) {
+	s.Data = val
+}
+
+func (*V1SuggestCompanyGetOK) v1SuggestCompanyGetRes() {}
+
+type V1SuggestCompanyGetOKData struct {
+	Name string `json:"name"`
+}
+
+// GetName returns the value of Name.
+func (s *V1SuggestCompanyGetOKData) GetName() string {
+	return s.Name
+}
+
+// SetName sets the value of Name.
+func (s *V1SuggestCompanyGetOKData) SetName(val string) {
+	s.Name = val
 }
 
 // V1SurveyPostOK is response for V1SurveyPost operation.
@@ -2602,65 +3519,112 @@ func (s *V1SurveyPostReq) SetQuestion(val string) {
 	s.Question = val
 }
 
+type V1TendersGetDirection string
+
+const (
+	V1TendersGetDirectionASC  V1TendersGetDirection = "ASC"
+	V1TendersGetDirectionDESC V1TendersGetDirection = "DESC"
+)
+
+// AllValues returns all V1TendersGetDirection values.
+func (V1TendersGetDirection) AllValues() []V1TendersGetDirection {
+	return []V1TendersGetDirection{
+		V1TendersGetDirectionASC,
+		V1TendersGetDirectionDESC,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s V1TendersGetDirection) MarshalText() ([]byte, error) {
+	switch s {
+	case V1TendersGetDirectionASC:
+		return []byte(s), nil
+	case V1TendersGetDirectionDESC:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1TendersGetDirection) UnmarshalText(data []byte) error {
+	switch V1TendersGetDirection(data) {
+	case V1TendersGetDirectionASC:
+		*s = V1TendersGetDirectionASC
+		return nil
+	case V1TendersGetDirectionDESC:
+		*s = V1TendersGetDirectionDESC
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 type V1TendersGetOK struct {
-	Data V1TendersGetOKData `json:"data"`
+	Data []Tender `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1TendersGetOK) GetData() V1TendersGetOKData {
+func (s *V1TendersGetOK) GetData() []Tender {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1TendersGetOK) SetData(val V1TendersGetOKData) {
+func (s *V1TendersGetOK) SetData(val []Tender) {
 	s.Data = val
 }
 
 func (*V1TendersGetOK) v1TendersGetRes() {}
 
-type V1TendersGetOKData struct {
-	Tenders []Tender `json:"tenders"`
+type V1TendersGetSort string
+
+const (
+	V1TendersGetSortID V1TendersGetSort = "id"
+)
+
+// AllValues returns all V1TendersGetSort values.
+func (V1TendersGetSort) AllValues() []V1TendersGetSort {
+	return []V1TendersGetSort{
+		V1TendersGetSortID,
+	}
 }
 
-// GetTenders returns the value of Tenders.
-func (s *V1TendersGetOKData) GetTenders() []Tender {
-	return s.Tenders
+// MarshalText implements encoding.TextMarshaler.
+func (s V1TendersGetSort) MarshalText() ([]byte, error) {
+	switch s {
+	case V1TendersGetSortID:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
 }
 
-// SetTenders sets the value of Tenders.
-func (s *V1TendersGetOKData) SetTenders(val []Tender) {
-	s.Tenders = val
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1TendersGetSort) UnmarshalText(data []byte) error {
+	switch V1TendersGetSort(data) {
+	case V1TendersGetSortID:
+		*s = V1TendersGetSortID
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 type V1TendersPostCreated struct {
-	Data V1TendersPostCreatedData `json:"data"`
+	Data Tender `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1TendersPostCreated) GetData() V1TendersPostCreatedData {
+func (s *V1TendersPostCreated) GetData() Tender {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1TendersPostCreated) SetData(val V1TendersPostCreatedData) {
+func (s *V1TendersPostCreated) SetData(val Tender) {
 	s.Data = val
 }
 
 func (*V1TendersPostCreated) v1TendersPostRes() {}
-
-type V1TendersPostCreatedData struct {
-	Tender Tender `json:"tender"`
-}
-
-// GetTender returns the value of Tender.
-func (s *V1TendersPostCreatedData) GetTender() Tender {
-	return s.Tender
-}
-
-// SetTender sets the value of Tender.
-func (s *V1TendersPostCreatedData) SetTender(val Tender) {
-	s.Tender = val
-}
 
 type V1TendersPostReq struct {
 	Name            string    `json:"name"`
@@ -2854,65 +3818,83 @@ func (s *V1TendersPostReq) SetWorkEnd(val time.Time) {
 	s.WorkEnd = val
 }
 
-type V1TendersTenderIDGetOK struct {
-	Data V1TendersTenderIDGetOKData `json:"data"`
+type V1TendersTenderIDCommentsGetOK struct {
+	Data []Comment `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1TendersTenderIDGetOK) GetData() V1TendersTenderIDGetOKData {
+func (s *V1TendersTenderIDCommentsGetOK) GetData() []Comment {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1TendersTenderIDGetOK) SetData(val V1TendersTenderIDGetOKData) {
+func (s *V1TendersTenderIDCommentsGetOK) SetData(val []Comment) {
+	s.Data = val
+}
+
+func (*V1TendersTenderIDCommentsGetOK) v1TendersTenderIDCommentsGetRes() {}
+
+// V1TendersTenderIDCommentsPostOK is response for V1TendersTenderIDCommentsPost operation.
+type V1TendersTenderIDCommentsPostOK struct{}
+
+func (*V1TendersTenderIDCommentsPostOK) v1TendersTenderIDCommentsPostRes() {}
+
+type V1TendersTenderIDCommentsPostReq struct {
+	Content     string   `json:"content"`
+	Attachments []string `json:"attachments"`
+}
+
+// GetContent returns the value of Content.
+func (s *V1TendersTenderIDCommentsPostReq) GetContent() string {
+	return s.Content
+}
+
+// GetAttachments returns the value of Attachments.
+func (s *V1TendersTenderIDCommentsPostReq) GetAttachments() []string {
+	return s.Attachments
+}
+
+// SetContent sets the value of Content.
+func (s *V1TendersTenderIDCommentsPostReq) SetContent(val string) {
+	s.Content = val
+}
+
+// SetAttachments sets the value of Attachments.
+func (s *V1TendersTenderIDCommentsPostReq) SetAttachments(val []string) {
+	s.Attachments = val
+}
+
+type V1TendersTenderIDGetOK struct {
+	Data Tender `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1TendersTenderIDGetOK) GetData() Tender {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1TendersTenderIDGetOK) SetData(val Tender) {
 	s.Data = val
 }
 
 func (*V1TendersTenderIDGetOK) v1TendersTenderIDGetRes() {}
 
-type V1TendersTenderIDGetOKData struct {
-	Tender Tender `json:"tender"`
-}
-
-// GetTender returns the value of Tender.
-func (s *V1TendersTenderIDGetOKData) GetTender() Tender {
-	return s.Tender
-}
-
-// SetTender sets the value of Tender.
-func (s *V1TendersTenderIDGetOKData) SetTender(val Tender) {
-	s.Tender = val
-}
-
 type V1TendersTenderIDPutCreated struct {
-	Data V1TendersTenderIDPutCreatedData `json:"data"`
+	Data Tender `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1TendersTenderIDPutCreated) GetData() V1TendersTenderIDPutCreatedData {
+func (s *V1TendersTenderIDPutCreated) GetData() Tender {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1TendersTenderIDPutCreated) SetData(val V1TendersTenderIDPutCreatedData) {
+func (s *V1TendersTenderIDPutCreated) SetData(val Tender) {
 	s.Data = val
 }
 
 func (*V1TendersTenderIDPutCreated) v1TendersTenderIDPutRes() {}
-
-type V1TendersTenderIDPutCreatedData struct {
-	Tender Tender `json:"tender"`
-}
-
-// GetTender returns the value of Tender.
-func (s *V1TendersTenderIDPutCreatedData) GetTender() Tender {
-	return s.Tender
-}
-
-// SetTender sets the value of Tender.
-func (s *V1TendersTenderIDPutCreatedData) SetTender(val Tender) {
-	s.Tender = val
-}
 
 type V1TendersTenderIDPutReq struct {
 	Name            OptString  `json:"name"`
@@ -3106,34 +4088,615 @@ func (s *V1TendersTenderIDPutReq) SetWorkEnd(val OptDateTime) {
 	s.WorkEnd = val
 }
 
-type V1UsersUserIDGetOK struct {
-	Data V1UsersUserIDGetOKData `json:"data"`
+// V1TendersTenderIDRespondPostOK is response for V1TendersTenderIDRespondPost operation.
+type V1TendersTenderIDRespondPostOK struct{}
+
+func (*V1TendersTenderIDRespondPostOK) v1TendersTenderIDRespondPostRes() {}
+
+type V1TendersTenderIDRespondPostReq struct {
+	Price int  `json:"price"`
+	IsNds bool `json:"is_nds"`
+}
+
+// GetPrice returns the value of Price.
+func (s *V1TendersTenderIDRespondPostReq) GetPrice() int {
+	return s.Price
+}
+
+// GetIsNds returns the value of IsNds.
+func (s *V1TendersTenderIDRespondPostReq) GetIsNds() bool {
+	return s.IsNds
+}
+
+// SetPrice sets the value of Price.
+func (s *V1TendersTenderIDRespondPostReq) SetPrice(val int) {
+	s.Price = val
+}
+
+// SetIsNds sets the value of IsNds.
+func (s *V1TendersTenderIDRespondPostReq) SetIsNds(val bool) {
+	s.IsNds = val
+}
+
+type V1TendersVerificationsGetDirection string
+
+const (
+	V1TendersVerificationsGetDirectionASC  V1TendersVerificationsGetDirection = "ASC"
+	V1TendersVerificationsGetDirectionDESC V1TendersVerificationsGetDirection = "DESC"
+)
+
+// AllValues returns all V1TendersVerificationsGetDirection values.
+func (V1TendersVerificationsGetDirection) AllValues() []V1TendersVerificationsGetDirection {
+	return []V1TendersVerificationsGetDirection{
+		V1TendersVerificationsGetDirectionASC,
+		V1TendersVerificationsGetDirectionDESC,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s V1TendersVerificationsGetDirection) MarshalText() ([]byte, error) {
+	switch s {
+	case V1TendersVerificationsGetDirectionASC:
+		return []byte(s), nil
+	case V1TendersVerificationsGetDirectionDESC:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1TendersVerificationsGetDirection) UnmarshalText(data []byte) error {
+	switch V1TendersVerificationsGetDirection(data) {
+	case V1TendersVerificationsGetDirectionASC:
+		*s = V1TendersVerificationsGetDirectionASC
+		return nil
+	case V1TendersVerificationsGetDirectionDESC:
+		*s = V1TendersVerificationsGetDirectionDESC
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type V1TendersVerificationsGetOK struct {
+	Data []VerificationRequest `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1UsersUserIDGetOK) GetData() V1UsersUserIDGetOKData {
+func (s *V1TendersVerificationsGetOK) GetData() []VerificationRequest {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1UsersUserIDGetOK) SetData(val V1UsersUserIDGetOKData) {
+func (s *V1TendersVerificationsGetOK) SetData(val []VerificationRequest) {
+	s.Data = val
+}
+
+func (*V1TendersVerificationsGetOK) v1TendersVerificationsGetRes() {}
+
+type V1TendersVerificationsGetSort string
+
+const (
+	V1TendersVerificationsGetSortID V1TendersVerificationsGetSort = "id"
+)
+
+// AllValues returns all V1TendersVerificationsGetSort values.
+func (V1TendersVerificationsGetSort) AllValues() []V1TendersVerificationsGetSort {
+	return []V1TendersVerificationsGetSort{
+		V1TendersVerificationsGetSortID,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s V1TendersVerificationsGetSort) MarshalText() ([]byte, error) {
+	switch s {
+	case V1TendersVerificationsGetSortID:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1TendersVerificationsGetSort) UnmarshalText(data []byte) error {
+	switch V1TendersVerificationsGetSort(data) {
+	case V1TendersVerificationsGetSortID:
+		*s = V1TendersVerificationsGetSortID
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// V1UsersConfirmEmailPostOK is response for V1UsersConfirmEmailPost operation.
+type V1UsersConfirmEmailPostOK struct{}
+
+func (*V1UsersConfirmEmailPostOK) v1UsersConfirmEmailPostRes() {}
+
+type V1UsersConfirmEmailPostReq struct {
+	UserID OptInt `json:"user_id"`
+	Code   string `json:"code"`
+}
+
+// GetUserID returns the value of UserID.
+func (s *V1UsersConfirmEmailPostReq) GetUserID() OptInt {
+	return s.UserID
+}
+
+// GetCode returns the value of Code.
+func (s *V1UsersConfirmEmailPostReq) GetCode() string {
+	return s.Code
+}
+
+// SetUserID sets the value of UserID.
+func (s *V1UsersConfirmEmailPostReq) SetUserID(val OptInt) {
+	s.UserID = val
+}
+
+// SetCode sets the value of Code.
+func (s *V1UsersConfirmEmailPostReq) SetCode(val string) {
+	s.Code = val
+}
+
+// V1UsersConfirmPasswordPostOK is response for V1UsersConfirmPasswordPost operation.
+type V1UsersConfirmPasswordPostOK struct{}
+
+func (*V1UsersConfirmPasswordPostOK) v1UsersConfirmPasswordPostRes() {}
+
+type V1UsersConfirmPasswordPostReq struct {
+	UserID   OptInt   `json:"user_id"`
+	Code     string   `json:"code"`
+	Password Password `json:"password"`
+}
+
+// GetUserID returns the value of UserID.
+func (s *V1UsersConfirmPasswordPostReq) GetUserID() OptInt {
+	return s.UserID
+}
+
+// GetCode returns the value of Code.
+func (s *V1UsersConfirmPasswordPostReq) GetCode() string {
+	return s.Code
+}
+
+// GetPassword returns the value of Password.
+func (s *V1UsersConfirmPasswordPostReq) GetPassword() Password {
+	return s.Password
+}
+
+// SetUserID sets the value of UserID.
+func (s *V1UsersConfirmPasswordPostReq) SetUserID(val OptInt) {
+	s.UserID = val
+}
+
+// SetCode sets the value of Code.
+func (s *V1UsersConfirmPasswordPostReq) SetCode(val string) {
+	s.Code = val
+}
+
+// SetPassword sets the value of Password.
+func (s *V1UsersConfirmPasswordPostReq) SetPassword(val Password) {
+	s.Password = val
+}
+
+type V1UsersGetDirection string
+
+const (
+	V1UsersGetDirectionASC  V1UsersGetDirection = "ASC"
+	V1UsersGetDirectionDESC V1UsersGetDirection = "DESC"
+)
+
+// AllValues returns all V1UsersGetDirection values.
+func (V1UsersGetDirection) AllValues() []V1UsersGetDirection {
+	return []V1UsersGetDirection{
+		V1UsersGetDirectionASC,
+		V1UsersGetDirectionDESC,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s V1UsersGetDirection) MarshalText() ([]byte, error) {
+	switch s {
+	case V1UsersGetDirectionASC:
+		return []byte(s), nil
+	case V1UsersGetDirectionDESC:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1UsersGetDirection) UnmarshalText(data []byte) error {
+	switch V1UsersGetDirection(data) {
+	case V1UsersGetDirectionASC:
+		*s = V1UsersGetDirectionASC
+		return nil
+	case V1UsersGetDirectionDESC:
+		*s = V1UsersGetDirectionDESC
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type V1UsersGetOK struct {
+	Data []User `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1UsersGetOK) GetData() []User {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1UsersGetOK) SetData(val []User) {
+	s.Data = val
+}
+
+func (*V1UsersGetOK) v1UsersGetRes() {}
+
+type V1UsersGetSort string
+
+const (
+	V1UsersGetSortID V1UsersGetSort = "id"
+)
+
+// AllValues returns all V1UsersGetSort values.
+func (V1UsersGetSort) AllValues() []V1UsersGetSort {
+	return []V1UsersGetSort{
+		V1UsersGetSortID,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s V1UsersGetSort) MarshalText() ([]byte, error) {
+	switch s {
+	case V1UsersGetSortID:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *V1UsersGetSort) UnmarshalText(data []byte) error {
+	switch V1UsersGetSort(data) {
+	case V1UsersGetSortID:
+		*s = V1UsersGetSortID
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// V1UsersRequestEmailVerificationPostOK is response for V1UsersRequestEmailVerificationPost operation.
+type V1UsersRequestEmailVerificationPostOK struct{}
+
+func (*V1UsersRequestEmailVerificationPostOK) v1UsersRequestEmailVerificationPostRes() {}
+
+type V1UsersRequestEmailVerificationPostReq struct {
+	Email Email `json:"email"`
+}
+
+// GetEmail returns the value of Email.
+func (s *V1UsersRequestEmailVerificationPostReq) GetEmail() Email {
+	return s.Email
+}
+
+// SetEmail sets the value of Email.
+func (s *V1UsersRequestEmailVerificationPostReq) SetEmail(val Email) {
+	s.Email = val
+}
+
+// V1UsersRequestResetPasswordPostOK is response for V1UsersRequestResetPasswordPost operation.
+type V1UsersRequestResetPasswordPostOK struct{}
+
+func (*V1UsersRequestResetPasswordPostOK) v1UsersRequestResetPasswordPostRes() {}
+
+type V1UsersRequestResetPasswordPostReq struct {
+	Email Email `json:"email"`
+}
+
+// GetEmail returns the value of Email.
+func (s *V1UsersRequestResetPasswordPostReq) GetEmail() Email {
+	return s.Email
+}
+
+// SetEmail sets the value of Email.
+func (s *V1UsersRequestResetPasswordPostReq) SetEmail(val Email) {
+	s.Email = val
+}
+
+type V1UsersUserIDGetOK struct {
+	Data User `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1UsersUserIDGetOK) GetData() User {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1UsersUserIDGetOK) SetData(val User) {
 	s.Data = val
 }
 
 func (*V1UsersUserIDGetOK) v1UsersUserIDGetRes() {}
 
-type V1UsersUserIDGetOKData struct {
-	User User `json:"user"`
+// V1VerificationsRequestIDAprovePostOK is response for V1VerificationsRequestIDAprovePost operation.
+type V1VerificationsRequestIDAprovePostOK struct{}
+
+func (*V1VerificationsRequestIDAprovePostOK) v1VerificationsRequestIDAprovePostRes() {}
+
+// V1VerificationsRequestIDDenyPostOK is response for V1VerificationsRequestIDDenyPost operation.
+type V1VerificationsRequestIDDenyPostOK struct{}
+
+func (*V1VerificationsRequestIDDenyPostOK) v1VerificationsRequestIDDenyPostRes() {}
+
+// Ref: #
+type VerificationRequest struct {
+	ID            int                       `json:"id"`
+	Reviewer      OptUser                   `json:"reviewer"`
+	ObjectType    ObjectType                `json:"object_type"`
+	Object        VerificationRequestObject `json:"object"`
+	Content       string                    `json:"content"`
+	Attachments   []string                  `json:"attachments"`
+	Status        VerificationStatus        `json:"status"`
+	ReviewComment OptString                 `json:"review_comment"`
+	CreatedAt     time.Time                 `json:"created_at"`
+	ReviewedAt    OptDateTime               `json:"reviewed_at"`
 }
 
-// GetUser returns the value of User.
-func (s *V1UsersUserIDGetOKData) GetUser() User {
-	return s.User
+// GetID returns the value of ID.
+func (s *VerificationRequest) GetID() int {
+	return s.ID
 }
 
-// SetUser sets the value of User.
-func (s *V1UsersUserIDGetOKData) SetUser(val User) {
-	s.User = val
+// GetReviewer returns the value of Reviewer.
+func (s *VerificationRequest) GetReviewer() OptUser {
+	return s.Reviewer
+}
+
+// GetObjectType returns the value of ObjectType.
+func (s *VerificationRequest) GetObjectType() ObjectType {
+	return s.ObjectType
+}
+
+// GetObject returns the value of Object.
+func (s *VerificationRequest) GetObject() VerificationRequestObject {
+	return s.Object
+}
+
+// GetContent returns the value of Content.
+func (s *VerificationRequest) GetContent() string {
+	return s.Content
+}
+
+// GetAttachments returns the value of Attachments.
+func (s *VerificationRequest) GetAttachments() []string {
+	return s.Attachments
+}
+
+// GetStatus returns the value of Status.
+func (s *VerificationRequest) GetStatus() VerificationStatus {
+	return s.Status
+}
+
+// GetReviewComment returns the value of ReviewComment.
+func (s *VerificationRequest) GetReviewComment() OptString {
+	return s.ReviewComment
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *VerificationRequest) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// GetReviewedAt returns the value of ReviewedAt.
+func (s *VerificationRequest) GetReviewedAt() OptDateTime {
+	return s.ReviewedAt
+}
+
+// SetID sets the value of ID.
+func (s *VerificationRequest) SetID(val int) {
+	s.ID = val
+}
+
+// SetReviewer sets the value of Reviewer.
+func (s *VerificationRequest) SetReviewer(val OptUser) {
+	s.Reviewer = val
+}
+
+// SetObjectType sets the value of ObjectType.
+func (s *VerificationRequest) SetObjectType(val ObjectType) {
+	s.ObjectType = val
+}
+
+// SetObject sets the value of Object.
+func (s *VerificationRequest) SetObject(val VerificationRequestObject) {
+	s.Object = val
+}
+
+// SetContent sets the value of Content.
+func (s *VerificationRequest) SetContent(val string) {
+	s.Content = val
+}
+
+// SetAttachments sets the value of Attachments.
+func (s *VerificationRequest) SetAttachments(val []string) {
+	s.Attachments = val
+}
+
+// SetStatus sets the value of Status.
+func (s *VerificationRequest) SetStatus(val VerificationStatus) {
+	s.Status = val
+}
+
+// SetReviewComment sets the value of ReviewComment.
+func (s *VerificationRequest) SetReviewComment(val OptString) {
+	s.ReviewComment = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *VerificationRequest) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// SetReviewedAt sets the value of ReviewedAt.
+func (s *VerificationRequest) SetReviewedAt(val OptDateTime) {
+	s.ReviewedAt = val
+}
+
+// VerificationRequestObject represents sum type.
+type VerificationRequestObject struct {
+	Type         VerificationRequestObjectType // switch on this field
+	Comment      Comment
+	Tender       Tender
+	Organization Organization
+}
+
+// VerificationRequestObjectType is oneOf type of VerificationRequestObject.
+type VerificationRequestObjectType string
+
+// Possible values for VerificationRequestObjectType.
+const (
+	CommentVerificationRequestObject      VerificationRequestObjectType = "Comment"
+	TenderVerificationRequestObject       VerificationRequestObjectType = "Tender"
+	OrganizationVerificationRequestObject VerificationRequestObjectType = "Organization"
+)
+
+// IsComment reports whether VerificationRequestObject is Comment.
+func (s VerificationRequestObject) IsComment() bool {
+	return s.Type == CommentVerificationRequestObject
+}
+
+// IsTender reports whether VerificationRequestObject is Tender.
+func (s VerificationRequestObject) IsTender() bool { return s.Type == TenderVerificationRequestObject }
+
+// IsOrganization reports whether VerificationRequestObject is Organization.
+func (s VerificationRequestObject) IsOrganization() bool {
+	return s.Type == OrganizationVerificationRequestObject
+}
+
+// SetComment sets VerificationRequestObject to Comment.
+func (s *VerificationRequestObject) SetComment(v Comment) {
+	s.Type = CommentVerificationRequestObject
+	s.Comment = v
+}
+
+// GetComment returns Comment and true boolean if VerificationRequestObject is Comment.
+func (s VerificationRequestObject) GetComment() (v Comment, ok bool) {
+	if !s.IsComment() {
+		return v, false
+	}
+	return s.Comment, true
+}
+
+// NewCommentVerificationRequestObject returns new VerificationRequestObject from Comment.
+func NewCommentVerificationRequestObject(v Comment) VerificationRequestObject {
+	var s VerificationRequestObject
+	s.SetComment(v)
+	return s
+}
+
+// SetTender sets VerificationRequestObject to Tender.
+func (s *VerificationRequestObject) SetTender(v Tender) {
+	s.Type = TenderVerificationRequestObject
+	s.Tender = v
+}
+
+// GetTender returns Tender and true boolean if VerificationRequestObject is Tender.
+func (s VerificationRequestObject) GetTender() (v Tender, ok bool) {
+	if !s.IsTender() {
+		return v, false
+	}
+	return s.Tender, true
+}
+
+// NewTenderVerificationRequestObject returns new VerificationRequestObject from Tender.
+func NewTenderVerificationRequestObject(v Tender) VerificationRequestObject {
+	var s VerificationRequestObject
+	s.SetTender(v)
+	return s
+}
+
+// SetOrganization sets VerificationRequestObject to Organization.
+func (s *VerificationRequestObject) SetOrganization(v Organization) {
+	s.Type = OrganizationVerificationRequestObject
+	s.Organization = v
+}
+
+// GetOrganization returns Organization and true boolean if VerificationRequestObject is Organization.
+func (s VerificationRequestObject) GetOrganization() (v Organization, ok bool) {
+	if !s.IsOrganization() {
+		return v, false
+	}
+	return s.Organization, true
+}
+
+// NewOrganizationVerificationRequestObject returns new VerificationRequestObject from Organization.
+func NewOrganizationVerificationRequestObject(v Organization) VerificationRequestObject {
+	var s VerificationRequestObject
+	s.SetOrganization(v)
+	return s
+}
+
+// Ref: #
+type VerificationStatus string
+
+const (
+	VerificationStatusUnverified VerificationStatus = "unverified"
+	VerificationStatusInReview   VerificationStatus = "in_review"
+	VerificationStatusDeclined   VerificationStatus = "declined"
+	VerificationStatusApproved   VerificationStatus = "approved"
+)
+
+// AllValues returns all VerificationStatus values.
+func (VerificationStatus) AllValues() []VerificationStatus {
+	return []VerificationStatus{
+		VerificationStatusUnverified,
+		VerificationStatusInReview,
+		VerificationStatusDeclined,
+		VerificationStatusApproved,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s VerificationStatus) MarshalText() ([]byte, error) {
+	switch s {
+	case VerificationStatusUnverified:
+		return []byte(s), nil
+	case VerificationStatusInReview:
+		return []byte(s), nil
+	case VerificationStatusDeclined:
+		return []byte(s), nil
+	case VerificationStatusApproved:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *VerificationStatus) UnmarshalText(data []byte) error {
+	switch VerificationStatus(data) {
+	case VerificationStatusUnverified:
+		*s = VerificationStatusUnverified
+		return nil
+	case VerificationStatusInReview:
+		*s = VerificationStatusInReview
+		return nil
+	case VerificationStatusDeclined:
+		*s = VerificationStatusDeclined
+		return nil
+	case VerificationStatusApproved:
+		*s = VerificationStatusApproved
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 // Ref: #

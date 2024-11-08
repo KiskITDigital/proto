@@ -2,6 +2,44 @@ get:
   tags:
     - catalog
   summary: Get a list of all available objects
+  description: Lists all available objects
+  security:
+    - bearerAuth: []
+  parameters:
+    - name: offset
+      in: query
+      description: Сдвиг начала каждой страницы на указанное количество единиц.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    - name: limit
+      in: query
+      description: Максимальное количество объектов, которое может вернуть запрос.
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 100
+        default: 100
+    - name: sort
+      in: query
+      description: Определяет атрибут, по которому сортируются элементы.
+      schema:
+        type: string
+        enum:
+          - id
+        default: id
+    - name: direction
+      in: query
+      description: |-
+        Направление сортировки результатов.
+        Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
+      schema:
+        type: string
+        enum:
+          - ASC
+          - DESC
+        default: ASC
   responses:
     '200':
       content:
@@ -12,18 +50,18 @@ get:
               - data
             properties:
               data:
-                type: object
-                required: 
-                  - objects
-                properties:
-                  objects:
-                    $ref: "../../schemas/catalog/Objects.yaml"
+                $ref: "../../schemas/catalog/Objects.yaml"
     default:
       $ref: "../../responses/Error.yaml"
 post:
   tags:
     - catalog
   summary: Create catalog object
+  description: |-
+    Creates catalog object
+
+    **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+    'Admin' or higher.
   security:
     - bearerAuth: []
   requestBody:
@@ -49,11 +87,6 @@ post:
               - data
             properties:
               data:
-                type: object
-                required: 
-                  - objects
-                properties:
-                  objects:
-                    $ref: "../../schemas/catalog/Object.yaml"
+                $ref: "../../schemas/catalog/Object.yaml"
     default:
       $ref: "../../responses/Error.yaml"

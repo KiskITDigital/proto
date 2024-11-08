@@ -1,9 +1,9 @@
 type: object
 required:
   - id
+  - organization
   - name
   - city
-  - region
   - price
   - is_contract_price
   - is_nds_price
@@ -19,17 +19,19 @@ required:
   - reception_end
   - work_start
   - work_end
+  - created_at
+  - updated_at
 properties:
   id:
     type: integer
+  organization:
+    $ref: "Organization.yaml"
+  winner_organization:
+    $ref: "Organization.yaml"
   name:
     type: string
   city:
     $ref: "City.yaml"
-  organization:
-    $ref: "Organization.yaml"
-  region:
-    type: string
   price:
     type: number
   is_contract_price:
@@ -67,5 +69,11 @@ properties:
     type: string
     format: date-time
   work_end:
+    type: string
+    format: date-time
+  created_at:
+    type: string
+    format: date-time
+  updated_at:
     type: string
     format: date-time

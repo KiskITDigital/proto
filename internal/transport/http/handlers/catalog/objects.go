@@ -10,16 +10,14 @@ import (
 	catalogService "gitlab.ubrato.ru/ubrato/core/internal/service/catalog"
 )
 
-func (h *Handler) V1CatalogObjectsGet(ctx context.Context) (api.V1CatalogObjectsGetRes, error) {
+func (h *Handler) V1CatalogObjectsGet(ctx context.Context, params api.V1CatalogObjectsGetParams) (api.V1CatalogObjectsGetRes, error) {
 	objects, err := h.svc.GetObjects(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("get objects catalog: %w", err)
 	}
 
 	return &api.V1CatalogObjectsGetOK{
-		Data: api.V1CatalogObjectsGetOKData{
-			Objects: convert.Slice[models.CatalogObjects, api.Objects](objects, models.ConvertModelCatalogObjectToApi),
-		},
+		Data: convert.Slice[models.CatalogObjects, api.Objects](objects, models.ConvertModelCatalogObjectToApi),
 	}, nil
 }
 
@@ -33,8 +31,6 @@ func (h *Handler) V1CatalogObjectsPost(ctx context.Context, req *api.V1CatalogOb
 	}
 
 	return &api.V1CatalogObjectsPostCreated{
-		Data: api.V1CatalogObjectsPostCreatedData{
-			Objects: models.ConvertModelCatalogObjectToApi(object),
-		},
+		Data: models.ConvertModelCatalogObjectToApi(object),
 	}, nil
 }
