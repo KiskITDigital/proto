@@ -25,7 +25,7 @@ func (s *TenderStore) CreateResponse(ctx context.Context, qe store.QueryExecutor
 		).
 		PlaceholderFormat(squirrel.Dollar)
 
-	err := builder.RunWith(qe).QueryRowContext(ctx)
+	_, err := builder.RunWith(qe).ExecContext(ctx)
 	if err != nil {
 		return fmt.Errorf("query row: %w", err)
 	}

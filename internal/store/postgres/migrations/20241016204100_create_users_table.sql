@@ -1,7 +1,7 @@
 -- +goose Up
 CREATE TABLE IF NOT EXISTS users (
     id              BIGSERIAL PRIMARY KEY,
-    organization_id BIGINT NOT NULL REFERENCES organizations(id),
+    organization_id BIGINT NOT NULL REFERENCES organizations(id) DEFERRABLE INITIALLY DEFERRED,
     email           TEXT NOT NULL UNIQUE,
     phone           TEXT NOT NULL,
     password_hash   TEXT NOT NULL,

@@ -41,6 +41,7 @@ type UserStore interface {
 
 type OrganizationStore interface {
 	Create(ctx context.Context, qe store.QueryExecutor, organization store.OrganizationCreateParams) (models.Organization, error)
+	UpdateOwner(ctx context.Context, qe store.QueryExecutor, organizationID, ownerID int) error
 }
 
 type SessionStore interface {

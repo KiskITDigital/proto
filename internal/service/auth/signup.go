@@ -83,7 +83,14 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 			return fmt.Errorf("create user: %w", err)
 		}
 
+		err = s.organizationStore.UpdateOwner(ctx, qe, organization.ID, user.ID)
+		if err != nil {
+			return fmt.Errorf("update owner: %w", err)
+		}
+
+		organization.OwnerUserID = user.ID
 		user.Organization = organization
+
 		result.User = user
 
 		session, err := s.sessionStore.Create(ctx, qe, store.SessionCreateParams{

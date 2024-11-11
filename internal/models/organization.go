@@ -38,6 +38,7 @@ type Organization struct {
 	VerificationObject
 
 	ID                 int
+	OwnerUserID        int
 	BrandName          string
 	FullName           string
 	ShortName          string
@@ -100,4 +101,34 @@ func ConvertContactInfoModelToApi(info ContactInfo) api.ContactInfo {
 		Contact: info.Info,
 		Info:    info.Info,
 	}
+}
+
+type CustomerInfo struct{}
+
+func (a CustomerInfo) Value() (driver.Value, error) {
+	return json.Marshal(a)
+}
+
+func (a *CustomerInfo) Scan(value interface{}) error {
+	b, ok := value.([]byte)
+	if !ok {
+		return errors.New("type assertion to []byte failed")
+	}
+
+	return json.Unmarshal(b, &a)
+}
+
+type ContractorInfo struct{}
+
+func (a ContractorInfo) Value() (driver.Value, error) {
+	return json.Marshal(a)
+}
+
+func (a *ContractorInfo) Scan(value interface{}) error {
+	b, ok := value.([]byte)
+	if !ok {
+		return errors.New("type assertion to []byte failed")
+	}
+
+	return json.Unmarshal(b, &a)
 }

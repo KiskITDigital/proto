@@ -1,6 +1,6 @@
 package store
 
-type OrganizationGetParams struct {}
+type OrganizationGetParams struct{}
 
 type OrganizationCreateParams struct {
 	BrandName    string
