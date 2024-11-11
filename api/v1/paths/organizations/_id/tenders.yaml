@@ -2,7 +2,7 @@ get:
   tags:
     - organizations
   summary: Get all of organization tenders
-  description: if user is in organization it also return all drafts
+  description: if user is in organization it also returns all drafts
   security:
   - bearerAuth: []
   parameters:

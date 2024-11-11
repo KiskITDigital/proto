@@ -5,15 +5,16 @@ CREATE TABLE IF NOT EXISTS users (
     email           TEXT NOT NULL UNIQUE,
     phone           TEXT NOT NULL,
     password_hash   TEXT NOT NULL,
-    totp_salt       TEXT NOT NULL,
     first_name      TEXT NOT NULL,
     last_name       TEXT NOT NULL,
     middle_name     TEXT NOT NULL,
-    avatar_url      TEXT NULL,
-    email_verified  BOOLEAN DEFAULT FALSE,
-    role            SMALLINT DEFAULT 1,
-    created_at      TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+    avatar_url      TEXT,
+    email_verified  BOOLEAN NOT NULL DEFAULT FALSE,
+    totp_salt       TEXT NOT NULL,
+    role            SMALLINT NOT NULL DEFAULT 1,
+    is_banned       BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- +goose Down

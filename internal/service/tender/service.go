@@ -29,6 +29,7 @@ type TenderStore interface {
 	Update(ctx context.Context, qe store.QueryExecutor, params store.TenderUpdateParams) (models.Tender, error)
 	DeleteTenderObjects(ctx context.Context, qe store.QueryExecutor, params store.TenderObjectsDeleteParams) error
 	DeleteTenderServices(ctx context.Context, qe store.QueryExecutor, params store.TenderServicesDeleteParams) error
+	CreateResponse(ctx context.Context, qe store.QueryExecutor, params store.TenderCreateResponseParams) error
 }
 
 func New(

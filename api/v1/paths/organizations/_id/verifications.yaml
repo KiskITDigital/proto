@@ -72,13 +72,8 @@ get:
               - data
             properties:
               data:
-                type: object
-                required: 
-                  - verifications
-                properties:
-                  verifications:
-                    type: array
-                    items:
-                      $ref: "../../../schemas/VerificationRequest.yaml"
+                type: array
+                items:
+                  $ref: "../../../schemas/VerificationRequest.yaml"
     default:
       $ref: "../../../responses/Error.yaml"

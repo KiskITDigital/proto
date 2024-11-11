@@ -35,7 +35,7 @@ type Handler interface {
 	// V1CatalogCitiesPost implements POST /v1/catalog/cities operation.
 	//
 	// Adds city to catalog
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/cities
@@ -49,7 +49,7 @@ type Handler interface {
 	// V1CatalogObjectsPost implements POST /v1/catalog/objects operation.
 	//
 	// Creates catalog object
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/objects
@@ -57,7 +57,7 @@ type Handler interface {
 	// V1CatalogRegionsPost implements POST /v1/catalog/regions operation.
 	//
 	// Adds region to catalog
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/regions
@@ -71,7 +71,7 @@ type Handler interface {
 	// V1CatalogServicesPost implements POST /v1/catalog/services operation.
 	//
 	// Creates catalog service
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/services
@@ -89,7 +89,7 @@ type Handler interface {
 	// List all organizations
 	// Для получения всех организаций (включая
 	// неверифицированные)
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
 	// GET /v1/organizations
@@ -137,7 +137,7 @@ type Handler interface {
 	// Returns all tenders
 	// Для получения всех тендеров (включая
 	// неверифицированные)
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
 	// GET /v1/tenders
@@ -164,7 +164,7 @@ type Handler interface {
 	//
 	// Returns tender by id
 	// Для получения неверифицированного тендера
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
 	// GET /v1/tenders/{tenderID}
@@ -224,7 +224,7 @@ type Handler interface {
 	// V1UsersUserIDGet implements GET /v1/users/{userID} operation.
 	//
 	// Returns user by id
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
 	// GET /v1/users/{userID}

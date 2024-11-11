@@ -68,3 +68,10 @@ type TenderServicesDeleteParams struct {
 	TenderID    int
 	ServicesIDs []int
 }
+
+type TenderCreateResponseParams struct {
+	TenderID       int
+	OrganizationID int
+	Price          int
+	IsNds          bool
+}

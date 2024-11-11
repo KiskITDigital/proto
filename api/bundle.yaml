@@ -191,7 +191,7 @@ paths:
         Returns all tenders
 
         Для получения всех тендеров (включая неверифицированные)
-        **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
         'Employee' or higher.
       security:
         - bearerAuth: []
@@ -420,7 +420,7 @@ paths:
         Returns tender by id
 
         Для получения неверифицированного тендера
-        **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
         'Employee' or higher.
       security:
         - bearerAuth: []
@@ -808,7 +808,7 @@ paths:
       description: |-
         Returns user by id
 
-        **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
         'Employee' or higher.
       security:
         - bearerAuth: []
@@ -877,7 +877,7 @@ paths:
         List all organizations
 
         Для получения всех организаций (включая неверифицированные)
-        **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
         'Employee' or higher.
       parameters:
         - name: verified
@@ -1179,7 +1179,7 @@ paths:
       description: |-
         Creates catalog service
 
-        **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
         'Admin' or higher.
       security:
         - bearerAuth: []
@@ -1272,7 +1272,7 @@ paths:
       description: |-
         Creates catalog object
 
-        **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
         'Admin' or higher.
       security:
         - bearerAuth: []
@@ -1310,7 +1310,7 @@ paths:
       description: |-
         Adds city to catalog
 
-        **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
         'Admin' or higher.
       security:
         - bearerAuth: []
@@ -1355,7 +1355,7 @@ paths:
       description: |-
         Adds region to catalog
 
-        **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
         'Admin' or higher.
       security:
         - bearerAuth: []

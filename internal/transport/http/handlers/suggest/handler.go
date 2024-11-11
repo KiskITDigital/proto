@@ -1,6 +1,9 @@
 package suggest
 
-import "log/slog"
+import (
+	"context"
+	"log/slog"
+)
 
 type Handler struct {
 	logger *slog.Logger
@@ -8,6 +11,7 @@ type Handler struct {
 }
 
 type Service interface {
+	Company(ctx context.Context, INN string) (string, error)
 }
 
 func New(logger *slog.Logger, svc Service) *Handler {

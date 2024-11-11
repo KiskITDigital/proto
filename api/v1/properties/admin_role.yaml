@@ -1,8 +1,0 @@
-type: integer
-enum:
-  - 1
-description: |
-  0: Invalid
-  1: Employee
-  2: Admin
-  3: SuperAdmin

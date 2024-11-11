@@ -1,9 +1,8 @@
 post:
   tags:
     - tenders
-  summary: Send comment for tender
-  description: |-
-    Leaves comment under tender
+  summary: Respond to a tender
+  description: Responds to a tender
   security:
     - bearerAuth: []
   parameters:

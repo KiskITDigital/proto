@@ -50,7 +50,7 @@ type Invoker interface {
 	// V1CatalogCitiesPost invokes POST /v1/catalog/cities operation.
 	//
 	// Adds city to catalog
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/cities
@@ -64,7 +64,7 @@ type Invoker interface {
 	// V1CatalogObjectsPost invokes POST /v1/catalog/objects operation.
 	//
 	// Creates catalog object
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/objects
@@ -72,7 +72,7 @@ type Invoker interface {
 	// V1CatalogRegionsPost invokes POST /v1/catalog/regions operation.
 	//
 	// Adds region to catalog
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/regions
@@ -86,7 +86,7 @@ type Invoker interface {
 	// V1CatalogServicesPost invokes POST /v1/catalog/services operation.
 	//
 	// Creates catalog service
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/services
@@ -104,7 +104,7 @@ type Invoker interface {
 	// List all organizations
 	// Для получения всех организаций (включая
 	// неверифицированные)
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
 	// GET /v1/organizations
@@ -152,7 +152,7 @@ type Invoker interface {
 	// Returns all tenders
 	// Для получения всех тендеров (включая
 	// неверифицированные)
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
 	// GET /v1/tenders
@@ -179,7 +179,7 @@ type Invoker interface {
 	//
 	// Returns tender by id
 	// Для получения неверифицированного тендера
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
 	// GET /v1/tenders/{tenderID}
@@ -239,7 +239,7 @@ type Invoker interface {
 	// V1UsersUserIDGet invokes GET /v1/users/{userID} operation.
 	//
 	// Returns user by id
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
 	// GET /v1/users/{userID}
@@ -687,7 +687,7 @@ func (c *Client) sendV1AuthUserGet(ctx context.Context) (res V1AuthUserGetRes, e
 // V1CatalogCitiesPost invokes POST /v1/catalog/cities operation.
 //
 // Adds city to catalog
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Admin' or higher.
 //
 // POST /v1/catalog/cities
@@ -972,7 +972,7 @@ func (c *Client) sendV1CatalogObjectsGet(ctx context.Context, params V1CatalogOb
 // V1CatalogObjectsPost invokes POST /v1/catalog/objects operation.
 //
 // Creates catalog object
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Admin' or higher.
 //
 // POST /v1/catalog/objects
@@ -1081,7 +1081,7 @@ func (c *Client) sendV1CatalogObjectsPost(ctx context.Context, request *V1Catalo
 // V1CatalogRegionsPost invokes POST /v1/catalog/regions operation.
 //
 // Adds region to catalog
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Admin' or higher.
 //
 // POST /v1/catalog/regions
@@ -1294,7 +1294,7 @@ func (c *Client) sendV1CatalogServicesGet(ctx context.Context) (res V1CatalogSer
 // V1CatalogServicesPost invokes POST /v1/catalog/services operation.
 //
 // Creates catalog service
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Admin' or higher.
 //
 // POST /v1/catalog/services
@@ -1609,7 +1609,7 @@ func (c *Client) sendV1CommentsVerificationsGet(ctx context.Context, params V1Co
 // List all organizations
 // Для получения всех организаций (включая
 // неверифицированные)
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
 // GET /v1/organizations
@@ -2549,7 +2549,7 @@ func (c *Client) sendV1SurveyPost(ctx context.Context, request *V1SurveyPostReq)
 // Returns all tenders
 // Для получения всех тендеров (включая
 // неверифицированные)
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
 // GET /v1/tenders
@@ -3068,7 +3068,7 @@ func (c *Client) sendV1TendersTenderIDCommentsPost(ctx context.Context, request 
 //
 // Returns tender by id
 // Для получения неверифицированного тендера
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
 // GET /v1/tenders/{tenderID}
@@ -4147,7 +4147,7 @@ func (c *Client) sendV1UsersRequestResetPasswordPost(ctx context.Context, reques
 // V1UsersUserIDGet invokes GET /v1/users/{userID} operation.
 //
 // Returns user by id
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
 // GET /v1/users/{userID}

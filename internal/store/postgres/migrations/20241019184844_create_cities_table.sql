@@ -1,13 +1,9 @@
 -- +goose Up
--- +goose StatementBegin
-CREATE TABLE cities (
+CREATE TABLE IF NOT EXISTS cities (
     id          BIGSERIAL PRIMARY KEY,
-    region_id   BIGINT NOT NULL REFERENCES regions(id),
-    name        TEXT
+    region_id   BIGINT REFERENCES regions(id),
+    name        TEXT NOT NULL
 );
--- +goose StatementEnd
 
 -- +goose Down
--- +goose StatementBegin
 DROP TABLE IF EXISTS cities;
--- +goose StatementEnd

@@ -51,3 +51,10 @@ type TenderUpdateParams struct {
 	WorkStart       models.Optional[time.Time]
 	WorkEnd         models.Optional[time.Time]
 }
+
+type TenderRespondParams struct {
+	TenderID       int
+	OrganizationID int
+	Price          int
+	IsNds          bool
+}

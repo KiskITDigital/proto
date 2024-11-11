@@ -1,7 +1,7 @@
 post:
   tags:
     - survey
-  summary: Response to survey
+  summary: Respond to a survey
   security:
   - {}
   - bearerAuth: []
