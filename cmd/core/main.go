@@ -14,6 +14,7 @@ import (
 	authService "gitlab.ubrato.ru/ubrato/core/internal/service/auth"
 	catalogService "gitlab.ubrato.ru/ubrato/core/internal/service/catalog"
 	organizationService "gitlab.ubrato.ru/ubrato/core/internal/service/organization"
+	suggestService "gitlab.ubrato.ru/ubrato/core/internal/service/suggest"
 	surveyService "gitlab.ubrato.ru/ubrato/core/internal/service/survey"
 	tenderService "gitlab.ubrato.ru/ubrato/core/internal/service/tender"
 	userService "gitlab.ubrato.ru/ubrato/core/internal/service/user"
@@ -123,6 +124,10 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		organizationStore,
 	)
 
+	suggestService := suggestService.New(
+		dadataGateway,
+	)
+
 	router := http.NewRouter(http.RouterParams{
 		Error:        errorHandler.New(logger),
 		Auth:         authHandler.New(logger, authService),
@@ -132,7 +137,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		Survey:       surveyHandler.New(logger, surveyService),
 		Organization: organizationHandler.New(logger, organizationService),
 		Comments:     commentHandler.New(logger, nil),
-		Suggest:      suggestHandler.New(logger, nil),
+		Suggest:      suggestHandler.New(logger, suggestService),
 		Verification: verificationHandler.New(logger, nil),
 	})
 
