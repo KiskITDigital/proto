@@ -15,6 +15,7 @@ required:
   - attachments
   - services
   - objects
+  - status
   - reception_start
   - reception_end
   - work_start
@@ -57,6 +58,10 @@ properties:
     $ref: "catalog/Services.yaml"
   objects:
     $ref: "catalog/Objects.yaml"
+  status:
+    type: string
+  verification_status:
+    $ref: "../properties/verification_status.yaml"
   reception_start:
     type: string
     format: date-time

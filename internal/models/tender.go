@@ -23,8 +23,8 @@ type Tender struct {
 	Wishes             string
 	Specification      string
 	Attachments        []string
-	Services           []TenderService
-	Objects            []TenderObject
+	Services           []Service
+	Objects            []Object
 	VerificationStatus VerificationStatus
 	Status             int
 	ReceptionStart     time.Time
@@ -71,18 +71,16 @@ func ConvertRegionModelToApi(region Region) api.Region {
 	}
 }
 
-type TenderObject struct {
+type Object struct {
 	ID       int
 	ParentID int
 	Name     string
-	TenderID int
 }
 
-type TenderService struct {
+type Service struct {
 	ID       int
 	ParentID int
 	Name     string
-	TenderID int
 }
 
 func ConvertTenderModelToApi(tender Tender) api.Tender {
@@ -102,20 +100,24 @@ func ConvertTenderModelToApi(tender Tender) api.Tender {
 		Attachments: convert.Slice[[]string, []api.URL](
 			tender.Attachments, func(u string) api.URL { return api.URL(u) },
 		),
-		Services: convert.Slice[[]TenderService, api.Services](
-			tender.Services, ConvertTenderServiceModelToApi,
+		Services: convert.Slice[[]Service, api.Services](
+			tender.Services, ConvertServiceModelToApi,
 		),
-		Objects: convert.Slice[[]TenderObject, api.Objects](
-			tender.Objects, ConvertTenderObjectModelToApi,
+		Objects: convert.Slice[[]Object, api.Objects](
+			tender.Objects, ConvertObjectModelToApi,
 		),
-		ReceptionStart: tender.ReceptionStart,
-		ReceptionEnd:   tender.ReceptionEnd,
-		WorkStart:      tender.WorkStart,
-		WorkEnd:        tender.WorkEnd,
+		Status:             "",
+		VerificationStatus: api.OptVerificationStatus{Value: tender.VerificationStatus.ToAPI(), Set: tender.VerificationStatus != 0},
+		ReceptionStart:     tender.ReceptionStart,
+		ReceptionEnd:       tender.ReceptionEnd,
+		WorkStart:          tender.WorkStart,
+		WorkEnd:            tender.WorkEnd,
+		CreatedAt:          tender.CreatedAt,
+		UpdatedAt:          tender.UpdatedAt,
 	}
 }
 
-func ConvertTenderServiceModelToApi(service TenderService) api.Service {
+func ConvertServiceModelToApi(service Service) api.Service {
 	return api.Service{
 		ID:       service.ID,
 		ParentID: api.OptInt{Value: service.ParentID, Set: service.ParentID != 0},
@@ -123,7 +125,7 @@ func ConvertTenderServiceModelToApi(service TenderService) api.Service {
 	}
 }
 
-func ConvertTenderObjectModelToApi(object TenderObject) api.Object {
+func ConvertObjectModelToApi(object Object) api.Object {
 	return api.Object{
 		ID:       object.ID,
 		ParentID: api.OptInt{Value: object.ParentID, Set: object.ParentID != 0},

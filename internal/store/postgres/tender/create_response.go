@@ -10,12 +10,12 @@ import (
 
 func (s *TenderStore) CreateResponse(ctx context.Context, qe store.QueryExecutor, params store.TenderCreateResponseParams) error {
 	builder := squirrel.
-		Insert("tenders_responses").
+		Insert("tender_responses").
 		Columns(
 			"tender_id",
 			"organization_id",
 			"price",
-			"is_nds",
+			"is_nds_price",
 		).
 		Values(
 			params.TenderID,

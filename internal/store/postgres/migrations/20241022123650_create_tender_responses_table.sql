@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS tender_responses (
     organization_id BIGINT      NOT NULL REFERENCES organizations(id),
     price           INT         NOT NULL,
     is_nds_price    BOOLEAN     NOT NULL,
-    created_at      TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (tender_id, organization_id)
 );
 
 -- +goose Down

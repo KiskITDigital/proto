@@ -96,7 +96,7 @@ func (UnimplementedHandler) V1CatalogRegionsPost(ctx context.Context, req *V1Cat
 // Lists all available services.
 //
 // GET /v1/catalog/services
-func (UnimplementedHandler) V1CatalogServicesGet(ctx context.Context) (r V1CatalogServicesGetRes, _ error) {
+func (UnimplementedHandler) V1CatalogServicesGet(ctx context.Context, params V1CatalogServicesGetParams) (r V1CatalogServicesGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -137,7 +137,7 @@ func (UnimplementedHandler) V1OrganizationsGet(ctx context.Context, params V1Org
 
 // V1OrganizationsOrganizationIDTendersGet implements GET /v1/organizations/{organizationID}/tenders operation.
 //
-// If user is in organization it also return all drafts.
+// If user is in organization it also returns all drafts.
 //
 // GET /v1/organizations/{organizationID}/tenders
 func (UnimplementedHandler) V1OrganizationsOrganizationIDTendersGet(ctx context.Context, params V1OrganizationsOrganizationIDTendersGetParams) (r V1OrganizationsOrganizationIDTendersGetRes, _ error) {
@@ -184,7 +184,7 @@ func (UnimplementedHandler) V1SuggestCompanyGet(ctx context.Context, params V1Su
 
 // V1SurveyPost implements POST /v1/survey operation.
 //
-// Response to survey.
+// Respond to a survey.
 //
 // POST /v1/survey
 func (UnimplementedHandler) V1SurveyPost(ctx context.Context, req *V1SurveyPostReq) (r V1SurveyPostRes, _ error) {
@@ -254,7 +254,7 @@ func (UnimplementedHandler) V1TendersTenderIDPut(ctx context.Context, req *V1Ten
 
 // V1TendersTenderIDRespondPost implements POST /v1/tenders/{tenderID}/respond operation.
 //
-// Leaves comment under tender.
+// Responds to a tender.
 //
 // POST /v1/tenders/{tenderID}/respond
 func (UnimplementedHandler) V1TendersTenderIDRespondPost(ctx context.Context, req *V1TendersTenderIDRespondPostReq, params V1TendersTenderIDRespondPostParams) (r V1TendersTenderIDRespondPostRes, _ error) {

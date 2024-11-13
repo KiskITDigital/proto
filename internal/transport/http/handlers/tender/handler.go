@@ -17,7 +17,7 @@ type Service interface {
 	Create(ctx context.Context, params service.TenderCreateParams) (models.Tender, error)
 	Update(ctx context.Context, params service.TenderUpdateParams) (models.Tender, error)
 	GetByID(ctx context.Context, tenderID int) (models.Tender, error)
-	Get(ctx context.Context, params service.TenderGetParams) ([]models.Tender, error)
+	List(ctx context.Context, params service.TenderListParams) ([]models.Tender, error)
 	Respond(ctx context.Context, params service.TenderRespondParams) error
 }
 

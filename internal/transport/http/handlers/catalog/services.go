@@ -10,7 +10,7 @@ import (
 	catalogService "gitlab.ubrato.ru/ubrato/core/internal/service/catalog"
 )
 
-func (h *Handler) V1CatalogServicesGet(ctx context.Context) (api.V1CatalogServicesGetRes, error) {
+func (h *Handler) V1CatalogServicesGet(ctx context.Context, params api.V1CatalogServicesGetParams) (api.V1CatalogServicesGetRes, error) {
 	services, err := h.svc.GetServices(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("get objects catalog: %w", err)

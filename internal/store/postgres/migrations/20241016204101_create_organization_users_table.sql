@@ -8,3 +8,4 @@ CREATE TABLE IF NOT EXISTS organization_users (
 );
 
 -- +goose Down
+DROP TABLE IF EXISTS organization_users;

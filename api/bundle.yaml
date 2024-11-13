@@ -518,7 +518,7 @@ paths:
                   type: string
                   format: date-time
       responses:
-        '201':
+        '200':
           description: Success
           content:
             application/json:
@@ -603,8 +603,8 @@ paths:
     post:
       tags:
         - tenders
-      summary: Send comment for tender
-      description: Leaves comment under tender
+      summary: Respond to a tender
+      description: Responds to a tender
       security:
         - bearerAuth: []
       parameters:
@@ -840,7 +840,7 @@ paths:
       tags:
         - organizations
       summary: Get all of organization tenders
-      description: if user is in organization it also return all drafts
+      description: if user is in organization it also returns all drafts
       security:
         - bearerAuth: []
       parameters:
@@ -1006,14 +1006,9 @@ paths:
                   - data
                 properties:
                   data:
-                    type: object
-                    required:
-                      - verifications
-                    properties:
-                      verifications:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/VerificationRequest'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VerificationRequest'
         default:
           $ref: '#/components/responses/Error'
   /v1/organizations/{organizationID}/verifications:
@@ -1089,14 +1084,9 @@ paths:
                   - data
                 properties:
                   data:
-                    type: object
-                    required:
-                      - verifications
-                    properties:
-                      verifications:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/VerificationRequest'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VerificationRequest'
         default:
           $ref: '#/components/responses/Error'
   /v1/verifications/{requestID}/aprove:
@@ -1159,6 +1149,41 @@ paths:
       description: Lists all available services
       security:
         - bearerAuth: []
+      parameters:
+        - name: offset
+          in: query
+          description: Сдвиг начала каждой страницы на указанное количество единиц.
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: Максимальное количество объектов, которое может вернуть запрос.
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+            default: 100
+        - name: sort
+          in: query
+          description: Определяет атрибут, по которому сортируются элементы.
+          schema:
+            type: string
+            enum:
+              - id
+            default: id
+        - name: direction
+          in: query
+          description: |-
+            Направление сортировки результатов.
+            Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+            default: ASC
       responses:
         '200':
           content:
@@ -1449,21 +1474,16 @@ paths:
                   - data
                 properties:
                   data:
-                    type: object
-                    required:
-                      - verifications
-                    properties:
-                      verifications:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/VerificationRequest'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VerificationRequest'
         default:
           $ref: '#/components/responses/Error'
   /v1/survey:
     post:
       tags:
         - survey
-      summary: Response to survey
+      summary: Respond to a survey
       security:
         - {}
         - bearerAuth: []
@@ -1838,6 +1858,7 @@ components:
         - attachments
         - services
         - objects
+        - status
         - reception_start
         - reception_end
         - work_start
@@ -1880,6 +1901,10 @@ components:
           $ref: '#/components/schemas/Services'
         objects:
           $ref: '#/components/schemas/Objects'
+        status:
+          type: string
+        verification_status:
+          $ref: '#/components/schemas/verification_status'
         reception_start:
           type: string
           format: date-time

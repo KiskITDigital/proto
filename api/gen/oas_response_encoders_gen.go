@@ -1088,10 +1088,10 @@ func encodeV1TendersTenderIDGetResponse(response V1TendersTenderIDGetRes, w http
 
 func encodeV1TendersTenderIDPutResponse(response V1TendersTenderIDPutRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *V1TendersTenderIDPutCreated:
+	case *V1TendersTenderIDPutOK:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(201)
-		span.SetStatus(codes.Ok, http.StatusText(201))
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
 
 		e := new(jx.Encoder)
 		response.Encode(e)

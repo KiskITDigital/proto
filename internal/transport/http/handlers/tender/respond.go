@@ -20,5 +20,5 @@ func (h *Handler) V1TendersTenderIDRespondPost(ctx context.Context, req *api.V1T
 		return nil, fmt.Errorf("respond: %w", err)
 	}
 
-	return nil, nil
+	return &api.V1TendersTenderIDRespondPostOK{}, nil
 }

@@ -1513,7 +1513,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						switch method {
 						case "POST":
 							r.name = "V1SurveyPost"
-							r.summary = "Response to survey"
+							r.summary = "Respond to a survey"
 							r.operationID = ""
 							r.pathPattern = "/v1/survey"
 							r.args = args
@@ -1687,7 +1687,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								switch method {
 								case "POST":
 									r.name = "V1TendersTenderIDRespondPost"
-									r.summary = "Send comment for tender"
+									r.summary = "Respond to a tender"
 									r.operationID = ""
 									r.pathPattern = "/v1/tenders/{tenderID}/respond"
 									r.args = args

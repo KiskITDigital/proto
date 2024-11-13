@@ -6,13 +6,15 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 )
 
-type TenderGetParams struct {
+type TenderListParams struct {
 	OrganizationID models.Optional[int]
 	WithDrafts     bool
+	VerifiedOnly   bool
 }
 
 type TenderCreateParams struct {
 	Name            string
+	OrganizationID  int
 	CityID          int
 	Price           int
 	IsContractPrice bool
@@ -33,6 +35,7 @@ type TenderCreateParams struct {
 
 type TenderUpdateParams struct {
 	ID              int
+	OrganizationID  int
 	Name            models.Optional[string]
 	Price           models.Optional[int]
 	IsContractPrice models.Optional[bool]

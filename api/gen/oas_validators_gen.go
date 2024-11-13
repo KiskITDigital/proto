@@ -596,6 +596,24 @@ func (s *Tender) Validate() error {
 			Error: err,
 		})
 	}
+	if err := func() error {
+		if value, ok := s.VerificationStatus.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "verification_status",
+			Error: err,
+		})
+	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
 	}
@@ -1146,6 +1164,17 @@ func (s V1CatalogObjectsGetSort) Validate() error {
 	}
 }
 
+func (s V1CatalogServicesGetDirection) Validate() error {
+	switch s {
+	case "ASC":
+		return nil
+	case "DESC":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
 func (s *V1CatalogServicesGetOK) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -1169,6 +1198,15 @@ func (s *V1CatalogServicesGetOK) Validate() error {
 	return nil
 }
 
+func (s V1CatalogServicesGetSort) Validate() error {
+	switch s {
+	case "id":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
 func (s V1CommentsVerificationsGetDirection) Validate() error {
 	switch s {
 	case "ASC":
@@ -1187,34 +1225,11 @@ func (s *V1CommentsVerificationsGetOK) Validate() error {
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Data.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "data",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
-func (s *V1CommentsVerificationsGetOKData) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if s.Verifications == nil {
+		if s.Data == nil {
 			return errors.New("nil is invalid value")
 		}
 		var failures []validate.FieldError
-		for i, elem := range s.Verifications {
+		for i, elem := range s.Data {
 			if err := func() error {
 				if err := elem.Validate(); err != nil {
 					return err
@@ -1233,7 +1248,7 @@ func (s *V1CommentsVerificationsGetOKData) Validate() error {
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "verifications",
+			Name:  "data",
 			Error: err,
 		})
 	}
@@ -1382,34 +1397,11 @@ func (s *V1OrganizationsOrganizationIDVerificationsGetOK) Validate() error {
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Data.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "data",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
-func (s *V1OrganizationsOrganizationIDVerificationsGetOKData) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if s.Verifications == nil {
+		if s.Data == nil {
 			return errors.New("nil is invalid value")
 		}
 		var failures []validate.FieldError
-		for i, elem := range s.Verifications {
+		for i, elem := range s.Data {
 			if err := func() error {
 				if err := elem.Validate(); err != nil {
 					return err
@@ -1428,7 +1420,7 @@ func (s *V1OrganizationsOrganizationIDVerificationsGetOKData) Validate() error {
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "verifications",
+			Name:  "data",
 			Error: err,
 		})
 	}
@@ -1456,34 +1448,11 @@ func (s *V1OrganizationsVerificationsGetOK) Validate() error {
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Data.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "data",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
-func (s *V1OrganizationsVerificationsGetOKData) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if s.Verifications == nil {
+		if s.Data == nil {
 			return errors.New("nil is invalid value")
 		}
 		var failures []validate.FieldError
-		for i, elem := range s.Verifications {
+		for i, elem := range s.Data {
 			if err := func() error {
 				if err := elem.Validate(); err != nil {
 					return err
@@ -1502,7 +1471,7 @@ func (s *V1OrganizationsVerificationsGetOKData) Validate() error {
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "verifications",
+			Name:  "data",
 			Error: err,
 		})
 	}
@@ -1780,7 +1749,7 @@ func (s *V1TendersTenderIDGetOK) Validate() error {
 	return nil
 }
 
-func (s *V1TendersTenderIDPutCreated) Validate() error {
+func (s *V1TendersTenderIDPutOK) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}

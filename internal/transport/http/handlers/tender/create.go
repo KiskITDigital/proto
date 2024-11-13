@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/contextor"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/service"
@@ -13,6 +14,7 @@ import (
 func (h *Handler) V1TendersPost(ctx context.Context, req *api.V1TendersPostReq) (api.V1TendersPostRes, error) {
 	tender, err := h.svc.Create(ctx, service.TenderCreateParams{
 		Name:            req.GetName(),
+		OrganizationID:  contextor.GetOrganizationID(ctx),
 		CityID:          req.GetCity(),
 		Price:           int(req.GetPrice() * 100),
 		IsContractPrice: req.GetIsContractPrice(),
