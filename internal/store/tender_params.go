@@ -28,6 +28,7 @@ type TenderCreateParams struct {
 type TenderGetParams struct {
 	OrganizationID models.Optional[int]
 	WithDrafts     bool
+	VerifiedOnly   bool
 }
 
 type TenderUpdateParams struct {

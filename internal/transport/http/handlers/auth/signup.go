@@ -11,7 +11,7 @@ import (
 )
 
 func (h *Handler) V1AuthSignupPost(ctx context.Context, req *api.V1AuthSignupPostReq) (api.V1AuthSignupPostRes, error) {
-	resp, err := h.svc.SignUp(ctx, auth.SignUpParams{
+	resp, err := h.authSvc.SignUp(ctx, auth.SignUpParams{
 		Email:        string(req.GetEmail()),
 		Phone:        string(req.GetPhone()),
 		Password:     string(req.GetPassword()),

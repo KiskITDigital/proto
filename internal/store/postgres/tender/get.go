@@ -132,30 +132,37 @@ func (s *TenderStore) GetByID(ctx context.Context, qe store.QueryExecutor, id in
 	return createdTender, nil
 }
 
-func (s *TenderStore) Get(ctx context.Context, qe store.QueryExecutor, params store.TenderGetParams) ([]models.Tender, error) {
+func (s *TenderStore) List(ctx context.Context, qe store.QueryExecutor, params store.TenderGetParams) ([]models.Tender, error) {
 	builder := squirrel.
 		Select(
 			"t.id",
+			"t.organization_id",
+			"t.winner_organization_id",
+			"t.city_id",
+			"t.services_ids",
+			"t.objects_ids",
 			"t.name",
 			"t.price",
 			"t.is_contract_price",
 			"t.is_nds_price",
-			"t.is_draft",
-			"c.name",
-			"c.id",
-			"r.name",
-			"r.id",
 			"t.floor_space",
 			"t.description",
 			"t.wishes",
 			"t.specification",
 			"t.attachments",
-			"t.verified",
+			"t.status",
+			"t.verification_status",
+			"t.is_draft",
 			"t.reception_start",
 			"t.reception_end",
 			"t.work_start",
 			"t.work_end",
 			"t.created_at",
+			"t.updated_at",
+			"c.name",
+			"c.id",
+			"r.name",
+			"r.id",
 			"o.id",
 			"o.brand_name",
 			"o.full_name",
@@ -170,6 +177,11 @@ func (s *TenderStore) Get(ctx context.Context, qe store.QueryExecutor, params st
 			"o.emails",
 			"o.phones",
 			"o.messengers",
+			"o.verification_status",
+			"o.is_contractor",
+			"o.is_banned",
+			"o.customer_info",
+			"o.contractor_info",
 			"o.created_at",
 			"o.updated_at",
 		).
@@ -187,7 +199,11 @@ func (s *TenderStore) Get(ctx context.Context, qe store.QueryExecutor, params st
 		builder = builder.Where(squirrel.Eq{"t.is_draft": false})
 	}
 
-	tenders := map[int]models.Tender{}
+	if params.VerifiedOnly {
+		builder = builder.Where(squirrel.Eq{"t.verification_status": models.VerificationStatusApproved})
+	}
+
+	tenders := make(map[int]models.Tender)
 
 	rows, err := builder.RunWith(qe).QueryContext(ctx)
 	if err != nil {
@@ -198,6 +214,8 @@ func (s *TenderStore) Get(ctx context.Context, qe store.QueryExecutor, params st
 	for rows.Next() {
 		var (
 			tender      models.Tender
+			serviceIDs  []int
+			objectsIDs  []int
 			description sql.NullString
 			wishes      sql.NullString
 			AvatarURL   sql.NullString
@@ -205,26 +223,32 @@ func (s *TenderStore) Get(ctx context.Context, qe store.QueryExecutor, params st
 
 		err = rows.Scan(
 			&tender.ID,
+			&tender.Organization.ID,
+			&tender.City.ID,
+			pq.Array(&serviceIDs),
+			pq.Array(&objectsIDs),
 			&tender.Name,
 			&tender.Price,
 			&tender.IsContractPrice,
 			&tender.IsNDSPrice,
-			&tender.IsDraft,
-			&tender.City.Name,
-			&tender.City.ID,
-			&tender.City.Region.Name,
-			&tender.City.Region.ID,
 			&tender.FloorSpace,
 			&description,
 			&wishes,
 			&tender.Specification,
 			pq.Array(&tender.Attachments),
-			&tender.Verified,
+			&tender.Status,
+			&tender.VerificationStatus,
+			&tender.IsDraft,
 			&tender.ReceptionStart,
 			&tender.ReceptionEnd,
 			&tender.WorkStart,
 			&tender.WorkEnd,
 			&tender.CreatedAt,
+			&tender.UpdatedAt,
+			&tender.City.Name,
+			&tender.City.ID,
+			&tender.City.Region.Name,
+			&tender.City.Region.ID,
 			&tender.Organization.ID,
 			&tender.Organization.BrandName,
 			&tender.Organization.FullName,
@@ -236,9 +260,14 @@ func (s *TenderStore) Get(ctx context.Context, qe store.QueryExecutor, params st
 			&tender.Organization.TaxCode,
 			&tender.Organization.Address,
 			&AvatarURL,
-			&tender.Organization.Emails,
-			&tender.Organization.Phones,
-			&tender.Organization.Messengers,
+			pq.Array(&tender.Organization.Emails),
+			pq.Array(&tender.Organization.Phones),
+			pq.Array(&tender.Organization.Messengers),
+			&tender.Organization.VerificationStatus,
+			&tender.Organization.IsContractor,
+			&tender.Organization.IsBanned,
+			&tender.Organization.CustomerInfo,
+			&tender.Organization.ContractorInfo,
 			&tender.Organization.CreatedAt,
 			&tender.Organization.UpdatedAt,
 		)

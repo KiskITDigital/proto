@@ -14,3 +14,9 @@ type OrganizationCreateParams struct {
 	TaxCode      string
 	Address      string
 }
+
+type OrganizationAddUserParams struct {
+	OrganizationID int
+	UserID         int
+	IsOwner        bool
+}

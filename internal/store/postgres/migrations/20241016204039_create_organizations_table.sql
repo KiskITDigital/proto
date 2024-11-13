@@ -1,7 +1,6 @@
 -- +goose Up
 CREATE TABLE IF NOT EXISTS organizations (
     id                    BIGSERIAL PRIMARY KEY,
-    owner_user_id         BIGINT NOT NULL,
     brand_name            TEXT NOT NULL,
     full_name             TEXT NOT NULL,
     short_name            TEXT NOT NULL,

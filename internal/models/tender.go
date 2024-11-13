@@ -10,27 +10,29 @@ import (
 type Tender struct {
 	VerificationObject
 
-	ID              int
-	Name            string
-	City            City
-	Organization    Organization
-	Price           int
-	IsContractPrice bool
-	IsNDSPrice      bool
-	IsDraft         bool
-	FloorSpace      int
-	Description     string
-	Wishes          string
-	Specification   string
-	Attachments     []string
-	Services        []TenderService
-	Objects         []TenderObject
-	Verified        bool
-	ReceptionStart  time.Time
-	ReceptionEnd    time.Time
-	WorkStart       time.Time
-	WorkEnd         time.Time
-	CreatedAt       time.Time
+	ID                 int
+	Name               string
+	City               City
+	Organization       Organization
+	Price              int
+	IsContractPrice    bool
+	IsNDSPrice         bool
+	IsDraft            bool
+	FloorSpace         int
+	Description        string
+	Wishes             string
+	Specification      string
+	Attachments        []string
+	Services           []TenderService
+	Objects            []TenderObject
+	VerificationStatus VerificationStatus
+	Status             int
+	ReceptionStart     time.Time
+	ReceptionEnd       time.Time
+	WorkStart          time.Time
+	WorkEnd            time.Time
+	CreatedAt          time.Time
+	UpdatedAt          time.Time
 }
 
 func (t Tender) ToVerificationObject() api.VerificationRequestObject {

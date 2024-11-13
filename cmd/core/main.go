@@ -128,7 +128,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 
 	router := http.NewRouter(http.RouterParams{
 		Error:        errorHandler.New(logger),
-		Auth:         authHandler.New(logger, authService),
+		Auth:         authHandler.New(logger, authService, userService),
 		Tenders:      tenderHandler.New(logger, tenderService),
 		Catalog:      catalogHandler.New(logger, catalogService),
 		Users:        userHandler.New(logger, userService),

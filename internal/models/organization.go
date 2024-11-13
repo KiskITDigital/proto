@@ -38,7 +38,6 @@ type Organization struct {
 	VerificationObject
 
 	ID                 int
-	OwnerUserID        int
 	BrandName          string
 	FullName           string
 	ShortName          string
@@ -55,6 +54,8 @@ type Organization struct {
 	Emails             ContactInfos
 	Phones             ContactInfos
 	Messengers         ContactInfos
+	CustomerInfo       CustomerInfo
+	ContractorInfo     ContractorInfo
 	CreatedAt          time.Time
 	UpdatedAt          time.Time
 }
@@ -81,7 +82,7 @@ func ConvertOrganizationModelToApi(organization Organization) api.Organization {
 		Kpp:                api.Kpp(organization.KPP),
 		TaxCode:            api.TaxCode(organization.TaxCode),
 		Address:            organization.Address,
-		AvatarURL:          api.NewOptURL(api.URL(organization.AvatarURL)),
+		AvatarURL:          api.OptURL{Value: api.URL(organization.AvatarURL), Set: organization.AvatarURL != ""},
 		Emails: convert.Slice[ContactInfos, []api.ContactInfo](
 			organization.Emails, ConvertContactInfoModelToApi,
 		),

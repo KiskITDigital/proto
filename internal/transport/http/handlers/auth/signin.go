@@ -11,7 +11,7 @@ import (
 )
 
 func (h *Handler) V1AuthSigninPost(ctx context.Context, req *api.V1AuthSigninPostReq) (api.V1AuthSigninPostRes, error) {
-	resp, err := h.svc.SignIn(ctx, auth.SignInParams{
+	resp, err := h.authSvc.SignIn(ctx, auth.SignInParams{
 		Email:    string(req.Email),
 		Password: string(req.Password),
 	})
