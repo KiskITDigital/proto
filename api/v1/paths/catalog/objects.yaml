@@ -60,7 +60,7 @@ post:
   description: |-
     Creates catalog object
 
-    **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+    **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
     'Admin' or higher.
   security:
     - bearerAuth: []

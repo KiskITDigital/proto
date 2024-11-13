@@ -7,6 +7,6 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
-func (s *Service) GetByID(ctx context.Context, tenderID int) (models.User, error) {
-	return s.userStore.GetWithOrganiztion(ctx, s.psql.DB(), store.UserGetParams{ID: tenderID})
+func (s *Service) GetByID(ctx context.Context, userID int) (models.User, error) {
+	return s.userStore.GetWithOrganiztion(ctx, s.psql.DB(), store.UserGetParams{ID: userID})
 }

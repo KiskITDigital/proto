@@ -14,7 +14,6 @@ func (s *UserStore) Get(ctx context.Context, qe store.QueryExecutor, params stor
 	builder := squirrel.
 		Select(
 			"id",
-			"organization_id",
 			"email",
 			"phone",
 			"password_hash",
@@ -46,7 +45,6 @@ func (s *UserStore) Get(ctx context.Context, qe store.QueryExecutor, params stor
 
 	err := builder.RunWith(qe).QueryRowContext(ctx).Scan(
 		&user.ID,
-		&user.Organization.ID,
 		&user.Email,
 		&user.Phone,
 		&user.PasswordHash,
@@ -73,7 +71,6 @@ func (s *UserStore) GetWithOrganiztion(ctx context.Context, qe store.QueryExecut
 	builder := squirrel.
 		Select(
 			"u.id",
-			"u.organization_id",
 			"u.email",
 			"u.phone",
 			"u.password_hash",
@@ -106,7 +103,8 @@ func (s *UserStore) GetWithOrganiztion(ctx context.Context, qe store.QueryExecut
 			"o.updated_at",
 		).
 		From("users AS u").
-		Join("organizations AS o ON u.organization_id = o.id").
+		Join("organization_users AS ou ON u.id = ou.user_id").
+		Join("organizations AS o ON o.id = ou.organization_id").
 		PlaceholderFormat(squirrel.Dollar)
 
 	if params.Email != "" {
@@ -125,7 +123,6 @@ func (s *UserStore) GetWithOrganiztion(ctx context.Context, qe store.QueryExecut
 
 	err := builder.RunWith(qe).QueryRowContext(ctx).Scan(
 		&user.ID,
-		&user.Organization.ID,
 		&user.Email,
 		&user.Phone,
 		&user.PasswordHash,

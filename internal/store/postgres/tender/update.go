@@ -2,20 +2,24 @@ package tender
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/lib/pq"
-	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
-func (s *TenderStore) Update(ctx context.Context, qe store.QueryExecutor, params store.TenderUpdateParams) (models.Tender, error) {
+func (s *TenderStore) Update(ctx context.Context, qe store.QueryExecutor, params store.TenderUpdateParams) (int, error) {
 	builder := squirrel.Update("tenders")
 
 	if params.Name.Set {
 		builder = builder.Set("name", params.Name.Value)
+	}
+	if params.ServiceIDs.Set {
+		builder = builder.Set("services_ids", pq.Array(params.ServiceIDs.Value))
+	}
+	if params.ObjectIDs.Set {
+		builder = builder.Set("objects_ids", pq.Array(params.ObjectIDs.Value))
 	}
 	if params.Price.Set {
 		builder = builder.Set("price", params.Price.Value)
@@ -63,60 +67,16 @@ func (s *TenderStore) Update(ctx context.Context, qe store.QueryExecutor, params
 	builder = builder.
 		Where(squirrel.Eq{"id": params.ID}).
 		Suffix(`
-		RETURNING
-			id,
-			name,
-			price,
-			is_contract_price,
-			is_nds_price,
-			is_draft,
-			city_id,
-			floor_space,
-			description,
-			wishes,
-			specification,
-			attachments,
-			verified,
-			reception_start,
-			reception_end,
-			work_start,
-			work_end,
-			organization_id
+			RETURNING id
 		`).
 		PlaceholderFormat(squirrel.Dollar)
 
-	var (
-		tender      models.Tender
-		description sql.NullString
-		wishes      sql.NullString
-	)
+	var id int
 
-	err := builder.RunWith(qe).QueryRowContext(ctx).Scan(
-		&tender.ID,
-		&tender.Name,
-		&tender.Price,
-		&tender.IsContractPrice,
-		&tender.IsNDSPrice,
-		&tender.IsDraft,
-		&tender.City.ID,
-		&tender.FloorSpace,
-		&description,
-		&wishes,
-		&tender.Specification,
-		pq.Array(&tender.Attachments),
-		&tender.Verified,
-		&tender.ReceptionStart,
-		&tender.ReceptionEnd,
-		&tender.WorkStart,
-		&tender.WorkEnd,
-		&tender.Organization.ID,
-	)
+	err := builder.RunWith(qe).QueryRowContext(ctx).Scan(&id)
 	if err != nil {
-		return models.Tender{}, fmt.Errorf("query row: %w", err)
+		return 0, fmt.Errorf("query row: %w", err)
 	}
 
-	tender.Description = description.String
-	tender.Wishes = wishes.String
-
-	return tender, nil
+	return id, nil
 }

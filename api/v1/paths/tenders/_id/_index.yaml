@@ -6,7 +6,7 @@ get:
     Returns tender by id
 
     Для получения неверифицированного тендера
-    **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+    **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
     'Employee' or higher.
   security:
   - bearerAuth: []
@@ -104,7 +104,7 @@ put:
               type: string
               format: date-time
   responses:
-    '201':
+    '200':
       description: Success
       content:
         application/json:

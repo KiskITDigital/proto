@@ -35,7 +35,7 @@ type Handler interface {
 	// V1CatalogCitiesPost implements POST /v1/catalog/cities operation.
 	//
 	// Adds city to catalog
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/cities
@@ -49,7 +49,7 @@ type Handler interface {
 	// V1CatalogObjectsPost implements POST /v1/catalog/objects operation.
 	//
 	// Creates catalog object
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/objects
@@ -57,7 +57,7 @@ type Handler interface {
 	// V1CatalogRegionsPost implements POST /v1/catalog/regions operation.
 	//
 	// Adds region to catalog
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/regions
@@ -67,11 +67,11 @@ type Handler interface {
 	// Lists all available services.
 	//
 	// GET /v1/catalog/services
-	V1CatalogServicesGet(ctx context.Context) (V1CatalogServicesGetRes, error)
+	V1CatalogServicesGet(ctx context.Context, params V1CatalogServicesGetParams) (V1CatalogServicesGetRes, error)
 	// V1CatalogServicesPost implements POST /v1/catalog/services operation.
 	//
 	// Creates catalog service
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/services
@@ -89,14 +89,14 @@ type Handler interface {
 	// List all organizations
 	// Для получения всех организаций (включая
 	// неверифицированные)
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
 	// GET /v1/organizations
 	V1OrganizationsGet(ctx context.Context, params V1OrganizationsGetParams) (V1OrganizationsGetRes, error)
 	// V1OrganizationsOrganizationIDTendersGet implements GET /v1/organizations/{organizationID}/tenders operation.
 	//
-	// If user is in organization it also return all drafts.
+	// If user is in organization it also returns all drafts.
 	//
 	// GET /v1/organizations/{organizationID}/tenders
 	V1OrganizationsOrganizationIDTendersGet(ctx context.Context, params V1OrganizationsOrganizationIDTendersGetParams) (V1OrganizationsOrganizationIDTendersGetRes, error)
@@ -128,7 +128,7 @@ type Handler interface {
 	V1SuggestCompanyGet(ctx context.Context, params V1SuggestCompanyGetParams) (V1SuggestCompanyGetRes, error)
 	// V1SurveyPost implements POST /v1/survey operation.
 	//
-	// Response to survey.
+	// Respond to a survey.
 	//
 	// POST /v1/survey
 	V1SurveyPost(ctx context.Context, req *V1SurveyPostReq) (V1SurveyPostRes, error)
@@ -137,7 +137,7 @@ type Handler interface {
 	// Returns all tenders
 	// Для получения всех тендеров (включая
 	// неверифицированные)
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
 	// GET /v1/tenders
@@ -164,7 +164,7 @@ type Handler interface {
 	//
 	// Returns tender by id
 	// Для получения неверифицированного тендера
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
 	// GET /v1/tenders/{tenderID}
@@ -177,7 +177,7 @@ type Handler interface {
 	V1TendersTenderIDPut(ctx context.Context, req *V1TendersTenderIDPutReq, params V1TendersTenderIDPutParams) (V1TendersTenderIDPutRes, error)
 	// V1TendersTenderIDRespondPost implements POST /v1/tenders/{tenderID}/respond operation.
 	//
-	// Leaves comment under tender.
+	// Responds to a tender.
 	//
 	// POST /v1/tenders/{tenderID}/respond
 	V1TendersTenderIDRespondPost(ctx context.Context, req *V1TendersTenderIDRespondPostReq, params V1TendersTenderIDRespondPostParams) (V1TendersTenderIDRespondPostRes, error)
@@ -224,7 +224,7 @@ type Handler interface {
 	// V1UsersUserIDGet implements GET /v1/users/{userID} operation.
 	//
 	// Returns user by id
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
 	// GET /v1/users/{userID}

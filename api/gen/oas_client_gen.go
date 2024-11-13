@@ -50,7 +50,7 @@ type Invoker interface {
 	// V1CatalogCitiesPost invokes POST /v1/catalog/cities operation.
 	//
 	// Adds city to catalog
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/cities
@@ -64,7 +64,7 @@ type Invoker interface {
 	// V1CatalogObjectsPost invokes POST /v1/catalog/objects operation.
 	//
 	// Creates catalog object
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/objects
@@ -72,7 +72,7 @@ type Invoker interface {
 	// V1CatalogRegionsPost invokes POST /v1/catalog/regions operation.
 	//
 	// Adds region to catalog
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/regions
@@ -82,11 +82,11 @@ type Invoker interface {
 	// Lists all available services.
 	//
 	// GET /v1/catalog/services
-	V1CatalogServicesGet(ctx context.Context) (V1CatalogServicesGetRes, error)
+	V1CatalogServicesGet(ctx context.Context, params V1CatalogServicesGetParams) (V1CatalogServicesGetRes, error)
 	// V1CatalogServicesPost invokes POST /v1/catalog/services operation.
 	//
 	// Creates catalog service
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Admin' or higher.
 	//
 	// POST /v1/catalog/services
@@ -104,14 +104,14 @@ type Invoker interface {
 	// List all organizations
 	// Для получения всех организаций (включая
 	// неверифицированные)
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
 	// GET /v1/organizations
 	V1OrganizationsGet(ctx context.Context, params V1OrganizationsGetParams) (V1OrganizationsGetRes, error)
 	// V1OrganizationsOrganizationIDTendersGet invokes GET /v1/organizations/{organizationID}/tenders operation.
 	//
-	// If user is in organization it also return all drafts.
+	// If user is in organization it also returns all drafts.
 	//
 	// GET /v1/organizations/{organizationID}/tenders
 	V1OrganizationsOrganizationIDTendersGet(ctx context.Context, params V1OrganizationsOrganizationIDTendersGetParams) (V1OrganizationsOrganizationIDTendersGetRes, error)
@@ -143,7 +143,7 @@ type Invoker interface {
 	V1SuggestCompanyGet(ctx context.Context, params V1SuggestCompanyGetParams) (V1SuggestCompanyGetRes, error)
 	// V1SurveyPost invokes POST /v1/survey operation.
 	//
-	// Response to survey.
+	// Respond to a survey.
 	//
 	// POST /v1/survey
 	V1SurveyPost(ctx context.Context, request *V1SurveyPostReq) (V1SurveyPostRes, error)
@@ -152,7 +152,7 @@ type Invoker interface {
 	// Returns all tenders
 	// Для получения всех тендеров (включая
 	// неверифицированные)
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
 	// GET /v1/tenders
@@ -179,7 +179,7 @@ type Invoker interface {
 	//
 	// Returns tender by id
 	// Для получения неверифицированного тендера
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
 	// GET /v1/tenders/{tenderID}
@@ -192,7 +192,7 @@ type Invoker interface {
 	V1TendersTenderIDPut(ctx context.Context, request *V1TendersTenderIDPutReq, params V1TendersTenderIDPutParams) (V1TendersTenderIDPutRes, error)
 	// V1TendersTenderIDRespondPost invokes POST /v1/tenders/{tenderID}/respond operation.
 	//
-	// Leaves comment under tender.
+	// Responds to a tender.
 	//
 	// POST /v1/tenders/{tenderID}/respond
 	V1TendersTenderIDRespondPost(ctx context.Context, request *V1TendersTenderIDRespondPostReq, params V1TendersTenderIDRespondPostParams) (V1TendersTenderIDRespondPostRes, error)
@@ -239,7 +239,7 @@ type Invoker interface {
 	// V1UsersUserIDGet invokes GET /v1/users/{userID} operation.
 	//
 	// Returns user by id
-	// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
 	// GET /v1/users/{userID}
@@ -687,7 +687,7 @@ func (c *Client) sendV1AuthUserGet(ctx context.Context) (res V1AuthUserGetRes, e
 // V1CatalogCitiesPost invokes POST /v1/catalog/cities operation.
 //
 // Adds city to catalog
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Admin' or higher.
 //
 // POST /v1/catalog/cities
@@ -972,7 +972,7 @@ func (c *Client) sendV1CatalogObjectsGet(ctx context.Context, params V1CatalogOb
 // V1CatalogObjectsPost invokes POST /v1/catalog/objects operation.
 //
 // Creates catalog object
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Admin' or higher.
 //
 // POST /v1/catalog/objects
@@ -1081,7 +1081,7 @@ func (c *Client) sendV1CatalogObjectsPost(ctx context.Context, request *V1Catalo
 // V1CatalogRegionsPost invokes POST /v1/catalog/regions operation.
 //
 // Adds region to catalog
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Admin' or higher.
 //
 // POST /v1/catalog/regions
@@ -1192,12 +1192,12 @@ func (c *Client) sendV1CatalogRegionsPost(ctx context.Context, request *V1Catalo
 // Lists all available services.
 //
 // GET /v1/catalog/services
-func (c *Client) V1CatalogServicesGet(ctx context.Context) (V1CatalogServicesGetRes, error) {
-	res, err := c.sendV1CatalogServicesGet(ctx)
+func (c *Client) V1CatalogServicesGet(ctx context.Context, params V1CatalogServicesGetParams) (V1CatalogServicesGetRes, error) {
+	res, err := c.sendV1CatalogServicesGet(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendV1CatalogServicesGet(ctx context.Context) (res V1CatalogServicesGetRes, err error) {
+func (c *Client) sendV1CatalogServicesGet(ctx context.Context, params V1CatalogServicesGetParams) (res V1CatalogServicesGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/v1/catalog/services"),
@@ -1235,6 +1235,78 @@ func (c *Client) sendV1CatalogServicesGet(ctx context.Context) (res V1CatalogSer
 	var pathParts [1]string
 	pathParts[0] = "/v1/catalog/services"
 	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "offset" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "offset",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Offset.Get(); ok {
+				return e.EncodeValue(conv.IntToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "limit" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "limit",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Limit.Get(); ok {
+				return e.EncodeValue(conv.IntToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "sort" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "sort",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Sort.Get(); ok {
+				return e.EncodeValue(conv.StringToString(string(val)))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "direction" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "direction",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Direction.Get(); ok {
+				return e.EncodeValue(conv.StringToString(string(val)))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "GET", u)
@@ -1294,7 +1366,7 @@ func (c *Client) sendV1CatalogServicesGet(ctx context.Context) (res V1CatalogSer
 // V1CatalogServicesPost invokes POST /v1/catalog/services operation.
 //
 // Creates catalog service
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Admin' or higher.
 //
 // POST /v1/catalog/services
@@ -1609,7 +1681,7 @@ func (c *Client) sendV1CommentsVerificationsGet(ctx context.Context, params V1Co
 // List all organizations
 // Для получения всех организаций (включая
 // неверифицированные)
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
 // GET /v1/organizations
@@ -1770,7 +1842,7 @@ func (c *Client) sendV1OrganizationsGet(ctx context.Context, params V1Organizati
 
 // V1OrganizationsOrganizationIDTendersGet invokes GET /v1/organizations/{organizationID}/tenders operation.
 //
-// If user is in organization it also return all drafts.
+// If user is in organization it also returns all drafts.
 //
 // GET /v1/organizations/{organizationID}/tenders
 func (c *Client) V1OrganizationsOrganizationIDTendersGet(ctx context.Context, params V1OrganizationsOrganizationIDTendersGetParams) (V1OrganizationsOrganizationIDTendersGetRes, error) {
@@ -2438,7 +2510,7 @@ func (c *Client) sendV1SuggestCompanyGet(ctx context.Context, params V1SuggestCo
 
 // V1SurveyPost invokes POST /v1/survey operation.
 //
-// Response to survey.
+// Respond to a survey.
 //
 // POST /v1/survey
 func (c *Client) V1SurveyPost(ctx context.Context, request *V1SurveyPostReq) (V1SurveyPostRes, error) {
@@ -2549,7 +2621,7 @@ func (c *Client) sendV1SurveyPost(ctx context.Context, request *V1SurveyPostReq)
 // Returns all tenders
 // Для получения всех тендеров (включая
 // неверифицированные)
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
 // GET /v1/tenders
@@ -3068,7 +3140,7 @@ func (c *Client) sendV1TendersTenderIDCommentsPost(ctx context.Context, request 
 //
 // Returns tender by id
 // Для получения неверифицированного тендера
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
 // GET /v1/tenders/{tenderID}
@@ -3316,7 +3388,7 @@ func (c *Client) sendV1TendersTenderIDPut(ctx context.Context, request *V1Tender
 
 // V1TendersTenderIDRespondPost invokes POST /v1/tenders/{tenderID}/respond operation.
 //
-// Leaves comment under tender.
+// Responds to a tender.
 //
 // POST /v1/tenders/{tenderID}/respond
 func (c *Client) V1TendersTenderIDRespondPost(ctx context.Context, request *V1TendersTenderIDRespondPostReq, params V1TendersTenderIDRespondPostParams) (V1TendersTenderIDRespondPostRes, error) {
@@ -4147,7 +4219,7 @@ func (c *Client) sendV1UsersRequestResetPasswordPost(ctx context.Context, reques
 // V1UsersUserIDGet invokes GET /v1/users/{userID} operation.
 //
 // Returns user by id
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
 // GET /v1/users/{userID}

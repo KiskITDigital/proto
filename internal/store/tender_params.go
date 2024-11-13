@@ -7,32 +7,40 @@ import (
 )
 
 type TenderCreateParams struct {
-	Name            string
-	Price           int
-	IsContractPrice bool
-	IsNDSPrice      bool
-	IsDraft         bool
-	CityID          int
-	FloorSpace      int
-	Description     string
-	Wishes          string
-	Specification   string
-	Attachments     []string
-	ReceptionStart  time.Time
-	ReceptionEnd    time.Time
-	WorkStart       time.Time
-	WorkEnd         time.Time
-	OrganizationID  int
+	Name               string
+	ServiceIDs         []int
+	ObjectIDs          []int
+	Price              int
+	IsContractPrice    bool
+	IsNDSPrice         bool
+	IsDraft            bool
+	CityID             int
+	FloorSpace         int
+	Description        string
+	Wishes             string
+	Specification      string
+	Attachments        []string
+	Status             int
+	VerificationStatus models.VerificationStatus
+	ReceptionStart     time.Time
+	ReceptionEnd       time.Time
+	WorkStart          time.Time
+	WorkEnd            time.Time
+	OrganizationID     int
 }
 
-type TenderGetParams struct {
+type TenderListParams struct {
 	OrganizationID models.Optional[int]
+	TenderIDs      models.Optional[[]int]
 	WithDrafts     bool
+	VerifiedOnly   bool
 }
 
 type TenderUpdateParams struct {
 	ID              int
 	Name            models.Optional[string]
+	ServiceIDs      models.Optional[[]int]
+	ObjectIDs       models.Optional[[]int]
 	Price           models.Optional[int]
 	IsContractPrice models.Optional[bool]
 	IsNDSPrice      models.Optional[bool]
@@ -67,4 +75,11 @@ type TenderObjectsDeleteParams struct {
 type TenderServicesDeleteParams struct {
 	TenderID    int
 	ServicesIDs []int
+}
+
+type TenderCreateResponseParams struct {
+	TenderID       int
+	OrganizationID int
+	Price          int
+	IsNds          bool
 }

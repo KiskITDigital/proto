@@ -1,6 +1,6 @@
 package store
 
-type OrganizationGetParams struct {}
+type OrganizationGetParams struct{}
 
 type OrganizationCreateParams struct {
 	BrandName    string
@@ -13,4 +13,10 @@ type OrganizationCreateParams struct {
 	KPP          string
 	TaxCode      string
 	Address      string
+}
+
+type OrganizationAddUserParams struct {
+	OrganizationID int
+	UserID         int
+	IsOwner        bool
 }

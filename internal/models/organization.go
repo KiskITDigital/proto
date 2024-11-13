@@ -54,6 +54,8 @@ type Organization struct {
 	Emails             ContactInfos
 	Phones             ContactInfos
 	Messengers         ContactInfos
+	CustomerInfo       CustomerInfo
+	ContractorInfo     ContractorInfo
 	CreatedAt          time.Time
 	UpdatedAt          time.Time
 }
@@ -80,7 +82,7 @@ func ConvertOrganizationModelToApi(organization Organization) api.Organization {
 		Kpp:                api.Kpp(organization.KPP),
 		TaxCode:            api.TaxCode(organization.TaxCode),
 		Address:            organization.Address,
-		AvatarURL:          api.NewOptURL(api.URL(organization.AvatarURL)),
+		AvatarURL:          api.OptURL{Value: api.URL(organization.AvatarURL), Set: organization.AvatarURL != ""},
 		Emails: convert.Slice[ContactInfos, []api.ContactInfo](
 			organization.Emails, ConvertContactInfoModelToApi,
 		),
@@ -100,4 +102,34 @@ func ConvertContactInfoModelToApi(info ContactInfo) api.ContactInfo {
 		Contact: info.Info,
 		Info:    info.Info,
 	}
+}
+
+type CustomerInfo struct{}
+
+func (a CustomerInfo) Value() (driver.Value, error) {
+	return json.Marshal(a)
+}
+
+func (a *CustomerInfo) Scan(value interface{}) error {
+	b, ok := value.([]byte)
+	if !ok {
+		return errors.New("type assertion to []byte failed")
+	}
+
+	return json.Unmarshal(b, &a)
+}
+
+type ContractorInfo struct{}
+
+func (a ContractorInfo) Value() (driver.Value, error) {
+	return json.Marshal(a)
+}
+
+func (a *ContractorInfo) Scan(value interface{}) error {
+	b, ok := value.([]byte)
+	if !ok {
+		return errors.New("type assertion to []byte failed")
+	}
+
+	return json.Unmarshal(b, &a)
 }

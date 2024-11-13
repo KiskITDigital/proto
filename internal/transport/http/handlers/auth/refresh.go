@@ -10,7 +10,7 @@ import (
 )
 
 func (h *Handler) V1AuthRefreshPost(ctx context.Context, params api.V1AuthRefreshPostParams) (api.V1AuthRefreshPostRes, error) {
-	resp, err := h.svc.Refresh(ctx, params.UbratoSession)
+	resp, err := h.authSvc.Refresh(ctx, params.UbratoSession)
 	if err != nil {
 		return nil, fmt.Errorf("refresh session: %w", err)
 	}

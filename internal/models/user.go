@@ -11,7 +11,25 @@ type UserRole uint8
 const (
 	UserRoleInvalid = iota
 	UserRoleUser
+	UserRoleEmployee
+	UserRoleAdmin
+	UserRoleSuperAdmin
 )
+
+func (r UserRole) ToApi() string {
+	switch r {
+	case UserRoleUser:
+		return "user"
+	case UserRoleEmployee:
+		return "employee"
+	case UserRoleAdmin:
+		return "admin"
+	case UserRoleSuperAdmin:
+		return "super_admin"
+	default:
+		return "invalid"
+	}
+}
 
 type User struct {
 	ID            int
@@ -39,9 +57,9 @@ func ConvertUserModelToApi(user User) api.User {
 		FirstName:     api.Name(user.FirstName),
 		LastName:      api.Name(user.LastName),
 		MiddleName:    api.Name(user.MiddleName),
-		AvatarURL:     api.NewOptURL(api.URL(user.AvatarURL)),
+		AvatarURL:     api.OptURL{Value: api.URL(user.AvatarURL), Set: user.AvatarURL != ""},
 		EmailVerified: user.EmailVerified,
-		Role:          api.Role(user.Role),
+		Role:          api.Role(user.Role.ToApi()),
 		Organization: api.OptOrganization{
 			Value: api.Organization(ConvertOrganizationModelToApi(user.Organization)),
 			Set:   user.Organization.ID != 0,

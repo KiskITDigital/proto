@@ -41,6 +41,7 @@ type UserStore interface {
 
 type OrganizationStore interface {
 	Create(ctx context.Context, qe store.QueryExecutor, organization store.OrganizationCreateParams) (models.Organization, error)
+	AddUser(ctx context.Context, qe store.QueryExecutor, params store.OrganizationAddUserParams) error
 }
 
 type SessionStore interface {

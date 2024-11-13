@@ -45,8 +45,31 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 		return SignUpResult{}, fmt.Errorf("get organization: %w", err)
 	}
 
+	if len(resp.Suggestions) == 0 {
+		return SignUpResult{}, fmt.Errorf("organization not found")
+	}
+
 	err = s.psql.WithTransaction(ctx, func(qe store.QueryExecutor) error {
-		// FIXME: panic
+		hashedPassword, err := crypto.Password(params.Password)
+		if err != nil {
+			return fmt.Errorf("hash password: %w", err)
+		}
+
+		user, err := s.userStore.Create(ctx, qe, store.UserCreateParams{
+			Email:        params.Email,
+			Phone:        params.Phone,
+			PasswordHash: hashedPassword,
+			TOTPSalt:     uuid.New().String(),
+			FirstName:    params.FirstName,
+			LastName:     params.LastName,
+			MiddleName:   params.MiddleName,
+			AvatarURL:    params.AvatarURL,
+			Role:         models.UserRoleUser,
+		})
+		if err != nil {
+			return fmt.Errorf("create user: %w", err)
+		}
+
 		organization, err := s.organizationStore.Create(ctx, qe, store.OrganizationCreateParams{
 			BrandName:    resp.Suggestions[0].Data.Name.Short,
 			FullName:     resp.Suggestions[0].Data.Name.FullWithOpf,
@@ -63,24 +86,13 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 			return fmt.Errorf("create organization: %w", err)
 		}
 
-		hashedPassword, err := crypto.Password(params.Password)
-		if err != nil {
-			return fmt.Errorf("hash password: %w", err)
-		}
-
-		user, err := s.userStore.Create(ctx, qe, store.UserCreateParams{
+		err = s.organizationStore.AddUser(ctx, qe, store.OrganizationAddUserParams{
 			OrganizationID: organization.ID,
-			Email:          params.Email,
-			Phone:          params.Phone,
-			PasswordHash:   hashedPassword,
-			TOTPSalt:       uuid.New().String(),
-			FirstName:      params.FirstName,
-			LastName:       params.LastName,
-			MiddleName:     params.MiddleName,
-			AvatarURL:      params.AvatarURL,
+			UserID:         user.ID,
+			IsOwner:        true,
 		})
 		if err != nil {
-			return fmt.Errorf("create user: %w", err)
+			return fmt.Errorf("add user to organization: %w", err)
 		}
 
 		user.Organization = organization

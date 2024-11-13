@@ -6,7 +6,7 @@ get:
     List all organizations
 
     Для получения всех организаций (включая неверифицированные)
-    **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+    **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
     'Employee' or higher.
   parameters:
     - name: verified

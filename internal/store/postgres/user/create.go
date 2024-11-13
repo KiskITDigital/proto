@@ -14,7 +14,6 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 	builder := squirrel.
 		Insert("users").
 		Columns(
-			"organization_id",
 			"email",
 			"phone",
 			"password_hash",
@@ -25,9 +24,9 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 			"avatar_url",
 			"email_verified",
 			"role",
+			"is_banned",
 		).
 		Values(
-			params.OrganizationID,
 			params.Email,
 			params.Phone,
 			params.PasswordHash,
@@ -36,13 +35,13 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 			params.LastName,
 			params.MiddleName,
 			sql.NullString{Valid: params.AvatarURL != "", String: params.AvatarURL},
-			params.EmailVerified,
+			false,
 			params.Role,
+			false,
 		).
 		Suffix(`
 			RETURNING
 				id,
-				organization_id,
 				email,
 				phone,
 				password_hash,
@@ -65,7 +64,6 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 
 	err := builder.RunWith(qe).QueryRowContext(ctx).Scan(
 		&createdUser.ID,
-		&createdUser.Organization.ID,
 		&createdUser.Email,
 		&createdUser.Phone,
 		&createdUser.PasswordHash,

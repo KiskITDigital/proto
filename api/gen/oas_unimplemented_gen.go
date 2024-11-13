@@ -52,7 +52,7 @@ func (UnimplementedHandler) V1AuthUserGet(ctx context.Context) (r V1AuthUserGetR
 // V1CatalogCitiesPost implements POST /v1/catalog/cities operation.
 //
 // Adds city to catalog
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Admin' or higher.
 //
 // POST /v1/catalog/cities
@@ -72,7 +72,7 @@ func (UnimplementedHandler) V1CatalogObjectsGet(ctx context.Context, params V1Ca
 // V1CatalogObjectsPost implements POST /v1/catalog/objects operation.
 //
 // Creates catalog object
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Admin' or higher.
 //
 // POST /v1/catalog/objects
@@ -83,7 +83,7 @@ func (UnimplementedHandler) V1CatalogObjectsPost(ctx context.Context, req *V1Cat
 // V1CatalogRegionsPost implements POST /v1/catalog/regions operation.
 //
 // Adds region to catalog
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Admin' or higher.
 //
 // POST /v1/catalog/regions
@@ -96,14 +96,14 @@ func (UnimplementedHandler) V1CatalogRegionsPost(ctx context.Context, req *V1Cat
 // Lists all available services.
 //
 // GET /v1/catalog/services
-func (UnimplementedHandler) V1CatalogServicesGet(ctx context.Context) (r V1CatalogServicesGetRes, _ error) {
+func (UnimplementedHandler) V1CatalogServicesGet(ctx context.Context, params V1CatalogServicesGetParams) (r V1CatalogServicesGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
 // V1CatalogServicesPost implements POST /v1/catalog/services operation.
 //
 // Creates catalog service
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Admin' or higher.
 //
 // POST /v1/catalog/services
@@ -127,7 +127,7 @@ func (UnimplementedHandler) V1CommentsVerificationsGet(ctx context.Context, para
 // List all organizations
 // Для получения всех организаций (включая
 // неверифицированные)
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
 // GET /v1/organizations
@@ -137,7 +137,7 @@ func (UnimplementedHandler) V1OrganizationsGet(ctx context.Context, params V1Org
 
 // V1OrganizationsOrganizationIDTendersGet implements GET /v1/organizations/{organizationID}/tenders operation.
 //
-// If user is in organization it also return all drafts.
+// If user is in organization it also returns all drafts.
 //
 // GET /v1/organizations/{organizationID}/tenders
 func (UnimplementedHandler) V1OrganizationsOrganizationIDTendersGet(ctx context.Context, params V1OrganizationsOrganizationIDTendersGetParams) (r V1OrganizationsOrganizationIDTendersGetRes, _ error) {
@@ -184,7 +184,7 @@ func (UnimplementedHandler) V1SuggestCompanyGet(ctx context.Context, params V1Su
 
 // V1SurveyPost implements POST /v1/survey operation.
 //
-// Response to survey.
+// Respond to a survey.
 //
 // POST /v1/survey
 func (UnimplementedHandler) V1SurveyPost(ctx context.Context, req *V1SurveyPostReq) (r V1SurveyPostRes, _ error) {
@@ -196,7 +196,7 @@ func (UnimplementedHandler) V1SurveyPost(ctx context.Context, req *V1SurveyPostR
 // Returns all tenders
 // Для получения всех тендеров (включая
 // неверифицированные)
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
 // GET /v1/tenders
@@ -235,7 +235,7 @@ func (UnimplementedHandler) V1TendersTenderIDCommentsPost(ctx context.Context, r
 //
 // Returns tender by id
 // Для получения неверифицированного тендера
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
 // GET /v1/tenders/{tenderID}
@@ -254,7 +254,7 @@ func (UnimplementedHandler) V1TendersTenderIDPut(ctx context.Context, req *V1Ten
 
 // V1TendersTenderIDRespondPost implements POST /v1/tenders/{tenderID}/respond operation.
 //
-// Leaves comment under tender.
+// Responds to a tender.
 //
 // POST /v1/tenders/{tenderID}/respond
 func (UnimplementedHandler) V1TendersTenderIDRespondPost(ctx context.Context, req *V1TendersTenderIDRespondPostReq, params V1TendersTenderIDRespondPostParams) (r V1TendersTenderIDRespondPostRes, _ error) {
@@ -322,7 +322,7 @@ func (UnimplementedHandler) V1UsersRequestResetPasswordPost(ctx context.Context,
 // V1UsersUserIDGet implements GET /v1/users/{userID} operation.
 //
 // Returns user by id
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
 // GET /v1/users/{userID}

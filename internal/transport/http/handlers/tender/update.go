@@ -6,6 +6,7 @@ import (
 	"time"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/contextor"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/service"
@@ -14,6 +15,7 @@ import (
 func (h *Handler) V1TendersTenderIDPut(ctx context.Context, req *api.V1TendersTenderIDPutReq, params api.V1TendersTenderIDPutParams) (api.V1TendersTenderIDPutRes, error) {
 	tender, err := h.svc.Update(ctx, service.TenderUpdateParams{
 		ID:              params.TenderID,
+		OrganizationID:  contextor.GetOrganizationID(ctx),
 		Name:            models.Optional[string]{Value: req.GetName().Value, Set: req.GetName().Set},
 		Price:           models.Optional[int]{Value: int(req.GetPrice().Value * 100), Set: req.GetPrice().Set},
 		IsContractPrice: models.Optional[bool]{Value: req.GetIsContractPrice().Value, Set: req.GetIsContractPrice().Set},
@@ -27,8 +29,8 @@ func (h *Handler) V1TendersTenderIDPut(ctx context.Context, req *api.V1TendersTe
 		Attachments: models.Optional[[]string]{Value: convert.Slice[[]api.URL, []string](
 			req.GetAttachments(), func(u api.URL) string { return string(u) },
 		), Set: req.GetAttachments() != nil},
-		ServiceIDs:     models.Optional[[]int]{Value: req.GetServices(), Set: req.GetServices() != nil},
-		ObjectIDs:      models.Optional[[]int]{Value: req.GetObjects(), Set: req.GetServices() != nil},
+		ServiceIDs:     models.Optional[[]int]{Value: req.GetServices(), Set: len(req.GetServices()) > 0},
+		ObjectIDs:      models.Optional[[]int]{Value: req.GetObjects(), Set: len(req.GetObjects()) > 0},
 		ReceptionStart: models.Optional[time.Time]{Value: req.GetReceptionStart().Value, Set: req.GetReceptionStart().Set},
 		ReceptionEnd:   models.Optional[time.Time]{Value: req.GetReceptionEnd().Value, Set: req.GetReceptionEnd().Set},
 		WorkStart:      models.Optional[time.Time]{Value: req.GetWorkStart().Value, Set: req.GetWorkStart().Set},
@@ -38,7 +40,7 @@ func (h *Handler) V1TendersTenderIDPut(ctx context.Context, req *api.V1TendersTe
 		return nil, fmt.Errorf("update tender: %w", err)
 	}
 
-	return &api.V1TendersTenderIDPutCreated{
+	return &api.V1TendersTenderIDPutOK{
 		Data: models.ConvertTenderModelToApi(tender),
 	}, nil
 }

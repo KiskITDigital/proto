@@ -539,7 +539,7 @@ func (s *Server) handleV1AuthUserGetRequest(args [0]string, argsEscaped bool, w 
 // handleV1CatalogCitiesPostRequest handles POST /v1/catalog/cities operation.
 //
 // Adds city to catalog
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Admin' or higher.
 //
 // POST /v1/catalog/cities
@@ -863,7 +863,7 @@ func (s *Server) handleV1CatalogObjectsGetRequest(args [0]string, argsEscaped bo
 // handleV1CatalogObjectsPostRequest handles POST /v1/catalog/objects operation.
 //
 // Creates catalog object
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Admin' or higher.
 //
 // POST /v1/catalog/objects
@@ -1020,7 +1020,7 @@ func (s *Server) handleV1CatalogObjectsPostRequest(args [0]string, argsEscaped b
 // handleV1CatalogRegionsPostRequest handles POST /v1/catalog/regions operation.
 //
 // Adds region to catalog
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Admin' or higher.
 //
 // POST /v1/catalog/regions
@@ -1265,6 +1265,16 @@ func (s *Server) handleV1CatalogServicesGetRequest(args [0]string, argsEscaped b
 			return
 		}
 	}
+	params, err := decodeV1CatalogServicesGetParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
 
 	var response V1CatalogServicesGetRes
 	if m := s.cfg.Middleware; m != nil {
@@ -1274,13 +1284,30 @@ func (s *Server) handleV1CatalogServicesGetRequest(args [0]string, argsEscaped b
 			OperationSummary: "Get a list of all available services",
 			OperationID:      "",
 			Body:             nil,
-			Params:           middleware.Parameters{},
-			Raw:              r,
+			Params: middleware.Parameters{
+				{
+					Name: "offset",
+					In:   "query",
+				}: params.Offset,
+				{
+					Name: "limit",
+					In:   "query",
+				}: params.Limit,
+				{
+					Name: "sort",
+					In:   "query",
+				}: params.Sort,
+				{
+					Name: "direction",
+					In:   "query",
+				}: params.Direction,
+			},
+			Raw: r,
 		}
 
 		type (
 			Request  = struct{}
-			Params   = struct{}
+			Params   = V1CatalogServicesGetParams
 			Response = V1CatalogServicesGetRes
 		)
 		response, err = middleware.HookMiddleware[
@@ -1290,14 +1317,14 @@ func (s *Server) handleV1CatalogServicesGetRequest(args [0]string, argsEscaped b
 		](
 			m,
 			mreq,
-			nil,
+			unpackV1CatalogServicesGetParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.V1CatalogServicesGet(ctx)
+				response, err = s.h.V1CatalogServicesGet(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.V1CatalogServicesGet(ctx)
+		response, err = s.h.V1CatalogServicesGet(ctx, params)
 	}
 	if err != nil {
 		defer recordError("Internal", err)
@@ -1317,7 +1344,7 @@ func (s *Server) handleV1CatalogServicesGetRequest(args [0]string, argsEscaped b
 // handleV1CatalogServicesPostRequest handles POST /v1/catalog/services operation.
 //
 // Creates catalog service
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Admin' or higher.
 //
 // POST /v1/catalog/services
@@ -1649,7 +1676,7 @@ func (s *Server) handleV1CommentsVerificationsGetRequest(args [0]string, argsEsc
 // List all organizations
 // Для получения всех организаций (включая
 // неверифицированные)
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
 // GET /v1/organizations
@@ -1777,7 +1804,7 @@ func (s *Server) handleV1OrganizationsGetRequest(args [0]string, argsEscaped boo
 
 // handleV1OrganizationsOrganizationIDTendersGetRequest handles GET /v1/organizations/{organizationID}/tenders operation.
 //
-// If user is in organization it also return all drafts.
+// If user is in organization it also returns all drafts.
 //
 // GET /v1/organizations/{organizationID}/tenders
 func (s *Server) handleV1OrganizationsOrganizationIDTendersGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
@@ -2541,7 +2568,7 @@ func (s *Server) handleV1SuggestCompanyGetRequest(args [0]string, argsEscaped bo
 
 // handleV1SurveyPostRequest handles POST /v1/survey operation.
 //
-// Response to survey.
+// Respond to a survey.
 //
 // POST /v1/survey
 func (s *Server) handleV1SurveyPostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
@@ -2652,7 +2679,7 @@ func (s *Server) handleV1SurveyPostRequest(args [0]string, argsEscaped bool, w h
 		mreq := middleware.Request{
 			Context:          ctx,
 			OperationName:    "V1SurveyPost",
-			OperationSummary: "Response to survey",
+			OperationSummary: "Respond to a survey",
 			OperationID:      "",
 			Body:             request,
 			Params:           middleware.Parameters{},
@@ -2700,7 +2727,7 @@ func (s *Server) handleV1SurveyPostRequest(args [0]string, argsEscaped bool, w h
 // Returns all tenders
 // Для получения всех тендеров (включая
 // неверифицированные)
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
 // GET /v1/tenders
@@ -3310,7 +3337,7 @@ func (s *Server) handleV1TendersTenderIDCommentsPostRequest(args [1]string, args
 //
 // Returns tender by id
 // Для получения неверифицированного тендера
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
 // GET /v1/tenders/{tenderID}
@@ -3636,7 +3663,7 @@ func (s *Server) handleV1TendersTenderIDPutRequest(args [1]string, argsEscaped b
 
 // handleV1TendersTenderIDRespondPostRequest handles POST /v1/tenders/{tenderID}/respond operation.
 //
-// Leaves comment under tender.
+// Responds to a tender.
 //
 // POST /v1/tenders/{tenderID}/respond
 func (s *Server) handleV1TendersTenderIDRespondPostRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
@@ -3756,7 +3783,7 @@ func (s *Server) handleV1TendersTenderIDRespondPostRequest(args [1]string, argsE
 		mreq := middleware.Request{
 			Context:          ctx,
 			OperationName:    "V1TendersTenderIDRespondPost",
-			OperationSummary: "Send comment for tender",
+			OperationSummary: "Respond to a tender",
 			OperationID:      "",
 			Body:             request,
 			Params: middleware.Parameters{
@@ -4597,7 +4624,7 @@ func (s *Server) handleV1UsersRequestResetPasswordPostRequest(args [0]string, ar
 // handleV1UsersUserIDGetRequest handles GET /v1/users/{userID} operation.
 //
 // Returns user by id
-// **[Role](https://wiki.ubrato.ru/books/arxitektura/page/roles-permissions) required**:
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
 // GET /v1/users/{userID}

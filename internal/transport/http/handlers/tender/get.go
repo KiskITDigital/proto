@@ -23,7 +23,7 @@ func (h *Handler) V1TendersTenderIDGet(ctx context.Context, params api.V1Tenders
 }
 
 func (h *Handler) V1TendersGet(ctx context.Context, params api.V1TendersGetParams) (api.V1TendersGetRes, error) {
-	tenders, err := h.svc.Get(ctx, service.TenderGetParams{})
+	tenders, err := h.svc.List(ctx, service.TenderListParams{})
 	if err != nil {
 		return nil, fmt.Errorf("get tender: %w", err)
 	}
@@ -39,7 +39,7 @@ func (h *Handler) V1OrganizationsOrganizationIDTendersGet(
 ) (api.V1OrganizationsOrganizationIDTendersGetRes, error) {
 	organizationID := contextor.GetOrganizationID(ctx)
 
-	tenders, err := h.svc.Get(ctx, service.TenderGetParams{
+	tenders, err := h.svc.List(ctx, service.TenderListParams{
 		OrganizationID: models.Optional[int]{Value: params.OrganizationID, Set: true},
 		WithDrafts:     organizationID == params.OrganizationID,
 	})

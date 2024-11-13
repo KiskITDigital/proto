@@ -5,9 +5,17 @@ import (
 	"fmt"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
-	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
 )
 
 func (h *Handler) V1SuggestCompanyGet(ctx context.Context, params api.V1SuggestCompanyGetParams) (api.V1SuggestCompanyGetRes, error) {
-	return nil, cerr.Wrap(fmt.Errorf("not impl"), cerr.CodeInternal, "func not impl", nil)
+	name, err := h.svc.Company(ctx, string(params.Inn))
+	if err != nil {
+		return nil, fmt.Errorf("sugget company: %w", err)
+	}
+
+	return &api.V1SuggestCompanyGetOK{
+		Data: api.V1SuggestCompanyGetOKData{
+			Name: name,
+		},
+	}, nil
 }
