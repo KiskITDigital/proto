@@ -1,11 +1,6 @@
 package suggest
 
-import (
-	"context"
-	"log/slog"
-
-	"gitlab.ubrato.ru/ubrato/core/internal/gateway/dadata"
-)
+import "log/slog"
 
 type Handler struct {
 	logger *slog.Logger
@@ -13,7 +8,6 @@ type Handler struct {
 }
 
 type Service interface {
-	SuggestByINN(ctx context.Context, inn string) (dadata.FindByInnResponse, error)
 }
 
 func New(logger *slog.Logger, svc Service) *Handler {
