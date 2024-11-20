@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS verification_requests (
     object_type         SMALLINT NOT NULL,
     object_id           BIGINT NOT NULL,
     content             JSONB NOT NULL,
-    attachments         JSONB NOT NULL,
+    attachments         TEXT NOT NULL,
     status              SMALLINT NOT NULL,
     review_comment      TEXT,
     created_at          TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
