@@ -67,7 +67,7 @@ func (s *UserStore) Get(ctx context.Context, qe store.QueryExecutor, params stor
 	return user, nil
 }
 
-func (s *UserStore) GetWithOrganiztion(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) (models.User, error) {
+func (s *UserStore) GetWithOrganiztion(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) ([]models.User, error) {
 	builder := squirrel.
 		Select(
 			"u.id",
@@ -115,51 +115,59 @@ func (s *UserStore) GetWithOrganiztion(ctx context.Context, qe store.QueryExecut
 		builder = builder.Where(squirrel.Eq{"u.id": params.ID})
 	}
 
-	var (
-		user                  models.User
-		userAvatarURL         sql.NullString
-		organizationAvatarURL sql.NullString
-	)
+	var users []models.User
 
-	err := builder.RunWith(qe).QueryRowContext(ctx).Scan(
-		&user.ID,
-		&user.Email,
-		&user.Phone,
-		&user.PasswordHash,
-		&user.TOTPSalt,
-		&user.FirstName,
-		&user.LastName,
-		&user.MiddleName,
-		&userAvatarURL,
-		&user.EmailVerified,
-		&user.Role,
-		&user.CreatedAt,
-		&user.UpdatedAt,
-		&user.Organization.ID,
-		&user.Organization.BrandName,
-		&user.Organization.FullName,
-		&user.Organization.ShortName,
-		&user.Organization.IsContractor,
-		&user.Organization.IsBanned,
-		&user.Organization.INN,
-		&user.Organization.OKPO,
-		&user.Organization.OGRN,
-		&user.Organization.KPP,
-		&user.Organization.TaxCode,
-		&user.Organization.Address,
-		&organizationAvatarURL,
-		&user.Organization.Emails,
-		&user.Organization.Phones,
-		&user.Organization.Messengers,
-		&user.Organization.CreatedAt,
-		&user.Organization.UpdatedAt,
-	)
+	rows, err := builder.RunWith(qe).QueryContext(ctx)
 	if err != nil {
-		return models.User{}, fmt.Errorf("query row: %w", err)
+		return nil, fmt.Errorf("query row: %w", err)
 	}
 
-	user.AvatarURL = userAvatarURL.String
-	user.Organization.AvatarURL = organizationAvatarURL.String
+	for rows.Next() {
+		var (
+			user                  models.User
+			userAvatarURL         sql.NullString
+			organizationAvatarURL sql.NullString
+		)
 
-	return user, nil
+		rows.Scan(
+			&user.ID,
+			&user.Email,
+			&user.Phone,
+			&user.PasswordHash,
+			&user.TOTPSalt,
+			&user.FirstName,
+			&user.LastName,
+			&user.MiddleName,
+			&userAvatarURL,
+			&user.EmailVerified,
+			&user.Role,
+			&user.CreatedAt,
+			&user.UpdatedAt,
+			&user.Organization.ID,
+			&user.Organization.BrandName,
+			&user.Organization.FullName,
+			&user.Organization.ShortName,
+			&user.Organization.IsContractor,
+			&user.Organization.IsBanned,
+			&user.Organization.INN,
+			&user.Organization.OKPO,
+			&user.Organization.OGRN,
+			&user.Organization.KPP,
+			&user.Organization.TaxCode,
+			&user.Organization.Address,
+			&organizationAvatarURL,
+			&user.Organization.Emails,
+			&user.Organization.Phones,
+			&user.Organization.Messengers,
+			&user.Organization.CreatedAt,
+			&user.Organization.UpdatedAt,
+		)
+
+		user.AvatarURL = userAvatarURL.String
+		user.Organization.AvatarURL = organizationAvatarURL.String
+
+		users = append(users, user)
+	}
+
+	return users, nil
 }

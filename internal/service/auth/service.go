@@ -36,7 +36,7 @@ type DBTX interface {
 
 type UserStore interface {
 	Create(ctx context.Context, qe store.QueryExecutor, params store.UserCreateParams) (models.User, error)
-	GetWithOrganiztion(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) (models.User, error)
+	GetWithOrganiztion(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) ([]models.User, error)
 }
 
 type OrganizationStore interface {

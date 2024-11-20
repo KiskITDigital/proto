@@ -15,12 +15,14 @@ func (s *Service) Refresh(ctx context.Context, sessionToken string) (SignInResul
 		return SignInResult{}, fmt.Errorf("get session: %w", err)
 	}
 
-	user, err := s.userStore.GetWithOrganiztion(ctx, s.psql.DB(), store.UserGetParams{
+	users, err := s.userStore.GetWithOrganiztion(ctx, s.psql.DB(), store.UserGetParams{
 		ID: session.UserID,
 	})
 	if err != nil {
 		return SignInResult{}, fmt.Errorf("get user: %w", err)
 	}
+
+	user := users[0]
 
 	rawToken, err := s.tokenAuthorizer.GenerateToken(token.Payload{
 		UserID:         user.ID,

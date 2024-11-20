@@ -14,6 +14,7 @@ type Handler struct {
 
 type Service interface {
 	GetByID(ctx context.Context, tenderID int) (models.User, error)
+	Get(ctx context.Context) ([]models.User, error)
 }
 
 func New(logger *slog.Logger, svc Service) *Handler {
