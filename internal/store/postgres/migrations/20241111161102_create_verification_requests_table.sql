@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS verification_requests (
     reviewer_user_id    BIGINT REFERENCES users(id),
     object_type         SMALLINT NOT NULL,
     object_id           BIGINT NOT NULL,
-    content             TEXT NOT NULL,
+    content             JSONB NOT NULL,
     attachments         JSONB NOT NULL,
     status              SMALLINT NOT NULL,
     review_comment      TEXT,
