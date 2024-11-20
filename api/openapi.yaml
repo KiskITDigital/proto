@@ -83,11 +83,3 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-    adminCookieAuth:
-      type: apiKey
-      in: cookie
-      name: ubrato_admin_session
-    adminBearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
