@@ -12,7 +12,7 @@ type VerificationObject interface {
 
 type VerificationRequest[T any] struct {
 	ID            int
-	Reviewer      User
+	Reviewer      EmployeeUser
 	ObjectType    string
 	ObjectID      int
 	Object        T
@@ -27,7 +27,7 @@ type VerificationRequest[T any] struct {
 func VerificationRequestModelToApi[T VerificationObject](request VerificationRequest[T]) api.VerificationRequest {
 	return api.VerificationRequest{
 		ID:            request.ID,
-		Reviewer:      api.NewOptUser(ConvertUserModelToApi(request.Reviewer)),
+		Reviewer:      api.NewOptEmployeeUser(ConvertEmployeeUserModelToApi(request.Reviewer)),
 		ObjectType:    api.ObjectType(request.ObjectType),
 		Object:        request.Object.ToVerificationObject(),
 		Attachments:   request.Attachments,

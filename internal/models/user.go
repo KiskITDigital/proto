@@ -42,11 +42,26 @@ type User struct {
 	MiddleName    string
 	AvatarURL     string
 	EmailVerified bool
-	Role          UserRole
 	IsBanned      bool
-	Organization  Organization
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
+}
+
+type RegularUser struct {
+	User
+	Organization Organization
+}
+
+type EmployeeUser struct {
+	User
+	Role     UserRole
+	Position string
+}
+
+type FullUser struct {
+	User
+	RegularUser
+	EmployeeUser
 }
 
 func ConvertUserModelToApi(user User) api.User {
@@ -59,12 +74,40 @@ func ConvertUserModelToApi(user User) api.User {
 		MiddleName:    api.Name(user.MiddleName),
 		AvatarURL:     api.OptURL{Value: api.URL(user.AvatarURL), Set: user.AvatarURL != ""},
 		EmailVerified: user.EmailVerified,
+		CreatedAt:     user.CreatedAt,
+		UpdatedAt:     user.UpdatedAt,
+	}
+}
+
+func ConvertRegularUserModelToApi(user RegularUser) api.RegularUser {
+	return api.RegularUser{
+		ID:            user.ID,
+		Email:         api.Email(user.Email),
+		Phone:         api.Phone(user.Phone),
+		FirstName:     api.Name(user.FirstName),
+		LastName:      api.Name(user.LastName),
+		MiddleName:    api.Name(user.MiddleName),
+		AvatarURL:     api.OptURL{Value: api.URL(user.AvatarURL), Set: user.AvatarURL != ""},
+		EmailVerified: user.EmailVerified,
+		Organization:  ConvertOrganizationModelToApi(user.Organization),
+		CreatedAt:     user.CreatedAt,
+		UpdatedAt:     user.UpdatedAt,
+	}
+}
+
+func ConvertEmployeeUserModelToApi(user EmployeeUser) api.EmployeeUser {
+	return api.EmployeeUser{
+		ID:            user.ID,
+		Email:         api.Email(user.Email),
+		Phone:         api.Phone(user.Phone),
+		FirstName:     api.Name(user.FirstName),
+		LastName:      api.Name(user.LastName),
+		MiddleName:    api.Name(user.MiddleName),
+		AvatarURL:     api.OptURL{Value: api.URL(user.AvatarURL), Set: user.AvatarURL != ""},
+		EmailVerified: user.EmailVerified,
 		Role:          api.Role(user.Role.ToApi()),
-		Organization: api.OptOrganization{
-			Value: api.Organization(ConvertOrganizationModelToApi(user.Organization)),
-			Set:   user.Organization.ID != 0,
-		},
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
+		Position:      user.Position,
+		CreatedAt:     user.CreatedAt,
+		UpdatedAt:     user.UpdatedAt,
 	}
 }

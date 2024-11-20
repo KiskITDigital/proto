@@ -19,15 +19,24 @@ type SignInParams struct {
 }
 
 type SignInResult struct {
-	User        models.User
+	User        models.RegularUser
 	Session     models.Session
 	AccessToken string
 }
 
 func (s *Service) SignIn(ctx context.Context, params SignInParams) (SignInResult, error) {
-	users, err := s.userStore.GetWithOrganiztion(ctx, s.psql.DB(), store.UserGetParams{Email: params.Email})
+	users, err := s.userStore.Get(ctx, s.psql.DB(), store.UserGetParams{Email: params.Email})
 	if err != nil {
-		return SignInResult{}, fmt.Errorf("get user with organization: %w", err)
+		return SignInResult{}, fmt.Errorf("get user: %w", err)
+	}
+
+	if len(users) == 0 {
+		return SignInResult{}, cerr.Wrap(
+			fmt.Errorf("user not found"),
+			cerr.CodeNotFound,
+			fmt.Sprintf("user with %s email not found", params.Email),
+			nil,
+		)
 	}
 
 	user := users[0]
@@ -57,7 +66,7 @@ func (s *Service) SignIn(ctx context.Context, params SignInParams) (SignInResult
 	}
 
 	return SignInResult{
-		User:        user,
+		User:        models.RegularUser{User: user.User, Organization: user.Organization},
 		Session:     session,
 		AccessToken: rawToken,
 	}, nil

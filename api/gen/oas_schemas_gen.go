@@ -191,6 +191,154 @@ func (s *CustomerInfo) SetTodo(val string) {
 
 type Email string
 
+// Merged schema.
+// Ref: #
+type EmployeeUser struct {
+	ID            int       `json:"id"`
+	Email         Email     `json:"email"`
+	Phone         Phone     `json:"phone"`
+	FirstName     Name      `json:"first_name"`
+	LastName      Name      `json:"last_name"`
+	MiddleName    Name      `json:"middle_name"`
+	AvatarURL     OptURL    `json:"avatar_url"`
+	EmailVerified bool      `json:"email_verified"`
+	IsBanned      bool      `json:"is_banned"`
+	CreatedAt     time.Time `json:"created_at"`
+	UpdatedAt     time.Time `json:"updated_at"`
+	Position      string    `json:"position"`
+	Role          Role      `json:"role"`
+}
+
+// GetID returns the value of ID.
+func (s *EmployeeUser) GetID() int {
+	return s.ID
+}
+
+// GetEmail returns the value of Email.
+func (s *EmployeeUser) GetEmail() Email {
+	return s.Email
+}
+
+// GetPhone returns the value of Phone.
+func (s *EmployeeUser) GetPhone() Phone {
+	return s.Phone
+}
+
+// GetFirstName returns the value of FirstName.
+func (s *EmployeeUser) GetFirstName() Name {
+	return s.FirstName
+}
+
+// GetLastName returns the value of LastName.
+func (s *EmployeeUser) GetLastName() Name {
+	return s.LastName
+}
+
+// GetMiddleName returns the value of MiddleName.
+func (s *EmployeeUser) GetMiddleName() Name {
+	return s.MiddleName
+}
+
+// GetAvatarURL returns the value of AvatarURL.
+func (s *EmployeeUser) GetAvatarURL() OptURL {
+	return s.AvatarURL
+}
+
+// GetEmailVerified returns the value of EmailVerified.
+func (s *EmployeeUser) GetEmailVerified() bool {
+	return s.EmailVerified
+}
+
+// GetIsBanned returns the value of IsBanned.
+func (s *EmployeeUser) GetIsBanned() bool {
+	return s.IsBanned
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *EmployeeUser) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// GetUpdatedAt returns the value of UpdatedAt.
+func (s *EmployeeUser) GetUpdatedAt() time.Time {
+	return s.UpdatedAt
+}
+
+// GetPosition returns the value of Position.
+func (s *EmployeeUser) GetPosition() string {
+	return s.Position
+}
+
+// GetRole returns the value of Role.
+func (s *EmployeeUser) GetRole() Role {
+	return s.Role
+}
+
+// SetID sets the value of ID.
+func (s *EmployeeUser) SetID(val int) {
+	s.ID = val
+}
+
+// SetEmail sets the value of Email.
+func (s *EmployeeUser) SetEmail(val Email) {
+	s.Email = val
+}
+
+// SetPhone sets the value of Phone.
+func (s *EmployeeUser) SetPhone(val Phone) {
+	s.Phone = val
+}
+
+// SetFirstName sets the value of FirstName.
+func (s *EmployeeUser) SetFirstName(val Name) {
+	s.FirstName = val
+}
+
+// SetLastName sets the value of LastName.
+func (s *EmployeeUser) SetLastName(val Name) {
+	s.LastName = val
+}
+
+// SetMiddleName sets the value of MiddleName.
+func (s *EmployeeUser) SetMiddleName(val Name) {
+	s.MiddleName = val
+}
+
+// SetAvatarURL sets the value of AvatarURL.
+func (s *EmployeeUser) SetAvatarURL(val OptURL) {
+	s.AvatarURL = val
+}
+
+// SetEmailVerified sets the value of EmailVerified.
+func (s *EmployeeUser) SetEmailVerified(val bool) {
+	s.EmailVerified = val
+}
+
+// SetIsBanned sets the value of IsBanned.
+func (s *EmployeeUser) SetIsBanned(val bool) {
+	s.IsBanned = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *EmployeeUser) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// SetUpdatedAt sets the value of UpdatedAt.
+func (s *EmployeeUser) SetUpdatedAt(val time.Time) {
+	s.UpdatedAt = val
+}
+
+// SetPosition sets the value of Position.
+func (s *EmployeeUser) SetPosition(val string) {
+	s.Position = val
+}
+
+// SetRole sets the value of Role.
+func (s *EmployeeUser) SetRole(val Role) {
+	s.Role = val
+}
+
 // Ref: #
 type Error struct {
 	// Application-specific error code.
@@ -584,6 +732,52 @@ func (o OptDateTime) Or(d time.Time) time.Time {
 	return d
 }
 
+// NewOptEmployeeUser returns new OptEmployeeUser with value set to v.
+func NewOptEmployeeUser(v EmployeeUser) OptEmployeeUser {
+	return OptEmployeeUser{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptEmployeeUser is optional EmployeeUser.
+type OptEmployeeUser struct {
+	Value EmployeeUser
+	Set   bool
+}
+
+// IsSet returns true if OptEmployeeUser was set.
+func (o OptEmployeeUser) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptEmployeeUser) Reset() {
+	var v EmployeeUser
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptEmployeeUser) SetTo(v EmployeeUser) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptEmployeeUser) Get() (v EmployeeUser, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptEmployeeUser) Or(d EmployeeUser) EmployeeUser {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptFloat64 returns new OptFloat64 with value set to v.
 func NewOptFloat64(v float64) OptFloat64 {
 	return OptFloat64{
@@ -854,52 +1048,6 @@ func (o OptURL) Get() (v URL, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptURL) Or(d URL) URL {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptUser returns new OptUser with value set to v.
-func NewOptUser(v User) OptUser {
-	return OptUser{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptUser is optional User.
-type OptUser struct {
-	Value User
-	Set   bool
-}
-
-// IsSet returns true if OptUser was set.
-func (o OptUser) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptUser) Reset() {
-	var v User
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptUser) SetTo(v User) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptUser) Get() (v User, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptUser) Or(d User) User {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -1953,6 +2101,143 @@ func (s *Region) SetName(val string) {
 	s.Name = val
 }
 
+// Merged schema.
+// Ref: #
+type RegularUser struct {
+	ID            int          `json:"id"`
+	Email         Email        `json:"email"`
+	Phone         Phone        `json:"phone"`
+	FirstName     Name         `json:"first_name"`
+	LastName      Name         `json:"last_name"`
+	MiddleName    Name         `json:"middle_name"`
+	AvatarURL     OptURL       `json:"avatar_url"`
+	EmailVerified bool         `json:"email_verified"`
+	IsBanned      bool         `json:"is_banned"`
+	CreatedAt     time.Time    `json:"created_at"`
+	UpdatedAt     time.Time    `json:"updated_at"`
+	Organization  Organization `json:"organization"`
+}
+
+// GetID returns the value of ID.
+func (s *RegularUser) GetID() int {
+	return s.ID
+}
+
+// GetEmail returns the value of Email.
+func (s *RegularUser) GetEmail() Email {
+	return s.Email
+}
+
+// GetPhone returns the value of Phone.
+func (s *RegularUser) GetPhone() Phone {
+	return s.Phone
+}
+
+// GetFirstName returns the value of FirstName.
+func (s *RegularUser) GetFirstName() Name {
+	return s.FirstName
+}
+
+// GetLastName returns the value of LastName.
+func (s *RegularUser) GetLastName() Name {
+	return s.LastName
+}
+
+// GetMiddleName returns the value of MiddleName.
+func (s *RegularUser) GetMiddleName() Name {
+	return s.MiddleName
+}
+
+// GetAvatarURL returns the value of AvatarURL.
+func (s *RegularUser) GetAvatarURL() OptURL {
+	return s.AvatarURL
+}
+
+// GetEmailVerified returns the value of EmailVerified.
+func (s *RegularUser) GetEmailVerified() bool {
+	return s.EmailVerified
+}
+
+// GetIsBanned returns the value of IsBanned.
+func (s *RegularUser) GetIsBanned() bool {
+	return s.IsBanned
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *RegularUser) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// GetUpdatedAt returns the value of UpdatedAt.
+func (s *RegularUser) GetUpdatedAt() time.Time {
+	return s.UpdatedAt
+}
+
+// GetOrganization returns the value of Organization.
+func (s *RegularUser) GetOrganization() Organization {
+	return s.Organization
+}
+
+// SetID sets the value of ID.
+func (s *RegularUser) SetID(val int) {
+	s.ID = val
+}
+
+// SetEmail sets the value of Email.
+func (s *RegularUser) SetEmail(val Email) {
+	s.Email = val
+}
+
+// SetPhone sets the value of Phone.
+func (s *RegularUser) SetPhone(val Phone) {
+	s.Phone = val
+}
+
+// SetFirstName sets the value of FirstName.
+func (s *RegularUser) SetFirstName(val Name) {
+	s.FirstName = val
+}
+
+// SetLastName sets the value of LastName.
+func (s *RegularUser) SetLastName(val Name) {
+	s.LastName = val
+}
+
+// SetMiddleName sets the value of MiddleName.
+func (s *RegularUser) SetMiddleName(val Name) {
+	s.MiddleName = val
+}
+
+// SetAvatarURL sets the value of AvatarURL.
+func (s *RegularUser) SetAvatarURL(val OptURL) {
+	s.AvatarURL = val
+}
+
+// SetEmailVerified sets the value of EmailVerified.
+func (s *RegularUser) SetEmailVerified(val bool) {
+	s.EmailVerified = val
+}
+
+// SetIsBanned sets the value of IsBanned.
+func (s *RegularUser) SetIsBanned(val bool) {
+	s.IsBanned = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *RegularUser) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// SetUpdatedAt sets the value of UpdatedAt.
+func (s *RegularUser) SetUpdatedAt(val time.Time) {
+	s.UpdatedAt = val
+}
+
+// SetOrganization sets the value of Organization.
+func (s *RegularUser) SetOrganization(val Organization) {
+	s.Organization = val
+}
+
 // Ref: #
 type Role string
 
@@ -2373,29 +2658,22 @@ type URL string
 
 // Ref: #
 type User struct {
-	ID            int             `json:"id"`
-	Organization  OptOrganization `json:"organization"`
-	Email         Email           `json:"email"`
-	Phone         Phone           `json:"phone"`
-	FirstName     Name            `json:"first_name"`
-	LastName      Name            `json:"last_name"`
-	MiddleName    Name            `json:"middle_name"`
-	AvatarURL     OptURL          `json:"avatar_url"`
-	EmailVerified bool            `json:"email_verified"`
-	Role          Role            `json:"role"`
-	IsBanned      bool            `json:"is_banned"`
-	CreatedAt     time.Time       `json:"created_at"`
-	UpdatedAt     time.Time       `json:"updated_at"`
+	ID            int       `json:"id"`
+	Email         Email     `json:"email"`
+	Phone         Phone     `json:"phone"`
+	FirstName     Name      `json:"first_name"`
+	LastName      Name      `json:"last_name"`
+	MiddleName    Name      `json:"middle_name"`
+	AvatarURL     OptURL    `json:"avatar_url"`
+	EmailVerified bool      `json:"email_verified"`
+	IsBanned      bool      `json:"is_banned"`
+	CreatedAt     time.Time `json:"created_at"`
+	UpdatedAt     time.Time `json:"updated_at"`
 }
 
 // GetID returns the value of ID.
 func (s *User) GetID() int {
 	return s.ID
-}
-
-// GetOrganization returns the value of Organization.
-func (s *User) GetOrganization() OptOrganization {
-	return s.Organization
 }
 
 // GetEmail returns the value of Email.
@@ -2433,11 +2711,6 @@ func (s *User) GetEmailVerified() bool {
 	return s.EmailVerified
 }
 
-// GetRole returns the value of Role.
-func (s *User) GetRole() Role {
-	return s.Role
-}
-
 // GetIsBanned returns the value of IsBanned.
 func (s *User) GetIsBanned() bool {
 	return s.IsBanned
@@ -2456,11 +2729,6 @@ func (s *User) GetUpdatedAt() time.Time {
 // SetID sets the value of ID.
 func (s *User) SetID(val int) {
 	s.ID = val
-}
-
-// SetOrganization sets the value of Organization.
-func (s *User) SetOrganization(val OptOrganization) {
-	s.Organization = val
 }
 
 // SetEmail sets the value of Email.
@@ -2496,11 +2764,6 @@ func (s *User) SetAvatarURL(val OptURL) {
 // SetEmailVerified sets the value of EmailVerified.
 func (s *User) SetEmailVerified(val bool) {
 	s.EmailVerified = val
-}
-
-// SetRole sets the value of Role.
-func (s *User) SetRole(val Role) {
-	s.Role = val
 }
 
 // SetIsBanned sets the value of IsBanned.
@@ -2600,12 +2863,12 @@ func (s *V1AuthSigninPostOK) SetData(val V1AuthSigninPostOKData) {
 }
 
 type V1AuthSigninPostOKData struct {
-	User        User   `json:"user"`
-	AccessToken string `json:"access_token"`
+	User        RegularUser `json:"user"`
+	AccessToken string      `json:"access_token"`
 }
 
 // GetUser returns the value of User.
-func (s *V1AuthSigninPostOKData) GetUser() User {
+func (s *V1AuthSigninPostOKData) GetUser() RegularUser {
 	return s.User
 }
 
@@ -2615,7 +2878,7 @@ func (s *V1AuthSigninPostOKData) GetAccessToken() string {
 }
 
 // SetUser sets the value of User.
-func (s *V1AuthSigninPostOKData) SetUser(val User) {
+func (s *V1AuthSigninPostOKData) SetUser(val RegularUser) {
 	s.User = val
 }
 
@@ -2692,12 +2955,12 @@ func (s *V1AuthSignupPostCreated) SetData(val V1AuthSignupPostCreatedData) {
 }
 
 type V1AuthSignupPostCreatedData struct {
-	User        User   `json:"user"`
-	AccessToken string `json:"access_token"`
+	User        RegularUser `json:"user"`
+	AccessToken string      `json:"access_token"`
 }
 
 // GetUser returns the value of User.
-func (s *V1AuthSignupPostCreatedData) GetUser() User {
+func (s *V1AuthSignupPostCreatedData) GetUser() RegularUser {
 	return s.User
 }
 
@@ -2707,7 +2970,7 @@ func (s *V1AuthSignupPostCreatedData) GetAccessToken() string {
 }
 
 // SetUser sets the value of User.
-func (s *V1AuthSignupPostCreatedData) SetUser(val User) {
+func (s *V1AuthSignupPostCreatedData) SetUser(val RegularUser) {
 	s.User = val
 }
 
@@ -2847,16 +3110,16 @@ func (s *V1AuthSignupPostReq) SetIsContractor(val bool) {
 }
 
 type V1AuthUserGetOK struct {
-	Data User `json:"data"`
+	Data RegularUser `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1AuthUserGetOK) GetData() User {
+func (s *V1AuthUserGetOK) GetData() RegularUser {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1AuthUserGetOK) SetData(val User) {
+func (s *V1AuthUserGetOK) SetData(val RegularUser) {
 	s.Data = val
 }
 
@@ -4557,16 +4820,16 @@ func (s *V1UsersRequestResetPasswordPostReq) SetEmail(val Email) {
 }
 
 type V1UsersUserIDGetOK struct {
-	Data User `json:"data"`
+	Data RegularUser `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1UsersUserIDGetOK) GetData() User {
+func (s *V1UsersUserIDGetOK) GetData() RegularUser {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1UsersUserIDGetOK) SetData(val User) {
+func (s *V1UsersUserIDGetOK) SetData(val RegularUser) {
 	s.Data = val
 }
 
@@ -4585,7 +4848,7 @@ func (*V1VerificationsRequestIDDenyPostOK) v1VerificationsRequestIDDenyPostRes()
 // Ref: #
 type VerificationRequest struct {
 	ID            int                       `json:"id"`
-	Reviewer      OptUser                   `json:"reviewer"`
+	Reviewer      OptEmployeeUser           `json:"reviewer"`
 	ObjectType    ObjectType                `json:"object_type"`
 	Object        VerificationRequestObject `json:"object"`
 	Content       string                    `json:"content"`
@@ -4602,7 +4865,7 @@ func (s *VerificationRequest) GetID() int {
 }
 
 // GetReviewer returns the value of Reviewer.
-func (s *VerificationRequest) GetReviewer() OptUser {
+func (s *VerificationRequest) GetReviewer() OptEmployeeUser {
 	return s.Reviewer
 }
 
@@ -4652,7 +4915,7 @@ func (s *VerificationRequest) SetID(val int) {
 }
 
 // SetReviewer sets the value of Reviewer.
-func (s *VerificationRequest) SetReviewer(val OptUser) {
+func (s *VerificationRequest) SetReviewer(val OptEmployeeUser) {
 	s.Reviewer = val
 }
 

@@ -11,7 +11,7 @@ properties:
   id:
     type: integer
   reviewer:
-    $ref: "./User.yaml"
+    $ref: "./EmployeeUser.yaml"
   object_type:
     $ref: "../properties/object_type.yaml"
   object:

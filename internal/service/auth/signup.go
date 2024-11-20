@@ -32,7 +32,7 @@ type SignUpParams struct {
 }
 
 type SignUpResult struct {
-	User        models.User
+	User        models.RegularUser
 	Session     models.Session
 	AccessToken string
 }
@@ -95,8 +95,10 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 			return fmt.Errorf("add user to organization: %w", err)
 		}
 
-		user.Organization = organization
-		result.User = user
+		result.User = models.RegularUser{
+			User:         user,
+			Organization: organization,
+		}
 
 		session, err := s.sessionStore.Create(ctx, qe, store.SessionCreateParams{
 			ID:        randSessionID(sessionLength),
@@ -112,8 +114,8 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 
 		rawToken, err := s.tokenAuthorizer.GenerateToken(token.Payload{
 			UserID:         user.ID,
-			OrganizationID: user.Organization.ID,
-			Role:           int(user.Role),
+			OrganizationID: result.User.Organization.ID,
+			Role:           int(models.UserRoleUser),
 		})
 		if err != nil {
 			return fmt.Errorf("generate access token: %w", err)
@@ -142,7 +144,7 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 			MiddleName:    result.User.MiddleName,
 			AvatarUrl:     &result.User.AvatarURL,
 			EmailVerified: result.User.EmailVerified,
-			Role:          modelsv1.UserRole(result.User.Role),
+			Role:          modelsv1.UserRole(models.UserRoleUser),
 			Organization: &modelsv1.Organization{
 				Id:           int64(result.User.Organization.ID),
 				BrandName:    result.User.Organization.BrandName,

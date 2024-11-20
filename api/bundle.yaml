@@ -50,7 +50,7 @@ paths:
                       - access_token
                     properties:
                       user:
-                        $ref: '#/components/schemas/User'
+                        $ref: '#/components/schemas/RegularUser'
                       access_token:
                         type: string
         default:
@@ -116,7 +116,7 @@ paths:
                       - access_token
                     properties:
                       user:
-                        $ref: '#/components/schemas/User'
+                        $ref: '#/components/schemas/RegularUser'
                       access_token:
                         type: string
         default:
@@ -138,7 +138,7 @@ paths:
                   - data
                 properties:
                   data:
-                    $ref: '#/components/schemas/User'
+                    $ref: '#/components/schemas/RegularUser'
         default:
           $ref: '#/components/responses/Error'
   /v1/auth/refresh:
@@ -832,7 +832,7 @@ paths:
                   - data
                 properties:
                   data:
-                    $ref: '#/components/schemas/User'
+                    $ref: '#/components/schemas/RegularUser'
         default:
           $ref: '#/components/responses/Error'
   /v1/organizations/{organizationID}/tenders:
@@ -1596,11 +1596,58 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/Error'
+    phone:
+      type: string
+      format: phone
+      pattern: ^\+?\d{10,14}$
     name:
       type: string
       minLength: 3
       pattern: ^[а-яА-ЯёЁ]+$
       example: Абоба
+    url:
+      type: string
+      pattern: ^https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$
+      example: https://s3.ubrato.ru/qwerty
+    User:
+      type: object
+      required:
+        - id
+        - email
+        - phone
+        - first_name
+        - last_name
+        - middle_name
+        - email_verified
+        - role
+        - is_banned
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+        email:
+          $ref: '#/components/schemas/email'
+        phone:
+          $ref: '#/components/schemas/phone'
+        first_name:
+          $ref: '#/components/schemas/name'
+        last_name:
+          $ref: '#/components/schemas/name'
+        middle_name:
+          $ref: '#/components/schemas/name'
+        avatar_url:
+          $ref: '#/components/schemas/url'
+        email_verified:
+          type: boolean
+        is_banned:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
     inn:
       type: string
       pattern: ^\d{10,12}$
@@ -1620,10 +1667,6 @@ components:
       type: string
       pattern: ^\d+$
       example: '7736'
-    url:
-      type: string
-      pattern: ^https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$
-      example: https://s3.ubrato.ru/qwerty
     ContactInfo:
       type: object
       required:
@@ -1730,60 +1773,15 @@ components:
         updated_at:
           type: string
           format: date-time
-    phone:
-      type: string
-      format: phone
-      pattern: ^\+?\d{10,14}$
-    role:
-      type: string
-      enum:
-        - user
-        - employee
-        - admin
-        - super_admin
-    User:
-      type: object
-      required:
-        - id
-        - email
-        - phone
-        - first_name
-        - last_name
-        - middle_name
-        - email_verified
-        - role
-        - is_banned
-        - created_at
-        - updated_at
-      properties:
-        id:
-          type: integer
-        organization:
-          $ref: '#/components/schemas/Organization'
-        email:
-          $ref: '#/components/schemas/email'
-        phone:
-          $ref: '#/components/schemas/phone'
-        first_name:
-          $ref: '#/components/schemas/name'
-        last_name:
-          $ref: '#/components/schemas/name'
-        middle_name:
-          $ref: '#/components/schemas/name'
-        avatar_url:
-          $ref: '#/components/schemas/url'
-        email_verified:
-          type: boolean
-        role:
-          $ref: '#/components/schemas/role'
-        is_banned:
-          type: boolean
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
+    RegularUser:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          required:
+            - organization
+          properties:
+            organization:
+              $ref: '#/components/schemas/Organization'
     Region:
       type: object
       required:
@@ -1925,6 +1923,24 @@ components:
         updated_at:
           type: string
           format: date-time
+    role:
+      type: string
+      enum:
+        - user
+        - employee
+        - admin
+        - super_admin
+    EmployeeUser:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          required:
+            - position
+          properties:
+            position:
+              type: string
+            role:
+              $ref: '#/components/schemas/role'
     object_type:
       type: string
       enum:
@@ -1966,7 +1982,7 @@ components:
         id:
           type: integer
         reviewer:
-          $ref: '#/components/schemas/User'
+          $ref: '#/components/schemas/EmployeeUser'
         object_type:
           $ref: '#/components/schemas/object_type'
         object:

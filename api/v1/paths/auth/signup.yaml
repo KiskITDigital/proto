@@ -58,7 +58,7 @@ post:
                   - access_token
                 properties:
                   user:
-                    $ref: "../../schemas/User.yaml"
+                    $ref: "../../schemas/RegularUser.yaml"
                   access_token:
                     type: string
     default:

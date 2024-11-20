@@ -14,6 +14,6 @@ get:
               - data
             properties:
               data:
-                $ref: "../../schemas/User.yaml"
+                $ref: "../../schemas/RegularUser.yaml"
     default:
       $ref: "../../responses/Error.yaml"

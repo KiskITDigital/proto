@@ -14,8 +14,6 @@ required:
 properties:
   id:
     type: integer
-  organization:
-    $ref: "./Organization.yaml"
   email:
     $ref: "../properties/email.yaml"
   phone:
@@ -30,8 +28,6 @@ properties:
     $ref: "../properties/url.yaml"
   email_verified:
     type: boolean
-  role:
-    $ref: "../properties/role.yaml"
   is_banned:
     type: boolean
   created_at:

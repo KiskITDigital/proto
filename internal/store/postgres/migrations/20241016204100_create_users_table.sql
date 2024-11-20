@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS users (
     avatar_url      TEXT,
     email_verified  BOOLEAN NOT NULL,
     totp_salt       TEXT NOT NULL,
-    role            SMALLINT NOT NULL,
     is_banned       BOOLEAN NOT NULL,
     created_at      TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP

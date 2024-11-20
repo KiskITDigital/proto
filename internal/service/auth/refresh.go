@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/token"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
@@ -15,11 +16,18 @@ func (s *Service) Refresh(ctx context.Context, sessionToken string) (SignInResul
 		return SignInResult{}, fmt.Errorf("get session: %w", err)
 	}
 
-	users, err := s.userStore.GetWithOrganiztion(ctx, s.psql.DB(), store.UserGetParams{
-		ID: session.UserID,
-	})
+	users, err := s.userStore.Get(ctx, s.psql.DB(), store.UserGetParams{ID: session.UserID})
 	if err != nil {
 		return SignInResult{}, fmt.Errorf("get user: %w", err)
+	}
+
+	if len(users) == 0 {
+		return SignInResult{}, cerr.Wrap(
+			fmt.Errorf("user not found"),
+			cerr.CodeNotFound,
+			fmt.Sprintf("user with %d user_id not found", session.UserID),
+			nil,
+		)
 	}
 
 	user := users[0]
@@ -42,7 +50,7 @@ func (s *Service) Refresh(ctx context.Context, sessionToken string) (SignInResul
 	}
 
 	return SignInResult{
-		User:        user,
+		User:        user.RegularUser,
 		Session:     session,
 		AccessToken: rawToken,
 	}, nil

@@ -40,7 +40,7 @@ func (h *Handler) V1AuthSignupPost(ctx context.Context, req *api.V1AuthSignupPos
 		SetCookie: api.NewOptString(cookie.String()),
 		Response: api.V1AuthSignupPostCreated{
 			Data: api.V1AuthSignupPostCreatedData{
-				User:        models.ConvertUserModelToApi(resp.User),
+				User:        models.ConvertRegularUserModelToApi(resp.User),
 				AccessToken: resp.AccessToken,
 			},
 		},

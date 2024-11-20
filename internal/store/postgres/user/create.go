@@ -51,7 +51,6 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 				middle_name,
 				avatar_url,
 				email_verified,
-				role,
 				created_at,
 				updated_at
 		`).
@@ -73,7 +72,6 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 		&createdUser.MiddleName,
 		&avatarURL,
 		&createdUser.EmailVerified,
-		&createdUser.Role,
 		&createdUser.CreatedAt,
 		&createdUser.UpdatedAt,
 	)

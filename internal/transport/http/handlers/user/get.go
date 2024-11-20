@@ -18,7 +18,7 @@ func (h *Handler) V1UsersUserIDGet(ctx context.Context, params api.V1UsersUserID
 	}
 
 	return &api.V1UsersUserIDGetOK{
-		Data: models.ConvertUserModelToApi(user),
+		Data: models.ConvertRegularUserModelToApi(user),
 	}, nil
 }
 
@@ -33,6 +33,8 @@ func (h *Handler) V1UsersGet(ctx context.Context, params api.V1UsersGetParams) (
 	}
 
 	return &api.V1UsersGetOK{
-		Data: convert.Slice[[]models.User, []api.User](users, models.ConvertUserModelToApi),
+		Data: convert.Slice[[]models.RegularUser, []api.User](users, func(ru models.RegularUser) api.User {
+			return models.ConvertUserModelToApi(ru.User)
+		}),
 	}, nil
 }

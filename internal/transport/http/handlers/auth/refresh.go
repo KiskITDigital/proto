@@ -29,7 +29,7 @@ func (h *Handler) V1AuthRefreshPost(ctx context.Context, params api.V1AuthRefres
 		SetCookie: api.NewOptString(cookie.String()),
 		Response: api.V1AuthRefreshPostOK{
 			Data: api.V1AuthRefreshPostOKData{
-				User:        models.ConvertUserModelToApi(resp.User),
+				User:        models.ConvertUserModelToApi(resp.User.User),
 				AccessToken: resp.AccessToken,
 			},
 		},

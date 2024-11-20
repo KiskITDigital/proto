@@ -33,7 +33,7 @@ func (h *Handler) V1AuthSigninPost(ctx context.Context, req *api.V1AuthSigninPos
 		SetCookie: api.NewOptString(cookie.String()),
 		Response: api.V1AuthSigninPostOK{
 			Data: api.V1AuthSigninPostOKData{
-				User:        models.ConvertUserModelToApi(resp.User),
+				User:        models.ConvertRegularUserModelToApi(resp.User),
 				AccessToken: resp.AccessToken,
 			},
 		},

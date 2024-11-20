@@ -16,6 +16,6 @@ func (h *Handler) V1AuthUserGet(ctx context.Context) (api.V1AuthUserGetRes, erro
 	}
 
 	return &api.V1AuthUserGetOK{
-		Data: models.ConvertUserModelToApi(user),
+		Data: models.ConvertRegularUserModelToApi(user),
 	}, nil
 }

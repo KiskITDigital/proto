@@ -23,7 +23,7 @@ type AuthService interface {
 }
 
 type UserService interface {
-	GetByID(ctx context.Context, userID int) (models.User, error)
+	GetByID(ctx context.Context, userID int) (models.RegularUser, error)
 }
 
 func New(
