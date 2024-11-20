@@ -25,10 +25,12 @@ type SignInResult struct {
 }
 
 func (s *Service) SignIn(ctx context.Context, params SignInParams) (SignInResult, error) {
-	user, err := s.userStore.GetWithOrganiztion(ctx, s.psql.DB(), store.UserGetParams{Email: params.Email})
+	users, err := s.userStore.GetWithOrganiztion(ctx, s.psql.DB(), store.UserGetParams{Email: params.Email})
 	if err != nil {
 		return SignInResult{}, fmt.Errorf("get user with organization: %w", err)
 	}
+
+	user := users[0]
 
 	err = crypto.CheckPassword(params.Password, user.PasswordHash)
 	if err != nil {
