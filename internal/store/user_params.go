@@ -9,7 +9,6 @@ type UserCreateParams struct {
 	LastName     string
 	MiddleName   string
 	AvatarURL    string
-	Role         int
 }
 
 type UserGetParams struct {

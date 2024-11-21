@@ -64,7 +64,6 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 			LastName:     params.LastName,
 			MiddleName:   params.MiddleName,
 			AvatarURL:    params.AvatarURL,
-			Role:         models.UserRoleUser,
 		})
 		if err != nil {
 			return fmt.Errorf("create user: %w", err)

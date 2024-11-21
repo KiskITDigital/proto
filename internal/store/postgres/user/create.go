@@ -23,7 +23,6 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 			"middle_name",
 			"avatar_url",
 			"email_verified",
-			"role",
 			"is_banned",
 		).
 		Values(
@@ -36,7 +35,6 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 			params.MiddleName,
 			sql.NullString{Valid: params.AvatarURL != "", String: params.AvatarURL},
 			false,
-			params.Role,
 			false,
 		).
 		Suffix(`
