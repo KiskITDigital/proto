@@ -23,6 +23,8 @@ require (
 	google.golang.org/protobuf v1.35.1
 )
 
+require github.com/boombuler/barcode v1.0.1-0.20190219062509-6c824513bacc // indirect
+
 require (
 	github.com/dlclark/regexp2 v1.11.4 // indirect
 	github.com/fatih/color v1.17.0 // indirect
@@ -37,6 +39,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/nats-io/nkeys v0.4.7 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
+	github.com/pquerna/otp v1.4.0
 	github.com/segmentio/asm v1.2.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/net v0.30.0 // indirect

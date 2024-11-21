@@ -3,6 +3,7 @@ package tender
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
@@ -22,7 +23,7 @@ func (s *TenderStore) GetByID(ctx context.Context, qe store.QueryExecutor, id in
 	}
 
 	if len(tenders) == 0 {
-		return models.Tender{}, fmt.Errorf("tender not found")
+		return models.Tender{}, errors.New("tender not found")
 	}
 
 	return tenders[0], nil
