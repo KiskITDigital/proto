@@ -112,6 +112,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	userService := userService.New(
 		psql,
 		userStore,
+		jetStream,
 	)
 
 	surveyService := surveyService.New(

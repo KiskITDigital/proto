@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -32,7 +33,7 @@ func (s *Service) SignIn(ctx context.Context, params SignInParams) (SignInResult
 
 	if len(users) == 0 {
 		return SignInResult{}, cerr.Wrap(
-			fmt.Errorf("user not found"),
+			errors.New("user not found"),
 			cerr.CodeNotFound,
 			fmt.Sprintf("user with %s email not found", params.Email),
 			nil,
