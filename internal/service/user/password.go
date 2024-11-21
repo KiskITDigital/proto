@@ -13,7 +13,7 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-func (s *Service) ReqEmailVerification(ctx context.Context, email string) error {
+func (s *Service) ReqResetPassword(ctx context.Context, email string) error {
 	users, err := s.userStore.Get(ctx, s.psql.DB(), store.UserGetParams{Email: email})
 	if err != nil {
 		return fmt.Errorf("store get user: %w", err)
@@ -35,23 +35,25 @@ func (s *Service) ReqEmailVerification(ctx context.Context, email string) error 
 		return fmt.Errorf("generate topt: %w", err)
 	}
 
-	confirmPb, err := proto.Marshal(&modelsv1.EmailConfirmation{
+	resetPb, err := proto.Marshal(&modelsv1.PasswordRecovery{
 		Email: user.Email,
 		Salt:  code,
+		Name:  user.FirstName,
 	})
 	if err != nil {
 		return fmt.Errorf("marshal proto: %w", err)
 	}
 
-	return s.broker.Publish(ctx, broker.UbratoUserConfirmEmail, confirmPb)
+	return s.broker.Publish(ctx, broker.UbratoUserEmailResetPass, resetPb)
 }
 
-type ConfirmEmailParams struct {
-	UserID int
-	Code   string
+type ResetPasswordParams struct {
+	UserID   int
+	Code     string
+	Password string
 }
 
-func (s *Service) ConfirmEmail(ctx context.Context, params ConfirmEmailParams) error {
+func (s *Service) ConfirmResetPassword(ctx context.Context, params ResetPasswordParams) error {
 	users, err := s.userStore.Get(ctx, s.psql.DB(), store.UserGetParams{ID: params.UserID})
 	if err != nil {
 		return fmt.Errorf("store get user: %w", err)
@@ -72,8 +74,16 @@ func (s *Service) ConfirmEmail(ctx context.Context, params ConfirmEmailParams) e
 		return fmt.Errorf("validate totp: %w", err)
 	}
 
-	if err := s.userStore.SetEmailVerified(ctx, s.psql.DB(), user.ID); err != nil {
-		return fmt.Errorf("set email verifed: %w", err)
+	hashedPassword, err := crypto.Password(params.Password)
+	if err != nil {
+		return fmt.Errorf("hash password: %w", err)
+	}
+
+	if err := s.userStore.ResetPassword(ctx, s.psql.DB(), store.ResetPasswordParams{
+		UserID:       params.UserID,
+		PasswordHash: hashedPassword,
+	}); err != nil {
+		return fmt.Errorf("reset password: %w", err)
 	}
 
 	return nil

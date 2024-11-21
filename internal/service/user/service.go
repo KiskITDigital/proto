@@ -24,6 +24,9 @@ type UserStore interface {
 	Create(ctx context.Context, qe store.QueryExecutor, params store.UserCreateParams) (models.User, error)
 	GetWithOrganiztion(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) ([]models.RegularUser, error)
 	Get(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) ([]models.FullUser, error)
+
+	SetEmailVerified(ctx context.Context, qe store.QueryExecutor, userID int) error
+	ResetPassword(ctx context.Context, qe store.QueryExecutor, params store.ResetPasswordParams) error
 }
 
 type Broker interface {
