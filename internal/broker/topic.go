@@ -5,5 +5,6 @@ type Topic string
 const (
 	UbratoUserRegisteredSubject  = "ubrato.user.registered"
 	UbratoSurveySubmittedSubject = "ubrato.survey.submitted"
-	UbratoUserConfirmEmail  = "email.send.confirmation"
+	UbratoUserConfirmEmail       = "email.send.confirmation"
+	UbratoUserEmailResetPass     = "email.send.resetpass"
 )

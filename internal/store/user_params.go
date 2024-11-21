@@ -15,3 +15,8 @@ type UserGetParams struct {
 	Email string
 	ID    int
 }
+
+type ResetPasswordParams struct {
+	UserID       int
+	PasswordHash string
+}

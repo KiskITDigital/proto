@@ -5,6 +5,7 @@ import (
 	"log/slog"
 
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
+	usersrv "gitlab.ubrato.ru/ubrato/core/internal/service/user"
 )
 
 type Handler struct {
@@ -15,7 +16,11 @@ type Handler struct {
 type Service interface {
 	GetByID(ctx context.Context, tenderID int) (models.RegularUser, error)
 	Get(ctx context.Context) ([]models.RegularUser, error)
+
 	ReqEmailVerification(ctx context.Context, email string) error
+	ConfirmEmail(ctx context.Context, params usersrv.ConfirmEmailParams) error
+	ReqResetPassword(ctx context.Context, email string) error
+	ConfirmResetPassword(ctx context.Context, params usersrv.ResetPasswordParams) error
 }
 
 func New(logger *slog.Logger, svc Service) *Handler {
