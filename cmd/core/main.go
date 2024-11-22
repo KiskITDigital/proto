@@ -18,6 +18,7 @@ import (
 	surveyService "gitlab.ubrato.ru/ubrato/core/internal/service/survey"
 	tenderService "gitlab.ubrato.ru/ubrato/core/internal/service/tender"
 	userService "gitlab.ubrato.ru/ubrato/core/internal/service/user"
+	verificationService "gitlab.ubrato.ru/ubrato/core/internal/service/verification"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 	"gitlab.ubrato.ru/ubrato/core/internal/store/postgres"
 	catalogStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/catalog"
@@ -25,6 +26,7 @@ import (
 	sessionStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/session"
 	tenderStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/tender"
 	userStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/user"
+	verificationStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/verification"
 	"gitlab.ubrato.ru/ubrato/core/internal/transport/http"
 	authHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/auth"
 	catalogHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/catalog"
@@ -77,6 +79,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	sessionStore := sessionStore.NewSessionStore()
 	tenderStore := tenderStore.NewTenderStore()
 	catalogStore := catalogStore.NewCatalogStore()
+	verificationStore := verificationStore.NewVerificationRequestStore()
 
 	dadataGateway := dadataGateway.NewClient(cfg.Gateway.Dadata.APIKey)
 
@@ -128,6 +131,13 @@ func run(cfg config.Default, logger *slog.Logger) error {
 
 	suggestService := suggestService.New(dadataGateway)
 
+	verificationServise := verificationService.New(
+		psql,
+		verificationStore,
+		tenderStore,
+		organizationStore,
+	)
+
 	router := http.NewRouter(http.RouterParams{
 		Error:        errorHandler.New(logger),
 		Auth:         authHandler.New(logger, authService, userService),
@@ -138,7 +148,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		Organization: organizationHandler.New(logger, organizationService),
 		Comments:     commentHandler.New(logger, nil),
 		Suggest:      suggestHandler.New(logger, suggestService),
-		Verification: verificationHandler.New(logger, nil),
+		Verification: verificationHandler.New(logger, verificationServise),
 		Employee:     employeeHandler.New(logger, userService),
 	})
 

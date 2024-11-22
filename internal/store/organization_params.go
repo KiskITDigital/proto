@@ -1,5 +1,7 @@
 package store
 
+import "gitlab.ubrato.ru/ubrato/core/internal/models"
+
 type OrganizationGetParams struct{}
 
 type OrganizationCreateParams struct {
@@ -19,4 +21,9 @@ type OrganizationAddUserParams struct {
 	OrganizationID int
 	UserID         int
 	IsOwner        bool
+}
+
+type OrganizationUpdateVerifStatusParams struct {
+	OrganizationID     int
+	VerificationStatus models.VerificationStatus
 }
