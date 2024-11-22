@@ -10,7 +10,7 @@ type VerificationObject interface {
 	ToVerificationObject() api.VerificationRequestObject
 }
 
-type VerificationRequest[T any] struct {
+type VerificationRequest[T VerificationObject] struct {
 	ID            int
 	Reviewer      EmployeeUser
 	ObjectType    string
@@ -56,4 +56,22 @@ var mapVerificationStatus = map[VerificationStatus]api.VerificationStatus{
 
 func (v VerificationStatus) ToAPI() api.VerificationStatus {
 	return mapVerificationStatus[v]
+}
+
+type VerificationObjectType int
+
+const (
+	ObjectTypeOrganization VerificationObjectType = iota
+	ObjectTypeTender
+	ObjectTypeComment
+)
+
+var mapVerificationObjectType = map[VerificationObjectType]api.VerificationRequestObjectType{
+	ObjectTypeOrganization: api.OrganizationVerificationRequestObject,
+	ObjectTypeTender:       api.TenderVerificationRequestObject,
+	ObjectTypeComment:      api.CommentVerificationRequestObject,
+}
+
+func (v VerificationObjectType) ToAPI() api.VerificationRequestObjectType {
+	return mapVerificationObjectType[v]
 }

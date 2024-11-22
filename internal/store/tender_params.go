@@ -83,3 +83,8 @@ type TenderCreateResponseParams struct {
 	Price          int
 	IsNds          bool
 }
+
+type TenderUpdateVerifStatusParams struct {
+	TenderID           int
+	VerificationStatus models.VerificationStatus
+}
