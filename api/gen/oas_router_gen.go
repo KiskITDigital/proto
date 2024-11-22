@@ -314,6 +314,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
+			case 'e': // Prefix: "employee"
+				origElem := elem
+				if l := len("employee"); len(elem) >= l && elem[0:l] == "employee" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "POST":
+						s.handleV1EmployeePostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "POST")
+					}
+
+					return
+				}
+
+				elem = origElem
 			case 'o': // Prefix: "organizations"
 				origElem := elem
 				if l := len("organizations"); len(elem) >= l && elem[0:l] == "organizations" {
@@ -1307,6 +1328,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
+				}
+
+				elem = origElem
+			case 'e': // Prefix: "employee"
+				origElem := elem
+				if l := len("employee"); len(elem) >= l && elem[0:l] == "employee" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "POST":
+						r.name = "V1EmployeePost"
+						r.summary = "Create employee user"
+						r.operationID = ""
+						r.pathPattern = "/v1/employee"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 
 				elem = origElem

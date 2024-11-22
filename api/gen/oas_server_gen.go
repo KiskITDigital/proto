@@ -84,6 +84,12 @@ type Handler interface {
 	//
 	// GET /v1/comments/verifications
 	V1CommentsVerificationsGet(ctx context.Context, params V1CommentsVerificationsGetParams) (V1CommentsVerificationsGetRes, error)
+	// V1EmployeePost implements POST /v1/employee operation.
+	//
+	// Create employee user.
+	//
+	// POST /v1/employee
+	V1EmployeePost(ctx context.Context, req *V1EmployeePostReq) (V1EmployeePostRes, error)
 	// V1OrganizationsGet implements GET /v1/organizations operation.
 	//
 	// List all organizations

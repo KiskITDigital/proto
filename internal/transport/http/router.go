@@ -20,6 +20,7 @@ type Router struct {
 	Comments
 	Suggest
 	Verification
+	Employee
 }
 
 type Error interface {
@@ -90,6 +91,10 @@ type Verification interface {
 	V1VerificationsRequestIDDenyPost(ctx context.Context, params api.V1VerificationsRequestIDDenyPostParams) (api.V1VerificationsRequestIDDenyPostRes, error)
 }
 
+type Employee interface {
+	V1EmployeePost(ctx context.Context, req *api.V1EmployeePostReq) (api.V1EmployeePostRes, error)
+}
+
 type RouterParams struct {
 	Error        Error
 	Auth         Auth
@@ -101,6 +106,7 @@ type RouterParams struct {
 	Comments     Comments
 	Suggest      Suggest
 	Verification Verification
+	Employee     Employee
 }
 
 func NewRouter(params RouterParams) *Router {
@@ -115,5 +121,6 @@ func NewRouter(params RouterParams) *Router {
 		Comments:     params.Comments,
 		Suggest:      params.Suggest,
 		Verification: params.Verification,
+		Employee:     params.Employee,
 	}
 }

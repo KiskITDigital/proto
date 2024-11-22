@@ -122,6 +122,15 @@ func (UnimplementedHandler) V1CommentsVerificationsGet(ctx context.Context, para
 	return r, ht.ErrNotImplemented
 }
 
+// V1EmployeePost implements POST /v1/employee operation.
+//
+// Create employee user.
+//
+// POST /v1/employee
+func (UnimplementedHandler) V1EmployeePost(ctx context.Context, req *V1EmployeePostReq) (r V1EmployeePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1OrganizationsGet implements GET /v1/organizations operation.
 //
 // List all organizations
