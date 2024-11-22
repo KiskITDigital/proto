@@ -17,6 +17,7 @@ func (c Code) HTTPCode() int {
 
 var (
 	CodeInternal           Code = "ERR_INTERNAL"
+	CodeUnauthorized       Code = "ERR_UNAUTHORIZED"
 	CodeNotPermitted       Code = "ERR_NOT_PERMITTED"
 	CodeValidate           Code = "ERR_VALIDATE"
 	CodeNotFound           Code = "ERR_NOT_FOUND"
@@ -27,5 +28,6 @@ var codes = map[Code]int{
 	CodeInternal:           http.StatusInternalServerError,
 	CodeValidate:           http.StatusBadRequest,
 	CodeInvalidCredentials: http.StatusBadRequest,
+	CodeUnauthorized:       http.StatusUnauthorized,
 	CodeNotPermitted:       http.StatusForbidden,
 }
