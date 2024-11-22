@@ -9,5 +9,5 @@ type VerificationRequestUpdateStatusParams struct {
 
 type VerificationObjectUpdateStatusResult struct {
 	ObjectID   int
-	ObjectType models.VerificationObjectType
+	ObjectType models.ObjectType
 }

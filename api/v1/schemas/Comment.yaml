@@ -1,12 +1,15 @@
 type: object
 required:
   - id
+  - organization
   - content
   - verification_status
   - created_at
 properties:
   id:
     type: integer
+  organization:
+    $ref: "Organization.yaml"
   content:
     type: string
   attachments:

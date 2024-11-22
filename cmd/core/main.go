@@ -22,6 +22,7 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 	"gitlab.ubrato.ru/ubrato/core/internal/store/postgres"
 	catalogStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/catalog"
+	commentStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/comment"
 	organizationStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/organization"
 	sessionStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/session"
 	tenderStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/tender"
@@ -80,6 +81,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	tenderStore := tenderStore.NewTenderStore()
 	catalogStore := catalogStore.NewCatalogStore()
 	verificationStore := verificationStore.NewVerificationRequestStore()
+	commentStore := commentStore.NewCommentStore()
 
 	dadataGateway := dadataGateway.NewClient(cfg.Gateway.Dadata.APIKey)
 
@@ -106,6 +108,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	tenderService := tenderService.New(
 		psql,
 		tenderStore,
+		commentStore,
 	)
 
 	catalogService := catalogService.New(

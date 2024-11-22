@@ -158,6 +158,10 @@ func (s *Comment) encodeFields(e *jx.Encoder) {
 		e.Int(s.ID)
 	}
 	{
+		e.FieldStart("organization")
+		s.Organization.Encode(e)
+	}
+	{
 		e.FieldStart("content")
 		e.Str(s.Content)
 	}
@@ -181,12 +185,13 @@ func (s *Comment) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfComment = [5]string{
+var jsonFieldsNameOfComment = [6]string{
 	0: "id",
-	1: "content",
-	2: "attachments",
-	3: "verification_status",
-	4: "created_at",
+	1: "organization",
+	2: "content",
+	3: "attachments",
+	4: "verification_status",
+	5: "created_at",
 }
 
 // Decode decodes Comment from json.
@@ -210,8 +215,18 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"id\"")
 			}
-		case "content":
+		case "organization":
 			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				if err := s.Organization.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"organization\"")
+			}
+		case "content":
+			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
 				v, err := d.Str()
 				s.Content = string(v)
@@ -242,7 +257,7 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"attachments\"")
 			}
 		case "verification_status":
-			requiredBitSet[0] |= 1 << 3
+			requiredBitSet[0] |= 1 << 4
 			if err := func() error {
 				v, err := d.Str()
 				s.VerificationStatus = string(v)
@@ -254,7 +269,7 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"verification_status\"")
 			}
 		case "created_at":
-			requiredBitSet[0] |= 1 << 4
+			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.CreatedAt = v
@@ -275,7 +290,7 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00011011,
+		0b00110111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -1407,6 +1422,8 @@ func (s *ObjectType) Decode(d *jx.Decoder) error {
 	}
 	// Try to use constant string.
 	switch ObjectType(v) {
+	case ObjectTypeInvalid:
+		*s = ObjectTypeInvalid
 	case ObjectTypeOrganization:
 		*s = ObjectTypeOrganization
 	case ObjectTypeComment:
@@ -10084,14 +10101,6 @@ func (s *VerificationRequestObject) Decode(d *jx.Decoder) error {
 			switch string(key) {
 			case "content":
 				match := CommentVerificationRequestObject
-				if found && s.Type != match {
-					s.Type = ""
-					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
-				}
-				found = true
-				s.Type = match
-			case "organization":
-				match := TenderVerificationRequestObject
 				if found && s.Type != match {
 					s.Type = ""
 					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)

@@ -8,8 +8,9 @@ import (
 )
 
 type Service struct {
-	psql        DBTX
-	tenderStore TenderStore
+	psql         DBTX
+	tenderStore  TenderStore
+	commentStore CommentStore
 }
 
 type DBTX interface {
@@ -24,14 +25,21 @@ type TenderStore interface {
 	List(ctx context.Context, qe store.QueryExecutor, params store.TenderListParams) ([]models.Tender, error)
 	Update(ctx context.Context, qe store.QueryExecutor, params store.TenderUpdateParams) (int, error)
 	CreateResponse(ctx context.Context, qe store.QueryExecutor, params store.TenderCreateResponseParams) error
+	CreateComment(ctx context.Context, qe store.QueryExecutor, params store.CommentCreateParams) error
+}
+
+type CommentStore interface {
+	CreateComment(ctx context.Context, qe store.QueryExecutor, params store.CommentCreateParams) error
 }
 
 func New(
 	psql DBTX,
 	tenderStore TenderStore,
+	commentStore CommentStore,
 ) *Service {
 	return &Service{
-		psql:        psql,
-		tenderStore: tenderStore,
+		psql:         psql,
+		tenderStore:  tenderStore,
+		commentStore: commentStore,
 	}
 }

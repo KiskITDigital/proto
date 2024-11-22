@@ -13,9 +13,10 @@ func (s *VerificationStore) UpdateStatus(ctx context.Context, qe store.QueryExec
 		Set("status", params.Status).
 		Set("reviewed_at", squirrel.Expr("CURRENT_TIMESTAMP")).
 		Suffix(`
-		returning 
-			object_id,
-			object_type`).
+			RETURNING 
+				object_id,
+				object_type
+		`).
 		Where(squirrel.Eq{"id": params.ID}).
 		PlaceholderFormat(squirrel.Dollar)
 

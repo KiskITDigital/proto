@@ -1986,6 +1986,7 @@ components:
     object_type:
       type: string
       enum:
+        - invalid
         - organization
         - comment
         - tender
@@ -1993,12 +1994,15 @@ components:
       type: object
       required:
         - id
+        - organization
         - content
         - verification_status
         - created_at
       properties:
         id:
           type: integer
+        organization:
+          $ref: '#/components/schemas/Organization'
         content:
           type: string
         attachments:
