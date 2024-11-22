@@ -62,16 +62,22 @@ func (s *City) SetRegion(val OptRegion) {
 
 // Ref: #
 type Comment struct {
-	ID                 int       `json:"id"`
-	Content            string    `json:"content"`
-	Attachments        []string  `json:"attachments"`
-	VerificationStatus string    `json:"verification_status"`
-	CreatedAt          time.Time `json:"created_at"`
+	ID                 int          `json:"id"`
+	Organization       Organization `json:"organization"`
+	Content            string       `json:"content"`
+	Attachments        []string     `json:"attachments"`
+	VerificationStatus string       `json:"verification_status"`
+	CreatedAt          time.Time    `json:"created_at"`
 }
 
 // GetID returns the value of ID.
 func (s *Comment) GetID() int {
 	return s.ID
+}
+
+// GetOrganization returns the value of Organization.
+func (s *Comment) GetOrganization() Organization {
+	return s.Organization
 }
 
 // GetContent returns the value of Content.
@@ -97,6 +103,11 @@ func (s *Comment) GetCreatedAt() time.Time {
 // SetID sets the value of ID.
 func (s *Comment) SetID(val int) {
 	s.ID = val
+}
+
+// SetOrganization sets the value of Organization.
+func (s *Comment) SetOrganization(val Organization) {
+	s.Organization = val
 }
 
 // SetContent sets the value of Content.
@@ -498,6 +509,7 @@ func (s *Object) SetName(val string) {
 type ObjectType string
 
 const (
+	ObjectTypeInvalid      ObjectType = "invalid"
 	ObjectTypeOrganization ObjectType = "organization"
 	ObjectTypeComment      ObjectType = "comment"
 	ObjectTypeTender       ObjectType = "tender"
@@ -506,6 +518,7 @@ const (
 // AllValues returns all ObjectType values.
 func (ObjectType) AllValues() []ObjectType {
 	return []ObjectType{
+		ObjectTypeInvalid,
 		ObjectTypeOrganization,
 		ObjectTypeComment,
 		ObjectTypeTender,
@@ -515,6 +528,8 @@ func (ObjectType) AllValues() []ObjectType {
 // MarshalText implements encoding.TextMarshaler.
 func (s ObjectType) MarshalText() ([]byte, error) {
 	switch s {
+	case ObjectTypeInvalid:
+		return []byte(s), nil
 	case ObjectTypeOrganization:
 		return []byte(s), nil
 	case ObjectTypeComment:
@@ -529,6 +544,9 @@ func (s ObjectType) MarshalText() ([]byte, error) {
 // UnmarshalText implements encoding.TextUnmarshaler.
 func (s *ObjectType) UnmarshalText(data []byte) error {
 	switch ObjectType(data) {
+	case ObjectTypeInvalid:
+		*s = ObjectTypeInvalid
+		return nil
 	case ObjectTypeOrganization:
 		*s = ObjectTypeOrganization
 		return nil
