@@ -16,6 +16,21 @@ const (
 	UserRoleSuperAdmin
 )
 
+func APIRoleToModel(r api.Role) UserRole {
+	switch r {
+	case api.RoleUser:
+		return UserRoleUser
+	case api.RoleEmployee:
+		return UserRoleEmployee
+	case api.RoleAdmin:
+		return UserRoleAdmin
+	case api.RoleSuperAdmin:
+		return UserRoleSuperAdmin
+	default:
+		return UserRoleInvalid
+	}
+}
+
 func (r UserRole) ToApi() string {
 	switch r {
 	case UserRoleUser:

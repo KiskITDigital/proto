@@ -22,6 +22,7 @@ type DBTX interface {
 
 type UserStore interface {
 	Create(ctx context.Context, qe store.QueryExecutor, params store.UserCreateParams) (models.User, error)
+	CreateEmployee(ctx context.Context, qe store.QueryExecutor, params store.UserCreateEmployeeParams) error
 	GetWithOrganiztion(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) ([]models.RegularUser, error)
 	Get(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) ([]models.FullUser, error)
 

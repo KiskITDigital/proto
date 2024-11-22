@@ -34,7 +34,7 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 			params.LastName,
 			params.MiddleName,
 			sql.NullString{Valid: params.AvatarURL != "", String: params.AvatarURL},
-			false,
+			params.EmailVerified,
 			false,
 		).
 		Suffix(`
@@ -80,4 +80,27 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 	createdUser.AvatarURL = avatarURL.String
 
 	return createdUser, nil
+}
+
+func (s *UserStore) CreateEmployee(ctx context.Context, qe store.QueryExecutor, params store.UserCreateEmployeeParams) error {
+	builder := squirrel.
+		Insert("employee").
+		Columns(
+			"user_id",
+			"role",
+			"position",
+		).
+		Values(
+			params.UserID,
+			params.Role,
+			params.Postition,
+		).
+		PlaceholderFormat(squirrel.Dollar)
+
+	_, err := builder.RunWith(qe).ExecContext(ctx)
+	if err != nil {
+		return fmt.Errorf("query row: %w", err)
+	}
+
+	return nil
 }

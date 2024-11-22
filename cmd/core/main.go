@@ -29,6 +29,7 @@ import (
 	authHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/auth"
 	catalogHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/catalog"
 	commentHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/comment"
+	employeeHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/employee"
 	errorHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/error"
 	organizationHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/organization"
 	suggestHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/suggest"
@@ -138,6 +139,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		Comments:     commentHandler.New(logger, nil),
 		Suggest:      suggestHandler.New(logger, suggestService),
 		Verification: verificationHandler.New(logger, nil),
+		Employee:     employeeHandler.New(logger, userService),
 	})
 
 	server, err := http.NewServer(logger, cfg.Transport.HTTP, router)

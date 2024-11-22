@@ -45,6 +45,10 @@ type V1CommentsVerificationsGetRes interface {
 	v1CommentsVerificationsGetRes()
 }
 
+type V1EmployeePostRes interface {
+	v1EmployeePostRes()
+}
+
 type V1OrganizationsGetRes interface {
 	v1OrganizationsGetRes()
 }

@@ -835,6 +835,56 @@ paths:
                     $ref: '#/components/schemas/RegularUser'
         default:
           $ref: '#/components/responses/Error'
+  /v1/employee:
+    post:
+      tags:
+        - employee
+      summary: Create employee user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - phone
+                - password
+                - first_name
+                - last_name
+                - role
+                - position
+              properties:
+                email:
+                  $ref: '#/components/schemas/email'
+                phone:
+                  $ref: '#/components/schemas/phone'
+                password:
+                  $ref: '#/components/schemas/password'
+                first_name:
+                  $ref: '#/components/schemas/name'
+                last_name:
+                  $ref: '#/components/schemas/name'
+                middle_name:
+                  $ref: '#/components/schemas/name'
+                role:
+                  $ref: '#/components/schemas/role'
+                position:
+                  type: string
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/EmployeeUser'
+        default:
+          $ref: '#/components/responses/Error'
   /v1/organizations/{organizationID}/tenders:
     get:
       tags:

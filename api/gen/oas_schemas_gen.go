@@ -426,6 +426,7 @@ func (*ErrorStatusCode) v1CatalogRegionsPostRes()                           {}
 func (*ErrorStatusCode) v1CatalogServicesGetRes()                           {}
 func (*ErrorStatusCode) v1CatalogServicesPostRes()                          {}
 func (*ErrorStatusCode) v1CommentsVerificationsGetRes()                     {}
+func (*ErrorStatusCode) v1EmployeePostRes()                                 {}
 func (*ErrorStatusCode) v1OrganizationsGetRes()                             {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDTendersGetRes()        {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDVerificationsGetRes()  {}
@@ -864,6 +865,52 @@ func (o OptInt) Get() (v int, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptInt) Or(d int) int {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptName returns new OptName with value set to v.
+func NewOptName(v Name) OptName {
+	return OptName{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptName is optional Name.
+type OptName struct {
+	Value Name
+	Set   bool
+}
+
+// IsSet returns true if OptName was set.
+func (o OptName) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptName) Reset() {
+	var v Name
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptName) SetTo(v Name) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptName) Get() (v Name, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptName) Or(d Name) Name {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -3563,6 +3610,113 @@ func (s *V1CommentsVerificationsGetSort) UnmarshalText(data []byte) error {
 	default:
 		return errors.Errorf("invalid value: %q", data)
 	}
+}
+
+type V1EmployeePostCreated struct {
+	Data EmployeeUser `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1EmployeePostCreated) GetData() EmployeeUser {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1EmployeePostCreated) SetData(val EmployeeUser) {
+	s.Data = val
+}
+
+func (*V1EmployeePostCreated) v1EmployeePostRes() {}
+
+type V1EmployeePostReq struct {
+	Email      Email    `json:"email"`
+	Phone      Phone    `json:"phone"`
+	Password   Password `json:"password"`
+	FirstName  Name     `json:"first_name"`
+	LastName   Name     `json:"last_name"`
+	MiddleName OptName  `json:"middle_name"`
+	Role       Role     `json:"role"`
+	Position   string   `json:"position"`
+}
+
+// GetEmail returns the value of Email.
+func (s *V1EmployeePostReq) GetEmail() Email {
+	return s.Email
+}
+
+// GetPhone returns the value of Phone.
+func (s *V1EmployeePostReq) GetPhone() Phone {
+	return s.Phone
+}
+
+// GetPassword returns the value of Password.
+func (s *V1EmployeePostReq) GetPassword() Password {
+	return s.Password
+}
+
+// GetFirstName returns the value of FirstName.
+func (s *V1EmployeePostReq) GetFirstName() Name {
+	return s.FirstName
+}
+
+// GetLastName returns the value of LastName.
+func (s *V1EmployeePostReq) GetLastName() Name {
+	return s.LastName
+}
+
+// GetMiddleName returns the value of MiddleName.
+func (s *V1EmployeePostReq) GetMiddleName() OptName {
+	return s.MiddleName
+}
+
+// GetRole returns the value of Role.
+func (s *V1EmployeePostReq) GetRole() Role {
+	return s.Role
+}
+
+// GetPosition returns the value of Position.
+func (s *V1EmployeePostReq) GetPosition() string {
+	return s.Position
+}
+
+// SetEmail sets the value of Email.
+func (s *V1EmployeePostReq) SetEmail(val Email) {
+	s.Email = val
+}
+
+// SetPhone sets the value of Phone.
+func (s *V1EmployeePostReq) SetPhone(val Phone) {
+	s.Phone = val
+}
+
+// SetPassword sets the value of Password.
+func (s *V1EmployeePostReq) SetPassword(val Password) {
+	s.Password = val
+}
+
+// SetFirstName sets the value of FirstName.
+func (s *V1EmployeePostReq) SetFirstName(val Name) {
+	s.FirstName = val
+}
+
+// SetLastName sets the value of LastName.
+func (s *V1EmployeePostReq) SetLastName(val Name) {
+	s.LastName = val
+}
+
+// SetMiddleName sets the value of MiddleName.
+func (s *V1EmployeePostReq) SetMiddleName(val OptName) {
+	s.MiddleName = val
+}
+
+// SetRole sets the value of Role.
+func (s *V1EmployeePostReq) SetRole(val Role) {
+	s.Role = val
+}
+
+// SetPosition sets the value of Position.
+func (s *V1EmployeePostReq) SetPosition(val string) {
+	s.Position = val
 }
 
 type V1OrganizationsGetDirection string
