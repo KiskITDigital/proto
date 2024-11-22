@@ -25,11 +25,11 @@ type TenderStore interface {
 	List(ctx context.Context, qe store.QueryExecutor, params store.TenderListParams) ([]models.Tender, error)
 	Update(ctx context.Context, qe store.QueryExecutor, params store.TenderUpdateParams) (int, error)
 	CreateResponse(ctx context.Context, qe store.QueryExecutor, params store.TenderCreateResponseParams) error
-	CreateComment(ctx context.Context, qe store.QueryExecutor, params store.CommentCreateParams) error
 }
 
 type CommentStore interface {
 	CreateComment(ctx context.Context, qe store.QueryExecutor, params store.CommentCreateParams) error
+	GetComments(ctx context.Context, qe store.QueryExecutor, params store.CommentGetParams) ([]models.Comment, error)
 }
 
 func New(

@@ -9,3 +9,8 @@ type CommentCreateParams struct {
 	Content        string
 	Attachments    []string
 }
+
+type CommentGetParams struct {
+	ObjectID   int
+	ObjectType models.ObjectType
+}

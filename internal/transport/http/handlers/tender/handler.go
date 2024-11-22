@@ -20,6 +20,7 @@ type Service interface {
 	List(ctx context.Context, params service.TenderListParams) ([]models.Tender, error)
 	Respond(ctx context.Context, params service.TenderRespondParams) error
 	CreateComment(ctx context.Context, params service.CommentCreateParams) error
+	GetComments(ctx context.Context, params service.GetCommentParams) ([]models.Comment, error)
 }
 
 func New(logger *slog.Logger, svc Service) *Handler {

@@ -5,3 +5,7 @@ type CommentCreateParams struct {
 	Content     string
 	Attachments []string
 }
+
+type GetCommentParams struct {
+	TenderID int
+}
