@@ -34,6 +34,16 @@ func (s *Service) Create(ctx context.Context, params service.TenderCreateParams)
 		return models.Tender{}, fmt.Errorf("create tender: %w", err)
 	}
 
+	if !params.IsDraft {
+		err = s.verificationStore.Create(ctx, s.psql.DB(), store.VerificationRequestCreateParams{
+			ObjectID:   id,
+			ObjectType: models.ObjectTypeTender,
+		})
+		if err != nil {
+			return models.Tender{}, fmt.Errorf("create verification request: %w", err)
+		}
+	}
+
 	tender, err := s.tenderStore.GetByID(ctx, s.psql.DB(), id)
 	if err != nil {
 		return models.Tender{}, fmt.Errorf("get tender: %w", err)
