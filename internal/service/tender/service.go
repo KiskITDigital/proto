@@ -8,9 +8,10 @@ import (
 )
 
 type Service struct {
-	psql         DBTX
-	tenderStore  TenderStore
-	commentStore CommentStore
+	psql              DBTX
+	tenderStore       TenderStore
+	commentStore      CommentStore
+	verificationStore VerificationStore
 }
 
 type DBTX interface {
@@ -32,14 +33,20 @@ type CommentStore interface {
 	GetComments(ctx context.Context, qe store.QueryExecutor, params store.CommentGetParams) ([]models.Comment, error)
 }
 
+type VerificationStore interface {
+	Create(ctx context.Context, qe store.QueryExecutor, params store.VerificationRequestCreateParams) error
+}
+
 func New(
 	psql DBTX,
 	tenderStore TenderStore,
 	commentStore CommentStore,
+	verificationStore VerificationStore,
 ) *Service {
 	return &Service{
-		psql:         psql,
-		tenderStore:  tenderStore,
-		commentStore: commentStore,
+		psql:              psql,
+		tenderStore:       tenderStore,
+		commentStore:      commentStore,
+		verificationStore: verificationStore,
 	}
 }

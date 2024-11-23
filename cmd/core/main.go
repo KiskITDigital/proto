@@ -109,6 +109,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		psql,
 		tenderStore,
 		commentStore,
+		verificationStore,
 	)
 
 	catalogService := catalogService.New(
