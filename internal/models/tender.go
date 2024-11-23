@@ -14,6 +14,7 @@ type Tender struct {
 	Name               string
 	City               City
 	Organization       Organization
+	WinnerOrganization Optional[Organization]
 	Price              int
 	IsContractPrice    bool
 	IsNDSPrice         bool
@@ -84,7 +85,7 @@ type Service struct {
 }
 
 func ConvertTenderModelToApi(tender Tender) api.Tender {
-	return api.Tender{
+	tenderApi := api.Tender{
 		ID:              tender.ID,
 		Name:            tender.Name,
 		City:            ConvertCityModelToApi(tender.City),
@@ -115,6 +116,14 @@ func ConvertTenderModelToApi(tender Tender) api.Tender {
 		CreatedAt:          tender.CreatedAt,
 		UpdatedAt:          tender.UpdatedAt,
 	}
+
+	if tender.WinnerOrganization.Set {
+		tenderApi.WinnerOrganization = api.OptOrganization{
+			Value: ConvertOrganizationModelToApi(tender.WinnerOrganization.Value),
+			Set:   true}
+	}
+
+	return tenderApi
 }
 
 func ConvertServiceModelToApi(service Service) api.Service {

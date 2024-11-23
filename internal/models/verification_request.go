@@ -57,3 +57,18 @@ var mapVerificationStatus = map[VerificationStatus]api.VerificationStatus{
 func (v VerificationStatus) ToAPI() api.VerificationStatus {
 	return mapVerificationStatus[v]
 }
+
+var mapApiToVerificationStatus = map[api.VerificationStatus]VerificationStatus{
+	api.VerificationStatusUnverified: VerificationStatusUnverified,
+	api.VerificationStatusInReview:   VerificationStatusInReview,
+	api.VerificationStatusDeclined:   VerificationStatusDeclined,
+	api.VerificationStatusApproved:   VerificationStatusApproved,
+}
+
+func APIToVerificationStatus(apiStatus api.VerificationStatus) VerificationStatus {
+	status, ok := mapApiToVerificationStatus[apiStatus]
+	if !ok {
+		return VerificationStatusUnverified
+	}
+	return status
+}

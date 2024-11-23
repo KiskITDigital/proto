@@ -5,21 +5,31 @@ import (
 	"log/slog"
 
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
+	"gitlab.ubrato.ru/ubrato/core/internal/service"
 	organizationService "gitlab.ubrato.ru/ubrato/core/internal/service/organization"
 )
 
 type Handler struct {
-	logger *slog.Logger
-	svc    Service
+	logger              *slog.Logger
+	organizationService OrganizationService
+	verificationService VerificationService
 }
 
-type Service interface {
+type OrganizationService interface {
 	Get(ctx context.Context, params organizationService.OrganizationGetParams) ([]models.Organization, error)
 }
 
-func New(logger *slog.Logger, svc Service) *Handler {
+type VerificationService interface {
+	Get(ctx context.Context, params service.VerificationRequestsObjectGetParams) ([]models.VerificationRequest[models.VerificationObject], error)
+}
+
+func New(
+	logger *slog.Logger,
+	organizationService OrganizationService,
+	verificationService VerificationService) *Handler {
 	return &Handler{
-		logger: logger,
-		svc:    svc,
+		logger:              logger,
+		organizationService: organizationService,
+		verificationService: verificationService,
 	}
 }

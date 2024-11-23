@@ -12,7 +12,7 @@ import (
 )
 
 func (h *Handler) V1TendersPost(ctx context.Context, req *api.V1TendersPostReq) (api.V1TendersPostRes, error) {
-	tender, err := h.svc.Create(ctx, service.TenderCreateParams{
+	tender, err := h.tenderService.Create(ctx, service.TenderCreateParams{
 		Name:            req.GetName(),
 		OrganizationID:  contextor.GetOrganizationID(ctx),
 		CityID:          req.GetCity(),

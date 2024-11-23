@@ -19,7 +19,6 @@ type DBTX interface {
 }
 
 type OrganizationStore interface {
-	// Create(ctx context.Context, qe store.QueryExecutor, params store.OrganizationCreateParams) (models.Organization, error)
 	Get(ctx context.Context, qe store.QueryExecutor, params store.OrganizationGetParams) ([]models.Organization, error)
 }
 

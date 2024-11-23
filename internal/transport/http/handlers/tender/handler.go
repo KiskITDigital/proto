@@ -10,10 +10,11 @@ import (
 
 type Handler struct {
 	logger *slog.Logger
-	svc    Service
+	tenderService TenderService
+	verificationService VerificationService
 }
 
-type Service interface {
+type TenderService interface {
 	Create(ctx context.Context, params service.TenderCreateParams) (models.Tender, error)
 	Update(ctx context.Context, params service.TenderUpdateParams) (models.Tender, error)
 	GetByID(ctx context.Context, tenderID int) (models.Tender, error)
@@ -23,9 +24,17 @@ type Service interface {
 	GetComments(ctx context.Context, params service.GetCommentParams) ([]models.Comment, error)
 }
 
-func New(logger *slog.Logger, svc Service) *Handler {
+type VerificationService interface {
+	Get(ctx context.Context, params service.VerificationRequestsObjectGetParams) ([]models.VerificationRequest[models.VerificationObject], error)
+}
+
+func New(
+	logger *slog.Logger, 
+	tenderService TenderService, 
+	verificationService VerificationService) *Handler {
 	return &Handler{
 		logger: logger,
-		svc:    svc,
+		tenderService: tenderService,
+		verificationService: verificationService,
 	}
 }

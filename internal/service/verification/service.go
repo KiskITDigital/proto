@@ -3,6 +3,7 @@ package verification
 import (
 	"context"
 
+	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
@@ -21,9 +22,12 @@ type DBTX interface {
 
 type VerificationStore interface {
 	UpdateStatus(ctx context.Context, qe store.QueryExecutor, params store.VerificationRequestUpdateStatusParams) (store.VerificationObjectUpdateStatusResult, error)
+	GetOrganizationRequests(ctx context.Context, qe store.QueryExecutor, params store.VerificationRequestsObjectGetParams) ([]models.VerificationRequest[models.VerificationObject], error)
+	GetTendersRequests(ctx context.Context, qe store.QueryExecutor, params store.VerificationRequestsObjectGetParams) ([]models.VerificationRequest[models.VerificationObject], error)
 }
 
 type TenderStore interface {
+	List(ctx context.Context, qe store.QueryExecutor, params store.TenderListParams) ([]models.Tender, error) 
 	UpdateVerificationStatus(ctx context.Context, qe store.QueryExecutor, params store.TenderUpdateVerifStatusParams) error
 }
 

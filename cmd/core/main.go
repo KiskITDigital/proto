@@ -145,11 +145,11 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	router := http.NewRouter(http.RouterParams{
 		Error:        errorHandler.New(logger),
 		Auth:         authHandler.New(logger, authService, userService),
-		Tenders:      tenderHandler.New(logger, tenderService),
+		Tenders:      tenderHandler.New(logger, tenderService, verificationServise),
 		Catalog:      catalogHandler.New(logger, catalogService),
 		Users:        userHandler.New(logger, userService),
 		Survey:       surveyHandler.New(logger, surveyService),
-		Organization: organizationHandler.New(logger, organizationService),
+		Organization: organizationHandler.New(logger, organizationService, verificationServise),
 		Comments:     commentHandler.New(logger, nil),
 		Suggest:      suggestHandler.New(logger, suggestService),
 		Verification: verificationHandler.New(logger, verificationServise),

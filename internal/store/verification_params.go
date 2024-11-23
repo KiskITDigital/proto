@@ -17,3 +17,10 @@ type VerificationObjectUpdateStatusResult struct {
 	ObjectID   int
 	ObjectType models.ObjectType
 }
+
+type VerificationRequestsObjectGetParams struct {
+	ObjectType models.ObjectType
+	Status     []models.VerificationStatus
+	Offset     uint64
+	Limit      uint64
+}
