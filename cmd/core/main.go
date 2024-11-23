@@ -133,7 +133,11 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		organizationStore,
 	)
 
-	suggestService := suggestService.New(dadataGateway)
+	suggestService := suggestService.New(
+		psql,
+		dadataGateway,
+		catalogStore,
+	)
 
 	verificationServise := verificationService.New(
 		psql,

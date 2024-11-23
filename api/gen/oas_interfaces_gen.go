@@ -69,6 +69,10 @@ type V1OrganizationsVerificationsGetRes interface {
 	v1OrganizationsVerificationsGetRes()
 }
 
+type V1SuggestCityGetRes interface {
+	v1SuggestCityGetRes()
+}
+
 type V1SuggestCompanyGetRes interface {
 	v1SuggestCompanyGetRes()
 }

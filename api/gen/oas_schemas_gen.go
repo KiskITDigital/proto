@@ -443,6 +443,7 @@ func (*ErrorStatusCode) v1OrganizationsOrganizationIDTendersGetRes()        {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDVerificationsGetRes()  {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDVerificationsPostRes() {}
 func (*ErrorStatusCode) v1OrganizationsVerificationsGetRes()                {}
+func (*ErrorStatusCode) v1SuggestCityGetRes()                               {}
 func (*ErrorStatusCode) v1SuggestCompanyGetRes()                            {}
 func (*ErrorStatusCode) v1SurveyPostRes()                                   {}
 func (*ErrorStatusCode) v1TendersGetRes()                                   {}
@@ -4018,6 +4019,22 @@ func (s *V1OrganizationsVerificationsGetSort) UnmarshalText(data []byte) error {
 		return errors.Errorf("invalid value: %q", data)
 	}
 }
+
+type V1SuggestCityGetOK struct {
+	Data []City `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1SuggestCityGetOK) GetData() []City {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1SuggestCityGetOK) SetData(val []City) {
+	s.Data = val
+}
+
+func (*V1SuggestCityGetOK) v1SuggestCityGetRes() {}
 
 type V1SuggestCompanyGetOK struct {
 	Data V1SuggestCompanyGetOKData `json:"data"`

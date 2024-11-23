@@ -182,6 +182,15 @@ func (UnimplementedHandler) V1OrganizationsVerificationsGet(ctx context.Context,
 	return r, ht.ErrNotImplemented
 }
 
+// V1SuggestCityGet implements GET /v1/suggest/city operation.
+//
+// Suggests a city with provided city name.
+//
+// GET /v1/suggest/city
+func (UnimplementedHandler) V1SuggestCityGet(ctx context.Context, params V1SuggestCityGetParams) (r V1SuggestCityGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1SuggestCompanyGet implements GET /v1/suggest/company operation.
 //
 // Suggests a company with provided INN.

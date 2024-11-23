@@ -126,6 +126,12 @@ type Handler interface {
 	//
 	// GET /v1/organizations/verifications
 	V1OrganizationsVerificationsGet(ctx context.Context, params V1OrganizationsVerificationsGetParams) (V1OrganizationsVerificationsGetRes, error)
+	// V1SuggestCityGet implements GET /v1/suggest/city operation.
+	//
+	// Suggests a city with provided city name.
+	//
+	// GET /v1/suggest/city
+	V1SuggestCityGet(ctx context.Context, params V1SuggestCityGetParams) (V1SuggestCityGetRes, error)
 	// V1SuggestCompanyGet implements GET /v1/suggest/company operation.
 	//
 	// Suggests a company with provided INN.

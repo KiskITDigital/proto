@@ -484,24 +484,60 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
-				case 'g': // Prefix: "ggest/company"
+				case 'g': // Prefix: "ggest/c"
 					origElem := elem
-					if l := len("ggest/company"); len(elem) >= l && elem[0:l] == "ggest/company" {
+					if l := len("ggest/c"); len(elem) >= l && elem[0:l] == "ggest/c" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch r.Method {
-						case "GET":
-							s.handleV1SuggestCompanyGetRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "GET")
+						break
+					}
+					switch elem[0] {
+					case 'i': // Prefix: "ity"
+						origElem := elem
+						if l := len("ity"); len(elem) >= l && elem[0:l] == "ity" {
+							elem = elem[l:]
+						} else {
+							break
 						}
 
-						return
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleV1SuggestCityGetRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+						elem = origElem
+					case 'o': // Prefix: "ompany"
+						origElem := elem
+						if l := len("ompany"); len(elem) >= l && elem[0:l] == "ompany" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleV1SuggestCompanyGetRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
@@ -1521,28 +1557,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
-				case 'g': // Prefix: "ggest/company"
+				case 'g': // Prefix: "ggest/c"
 					origElem := elem
-					if l := len("ggest/company"); len(elem) >= l && elem[0:l] == "ggest/company" {
+					if l := len("ggest/c"); len(elem) >= l && elem[0:l] == "ggest/c" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						// Leaf node.
-						switch method {
-						case "GET":
-							r.name = "V1SuggestCompanyGet"
-							r.summary = "Suggest company"
-							r.operationID = ""
-							r.pathPattern = "/v1/suggest/company"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
+						break
+					}
+					switch elem[0] {
+					case 'i': // Prefix: "ity"
+						origElem := elem
+						if l := len("ity"); len(elem) >= l && elem[0:l] == "ity" {
+							elem = elem[l:]
+						} else {
+							break
 						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = "V1SuggestCityGet"
+								r.summary = "Suggest city"
+								r.operationID = ""
+								r.pathPattern = "/v1/suggest/city"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'o': // Prefix: "ompany"
+						origElem := elem
+						if l := len("ompany"); len(elem) >= l && elem[0:l] == "ompany" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = "V1SuggestCompanyGet"
+								r.summary = "Suggest company"
+								r.operationID = ""
+								r.pathPattern = "/v1/suggest/company"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem

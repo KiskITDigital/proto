@@ -84,6 +84,7 @@ type Comments interface {
 
 type Suggest interface {
 	V1SuggestCompanyGet(ctx context.Context, params api.V1SuggestCompanyGetParams) (api.V1SuggestCompanyGetRes, error)
+	V1SuggestCityGet(ctx context.Context, params api.V1SuggestCityGetParams) (api.V1SuggestCityGetRes, error)
 }
 
 type Verification interface {

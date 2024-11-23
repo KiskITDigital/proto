@@ -76,6 +76,8 @@ paths:
 
   /v1/suggest/company:
     $ref: "v1/paths/suggest/company.yaml"
+  /v1/suggest/city:
+    $ref: "v1/paths/suggest/city.yaml"
 components:
   securitySchemes:
     cookieAuth:

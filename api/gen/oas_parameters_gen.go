@@ -2146,6 +2146,71 @@ func decodeV1OrganizationsVerificationsGetParams(args [0]string, argsEscaped boo
 	return params, nil
 }
 
+// V1SuggestCityGetParams is parameters of GET /v1/suggest/city operation.
+type V1SuggestCityGetParams struct {
+	// Name of a city.
+	Name OptString
+}
+
+func unpackV1SuggestCityGetParams(packed middleware.Parameters) (params V1SuggestCityGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "name",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Name = v.(OptString)
+		}
+	}
+	return params
+}
+
+func decodeV1SuggestCityGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1SuggestCityGetParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: name.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "name",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotNameVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotNameVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Name.SetTo(paramsDotNameVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "name",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // V1SuggestCompanyGetParams is parameters of GET /v1/suggest/company operation.
 type V1SuggestCompanyGetParams struct {
 	// INN of a company.

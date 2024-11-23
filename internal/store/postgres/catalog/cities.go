@@ -69,3 +69,45 @@ func (s *CatalogStore) GetCityByID(ctx context.Context, qe store.QueryExecutor, 
 
 	return city, nil
 }
+
+func (s *CatalogStore) ListCities(ctx context.Context, qe store.QueryExecutor, name string) ([]models.City, error) {
+	builder := squirrel.
+		Select(
+			"c.id",
+			"c.name",
+			"c.region_id",
+			"r.name",
+		).
+		From("cities c").
+		Join("regions r ON r.id = c.region_id").
+		PlaceholderFormat(squirrel.Dollar)
+
+	if name != "" {
+		builder = builder.Where(squirrel.ILike{"c.name": fmt.Sprintf("%s%%", name)})
+	}
+
+	var cities []models.City
+
+	rows, err := builder.RunWith(qe).QueryContext(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("query row: %w", err)
+	}
+
+	for rows.Next() {
+		var city models.City
+
+		err = rows.Scan(
+			&city.ID,
+			&city.Name,
+			&city.Region.ID,
+			&city.Region.Name,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("scan row: %w", err)
+		}
+
+		cities = append(cities, city)
+	}
+
+	return cities, nil
+}
