@@ -3,8 +3,7 @@ package config
 import "time"
 
 type Auth struct {
-	JWT      JWT `envPrefix:"JWT_"`
-	JWTAdmin JWT `envPrefix:"JWT_ADMIN_"`
+	JWT JWT `envPrefix:"JWT_"`
 }
 
 type JWT struct {

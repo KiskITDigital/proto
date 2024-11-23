@@ -2311,6 +2311,23 @@ func (s *V1UsersGetOK) Validate() error {
 	return nil
 }
 
+func (s V1UsersGetOKDataItem) Validate() error {
+	switch s.Type {
+	case RegularUserV1UsersGetOKDataItem:
+		if err := s.RegularUser.Validate(); err != nil {
+			return err
+		}
+		return nil
+	case EmployeeUserV1UsersGetOKDataItem:
+		if err := s.EmployeeUser.Validate(); err != nil {
+			return err
+		}
+		return nil
+	default:
+		return errors.Errorf("invalid type %q", s.Type)
+	}
+}
+
 func (s V1UsersGetSort) Validate() error {
 	switch s {
 	case "id":

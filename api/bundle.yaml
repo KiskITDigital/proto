@@ -702,7 +702,9 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/User'
+                      oneOf:
+                        - $ref: '#/components/schemas/RegularUser'
+                        - $ref: '#/components/schemas/EmployeeUser'
         default:
           $ref: '#/components/responses/Error'
   /v1/users/confirm/email:

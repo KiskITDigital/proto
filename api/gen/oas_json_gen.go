@@ -9453,9 +9453,9 @@ func (s *V1UsersGetOK) Decode(d *jx.Decoder) error {
 		case "data":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				s.Data = make([]User, 0)
+				s.Data = make([]V1UsersGetOKDataItem, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem User
+					var elem V1UsersGetOKDataItem
 					if err := elem.Decode(d); err != nil {
 						return err
 					}
@@ -9520,6 +9520,100 @@ func (s *V1UsersGetOK) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *V1UsersGetOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes V1UsersGetOKDataItem as json.
+func (s V1UsersGetOKDataItem) Encode(e *jx.Encoder) {
+	switch s.Type {
+	case RegularUserV1UsersGetOKDataItem:
+		s.RegularUser.Encode(e)
+	case EmployeeUserV1UsersGetOKDataItem:
+		s.EmployeeUser.Encode(e)
+	}
+}
+
+func (s V1UsersGetOKDataItem) encodeFields(e *jx.Encoder) {
+	switch s.Type {
+	case RegularUserV1UsersGetOKDataItem:
+		s.RegularUser.encodeFields(e)
+	case EmployeeUserV1UsersGetOKDataItem:
+		s.EmployeeUser.encodeFields(e)
+	}
+}
+
+// Decode decodes V1UsersGetOKDataItem from json.
+func (s *V1UsersGetOKDataItem) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode V1UsersGetOKDataItem to nil")
+	}
+	// Sum type fields.
+	if typ := d.Next(); typ != jx.Object {
+		return errors.Errorf("unexpected json type %q", typ)
+	}
+
+	var found bool
+	if err := d.Capture(func(d *jx.Decoder) error {
+		return d.ObjBytes(func(d *jx.Decoder, key []byte) error {
+			switch string(key) {
+			case "organization":
+				match := RegularUserV1UsersGetOKDataItem
+				if found && s.Type != match {
+					s.Type = ""
+					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
+				}
+				found = true
+				s.Type = match
+			case "position":
+				match := EmployeeUserV1UsersGetOKDataItem
+				if found && s.Type != match {
+					s.Type = ""
+					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
+				}
+				found = true
+				s.Type = match
+			case "role":
+				match := EmployeeUserV1UsersGetOKDataItem
+				if found && s.Type != match {
+					s.Type = ""
+					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
+				}
+				found = true
+				s.Type = match
+			}
+			return d.Skip()
+		})
+	}); err != nil {
+		return errors.Wrap(err, "capture")
+	}
+	if !found {
+		return errors.New("unable to detect sum type variant")
+	}
+	switch s.Type {
+	case RegularUserV1UsersGetOKDataItem:
+		if err := s.RegularUser.Decode(d); err != nil {
+			return err
+		}
+	case EmployeeUserV1UsersGetOKDataItem:
+		if err := s.EmployeeUser.Decode(d); err != nil {
+			return err
+		}
+	default:
+		return errors.Errorf("inferred invalid type: %s", s.Type)
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s V1UsersGetOKDataItem) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *V1UsersGetOKDataItem) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

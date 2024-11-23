@@ -4904,20 +4904,86 @@ func (s *V1UsersGetDirection) UnmarshalText(data []byte) error {
 }
 
 type V1UsersGetOK struct {
-	Data []User `json:"data"`
+	Data []V1UsersGetOKDataItem `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1UsersGetOK) GetData() []User {
+func (s *V1UsersGetOK) GetData() []V1UsersGetOKDataItem {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1UsersGetOK) SetData(val []User) {
+func (s *V1UsersGetOK) SetData(val []V1UsersGetOKDataItem) {
 	s.Data = val
 }
 
 func (*V1UsersGetOK) v1UsersGetRes() {}
+
+// V1UsersGetOKDataItem represents sum type.
+type V1UsersGetOKDataItem struct {
+	Type         V1UsersGetOKDataItemType // switch on this field
+	RegularUser  RegularUser
+	EmployeeUser EmployeeUser
+}
+
+// V1UsersGetOKDataItemType is oneOf type of V1UsersGetOKDataItem.
+type V1UsersGetOKDataItemType string
+
+// Possible values for V1UsersGetOKDataItemType.
+const (
+	RegularUserV1UsersGetOKDataItem  V1UsersGetOKDataItemType = "RegularUser"
+	EmployeeUserV1UsersGetOKDataItem V1UsersGetOKDataItemType = "EmployeeUser"
+)
+
+// IsRegularUser reports whether V1UsersGetOKDataItem is RegularUser.
+func (s V1UsersGetOKDataItem) IsRegularUser() bool { return s.Type == RegularUserV1UsersGetOKDataItem }
+
+// IsEmployeeUser reports whether V1UsersGetOKDataItem is EmployeeUser.
+func (s V1UsersGetOKDataItem) IsEmployeeUser() bool {
+	return s.Type == EmployeeUserV1UsersGetOKDataItem
+}
+
+// SetRegularUser sets V1UsersGetOKDataItem to RegularUser.
+func (s *V1UsersGetOKDataItem) SetRegularUser(v RegularUser) {
+	s.Type = RegularUserV1UsersGetOKDataItem
+	s.RegularUser = v
+}
+
+// GetRegularUser returns RegularUser and true boolean if V1UsersGetOKDataItem is RegularUser.
+func (s V1UsersGetOKDataItem) GetRegularUser() (v RegularUser, ok bool) {
+	if !s.IsRegularUser() {
+		return v, false
+	}
+	return s.RegularUser, true
+}
+
+// NewRegularUserV1UsersGetOKDataItem returns new V1UsersGetOKDataItem from RegularUser.
+func NewRegularUserV1UsersGetOKDataItem(v RegularUser) V1UsersGetOKDataItem {
+	var s V1UsersGetOKDataItem
+	s.SetRegularUser(v)
+	return s
+}
+
+// SetEmployeeUser sets V1UsersGetOKDataItem to EmployeeUser.
+func (s *V1UsersGetOKDataItem) SetEmployeeUser(v EmployeeUser) {
+	s.Type = EmployeeUserV1UsersGetOKDataItem
+	s.EmployeeUser = v
+}
+
+// GetEmployeeUser returns EmployeeUser and true boolean if V1UsersGetOKDataItem is EmployeeUser.
+func (s V1UsersGetOKDataItem) GetEmployeeUser() (v EmployeeUser, ok bool) {
+	if !s.IsEmployeeUser() {
+		return v, false
+	}
+	return s.EmployeeUser, true
+}
+
+// NewEmployeeUserV1UsersGetOKDataItem returns new V1UsersGetOKDataItem from EmployeeUser.
+func NewEmployeeUserV1UsersGetOKDataItem(v EmployeeUser) V1UsersGetOKDataItem {
+	var s V1UsersGetOKDataItem
+	s.SetEmployeeUser(v)
+	return s
+}
 
 type V1UsersGetSort string
 

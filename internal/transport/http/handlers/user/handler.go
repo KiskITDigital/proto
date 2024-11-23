@@ -15,7 +15,7 @@ type Handler struct {
 
 type Service interface {
 	GetByID(ctx context.Context, tenderID int) (models.RegularUser, error)
-	Get(ctx context.Context) ([]models.RegularUser, error)
+	Get(ctx context.Context) ([]models.FullUser, error)
 
 	ReqEmailVerification(ctx context.Context, email string) error
 	ConfirmEmail(ctx context.Context, params usersrv.ConfirmEmailParams) error

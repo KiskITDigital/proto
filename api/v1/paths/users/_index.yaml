@@ -64,6 +64,8 @@ get:
               data:
                 type: array
                 items:
-                  $ref: "../../schemas/User.yaml"
+                  oneOf:
+                    - $ref: "../../schemas/RegularUser.yaml"
+                    - $ref: "../../schemas/EmployeeUser.yaml"
     default:
       $ref: "../../responses/Error.yaml"

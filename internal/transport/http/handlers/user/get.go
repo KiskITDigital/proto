@@ -33,8 +33,20 @@ func (h *Handler) V1UsersGet(ctx context.Context, params api.V1UsersGetParams) (
 	}
 
 	return &api.V1UsersGetOK{
-		Data: convert.Slice[[]models.RegularUser, []api.User](users, func(ru models.RegularUser) api.User {
-			return models.ConvertUserModelToApi(ru.User)
+		Data: convert.Slice[[]models.FullUser, []api.V1UsersGetOKDataItem](users, func(fu models.FullUser) api.V1UsersGetOKDataItem {
+			var user api.V1UsersGetOKDataItem
+
+			if fu.Role != 0 {
+				fu.EmployeeUser.User = fu.User
+				user.Type = api.EmployeeUserV1UsersGetOKDataItem
+				user.EmployeeUser = models.ConvertEmployeeUserModelToApi(fu.EmployeeUser)
+				return user
+			}
+
+			fu.RegularUser.User = fu.User
+			user.Type = api.RegularUserV1UsersGetOKDataItem
+			user.RegularUser = models.ConvertRegularUserModelToApi(fu.RegularUser)
+			return user
 		}),
 	}, nil
 }
