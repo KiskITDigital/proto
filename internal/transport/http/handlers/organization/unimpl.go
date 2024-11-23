@@ -22,7 +22,3 @@ func (h *Handler) V1OrganizationsOrganizationIDVerificationsPost(
 ) (api.V1OrganizationsOrganizationIDVerificationsPostRes, error) {
 	return nil, cerr.Wrap(fmt.Errorf("not impl"), cerr.CodeInternal, "func not impl", nil)
 }
-
-func (h *Handler) V1OrganizationsVerificationsGet(ctx context.Context, params api.V1OrganizationsVerificationsGetParams) (api.V1OrganizationsVerificationsGetRes, error) {
-	return nil, cerr.Wrap(fmt.Errorf("not impl"), cerr.CodeInternal, "func not impl", nil)
-}

@@ -16,7 +16,7 @@ func (h *Handler) V1TendersTenderIDCommentsPost(
 	params api.V1TendersTenderIDCommentsPostParams,
 ) (api.V1TendersTenderIDCommentsPostRes, error) {
 
-	err := h.svc.CreateComment(ctx, service.CommentCreateParams{
+	err := h.tenderService.CreateComment(ctx, service.CommentCreateParams{
 		TenderID:    params.TenderID,
 		Content:     req.Content,
 		Attachments: req.Attachments,
@@ -32,7 +32,7 @@ func (h *Handler) V1TendersTenderIDCommentsGet(
 	ctx context.Context,
 	params api.V1TendersTenderIDCommentsGetParams,
 ) (api.V1TendersTenderIDCommentsGetRes, error) {
-	comment, err := h.svc.GetComments(ctx, service.GetCommentParams{TenderID: params.TenderID})
+	comment, err := h.tenderService.GetComments(ctx, service.GetCommentParams{TenderID: params.TenderID})
 	if err != nil {
 		return nil, fmt.Errorf("get tender: %w", err)
 	}

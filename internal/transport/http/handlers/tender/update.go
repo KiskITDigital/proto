@@ -13,7 +13,7 @@ import (
 )
 
 func (h *Handler) V1TendersTenderIDPut(ctx context.Context, req *api.V1TendersTenderIDPutReq, params api.V1TendersTenderIDPutParams) (api.V1TendersTenderIDPutRes, error) {
-	tender, err := h.svc.Update(ctx, service.TenderUpdateParams{
+	tender, err := h.tenderService.Update(ctx, service.TenderUpdateParams{
 		ID:              params.TenderID,
 		OrganizationID:  contextor.GetOrganizationID(ctx),
 		Name:            models.Optional[string]{Value: req.GetName().Value, Set: req.GetName().Set},
