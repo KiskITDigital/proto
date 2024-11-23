@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
@@ -28,5 +29,12 @@ func (s *Service) GetByID(ctx context.Context, userID int) (models.RegularUser, 
 }
 
 func (s *Service) Get(ctx context.Context) ([]models.RegularUser, error) {
-	return s.userStore.GetWithOrganiztion(ctx, s.psql.DB(), store.UserGetParams{})
+	users, err := s.userStore.Get(ctx, s.psql.DB(), store.UserGetParams{})
+	if err != nil {
+		return nil, err
+	}
+
+	return convert.Slice[[]models.FullUser, []models.RegularUser](users, func(fu models.FullUser) models.RegularUser {
+		return models.RegularUser{User: fu.User, Organization: fu.Organization}
+	}), nil
 }
