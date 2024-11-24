@@ -53,6 +53,8 @@ func newCORShandler() func(http.Handler) http.Handler {
 			"https://ubrato.ru",
 			"http://dev.ubrato.ru",
 			"https://dev.ubrato.ru",
+			"http://admin.ubrato.ru",
+			"https://admin.ubrato.ru",
 			"http://localhost",
 			"http://localhost:5174",
 			"http://localhost:5173",
