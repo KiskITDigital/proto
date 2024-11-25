@@ -64,6 +64,7 @@ func (s *City) SetRegion(val OptRegion) {
 type Comment struct {
 	ID                 int          `json:"id"`
 	Organization       Organization `json:"organization"`
+	Title              string       `json:"title"`
 	Content            string       `json:"content"`
 	Attachments        []string     `json:"attachments"`
 	VerificationStatus string       `json:"verification_status"`
@@ -78,6 +79,11 @@ func (s *Comment) GetID() int {
 // GetOrganization returns the value of Organization.
 func (s *Comment) GetOrganization() Organization {
 	return s.Organization
+}
+
+// GetTitle returns the value of Title.
+func (s *Comment) GetTitle() string {
+	return s.Title
 }
 
 // GetContent returns the value of Content.
@@ -108,6 +114,11 @@ func (s *Comment) SetID(val int) {
 // SetOrganization sets the value of Organization.
 func (s *Comment) SetOrganization(val Organization) {
 	s.Organization = val
+}
+
+// SetTitle sets the value of Title.
+func (s *Comment) SetTitle(val string) {
+	s.Title = val
 }
 
 // SetContent sets the value of Content.
@@ -4474,8 +4485,14 @@ type V1TendersTenderIDCommentsPostOK struct{}
 func (*V1TendersTenderIDCommentsPostOK) v1TendersTenderIDCommentsPostRes() {}
 
 type V1TendersTenderIDCommentsPostReq struct {
+	Title       string   `json:"title"`
 	Content     string   `json:"content"`
 	Attachments []string `json:"attachments"`
+}
+
+// GetTitle returns the value of Title.
+func (s *V1TendersTenderIDCommentsPostReq) GetTitle() string {
+	return s.Title
 }
 
 // GetContent returns the value of Content.
@@ -4486,6 +4503,11 @@ func (s *V1TendersTenderIDCommentsPostReq) GetContent() string {
 // GetAttachments returns the value of Attachments.
 func (s *V1TendersTenderIDCommentsPostReq) GetAttachments() []string {
 	return s.Attachments
+}
+
+// SetTitle sets the value of Title.
+func (s *V1TendersTenderIDCommentsPostReq) SetTitle(val string) {
+	s.Title = val
 }
 
 // SetContent sets the value of Content.

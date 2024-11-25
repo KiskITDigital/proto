@@ -18,6 +18,7 @@ func (h *Handler) V1TendersTenderIDCommentsPost(
 
 	err := h.tenderService.CreateComment(ctx, service.CommentCreateParams{
 		TenderID:    params.TenderID,
+		Title:       req.Title,
 		Content:     req.Content,
 		Attachments: req.Attachments,
 	})

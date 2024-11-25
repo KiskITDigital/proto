@@ -13,6 +13,7 @@ type Comment struct {
 	Organization       Organization
 	ObjectType         ObjectType
 	ObjectID           int
+	Title              string
 	Content            string
 	Attachments        []string
 	VerificationStatus VerificationStatus
@@ -21,12 +22,13 @@ type Comment struct {
 
 func ConvertCommentModelToApi(comment Comment) api.Comment {
 	return api.Comment{
-		ID:           comment.ID,
-		Organization: ConvertOrganizationModelToApi(comment.Organization),
-		Content:      comment.Content,
-		Attachments:  comment.Attachments,
+		ID:                 comment.ID,
+		Organization:       ConvertOrganizationModelToApi(comment.Organization),
+		Title:              comment.Title,
+		Content:            comment.Content,
+		Attachments:        comment.Attachments,
 		VerificationStatus: string(comment.VerificationStatus.ToAPI()),
-		CreatedAt:    comment.CreatedAt,
+		CreatedAt:          comment.CreatedAt,
 	}
 }
 
