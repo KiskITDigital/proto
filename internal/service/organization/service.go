@@ -20,6 +20,7 @@ type DBTX interface {
 
 type OrganizationStore interface {
 	Get(ctx context.Context, qe store.QueryExecutor, params store.OrganizationGetParams) ([]models.Organization, error)
+	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Organization, error) 
 }
 
 func New(psql DBTX, organizationStore OrganizationStore) *Service {

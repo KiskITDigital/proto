@@ -42,6 +42,7 @@ get:
         default: ASC
   responses:
     '200':
+      description: Success
       content:
         application/json:
           schema:
@@ -79,6 +80,7 @@ post:
               type: integer
   responses:
     '201':
+      description: Success
       content:
         application/json:
           schema:

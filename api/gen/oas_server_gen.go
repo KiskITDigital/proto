@@ -100,6 +100,12 @@ type Handler interface {
 	//
 	// GET /v1/organizations
 	V1OrganizationsGet(ctx context.Context, params V1OrganizationsGetParams) (V1OrganizationsGetRes, error)
+	// V1OrganizationsOrganizationIDGet implements GET /v1/organizations/{organizationID} operation.
+	//
+	// Returns organization by id.
+	//
+	// GET /v1/organizations/{organizationID}
+	V1OrganizationsOrganizationIDGet(ctx context.Context, params V1OrganizationsOrganizationIDGetParams) (V1OrganizationsOrganizationIDGetRes, error)
 	// V1OrganizationsOrganizationIDTendersGet implements GET /v1/organizations/{organizationID}/tenders operation.
 	//
 	// If user is in organization it also returns all drafts.

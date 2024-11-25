@@ -47,3 +47,14 @@ func (h *Handler) V1OrganizationsVerificationsGet(ctx context.Context, params ap
 			orgVerifications, models.VerificationRequestModelToApi),
 	}, nil
 }
+
+func (h *Handler) V1OrganizationsOrganizationIDGet(ctx context.Context, params api.V1OrganizationsOrganizationIDGetParams) (api.V1OrganizationsOrganizationIDGetRes, error) {
+	// TODO: check role
+	organization, err := h.organizationService.GetByID(ctx, params.OrganizationID)
+	if err != nil {
+		return nil, fmt.Errorf("get organization by id: %w", err)
+	}
+
+	apiOrganization := models.ConvertOrganizationModelToApi(organization)
+	return &apiOrganization, nil
+}
