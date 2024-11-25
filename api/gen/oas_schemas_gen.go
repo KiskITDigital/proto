@@ -2139,8 +2139,6 @@ func (s *Organization) SetUpdatedAt(val time.Time) {
 	s.UpdatedAt = val
 }
 
-func (*Organization) v1OrganizationsOrganizationIDGetRes() {}
-
 type Password string
 
 type Phone string
@@ -3863,6 +3861,22 @@ func (s *V1OrganizationsGetSort) UnmarshalText(data []byte) error {
 		return errors.Errorf("invalid value: %q", data)
 	}
 }
+
+type V1OrganizationsOrganizationIDGetOK struct {
+	Data Organization `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1OrganizationsOrganizationIDGetOK) GetData() Organization {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1OrganizationsOrganizationIDGetOK) SetData(val Organization) {
+	s.Data = val
+}
+
+func (*V1OrganizationsOrganizationIDGetOK) v1OrganizationsOrganizationIDGetRes() {}
 
 type V1OrganizationsOrganizationIDTendersGetOK struct {
 	Data []Tender `json:"data"`
