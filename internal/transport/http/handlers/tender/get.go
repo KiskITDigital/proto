@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/contextor"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
@@ -53,6 +54,10 @@ func (h *Handler) V1OrganizationsOrganizationIDTendersGet(
 }
 
 func (h *Handler) V1TendersVerificationsGet(ctx context.Context, params api.V1TendersVerificationsGetParams) (api.V1TendersVerificationsGetRes, error) {
+	if contextor.GetRole(ctx) < models.UserRoleEmployee {
+		return nil, cerr.ErrPermission
+	}
+
 	orgVerifications, err := h.verificationService.Get(ctx, service.VerificationRequestsObjectGetParams{
 		ObjectType: models.ObjectTypeTender,
 		Status:     convert.Slice[[]api.VerificationStatus, []models.VerificationStatus](params.Status, models.APIToVerificationStatus),
