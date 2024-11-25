@@ -50,6 +50,7 @@ type SessionStore interface {
 	Create(ctx context.Context, qe store.QueryExecutor, params store.SessionCreateParams) (models.Session, error)
 	Get(ctx context.Context, qe store.QueryExecutor, params store.SessionGetParams) (models.Session, error)
 	Update(ctx context.Context, qe store.QueryExecutor, params store.SessionUpdateParams) (models.Session, error)
+	Delete(ctx context.Context, qe store.QueryExecutor, sessionID string) error
 }
 
 type DadataGateway interface {

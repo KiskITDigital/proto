@@ -73,6 +73,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
+				case 'l': // Prefix: "logout"
+					origElem := elem
+					if l := len("logout"); len(elem) >= l && elem[0:l] == "logout" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "DELETE":
+							s.handleV1AuthLogoutDeleteRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "DELETE")
+						}
+
+						return
+					}
+
+					elem = origElem
 				case 'r': // Prefix: "refresh"
 					origElem := elem
 					if l := len("refresh"); len(elem) >= l && elem[0:l] == "refresh" {
@@ -1087,6 +1108,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
+				case 'l': // Prefix: "logout"
+					origElem := elem
+					if l := len("logout"); len(elem) >= l && elem[0:l] == "logout" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "DELETE":
+							r.name = "V1AuthLogoutDelete"
+							r.summary = "Logout User"
+							r.operationID = ""
+							r.pathPattern = "/v1/auth/logout"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
 				case 'r': // Prefix: "refresh"
 					origElem := elem
 					if l := len("refresh"); len(elem) >= l && elem[0:l] == "refresh" {

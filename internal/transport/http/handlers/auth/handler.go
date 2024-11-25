@@ -20,6 +20,7 @@ type AuthService interface {
 	SignIn(ctx context.Context, params authService.SignInParams) (authService.SignInResult, error)
 	Refresh(ctx context.Context, sessionToken string) (authService.SignInResult, error)
 	ValidateAccessToken(ctx context.Context, accessToken string) (token.Claims, error)
+	Logout(ctx context.Context, sessionToken string) error
 }
 
 type UserService interface {

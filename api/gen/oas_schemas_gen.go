@@ -426,6 +426,7 @@ func (s *ErrorStatusCode) SetResponse(val WrappedError) {
 	s.Response = val
 }
 
+func (*ErrorStatusCode) v1AuthLogoutDeleteRes()                             {}
 func (*ErrorStatusCode) v1AuthRefreshPostRes()                              {}
 func (*ErrorStatusCode) v1AuthSigninPostRes()                               {}
 func (*ErrorStatusCode) v1AuthSignupPostRes()                               {}
@@ -2849,6 +2850,23 @@ func (s *User) SetCreatedAt(val time.Time) {
 func (s *User) SetUpdatedAt(val time.Time) {
 	s.UpdatedAt = val
 }
+
+// V1AuthLogoutDeleteNoContent is response for V1AuthLogoutDelete operation.
+type V1AuthLogoutDeleteNoContent struct {
+	SetCookie OptString
+}
+
+// GetSetCookie returns the value of SetCookie.
+func (s *V1AuthLogoutDeleteNoContent) GetSetCookie() OptString {
+	return s.SetCookie
+}
+
+// SetSetCookie sets the value of SetCookie.
+func (s *V1AuthLogoutDeleteNoContent) SetSetCookie(val OptString) {
+	s.SetCookie = val
+}
+
+func (*V1AuthLogoutDeleteNoContent) v1AuthLogoutDeleteRes() {}
 
 type V1AuthRefreshPostOK struct {
 	Data V1AuthRefreshPostOKData `json:"data"`
