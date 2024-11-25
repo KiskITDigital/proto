@@ -162,6 +162,10 @@ func (s *Comment) encodeFields(e *jx.Encoder) {
 		s.Organization.Encode(e)
 	}
 	{
+		e.FieldStart("title")
+		e.Str(s.Title)
+	}
+	{
 		e.FieldStart("content")
 		e.Str(s.Content)
 	}
@@ -185,13 +189,14 @@ func (s *Comment) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfComment = [6]string{
+var jsonFieldsNameOfComment = [7]string{
 	0: "id",
 	1: "organization",
-	2: "content",
-	3: "attachments",
-	4: "verification_status",
-	5: "created_at",
+	2: "title",
+	3: "content",
+	4: "attachments",
+	5: "verification_status",
+	6: "created_at",
 }
 
 // Decode decodes Comment from json.
@@ -225,8 +230,20 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"organization\"")
 			}
-		case "content":
+		case "title":
 			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Str()
+				s.Title = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"title\"")
+			}
+		case "content":
+			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
 				v, err := d.Str()
 				s.Content = string(v)
@@ -257,7 +274,7 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"attachments\"")
 			}
 		case "verification_status":
-			requiredBitSet[0] |= 1 << 4
+			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
 				v, err := d.Str()
 				s.VerificationStatus = string(v)
@@ -269,7 +286,7 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"verification_status\"")
 			}
 		case "created_at":
-			requiredBitSet[0] |= 1 << 5
+			requiredBitSet[0] |= 1 << 6
 			if err := func() error {
 				v, err := json.DecodeDateTime(d)
 				s.CreatedAt = v
@@ -290,7 +307,7 @@ func (s *Comment) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00110111,
+		0b01101111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -8481,6 +8498,10 @@ func (s *V1TendersTenderIDCommentsPostReq) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *V1TendersTenderIDCommentsPostReq) encodeFields(e *jx.Encoder) {
 	{
+		e.FieldStart("title")
+		e.Str(s.Title)
+	}
+	{
 		e.FieldStart("content")
 		e.Str(s.Content)
 	}
@@ -8496,9 +8517,10 @@ func (s *V1TendersTenderIDCommentsPostReq) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfV1TendersTenderIDCommentsPostReq = [2]string{
-	0: "content",
-	1: "attachments",
+var jsonFieldsNameOfV1TendersTenderIDCommentsPostReq = [3]string{
+	0: "title",
+	1: "content",
+	2: "attachments",
 }
 
 // Decode decodes V1TendersTenderIDCommentsPostReq from json.
@@ -8510,8 +8532,20 @@ func (s *V1TendersTenderIDCommentsPostReq) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "content":
+		case "title":
 			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.Title = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"title\"")
+			}
+		case "content":
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
 				v, err := d.Str()
 				s.Content = string(v)
@@ -8551,7 +8585,7 @@ func (s *V1TendersTenderIDCommentsPostReq) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000001,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -10393,6 +10427,14 @@ func (s *VerificationRequestObject) Decode(d *jx.Decoder) error {
 	if err := d.Capture(func(d *jx.Decoder) error {
 		return d.ObjBytes(func(d *jx.Decoder, key []byte) error {
 			switch string(key) {
+			case "title":
+				match := CommentVerificationRequestObject
+				if found && s.Type != match {
+					s.Type = ""
+					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
+				}
+				found = true
+				s.Type = match
 			case "content":
 				match := CommentVerificationRequestObject
 				if found && s.Type != match {

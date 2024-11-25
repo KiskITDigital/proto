@@ -17,6 +17,7 @@ func (s *Service) CreateComment(ctx context.Context, params service.CommentCreat
 		ObjectType:     models.ObjectTypeTender,
 		ObjectID:       params.TenderID,
 		OrganizationID: organizationID,
+		Title:          params.Title,
 		Content:        params.Content,
 		Attachments:    params.Attachments,
 	})

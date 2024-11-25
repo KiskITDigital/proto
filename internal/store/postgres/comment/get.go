@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
+	"github.com/lib/pq"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
@@ -15,6 +16,7 @@ func (s *CommentStore) GetComments(ctx context.Context, qe store.QueryExecutor, 
 			"c.id",
 			"c.object_type",
 			"c.object_id",
+			"c.title",
 			"c.content",
 			"c.attachments",
 			"c.verification_status",
@@ -55,8 +57,11 @@ func (s *CommentStore) GetComments(ctx context.Context, qe store.QueryExecutor, 
 		var comment models.Comment
 		err := rows.Scan(
 			&comment.ID,
+			&comment.ObjectType,
+			&comment.ObjectID,
+			&comment.Title,
 			&comment.Content,
-			&comment.Attachments,
+			pq.Array(&comment.Attachments),
 			&comment.VerificationStatus,
 			&comment.CreatedAt,
 			&comment.Organization.ID,
