@@ -4,10 +4,10 @@ CREATE TABLE IF NOT EXISTS verification_requests (
     reviewer_user_id    BIGINT REFERENCES users(id),
     object_type         SMALLINT NOT NULL,
     object_id           BIGINT NOT NULL,
-    content             TEXT NOT NULL,
+    content             TEXT NULL,
     attachments         TEXT[],
     status              SMALLINT NOT NULL,
-    review_comment      TEXT,
+    review_comment      TEXT NULL,
     created_at          TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     reviewed_at         TIMESTAMPTZ
 );

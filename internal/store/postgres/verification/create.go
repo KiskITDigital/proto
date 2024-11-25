@@ -6,6 +6,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/lib/pq"
+	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
@@ -16,11 +17,13 @@ func (s *VerificationStore) Create(ctx context.Context, qe store.QueryExecutor, 
 			"object_type",
 			"object_id",
 			"attachments",
+			"status",
 		).
 		Values(
 			params.ObjectType,
 			params.ObjectType,
 			pq.Array(params.Attachments),
+			models.VerificationStatusInReview,
 		).
 		PlaceholderFormat(squirrel.Dollar)
 

@@ -31,6 +31,7 @@ func (s *VerificationStore) GetTendersRequests(ctx context.Context, qe store.Que
 		"vr.content",
 		"vr.attachments",
 		"vr.status",
+		"vr.review_comment",
 		"vr.created_at AS vr_created_at",
 		"vr.reviewed_at AS vr_reviewed_at",
 		"t.id").
@@ -57,9 +58,11 @@ func (s *VerificationStore) GetTendersRequests(ctx context.Context, qe store.Que
 
 	for rows.Next() {
 		var (
-			request       models.VerificationRequest[models.VerificationObject]
-			userAvatarURL sql.NullString
-			tenderID      int
+			request                models.VerificationRequest[models.VerificationObject]
+			userAvatarURL          sql.NullString
+			requestContent         sql.NullString
+			requestReviewerComment sql.NullString
+			tenderID               int
 		)
 
 		if err := rows.Scan(
@@ -78,9 +81,10 @@ func (s *VerificationStore) GetTendersRequests(ctx context.Context, qe store.Que
 			&request.Reviewer.Position,
 			&request.Reviewer.Role,
 			&request.ObjectType,
-			&request.Content,
+			&requestContent,
 			pq.Array(&request.Attachments),
 			&request.Status,
+			&requestReviewerComment,
 			&request.CreatedAt,
 			&request.ReviewedAt,
 			&tenderID); err != nil {
@@ -89,6 +93,8 @@ func (s *VerificationStore) GetTendersRequests(ctx context.Context, qe store.Que
 
 		request.ObjectID = tenderID
 		request.Object = &models.Tender{}
+		request.Content = requestContent.String
+		request.ReviewComment = requestReviewerComment.String
 
 		requests = append(requests, request)
 	}
@@ -120,6 +126,7 @@ func (s *VerificationStore) GetOrganizationRequests(ctx context.Context, qe stor
 		"vr.content",
 		"vr.attachments",
 		"vr.status",
+		"vr.review_comment",
 		"vr.created_at AS vr_created_at",
 		"vr.reviewed_at AS vr_reviewed_at",
 		"o.id",
@@ -166,10 +173,12 @@ func (s *VerificationStore) GetOrganizationRequests(ctx context.Context, qe stor
 
 	for rows.Next() {
 		var (
-			request       models.VerificationRequest[models.VerificationObject]
-			userAvatarURL sql.NullString
-			orgAvatarURL  sql.NullString
-			org           models.Organization
+			request                models.VerificationRequest[models.VerificationObject]
+			userAvatarURL          sql.NullString
+			orgAvatarURL           sql.NullString
+			requestContent         sql.NullString
+			requestReviewerComment sql.NullString
+			org                    models.Organization
 		)
 
 		if err := rows.Scan(
@@ -188,9 +197,10 @@ func (s *VerificationStore) GetOrganizationRequests(ctx context.Context, qe stor
 			&request.Reviewer.Position,
 			&request.Reviewer.Role,
 			&request.ObjectType,
-			&request.Content,
+			&requestContent,
 			pq.Array(&request.Attachments),
 			&request.Status,
+			&requestReviewerComment,
 			&request.CreatedAt,
 			&request.ReviewedAt,
 			&org.ID,
@@ -220,6 +230,8 @@ func (s *VerificationStore) GetOrganizationRequests(ctx context.Context, qe stor
 		request.Reviewer.AvatarURL = userAvatarURL.String
 		org.AvatarURL = orgAvatarURL.String
 		request.Object = org
+		request.Content = requestContent.String
+		request.ReviewComment = requestReviewerComment.String
 
 		requests = append(requests, request)
 	}
