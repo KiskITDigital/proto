@@ -439,6 +439,7 @@ func (*ErrorStatusCode) v1CatalogServicesPostRes()                          {}
 func (*ErrorStatusCode) v1CommentsVerificationsGetRes()                     {}
 func (*ErrorStatusCode) v1EmployeePostRes()                                 {}
 func (*ErrorStatusCode) v1OrganizationsGetRes()                             {}
+func (*ErrorStatusCode) v1OrganizationsOrganizationIDGetRes()               {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDTendersGetRes()        {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDVerificationsGetRes()  {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDVerificationsPostRes() {}
@@ -2136,6 +2137,8 @@ func (s *Organization) SetCreatedAt(val time.Time) {
 func (s *Organization) SetUpdatedAt(val time.Time) {
 	s.UpdatedAt = val
 }
+
+func (*Organization) v1OrganizationsOrganizationIDGetRes() {}
 
 type Password string
 

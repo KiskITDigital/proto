@@ -144,6 +144,15 @@ func (UnimplementedHandler) V1OrganizationsGet(ctx context.Context, params V1Org
 	return r, ht.ErrNotImplemented
 }
 
+// V1OrganizationsOrganizationIDGet implements GET /v1/organizations/{organizationID} operation.
+//
+// Returns organization by id.
+//
+// GET /v1/organizations/{organizationID}
+func (UnimplementedHandler) V1OrganizationsOrganizationIDGet(ctx context.Context, params V1OrganizationsOrganizationIDGetParams) (r V1OrganizationsOrganizationIDGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1OrganizationsOrganizationIDTendersGet implements GET /v1/organizations/{organizationID}/tenders operation.
 //
 // If user is in organization it also returns all drafts.

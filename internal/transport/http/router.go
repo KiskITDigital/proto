@@ -72,6 +72,7 @@ type Catalog interface {
 }
 
 type Organization interface {
+	V1OrganizationsOrganizationIDGet(ctx context.Context, params api.V1OrganizationsOrganizationIDGetParams) (api.V1OrganizationsOrganizationIDGetRes, error)
 	V1OrganizationsGet(ctx context.Context, params api.V1OrganizationsGetParams) (api.V1OrganizationsGetRes, error)
 	V1OrganizationsOrganizationIDVerificationsGet(ctx context.Context, params api.V1OrganizationsOrganizationIDVerificationsGetParams) (api.V1OrganizationsOrganizationIDVerificationsGetRes, error)
 	V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, req *api.V1OrganizationsOrganizationIDVerificationsPostReq, params api.V1OrganizationsOrganizationIDVerificationsPostParams) (api.V1OrganizationsOrganizationIDVerificationsPostRes, error)

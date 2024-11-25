@@ -53,6 +53,10 @@ type V1OrganizationsGetRes interface {
 	v1OrganizationsGetRes()
 }
 
+type V1OrganizationsOrganizationIDGetRes interface {
+	v1OrganizationsOrganizationIDGetRes()
+}
+
 type V1OrganizationsOrganizationIDTendersGetRes interface {
 	v1OrganizationsOrganizationIDTendersGetRes()
 }
