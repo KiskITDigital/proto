@@ -115,6 +115,10 @@ func (a CustomerInfo) Value() (driver.Value, error) {
 }
 
 func (a *CustomerInfo) Scan(value interface{}) error {
+	if value == nil {
+		return nil
+	}
+
 	b, ok := value.([]byte)
 	if !ok {
 		return errors.New("type assertion to []byte failed")
@@ -130,6 +134,10 @@ func (a ContractorInfo) Value() (driver.Value, error) {
 }
 
 func (a *ContractorInfo) Scan(value interface{}) error {
+	if value == nil {
+		return nil
+	}
+
 	b, ok := value.([]byte)
 	if !ok {
 		return errors.New("type assertion to []byte failed")
