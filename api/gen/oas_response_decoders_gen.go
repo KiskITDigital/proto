@@ -1402,7 +1402,7 @@ func decodeV1OrganizationsOrganizationIDGetResponse(resp *http.Response) (res V1
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response Organization
+			var response V1OrganizationsOrganizationIDGetOK
 			if err := func() error {
 				if err := response.Decode(d); err != nil {
 					return err

@@ -21,6 +21,11 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../../../schemas/Organization.yaml"
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                $ref: "../../../schemas/Organization.yaml"
     default:
       $ref: "../../../responses/Error.yaml"

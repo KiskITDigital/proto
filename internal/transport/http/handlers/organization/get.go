@@ -55,6 +55,7 @@ func (h *Handler) V1OrganizationsOrganizationIDGet(ctx context.Context, params a
 		return nil, fmt.Errorf("get organization by id: %w", err)
 	}
 
-	apiOrganization := models.ConvertOrganizationModelToApi(organization)
-	return &apiOrganization, nil
+	return &api.V1OrganizationsOrganizationIDGetOK{
+		Data: models.ConvertOrganizationModelToApi(organization),
+	}, nil
 }
