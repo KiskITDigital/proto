@@ -1,18 +1,35 @@
 package comment
 
-import "log/slog"
+import (
+	"context"
+	"log/slog"
 
-type Handler struct {
-	logger *slog.Logger
-	svc    Service
-}
+	"gitlab.ubrato.ru/ubrato/core/internal/models"
+	"gitlab.ubrato.ru/ubrato/core/internal/service"
+)
 
-type Service interface {
-}
+type (
+	Handler struct {
+		logger              *slog.Logger
+		commentService      CommentService
+		verificationService VerificationService
+	}
 
-func New(logger *slog.Logger, svc Service) *Handler {
+	CommentService interface {
+	}
+
+	VerificationService interface {
+		Get(ctx context.Context, params service.VerificationRequestsObjectGetParams) ([]models.VerificationRequest[models.VerificationObject], error)
+	}
+)
+
+func New(
+	logger *slog.Logger,
+	commentService CommentService,
+	verificationService VerificationService) *Handler {
 	return &Handler{
-		logger: logger,
-		svc:    svc,
+		logger:              logger,
+		commentService:      commentService,
+		verificationService: verificationService,
 	}
 }

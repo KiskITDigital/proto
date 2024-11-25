@@ -25,6 +25,7 @@ func ConvertCommentModelToApi(comment Comment) api.Comment {
 		Organization: ConvertOrganizationModelToApi(comment.Organization),
 		Content:      comment.Content,
 		Attachments:  comment.Attachments,
+		VerificationStatus: string(comment.VerificationStatus.ToAPI()),
 		CreatedAt:    comment.CreatedAt,
 	}
 }

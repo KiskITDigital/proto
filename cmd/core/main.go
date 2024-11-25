@@ -154,7 +154,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		Users:        userHandler.New(logger, userService),
 		Survey:       surveyHandler.New(logger, surveyService),
 		Organization: organizationHandler.New(logger, organizationService, verificationServise),
-		Comments:     commentHandler.New(logger, nil),
+		Comments:     commentHandler.New(logger, nil, verificationServise),
 		Suggest:      suggestHandler.New(logger, suggestService),
 		Verification: verificationHandler.New(logger, verificationServise),
 		Employee:     employeeHandler.New(logger, userService),

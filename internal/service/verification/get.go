@@ -2,7 +2,6 @@ package verification
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
@@ -55,7 +54,7 @@ func (s *Service) Get(ctx context.Context, params service.VerificationRequestsOb
 		return requests, nil
 
 	case models.ObjectTypeComment:
-		return nil, errors.New("get comments request not impl")
+		return s.verificationStore.GetCommentRequests(ctx, s.psql.DB(), storeParams)
 	}
 
 	return nil, fmt.Errorf("invalid object type: %v", params.ObjectType)
