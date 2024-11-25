@@ -11,6 +11,8 @@ info:
 paths:
   /v1/auth/signin:
     $ref: "v1/paths/auth/signin.yaml"
+  /v1/auth/logout:
+    $ref: "v1/paths/auth/logout.yaml"
   /v1/auth/signup:
     $ref: "v1/paths/auth/signup.yaml"
   /v1/auth/user:
