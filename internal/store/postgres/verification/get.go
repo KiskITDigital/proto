@@ -99,10 +99,6 @@ func (s *VerificationStore) GetTendersRequests(ctx context.Context, qe store.Que
 		requests = append(requests, request)
 	}
 
-	if len(requests) == 0 {
-		return nil, fmt.Errorf("requests not found")
-	}
-
 	return requests, nil
 }
 
@@ -234,10 +230,6 @@ func (s *VerificationStore) GetOrganizationRequests(ctx context.Context, qe stor
 		request.ReviewComment = requestReviewerComment.String
 
 		requests = append(requests, request)
-	}
-
-	if len(requests) == 0 {
-		return nil, fmt.Errorf("requests not found")
 	}
 
 	return requests, nil
