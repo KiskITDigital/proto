@@ -8,7 +8,7 @@ type UserCreateEmployeeParams struct {
 	Password   string
 	FirstName  string
 	LastName   string
-	MiddleName string
+	MiddleName models.Optional[string]
 	Role       models.UserRole
 	Position   string
 }

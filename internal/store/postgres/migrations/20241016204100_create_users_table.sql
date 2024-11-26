@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash   TEXT NOT NULL,
     first_name      TEXT NOT NULL,
     last_name       TEXT NOT NULL,
-    middle_name     TEXT NOT NULL,
+    middle_name     TEXT,
     avatar_url      TEXT,
     email_verified  BOOLEAN NOT NULL,
     totp_salt       TEXT NOT NULL,

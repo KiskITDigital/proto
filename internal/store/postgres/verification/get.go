@@ -60,6 +60,7 @@ func (s *VerificationStore) GetTendersRequests(ctx context.Context, qe store.Que
 		var (
 			request                models.VerificationRequest[models.VerificationObject]
 			userAvatarURL          sql.NullString
+			userMiddleName         sql.NullString
 			requestContent         sql.NullString
 			requestReviewerComment sql.NullString
 			tenderID               int
@@ -72,7 +73,7 @@ func (s *VerificationStore) GetTendersRequests(ctx context.Context, qe store.Que
 			&request.Reviewer.Phone,
 			&request.Reviewer.FirstName,
 			&request.Reviewer.LastName,
-			&request.Reviewer.MiddleName,
+			&userMiddleName,
 			&userAvatarURL,
 			&request.Reviewer.EmailVerified,
 			&request.Reviewer.IsBanned,
@@ -95,6 +96,10 @@ func (s *VerificationStore) GetTendersRequests(ctx context.Context, qe store.Que
 		request.Object = &models.Tender{}
 		request.Content = requestContent.String
 		request.ReviewComment = requestReviewerComment.String
+
+		if userMiddleName.Valid {
+			request.Reviewer.MiddleName = models.Optional[string]{Value: userMiddleName.String, Set: true}
+		}
 
 		requests = append(requests, request)
 	}
@@ -171,6 +176,7 @@ func (s *VerificationStore) GetOrganizationRequests(ctx context.Context, qe stor
 		var (
 			request                models.VerificationRequest[models.VerificationObject]
 			userAvatarURL          sql.NullString
+			userMiddleName         sql.NullString
 			orgAvatarURL           sql.NullString
 			requestContent         sql.NullString
 			requestReviewerComment sql.NullString
@@ -184,7 +190,7 @@ func (s *VerificationStore) GetOrganizationRequests(ctx context.Context, qe stor
 			&request.Reviewer.Phone,
 			&request.Reviewer.FirstName,
 			&request.Reviewer.LastName,
-			&request.Reviewer.MiddleName,
+			&userMiddleName,
 			&userAvatarURL,
 			&request.Reviewer.EmailVerified,
 			&request.Reviewer.IsBanned,
@@ -228,6 +234,10 @@ func (s *VerificationStore) GetOrganizationRequests(ctx context.Context, qe stor
 		request.Object = org
 		request.Content = requestContent.String
 		request.ReviewComment = requestReviewerComment.String
+
+		if userMiddleName.Valid {
+			request.Reviewer.MiddleName = models.Optional[string]{Value: userMiddleName.String, Set: true}
+		}
 
 		requests = append(requests, request)
 	}
@@ -310,10 +320,11 @@ func (s *VerificationStore) GetCommentRequests(ctx context.Context, qe store.Que
 
 	for rows.Next() {
 		var (
-			request       models.VerificationRequest[models.VerificationObject]
-			userAvatarURL sql.NullString
-			orgAvatarURL  sql.NullString
-			comment       models.Comment
+			request        models.VerificationRequest[models.VerificationObject]
+			userAvatarURL  sql.NullString
+			userMiddleName sql.NullString
+			orgAvatarURL   sql.NullString
+			comment        models.Comment
 		)
 
 		if err := rows.Scan(
@@ -323,7 +334,7 @@ func (s *VerificationStore) GetCommentRequests(ctx context.Context, qe store.Que
 			&request.Reviewer.Phone,
 			&request.Reviewer.FirstName,
 			&request.Reviewer.LastName,
-			&request.Reviewer.MiddleName,
+			&userMiddleName,
 			&userAvatarURL,
 			&request.Reviewer.EmailVerified,
 			&request.Reviewer.IsBanned,
@@ -372,6 +383,10 @@ func (s *VerificationStore) GetCommentRequests(ctx context.Context, qe store.Que
 		request.Reviewer.AvatarURL = userAvatarURL.String
 		comment.Organization.AvatarURL = orgAvatarURL.String
 		request.Object = comment
+
+		if userMiddleName.Valid {
+			request.Reviewer.MiddleName = models.Optional[string]{Value: userMiddleName.String, Set: true}
+		}
 
 		requests = append(requests, request)
 	}

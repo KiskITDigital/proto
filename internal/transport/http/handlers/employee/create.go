@@ -16,7 +16,7 @@ func (h *Handler) V1EmployeePost(ctx context.Context, req *api.V1EmployeePostReq
 		Password:   string(req.GetPassword()),
 		FirstName:  string(req.GetFirstName()),
 		LastName:   string(req.GetLastName()),
-		MiddleName: string(req.GetMiddleName().Value),
+		MiddleName: models.Optional[string]{Value: string(req.MiddleName.Value), Set: req.MiddleName.Set},
 		Role:       models.APIRoleToModel(req.GetRole()),
 		Position:   req.GetPosition(),
 	})

@@ -14,7 +14,6 @@ post:
             - password
             - first_name
             - last_name
-            - middle_name
             - inn
             - is_contractor
           properties:

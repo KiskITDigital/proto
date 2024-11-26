@@ -69,8 +69,9 @@ func (s *UserStore) Get(ctx context.Context, qe store.QueryExecutor, params stor
 
 	for rows.Next() {
 		var (
-			user      models.FullUser
-			avatarURL sql.NullString
+			user           models.FullUser
+			userMiddleName sql.NullString
+			avatarURL      sql.NullString
 
 			organizationID           sql.NullInt64
 			organizationBrandName    sql.NullString
@@ -99,7 +100,7 @@ func (s *UserStore) Get(ctx context.Context, qe store.QueryExecutor, params stor
 			&user.TOTPSalt,
 			&user.FirstName,
 			&user.LastName,
-			&user.MiddleName,
+			&userMiddleName,
 			&avatarURL,
 			&user.EmailVerified,
 			&user.CreatedAt,
@@ -149,6 +150,10 @@ func (s *UserStore) Get(ctx context.Context, qe store.QueryExecutor, params stor
 
 		user.Position = employeePosition.String
 		user.Role = models.UserRole(employeeRole.Int16)
+
+		if userMiddleName.Valid {
+			user.MiddleName = models.Optional[string]{Value: userMiddleName.String, Set: true}
+		}
 
 		users = append(users, user)
 	}

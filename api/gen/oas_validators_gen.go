@@ -150,8 +150,15 @@ func (s *EmployeeUser) Validate() error {
 		})
 	}
 	if err := func() error {
-		if err := s.MiddleName.Validate(); err != nil {
-			return err
+		if value, ok := s.MiddleName.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
 		}
 		return nil
 	}(); err != nil {
@@ -230,7 +237,7 @@ func (s Kpp) Validate() error {
 func (s Name) Validate() error {
 	alias := (string)(s)
 	if err := (validate.String{
-		MinLength:    3,
+		MinLength:    1,
 		MinLengthSet: true,
 		MaxLength:    0,
 		MaxLengthSet: false,
@@ -527,7 +534,7 @@ func (s Password) Validate() error {
 		MaxLengthSet: false,
 		Email:        false,
 		Hostname:     false,
-		Regex:        regexMap["^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$"],
+		Regex:        regexMap["^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,}$"],
 	}).Validate(string(alias)); err != nil {
 		return errors.Wrap(err, "string")
 	}
@@ -601,8 +608,15 @@ func (s *RegularUser) Validate() error {
 		})
 	}
 	if err := func() error {
-		if err := s.MiddleName.Validate(); err != nil {
-			return err
+		if value, ok := s.MiddleName.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
 		}
 		return nil
 	}(); err != nil {
@@ -904,8 +918,15 @@ func (s *User) Validate() error {
 		})
 	}
 	if err := func() error {
-		if err := s.MiddleName.Validate(); err != nil {
-			return err
+		if value, ok := s.MiddleName.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
 		}
 		return nil
 	}(); err != nil {
@@ -1241,8 +1262,15 @@ func (s *V1AuthSignupPostReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if err := s.MiddleName.Validate(); err != nil {
-			return err
+		if value, ok := s.MiddleName.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
 		}
 		return nil
 	}(); err != nil {
