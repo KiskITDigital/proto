@@ -1706,7 +1706,7 @@ components:
     password:
       type: string
       format: password
-      pattern: ^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$
+      pattern: ^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])?[A-Za-z\d!@#$%^&*]{8,52}$
     Error:
       type: object
       required:

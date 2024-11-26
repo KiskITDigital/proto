@@ -17,7 +17,7 @@ import (
 )
 
 var regexMap = map[string]ogenregex.Regexp{
-	"^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,}$": ogenregex.MustCompile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,}$"),
+	"^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])?[A-Za-z\\d!@#$%^&*]{8,52}$": ogenregex.MustCompile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])?[A-Za-z\\d!@#$%^&*]{8,52}$"),
 	"^[а-яА-ЯёЁ]+$":                ogenregex.MustCompile("^[а-яА-ЯёЁ]+$"),
 	"^\\+?\\d{10,14}$":             ogenregex.MustCompile("^\\+?\\d{10,14}$"),
 	"^\\d+$":                       ogenregex.MustCompile("^\\d+$"),

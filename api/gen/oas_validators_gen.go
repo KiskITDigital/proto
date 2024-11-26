@@ -534,7 +534,7 @@ func (s Password) Validate() error {
 		MaxLengthSet: false,
 		Email:        false,
 		Hostname:     false,
-		Regex:        regexMap["^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,}$"],
+		Regex:        regexMap["^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])?[A-Za-z\\d!@#$%^&*]{8,52}$"],
 	}).Validate(string(alias)); err != nil {
 		return errors.Wrap(err, "string")
 	}
