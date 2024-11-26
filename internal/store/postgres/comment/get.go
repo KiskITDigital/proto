@@ -2,6 +2,8 @@ package comment
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
@@ -35,6 +37,7 @@ func (s *CommentStore) GetComments(ctx context.Context, qe store.QueryExecutor, 
 			"o.emails",
 			"o.phones",
 			"o.messengers",
+			"o.verification_status",
 			"o.is_contractor",
 			"o.is_banned",
 			"o.created_at",
@@ -54,7 +57,10 @@ func (s *CommentStore) GetComments(ctx context.Context, qe store.QueryExecutor, 
 
 	var comments []models.Comment
 	for rows.Next() {
-		var comment models.Comment
+		var (
+			comment   models.Comment
+			avatarURL sql.NullString
+		)
 		err := rows.Scan(
 			&comment.ID,
 			&comment.ObjectType,
@@ -74,23 +80,32 @@ func (s *CommentStore) GetComments(ctx context.Context, qe store.QueryExecutor, 
 			&comment.Organization.KPP,
 			&comment.Organization.TaxCode,
 			&comment.Organization.Address,
-			&comment.Organization.AvatarURL,
+			&avatarURL,
 			&comment.Organization.Emails,
 			&comment.Organization.Phones,
 			&comment.Organization.Messengers,
+			&comment.Organization.VerificationStatus,
 			&comment.Organization.IsContractor,
 			&comment.Organization.IsBanned,
 			&comment.Organization.CreatedAt,
 			&comment.Organization.UpdatedAt,
 		)
+
 		if err != nil {
 			return nil, fmt.Errorf("scan row: %w", err)
 		}
+
+		comment.Organization.AvatarURL = avatarURL.String
+
 		comments = append(comments, comment)
 	}
 
 	if err = rows.Err(); err != nil {
 		return nil, fmt.Errorf("rows error: %w", err)
+	}
+
+	if len(comments) == 0 {
+		return nil, errors.New("comments not found")
 	}
 
 	return comments, nil

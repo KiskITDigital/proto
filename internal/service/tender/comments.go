@@ -13,6 +13,10 @@ import (
 func (s *Service) CreateComment(ctx context.Context, params service.CommentCreateParams) error {
 	organizationID := contextor.GetOrganizationID(ctx)
 
+	if _, err := s.tenderStore.GetByID(ctx, s.psql.DB(), params.TenderID); err != nil {
+		return fmt.Errorf("get tender: %w", err)
+	}
+
 	err := s.commentStore.CreateComment(ctx, s.psql.DB(), store.CommentCreateParams{
 		ObjectType:     models.ObjectTypeTender,
 		ObjectID:       params.TenderID,
