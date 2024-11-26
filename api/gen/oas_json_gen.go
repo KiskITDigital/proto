@@ -728,8 +728,10 @@ func (s *EmployeeUser) encodeFields(e *jx.Encoder) {
 		s.LastName.Encode(e)
 	}
 	{
-		e.FieldStart("middle_name")
-		s.MiddleName.Encode(e)
+		if s.MiddleName.Set {
+			e.FieldStart("middle_name")
+			s.MiddleName.Encode(e)
+		}
 	}
 	{
 		if s.AvatarURL.Set {
@@ -841,8 +843,8 @@ func (s *EmployeeUser) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"last_name\"")
 			}
 		case "middle_name":
-			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
+				s.MiddleName.Reset()
 				if err := s.MiddleName.Decode(d); err != nil {
 					return err
 				}
@@ -940,7 +942,7 @@ func (s *EmployeeUser) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
-		0b10111111,
+		0b10011111,
 		0b00011111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
@@ -2711,8 +2713,10 @@ func (s *RegularUser) encodeFields(e *jx.Encoder) {
 		s.LastName.Encode(e)
 	}
 	{
-		e.FieldStart("middle_name")
-		s.MiddleName.Encode(e)
+		if s.MiddleName.Set {
+			e.FieldStart("middle_name")
+			s.MiddleName.Encode(e)
+		}
 	}
 	{
 		if s.AvatarURL.Set {
@@ -2819,8 +2823,8 @@ func (s *RegularUser) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"last_name\"")
 			}
 		case "middle_name":
-			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
+				s.MiddleName.Reset()
 				if err := s.MiddleName.Decode(d); err != nil {
 					return err
 				}
@@ -2906,7 +2910,7 @@ func (s *RegularUser) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
-		0b10111111,
+		0b10011111,
 		0b00001111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
@@ -3818,8 +3822,10 @@ func (s *User) encodeFields(e *jx.Encoder) {
 		s.LastName.Encode(e)
 	}
 	{
-		e.FieldStart("middle_name")
-		s.MiddleName.Encode(e)
+		if s.MiddleName.Set {
+			e.FieldStart("middle_name")
+			s.MiddleName.Encode(e)
+		}
 	}
 	{
 		if s.AvatarURL.Set {
@@ -3921,8 +3927,8 @@ func (s *User) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"last_name\"")
 			}
 		case "middle_name":
-			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
+				s.MiddleName.Reset()
 				if err := s.MiddleName.Decode(d); err != nil {
 					return err
 				}
@@ -3998,7 +4004,7 @@ func (s *User) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
-		0b10111111,
+		0b10011111,
 		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
@@ -4799,8 +4805,10 @@ func (s *V1AuthSignupPostReq) encodeFields(e *jx.Encoder) {
 		s.LastName.Encode(e)
 	}
 	{
-		e.FieldStart("middle_name")
-		s.MiddleName.Encode(e)
+		if s.MiddleName.Set {
+			e.FieldStart("middle_name")
+			s.MiddleName.Encode(e)
+		}
 	}
 	{
 		if s.AvatarURL.Set {
@@ -4890,8 +4898,8 @@ func (s *V1AuthSignupPostReq) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"last_name\"")
 			}
 		case "middle_name":
-			requiredBitSet[0] |= 1 << 5
 			if err := func() error {
+				s.MiddleName.Reset()
 				if err := s.MiddleName.Decode(d); err != nil {
 					return err
 				}
@@ -4941,7 +4949,7 @@ func (s *V1AuthSignupPostReq) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [2]uint8{
-		0b10111111,
+		0b10011111,
 		0b00000001,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {

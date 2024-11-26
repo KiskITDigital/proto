@@ -32,7 +32,7 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 			params.TOTPSalt,
 			params.FirstName,
 			params.LastName,
-			params.MiddleName,
+			sql.NullString{Valid: params.MiddleName.Set, String: params.MiddleName.Value},
 			sql.NullString{Valid: params.AvatarURL != "", String: params.AvatarURL},
 			params.EmailVerified,
 			false,
@@ -57,6 +57,7 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 	var (
 		createdUser models.User
 		avatarURL   sql.NullString
+		middleName  sql.NullString
 	)
 
 	err := builder.RunWith(qe).QueryRowContext(ctx).Scan(
@@ -67,7 +68,7 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 		&createdUser.TOTPSalt,
 		&createdUser.FirstName,
 		&createdUser.LastName,
-		&createdUser.MiddleName,
+		&middleName,
 		&avatarURL,
 		&createdUser.EmailVerified,
 		&createdUser.CreatedAt,
@@ -75,6 +76,10 @@ func (s *UserStore) Create(ctx context.Context, qe store.QueryExecutor, params s
 	)
 	if err != nil {
 		return models.User{}, fmt.Errorf("query row: %w", err)
+	}
+
+	if middleName.Valid {
+		createdUser.MiddleName = models.Optional[string]{Value: middleName.String, Set: true}
 	}
 
 	createdUser.AvatarURL = avatarURL.String

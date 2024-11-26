@@ -17,7 +17,7 @@ func (h *Handler) V1AuthSignupPost(ctx context.Context, req *api.V1AuthSignupPos
 		Password:     string(req.GetPassword()),
 		FirstName:    string(req.GetFirstName()),
 		LastName:     string(req.GetLastName()),
-		MiddleName:   string(req.GetMiddleName()),
+		MiddleName:   models.Optional[string]{Value: string(req.MiddleName.Value), Set: req.MiddleName.Set},
 		AvatarURL:    string(req.GetAvatarURL().Value),
 		INN:          string(req.GetInn()),
 		IsContractor: req.GetIsContractor(),

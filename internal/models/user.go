@@ -54,7 +54,7 @@ type User struct {
 	TOTPSalt      string
 	FirstName     string
 	LastName      string
-	MiddleName    string
+	MiddleName    Optional[string]
 	AvatarURL     string
 	EmailVerified bool
 	IsBanned      bool
@@ -86,7 +86,7 @@ func ConvertUserModelToApi(user User) api.User {
 		Phone:         api.Phone(user.Phone),
 		FirstName:     api.Name(user.FirstName),
 		LastName:      api.Name(user.LastName),
-		MiddleName:    api.Name(user.MiddleName),
+		MiddleName:    api.OptName{Value: api.Name(user.MiddleName.Value), Set: user.MiddleName.Set},
 		AvatarURL:     api.OptURL{Value: api.URL(user.AvatarURL), Set: user.AvatarURL != ""},
 		EmailVerified: user.EmailVerified,
 		CreatedAt:     user.CreatedAt,
@@ -101,7 +101,7 @@ func ConvertRegularUserModelToApi(user RegularUser) api.RegularUser {
 		Phone:         api.Phone(user.Phone),
 		FirstName:     api.Name(user.FirstName),
 		LastName:      api.Name(user.LastName),
-		MiddleName:    api.Name(user.MiddleName),
+		MiddleName:    api.OptName{Value: api.Name(user.MiddleName.Value), Set: user.MiddleName.Set},
 		AvatarURL:     api.OptURL{Value: api.URL(user.AvatarURL), Set: user.AvatarURL != ""},
 		EmailVerified: user.EmailVerified,
 		Organization:  ConvertOrganizationModelToApi(user.Organization),
@@ -117,7 +117,7 @@ func ConvertEmployeeUserModelToApi(user EmployeeUser) api.EmployeeUser {
 		Phone:         api.Phone(user.Phone),
 		FirstName:     api.Name(user.FirstName),
 		LastName:      api.Name(user.LastName),
-		MiddleName:    api.Name(user.MiddleName),
+		MiddleName:    api.OptName{Value: api.Name(user.MiddleName.Value), Set: user.MiddleName.Set},
 		AvatarURL:     api.OptURL{Value: api.URL(user.AvatarURL), Set: user.AvatarURL != ""},
 		EmailVerified: user.EmailVerified,
 		Role:          api.Role(user.Role.ToApi()),

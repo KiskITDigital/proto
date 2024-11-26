@@ -24,7 +24,7 @@ type SignUpParams struct {
 	Password     string
 	FirstName    string
 	LastName     string
-	MiddleName   string
+	MiddleName   models.Optional[string]
 	AvatarURL    string
 	INN          string
 	IsContractor bool
@@ -140,7 +140,7 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 			Phone:         result.User.Phone,
 			FirstName:     result.User.FirstName,
 			LastName:      result.User.LastName,
-			MiddleName:    result.User.MiddleName,
+			MiddleName:    result.User.MiddleName.Value,
 			AvatarUrl:     &result.User.AvatarURL,
 			EmailVerified: result.User.EmailVerified,
 			Role:          modelsv1.UserRole(models.UserRoleUser),

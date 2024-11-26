@@ -221,7 +221,7 @@ type EmployeeUser struct {
 	Phone         Phone     `json:"phone"`
 	FirstName     Name      `json:"first_name"`
 	LastName      Name      `json:"last_name"`
-	MiddleName    Name      `json:"middle_name"`
+	MiddleName    OptName   `json:"middle_name"`
 	AvatarURL     OptURL    `json:"avatar_url"`
 	EmailVerified bool      `json:"email_verified"`
 	IsBanned      bool      `json:"is_banned"`
@@ -257,7 +257,7 @@ func (s *EmployeeUser) GetLastName() Name {
 }
 
 // GetMiddleName returns the value of MiddleName.
-func (s *EmployeeUser) GetMiddleName() Name {
+func (s *EmployeeUser) GetMiddleName() OptName {
 	return s.MiddleName
 }
 
@@ -322,7 +322,7 @@ func (s *EmployeeUser) SetLastName(val Name) {
 }
 
 // SetMiddleName sets the value of MiddleName.
-func (s *EmployeeUser) SetMiddleName(val Name) {
+func (s *EmployeeUser) SetMiddleName(val OptName) {
 	s.MiddleName = val
 }
 
@@ -2188,7 +2188,7 @@ type RegularUser struct {
 	Phone         Phone        `json:"phone"`
 	FirstName     Name         `json:"first_name"`
 	LastName      Name         `json:"last_name"`
-	MiddleName    Name         `json:"middle_name"`
+	MiddleName    OptName      `json:"middle_name"`
 	AvatarURL     OptURL       `json:"avatar_url"`
 	EmailVerified bool         `json:"email_verified"`
 	IsBanned      bool         `json:"is_banned"`
@@ -2223,7 +2223,7 @@ func (s *RegularUser) GetLastName() Name {
 }
 
 // GetMiddleName returns the value of MiddleName.
-func (s *RegularUser) GetMiddleName() Name {
+func (s *RegularUser) GetMiddleName() OptName {
 	return s.MiddleName
 }
 
@@ -2283,7 +2283,7 @@ func (s *RegularUser) SetLastName(val Name) {
 }
 
 // SetMiddleName sets the value of MiddleName.
-func (s *RegularUser) SetMiddleName(val Name) {
+func (s *RegularUser) SetMiddleName(val OptName) {
 	s.MiddleName = val
 }
 
@@ -2742,7 +2742,7 @@ type User struct {
 	Phone         Phone     `json:"phone"`
 	FirstName     Name      `json:"first_name"`
 	LastName      Name      `json:"last_name"`
-	MiddleName    Name      `json:"middle_name"`
+	MiddleName    OptName   `json:"middle_name"`
 	AvatarURL     OptURL    `json:"avatar_url"`
 	EmailVerified bool      `json:"email_verified"`
 	IsBanned      bool      `json:"is_banned"`
@@ -2776,7 +2776,7 @@ func (s *User) GetLastName() Name {
 }
 
 // GetMiddleName returns the value of MiddleName.
-func (s *User) GetMiddleName() Name {
+func (s *User) GetMiddleName() OptName {
 	return s.MiddleName
 }
 
@@ -2831,7 +2831,7 @@ func (s *User) SetLastName(val Name) {
 }
 
 // SetMiddleName sets the value of MiddleName.
-func (s *User) SetMiddleName(val Name) {
+func (s *User) SetMiddleName(val OptName) {
 	s.MiddleName = val
 }
 
@@ -3109,7 +3109,7 @@ type V1AuthSignupPostReq struct {
 	Password     Password `json:"password"`
 	FirstName    Name     `json:"first_name"`
 	LastName     Name     `json:"last_name"`
-	MiddleName   Name     `json:"middle_name"`
+	MiddleName   OptName  `json:"middle_name"`
 	AvatarURL    OptURL   `json:"avatar_url"`
 	Inn          Inn      `json:"inn"`
 	IsContractor bool     `json:"is_contractor"`
@@ -3141,7 +3141,7 @@ func (s *V1AuthSignupPostReq) GetLastName() Name {
 }
 
 // GetMiddleName returns the value of MiddleName.
-func (s *V1AuthSignupPostReq) GetMiddleName() Name {
+func (s *V1AuthSignupPostReq) GetMiddleName() OptName {
 	return s.MiddleName
 }
 
@@ -3186,7 +3186,7 @@ func (s *V1AuthSignupPostReq) SetLastName(val Name) {
 }
 
 // SetMiddleName sets the value of MiddleName.
-func (s *V1AuthSignupPostReq) SetMiddleName(val Name) {
+func (s *V1AuthSignupPostReq) SetMiddleName(val OptName) {
 	s.MiddleName = val
 }
 
