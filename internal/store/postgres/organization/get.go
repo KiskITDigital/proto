@@ -33,7 +33,18 @@ func (s *OrganizationStore) Get(ctx context.Context, qe store.QueryExecutor, par
 		"o.created_at",
 		"o.updated_at",
 	).From("organizations AS o").
+		Limit(params.Limit).
+		Offset(params.Offset).
 		PlaceholderFormat(sq.Dollar)
+
+	if params.IsContractor.Set {
+		builder = builder.Where(
+			sq.Eq{
+				"o.is_contractor":       params.IsContractor.Value,
+				"o.verification_status": models.VerificationStatusApproved,
+				"o.is_banned":           false,
+			})
+	}
 
 	rows, err := builder.RunWith(qe).QueryContext(ctx)
 	if err != nil {

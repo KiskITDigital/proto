@@ -1,0 +1,38 @@
+get:
+  tags:
+    - organizations
+  summary: Get contractors
+  description: |-
+    Получить всех исполнителей (verifed=true, banned=false)
+  parameters:
+    - name: offset
+      in: query
+      description: Сдвиг начала каждой страницы на указанное количество единиц.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    - name: limit
+      in: query
+      description: Максимальное количество объектов, которое может вернуть запрос.
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 100
+        default: 100
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: array
+                items:
+                  $ref: "../../schemas/Organization.yaml"
+    default:
+      $ref: "../../responses/Error.yaml"

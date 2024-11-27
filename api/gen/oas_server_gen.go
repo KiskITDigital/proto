@@ -96,6 +96,12 @@ type Handler interface {
 	//
 	// POST /v1/employee
 	V1EmployeePost(ctx context.Context, req *V1EmployeePostReq) (V1EmployeePostRes, error)
+	// V1OrganizationsContractorsGet implements GET /v1/organizations/contractors operation.
+	//
+	// Получить всех исполнителей (verifed=true, banned=false).
+	//
+	// GET /v1/organizations/contractors
+	V1OrganizationsContractorsGet(ctx context.Context, params V1OrganizationsContractorsGetParams) (V1OrganizationsContractorsGetRes, error)
 	// V1OrganizationsGet implements GET /v1/organizations operation.
 	//
 	// List all organizations
