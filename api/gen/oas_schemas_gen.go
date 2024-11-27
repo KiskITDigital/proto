@@ -450,6 +450,7 @@ func (*ErrorStatusCode) v1CatalogServicesGetRes()                           {}
 func (*ErrorStatusCode) v1CatalogServicesPostRes()                          {}
 func (*ErrorStatusCode) v1CommentsVerificationsGetRes()                     {}
 func (*ErrorStatusCode) v1EmployeePostRes()                                 {}
+func (*ErrorStatusCode) v1OrganizationsContractorsGetRes()                  {}
 func (*ErrorStatusCode) v1OrganizationsGetRes()                             {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDGetRes()               {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDTendersGetRes()        {}
@@ -3767,6 +3768,22 @@ func (s *V1EmployeePostReq) SetRole(val Role) {
 func (s *V1EmployeePostReq) SetPosition(val string) {
 	s.Position = val
 }
+
+type V1OrganizationsContractorsGetOK struct {
+	Data []Organization `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1OrganizationsContractorsGetOK) GetData() []Organization {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1OrganizationsContractorsGetOK) SetData(val []Organization) {
+	s.Data = val
+}
+
+func (*V1OrganizationsContractorsGetOK) v1OrganizationsContractorsGetRes() {}
 
 type V1OrganizationsGetDirection string
 

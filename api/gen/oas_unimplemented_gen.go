@@ -140,6 +140,15 @@ func (UnimplementedHandler) V1EmployeePost(ctx context.Context, req *V1EmployeeP
 	return r, ht.ErrNotImplemented
 }
 
+// V1OrganizationsContractorsGet implements GET /v1/organizations/contractors operation.
+//
+// Получить всех исполнителей (verifed=true, banned=false).
+//
+// GET /v1/organizations/contractors
+func (UnimplementedHandler) V1OrganizationsContractorsGet(ctx context.Context, params V1OrganizationsContractorsGetParams) (r V1OrganizationsContractorsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1OrganizationsGet implements GET /v1/organizations operation.
 //
 // List all organizations

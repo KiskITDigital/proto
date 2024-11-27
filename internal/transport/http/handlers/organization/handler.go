@@ -6,7 +6,6 @@ import (
 
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/service"
-	organizationService "gitlab.ubrato.ru/ubrato/core/internal/service/organization"
 )
 
 type Handler struct {
@@ -16,7 +15,7 @@ type Handler struct {
 }
 
 type OrganizationService interface {
-	Get(ctx context.Context, params organizationService.OrganizationGetParams) ([]models.Organization, error)
+	Get(ctx context.Context, params service.OrganizationGetParams) ([]models.Organization, error)
 	GetByID(ctx context.Context, id int) (models.Organization, error)
 }
 

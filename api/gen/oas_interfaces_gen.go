@@ -53,6 +53,10 @@ type V1EmployeePostRes interface {
 	v1EmployeePostRes()
 }
 
+type V1OrganizationsContractorsGetRes interface {
+	v1OrganizationsContractorsGetRes()
+}
+
 type V1OrganizationsGetRes interface {
 	v1OrganizationsGetRes()
 }

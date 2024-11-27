@@ -51,6 +51,8 @@ paths:
     $ref: "v1/paths/organizations/_id/tenders.yaml"
   /v1/organizations:
     $ref: "v1/paths/organizations/_index.yaml"
+  /v1/organizations/contractors:
+    $ref: "v1/paths/organizations/contractors.yaml"
   /v1/organizations/{organizationID}: 
     $ref: "v1/paths/organizations/_id/_index.yaml"
   /v1/organizations/verifications:
