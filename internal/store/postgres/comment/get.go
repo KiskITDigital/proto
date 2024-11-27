@@ -12,6 +12,88 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
+func (s *CommentStore) GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Comment, error) {
+	builder := squirrel.
+		Select(
+			"c.id",
+			"c.object_type",
+			"c.object_id",
+			"c.title",
+			"c.content",
+			"c.attachments",
+			"c.verification_status",
+			"c.created_at",
+			"o.id",
+			"o.brand_name",
+			"o.full_name",
+			"o.short_name",
+			"o.inn",
+			"o.okpo",
+			"o.ogrn",
+			"o.kpp",
+			"o.tax_code",
+			"o.address",
+			"o.avatar_url",
+			"o.emails",
+			"o.phones",
+			"o.messengers",
+			"o.verification_status",
+			"o.is_contractor",
+			"o.is_banned",
+			"o.created_at",
+			"o.updated_at",
+		).
+		From("comments as c").
+		Join("organizations AS o ON o.id = c.organization_id").
+		Where(squirrel.Eq{"c.id": id}).
+		PlaceholderFormat(squirrel.Dollar)
+
+	var (
+		comment   models.Comment
+		avatarURL sql.NullString
+	)
+
+	err := builder.RunWith(qe).QueryRowContext(ctx).Scan(
+		&comment.ID,
+		&comment.ObjectType,
+		&comment.ObjectID,
+		&comment.Title,
+		&comment.Content,
+		pq.Array(&comment.Attachments),
+		&comment.VerificationStatus,
+		&comment.CreatedAt,
+		&comment.Organization.ID,
+		&comment.Organization.BrandName,
+		&comment.Organization.FullName,
+		&comment.Organization.ShortName,
+		&comment.Organization.INN,
+		&comment.Organization.OKPO,
+		&comment.Organization.OGRN,
+		&comment.Organization.KPP,
+		&comment.Organization.TaxCode,
+		&comment.Organization.Address,
+		&avatarURL,
+		&comment.Organization.Emails,
+		&comment.Organization.Phones,
+		&comment.Organization.Messengers,
+		&comment.Organization.VerificationStatus,
+		&comment.Organization.IsContractor,
+		&comment.Organization.IsBanned,
+		&comment.Organization.CreatedAt,
+		&comment.Organization.UpdatedAt,
+	)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return models.Comment{}, errors.New("comment not found")
+		}
+		return models.Comment{}, fmt.Errorf("query row: %w", err)
+	}
+
+	comment.Organization.AvatarURL = avatarURL.String
+
+	return comment, nil
+}
+
 func (s *CommentStore) GetComments(ctx context.Context, qe store.QueryExecutor, params store.CommentGetParams) ([]models.Comment, error) {
 	builder := squirrel.
 		Select(
@@ -102,10 +184,6 @@ func (s *CommentStore) GetComments(ctx context.Context, qe store.QueryExecutor, 
 
 	if err = rows.Err(); err != nil {
 		return nil, fmt.Errorf("rows error: %w", err)
-	}
-
-	if len(comments) == 0 {
-		return nil, errors.New("comments not found")
 	}
 
 	return comments, nil

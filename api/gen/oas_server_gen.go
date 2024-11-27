@@ -275,6 +275,14 @@ type Handler interface {
 	//
 	// POST /v1/verifications/{requestID}/deny
 	V1VerificationsRequestIDDenyPost(ctx context.Context, params V1VerificationsRequestIDDenyPostParams) (V1VerificationsRequestIDDenyPostRes, error)
+	// V1VerificationsRequestIDGet implements GET /v1/verifications/{requestID} operation.
+	//
+	// Returns verification request by id
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+	// 'Employee' or higher.
+	//
+	// GET /v1/verifications/{requestID}
+	V1VerificationsRequestIDGet(ctx context.Context, params V1VerificationsRequestIDGetParams) (V1VerificationsRequestIDGetRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

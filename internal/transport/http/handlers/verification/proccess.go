@@ -16,6 +16,7 @@ func (h *Handler) V1VerificationsRequestIDAprovePost(ctx context.Context, params
 	}
 
 	if err := h.svc.UpdateStatus(ctx, service.VerificationRequestUpdateStatusParams{
+		UserID: contextor.GetUserID(ctx),
 		RequesID: params.RequestID,
 		Status: models.VerificationStatusApproved,
 	}); err != nil {
@@ -31,6 +32,7 @@ func (h *Handler) V1VerificationsRequestIDDenyPost(ctx context.Context, params a
 	}
 
 	if err := h.svc.UpdateStatus(ctx, service.VerificationRequestUpdateStatusParams{
+		UserID: contextor.GetUserID(ctx),
 		RequesID: params.RequestID,
 		Status: models.VerificationStatusDeclined,
 	}); err != nil {

@@ -955,7 +955,16 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				elem = elem[idx:]
 
 				if len(elem) == 0 {
-					break
+					switch r.Method {
+					case "GET":
+						s.handleV1VerificationsRequestIDGetRequest([1]string{
+							args[0],
+						}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET")
+					}
+
+					return
 				}
 				switch elem[0] {
 				case '/': // Prefix: "/"
@@ -2151,7 +2160,18 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				elem = elem[idx:]
 
 				if len(elem) == 0 {
-					break
+					switch method {
+					case "GET":
+						r.name = "V1VerificationsRequestIDGet"
+						r.summary = "Get verification request by id"
+						r.operationID = ""
+						r.pathPattern = "/v1/verifications/{requestID}"
+						r.args = args
+						r.count = 1
+						return r, true
+					default:
+						return
+					}
 				}
 				switch elem[0] {
 				case '/': // Prefix: "/"

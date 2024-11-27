@@ -160,7 +160,7 @@ func (s *TenderStore) List(ctx context.Context, qe store.QueryExecutor, params s
 			winnerTaxCode            sql.NullString
 			winnerAddress            sql.NullString
 			winnerAvatarURL          sql.NullString
-			winnerVerificationStatus sql.NullInt64
+			winnerVerificationStatus sql.NullInt16
 			winnerIsContractor       sql.NullBool
 			winnerIsBanned           sql.NullBool
 			winnerCreatedAt          sql.NullTime
@@ -259,7 +259,7 @@ func (s *TenderStore) List(ctx context.Context, qe store.QueryExecutor, params s
 					TaxCode:            winnerTaxCode.String,
 					Address:            winnerAddress.String,
 					AvatarURL:          winnerAvatarURL.String,
-					VerificationStatus: models.VerificationStatus(winnerVerificationStatus.Int64),
+					VerificationStatus: models.VerificationStatus(winnerVerificationStatus.Int16),
 					IsContractor:       winnerIsContractor.Bool,
 					IsBanned:           winnerIsBanned.Bool,
 					Emails:             winner.Emails,
@@ -311,10 +311,6 @@ func (s *TenderStore) List(ctx context.Context, qe store.QueryExecutor, params s
 
 		tenders[i].Services = tenderServices
 		tenders[i].Objects = tenderObjects
-	}
-
-	if len(tenders) == 0 {
-		return nil, fmt.Errorf("tenders not found")
 	}
 
 	return tenders, nil

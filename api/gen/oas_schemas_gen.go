@@ -476,6 +476,7 @@ func (*ErrorStatusCode) v1UsersRequestResetPasswordPostRes()                {}
 func (*ErrorStatusCode) v1UsersUserIDGetRes()                               {}
 func (*ErrorStatusCode) v1VerificationsRequestIDAprovePostRes()             {}
 func (*ErrorStatusCode) v1VerificationsRequestIDDenyPostRes()               {}
+func (*ErrorStatusCode) v1VerificationsRequestIDGetRes()                    {}
 
 type Inn string
 
@@ -5173,6 +5174,22 @@ func (*V1VerificationsRequestIDAprovePostOK) v1VerificationsRequestIDAprovePostR
 type V1VerificationsRequestIDDenyPostOK struct{}
 
 func (*V1VerificationsRequestIDDenyPostOK) v1VerificationsRequestIDDenyPostRes() {}
+
+type V1VerificationsRequestIDGetOK struct {
+	Data VerificationRequest `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1VerificationsRequestIDGetOK) GetData() VerificationRequest {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1VerificationsRequestIDGetOK) SetData(val VerificationRequest) {
+	s.Data = val
+}
+
+func (*V1VerificationsRequestIDGetOK) v1VerificationsRequestIDGetRes() {}
 
 // Ref: #
 type VerificationRequest struct {
