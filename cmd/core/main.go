@@ -143,6 +143,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		psql,
 		verificationStore,
 		tenderStore,
+		commentStore,
 		organizationStore,
 	)
 

@@ -27,14 +27,15 @@ type VerificationRequest[T VerificationObject] struct {
 func VerificationRequestModelToApi[T VerificationObject](request VerificationRequest[T]) api.VerificationRequest {
 	return api.VerificationRequest{
 		ID:            request.ID,
-		Reviewer:      api.NewOptEmployeeUser(ConvertEmployeeUserModelToApi(request.Reviewer)),
+		Reviewer:      api.OptEmployeeUser{Value: ConvertEmployeeUserModelToApi(request.Reviewer), Set: request.Reviewer.ID != 0},
 		ObjectType:    api.ObjectType(request.ObjectType.ToAPI()),
 		Object:        request.Object.ToVerificationObject(),
+		Content:       request.Content,
 		Attachments:   request.Attachments,
 		Status:        request.Status.ToAPI(),
-		ReviewComment: api.NewOptString(request.ReviewComment),
+		ReviewComment: api.OptString{Value: request.ReviewComment, Set: request.ReviewComment != ""},
 		CreatedAt:     request.CreatedAt,
-		ReviewedAt:    api.NewOptDateTime(request.ReviewedAt),
+		ReviewedAt:    api.OptDateTime{Value: request.ReviewedAt, Set: !request.ReviewedAt.IsZero()},
 	}
 }
 

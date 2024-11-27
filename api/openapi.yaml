@@ -64,6 +64,8 @@ paths:
     $ref: "v1/paths/verifications/_id/aprove.yaml"
   /v1/verifications/{requestID}/deny:
     $ref: "v1/paths/verifications/_id/deny.yaml"
+  /v1/verifications/{requestID}:
+    $ref: "v1/paths/verifications/_id/_index.yaml"
 
   /v1/catalog/services:
     $ref: "v1/paths/catalog/services.yaml"

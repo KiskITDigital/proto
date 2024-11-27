@@ -14,8 +14,9 @@ import (
 func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationRequestUpdateStatusParams) error {
 	return s.psql.WithTransaction(ctx, func(qe store.QueryExecutor) error {
 		result, err := s.verificationStore.UpdateStatus(ctx, qe, store.VerificationRequestUpdateStatusParams{
-			ID:     params.RequesID,
-			Status: params.Status,
+			UserID:    params.UserID,
+			RequestID: params.RequesID,
+			Status:    params.Status,
 		})
 		if err != nil {
 			return fmt.Errorf("update request status: %w", err)

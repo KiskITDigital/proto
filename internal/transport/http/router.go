@@ -93,6 +93,7 @@ type Suggest interface {
 type Verification interface {
 	V1VerificationsRequestIDAprovePost(ctx context.Context, params api.V1VerificationsRequestIDAprovePostParams) (api.V1VerificationsRequestIDAprovePostRes, error)
 	V1VerificationsRequestIDDenyPost(ctx context.Context, params api.V1VerificationsRequestIDDenyPostParams) (api.V1VerificationsRequestIDDenyPostRes, error)
+	V1VerificationsRequestIDGet(ctx context.Context, params api.V1VerificationsRequestIDGetParams) (api.V1VerificationsRequestIDGetRes, error)
 }
 
 type Employee interface {

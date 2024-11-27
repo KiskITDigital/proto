@@ -9,8 +9,9 @@ type VerificationRequestCreateParams struct {
 }
 
 type VerificationRequestUpdateStatusParams struct {
-	ID     int
-	Status models.VerificationStatus
+	UserID    int
+	RequestID int
+	Status    models.VerificationStatus
 }
 
 type VerificationObjectUpdateStatusResult struct {
@@ -19,7 +20,8 @@ type VerificationObjectUpdateStatusResult struct {
 }
 
 type VerificationRequestsObjectGetParams struct {
-	ObjectType models.ObjectType
+	ObjectID   models.Optional[int]
+	ObjectType models.Optional[models.ObjectType]
 	Status     []models.VerificationStatus
 	Offset     uint64
 	Limit      uint64

@@ -5,12 +5,14 @@ import api "gitlab.ubrato.ru/ubrato/core/api/gen"
 type ObjectType int
 
 const (
-	ObjectTypeOrganization ObjectType = iota
+	ObjectTypeInvalid ObjectType = iota
+	ObjectTypeOrganization
 	ObjectTypeTender
 	ObjectTypeComment
 )
 
 var mapVerificationObjectType = map[ObjectType]api.ObjectType{
+	ObjectTypeInvalid:      api.ObjectTypeInvalid,
 	ObjectTypeOrganization: api.ObjectTypeOrganization,
 	ObjectTypeTender:       api.ObjectTypeTender,
 	ObjectTypeComment:      api.ObjectTypeComment,

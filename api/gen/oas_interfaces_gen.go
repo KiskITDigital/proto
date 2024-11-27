@@ -156,3 +156,7 @@ type V1VerificationsRequestIDAprovePostRes interface {
 type V1VerificationsRequestIDDenyPostRes interface {
 	v1VerificationsRequestIDDenyPostRes()
 }
+
+type V1VerificationsRequestIDGetRes interface {
+	v1VerificationsRequestIDGetRes()
+}

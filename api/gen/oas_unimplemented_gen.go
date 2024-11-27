@@ -396,3 +396,14 @@ func (UnimplementedHandler) V1VerificationsRequestIDAprovePost(ctx context.Conte
 func (UnimplementedHandler) V1VerificationsRequestIDDenyPost(ctx context.Context, params V1VerificationsRequestIDDenyPostParams) (r V1VerificationsRequestIDDenyPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
+
+// V1VerificationsRequestIDGet implements GET /v1/verifications/{requestID} operation.
+//
+// Returns verification request by id
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+// 'Employee' or higher.
+//
+// GET /v1/verifications/{requestID}
+func (UnimplementedHandler) V1VerificationsRequestIDGet(ctx context.Context, params V1VerificationsRequestIDGetParams) (r V1VerificationsRequestIDGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}

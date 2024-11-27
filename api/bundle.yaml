@@ -1292,6 +1292,41 @@ paths:
           description: Success
         default:
           $ref: '#/components/responses/Error'
+  /v1/verifications/{requestID}:
+    get:
+      tags:
+        - verifications
+      summary: Get verification request by id
+      description: |-
+        Returns verification request by id
+
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+        'Employee' or higher.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: requestID
+          required: true
+          in: path
+          description: ID of request
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/VerificationRequest'
+        default:
+          $ref: '#/components/responses/Error'
   /v1/catalog/services:
     get:
       tags:

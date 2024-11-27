@@ -10,6 +10,7 @@ import (
 
 func (s *VerificationStore) UpdateStatus(ctx context.Context, qe store.QueryExecutor, params store.VerificationRequestUpdateStatusParams) (store.VerificationObjectUpdateStatusResult, error) {
 	builder := squirrel.Update("verification_requests").
+		Set("reviewer_user_id", params.UserID).
 		Set("status", params.Status).
 		Set("reviewed_at", squirrel.Expr("CURRENT_TIMESTAMP")).
 		Suffix(`
@@ -17,7 +18,7 @@ func (s *VerificationStore) UpdateStatus(ctx context.Context, qe store.QueryExec
 				object_id,
 				object_type
 		`).
-		Where(squirrel.Eq{"id": params.ID}).
+		Where(squirrel.Eq{"id": params.RequestID}).
 		PlaceholderFormat(squirrel.Dollar)
 
 	result := store.VerificationObjectUpdateStatusResult{}
