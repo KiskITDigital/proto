@@ -15,9 +15,9 @@ import (
 	"github.com/ogen-go/ogen/uri"
 )
 
-func encodeV1AuthLogoutDeleteResponse(response V1AuthLogoutDeleteRes, w http.ResponseWriter, span trace.Span) error {
+func encodeV1AuthLogoutPostResponse(response V1AuthLogoutPostRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *V1AuthLogoutDeleteNoContent:
+	case *V1AuthLogoutPostNoContent:
 		// Encoding response headers.
 		{
 			h := uri.NewHeaderEncoder(w.Header())

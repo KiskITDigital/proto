@@ -23,12 +23,12 @@ import (
 
 // Invoker invokes operations described by OpenAPI v3 specification.
 type Invoker interface {
-	// V1AuthLogoutDelete invokes DELETE /v1/auth/logout operation.
+	// V1AuthLogoutPost invokes POST /v1/auth/logout operation.
 	//
 	// Terminates the user session.
 	//
-	// DELETE /v1/auth/logout
-	V1AuthLogoutDelete(ctx context.Context, params V1AuthLogoutDeleteParams) (V1AuthLogoutDeleteRes, error)
+	// POST /v1/auth/logout
+	V1AuthLogoutPost(ctx context.Context, params V1AuthLogoutPostParams) (V1AuthLogoutPostRes, error)
 	// V1AuthRefreshPost invokes POST /v1/auth/refresh operation.
 	//
 	// Get new access token.
@@ -350,19 +350,19 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 	return u
 }
 
-// V1AuthLogoutDelete invokes DELETE /v1/auth/logout operation.
+// V1AuthLogoutPost invokes POST /v1/auth/logout operation.
 //
 // Terminates the user session.
 //
-// DELETE /v1/auth/logout
-func (c *Client) V1AuthLogoutDelete(ctx context.Context, params V1AuthLogoutDeleteParams) (V1AuthLogoutDeleteRes, error) {
-	res, err := c.sendV1AuthLogoutDelete(ctx, params)
+// POST /v1/auth/logout
+func (c *Client) V1AuthLogoutPost(ctx context.Context, params V1AuthLogoutPostParams) (V1AuthLogoutPostRes, error) {
+	res, err := c.sendV1AuthLogoutPost(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendV1AuthLogoutDelete(ctx context.Context, params V1AuthLogoutDeleteParams) (res V1AuthLogoutDeleteRes, err error) {
+func (c *Client) sendV1AuthLogoutPost(ctx context.Context, params V1AuthLogoutPostParams) (res V1AuthLogoutPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("DELETE"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/v1/auth/logout"),
 	}
 
@@ -378,7 +378,7 @@ func (c *Client) sendV1AuthLogoutDelete(ctx context.Context, params V1AuthLogout
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "V1AuthLogoutDelete",
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1AuthLogoutPost",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -400,7 +400,7 @@ func (c *Client) sendV1AuthLogoutDelete(ctx context.Context, params V1AuthLogout
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "DELETE", u)
+	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
@@ -426,7 +426,7 @@ func (c *Client) sendV1AuthLogoutDelete(ctx context.Context, params V1AuthLogout
 		var satisfied bitset
 		{
 			stage = "Security:CookieAuth"
-			switch err := c.securityCookieAuth(ctx, "V1AuthLogoutDelete", r); {
+			switch err := c.securityCookieAuth(ctx, "V1AuthLogoutPost", r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -462,7 +462,7 @@ func (c *Client) sendV1AuthLogoutDelete(ctx context.Context, params V1AuthLogout
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeV1AuthLogoutDeleteResponse(resp)
+	result, err := decodeV1AuthLogoutPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

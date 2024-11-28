@@ -56,7 +56,7 @@ paths:
         default:
           $ref: '#/components/responses/Error'
   /v1/auth/logout:
-    delete:
+    post:
       tags:
         - auth
       summary: Logout User

@@ -8,12 +8,12 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// V1AuthLogoutDelete implements DELETE /v1/auth/logout operation.
+	// V1AuthLogoutPost implements POST /v1/auth/logout operation.
 	//
 	// Terminates the user session.
 	//
-	// DELETE /v1/auth/logout
-	V1AuthLogoutDelete(ctx context.Context, params V1AuthLogoutDeleteParams) (V1AuthLogoutDeleteRes, error)
+	// POST /v1/auth/logout
+	V1AuthLogoutPost(ctx context.Context, params V1AuthLogoutPostParams) (V1AuthLogoutPostRes, error)
 	// V1AuthRefreshPost implements POST /v1/auth/refresh operation.
 	//
 	// Get new access token.

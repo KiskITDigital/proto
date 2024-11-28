@@ -16,13 +16,13 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-// V1AuthLogoutDeleteParams is parameters of DELETE /v1/auth/logout operation.
-type V1AuthLogoutDeleteParams struct {
+// V1AuthLogoutPostParams is parameters of POST /v1/auth/logout operation.
+type V1AuthLogoutPostParams struct {
 	// The session ID for the user.
 	UbratoSession string
 }
 
-func unpackV1AuthLogoutDeleteParams(packed middleware.Parameters) (params V1AuthLogoutDeleteParams) {
+func unpackV1AuthLogoutPostParams(packed middleware.Parameters) (params V1AuthLogoutPostParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "ubrato_session",
@@ -33,7 +33,7 @@ func unpackV1AuthLogoutDeleteParams(packed middleware.Parameters) (params V1Auth
 	return params
 }
 
-func decodeV1AuthLogoutDeleteParams(args [0]string, argsEscaped bool, r *http.Request) (params V1AuthLogoutDeleteParams, _ error) {
+func decodeV1AuthLogoutPostParams(args [0]string, argsEscaped bool, r *http.Request) (params V1AuthLogoutPostParams, _ error) {
 	c := uri.NewCookieDecoder(r)
 	// Decode cookie: ubrato_session.
 	if err := func() error {

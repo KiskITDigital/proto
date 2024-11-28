@@ -84,10 +84,10 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					if len(elem) == 0 {
 						// Leaf node.
 						switch r.Method {
-						case "DELETE":
-							s.handleV1AuthLogoutDeleteRequest([0]string{}, elemIsEscaped, w, r)
+						case "POST":
+							s.handleV1AuthLogoutPostRequest([0]string{}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "DELETE")
+							s.notAllowed(w, r, "POST")
 						}
 
 						return
@@ -1149,8 +1149,8 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						// Leaf node.
 						switch method {
-						case "DELETE":
-							r.name = "V1AuthLogoutDelete"
+						case "POST":
+							r.name = "V1AuthLogoutPost"
 							r.summary = "Logout User"
 							r.operationID = ""
 							r.pathPattern = "/v1/auth/logout"
