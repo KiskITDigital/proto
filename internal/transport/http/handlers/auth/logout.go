@@ -8,7 +8,7 @@ import (
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
 )
 
-func (h *Handler) V1AuthLogoutDelete(ctx context.Context, params api.V1AuthLogoutDeleteParams) (api.V1AuthLogoutDeleteRes, error) {
+func (h *Handler) V1AuthLogoutPost(ctx context.Context, params api.V1AuthLogoutPostParams) (api.V1AuthLogoutPostRes, error) {
 	if err := h.authSvc.Logout(ctx, params.UbratoSession); err != nil {
 		return nil, fmt.Errorf("logout: %w", err)
 	}
@@ -21,7 +21,7 @@ func (h *Handler) V1AuthLogoutDelete(ctx context.Context, params api.V1AuthLogou
 		HttpOnly: true,
 	}
 
-	return &api.V1AuthLogoutDeleteNoContent{
+	return &api.V1AuthLogoutPostNoContent{
 		SetCookie: api.NewOptString(cookie.String()),
 	}, nil
 }

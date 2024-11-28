@@ -13,12 +13,12 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// V1AuthLogoutDelete implements DELETE /v1/auth/logout operation.
+// V1AuthLogoutPost implements POST /v1/auth/logout operation.
 //
 // Terminates the user session.
 //
-// DELETE /v1/auth/logout
-func (UnimplementedHandler) V1AuthLogoutDelete(ctx context.Context, params V1AuthLogoutDeleteParams) (r V1AuthLogoutDeleteRes, _ error) {
+// POST /v1/auth/logout
+func (UnimplementedHandler) V1AuthLogoutPost(ctx context.Context, params V1AuthLogoutPostParams) (r V1AuthLogoutPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

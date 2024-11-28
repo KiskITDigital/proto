@@ -19,19 +19,19 @@ import (
 	"github.com/ogen-go/ogen/ogenerrors"
 )
 
-// handleV1AuthLogoutDeleteRequest handles DELETE /v1/auth/logout operation.
+// handleV1AuthLogoutPostRequest handles POST /v1/auth/logout operation.
 //
 // Terminates the user session.
 //
-// DELETE /v1/auth/logout
-func (s *Server) handleV1AuthLogoutDeleteRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /v1/auth/logout
+func (s *Server) handleV1AuthLogoutPostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("DELETE"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/v1/auth/logout"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "V1AuthLogoutDelete",
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "V1AuthLogoutPost",
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -62,7 +62,7 @@ func (s *Server) handleV1AuthLogoutDeleteRequest(args [0]string, argsEscaped boo
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: "V1AuthLogoutDelete",
+			Name: "V1AuthLogoutPost",
 			ID:   "",
 		}
 	)
@@ -70,7 +70,7 @@ func (s *Server) handleV1AuthLogoutDeleteRequest(args [0]string, argsEscaped boo
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityCookieAuth(ctx, "V1AuthLogoutDelete", r)
+			sctx, ok, err := s.securityCookieAuth(ctx, "V1AuthLogoutPost", r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -110,7 +110,7 @@ func (s *Server) handleV1AuthLogoutDeleteRequest(args [0]string, argsEscaped boo
 			return
 		}
 	}
-	params, err := decodeV1AuthLogoutDeleteParams(args, argsEscaped, r)
+	params, err := decodeV1AuthLogoutPostParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
 			OperationContext: opErrContext,
@@ -121,11 +121,11 @@ func (s *Server) handleV1AuthLogoutDeleteRequest(args [0]string, argsEscaped boo
 		return
 	}
 
-	var response V1AuthLogoutDeleteRes
+	var response V1AuthLogoutPostRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    "V1AuthLogoutDelete",
+			OperationName:    "V1AuthLogoutPost",
 			OperationSummary: "Logout User",
 			OperationID:      "",
 			Body:             nil,
@@ -140,8 +140,8 @@ func (s *Server) handleV1AuthLogoutDeleteRequest(args [0]string, argsEscaped boo
 
 		type (
 			Request  = struct{}
-			Params   = V1AuthLogoutDeleteParams
-			Response = V1AuthLogoutDeleteRes
+			Params   = V1AuthLogoutPostParams
+			Response = V1AuthLogoutPostRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -150,14 +150,14 @@ func (s *Server) handleV1AuthLogoutDeleteRequest(args [0]string, argsEscaped boo
 		](
 			m,
 			mreq,
-			unpackV1AuthLogoutDeleteParams,
+			unpackV1AuthLogoutPostParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.V1AuthLogoutDelete(ctx, params)
+				response, err = s.h.V1AuthLogoutPost(ctx, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.V1AuthLogoutDelete(ctx, params)
+		response, err = s.h.V1AuthLogoutPost(ctx, params)
 	}
 	if err != nil {
 		defer recordError("Internal", err)
@@ -165,7 +165,7 @@ func (s *Server) handleV1AuthLogoutDeleteRequest(args [0]string, argsEscaped boo
 		return
 	}
 
-	if err := encodeV1AuthLogoutDeleteResponse(response, w, span); err != nil {
+	if err := encodeV1AuthLogoutPostResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

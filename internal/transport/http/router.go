@@ -32,7 +32,7 @@ type Auth interface {
 	V1AuthSignupPost(ctx context.Context, req *api.V1AuthSignupPostReq) (api.V1AuthSignupPostRes, error)
 	V1AuthUserGet(ctx context.Context) (api.V1AuthUserGetRes, error)
 	V1AuthRefreshPost(ctx context.Context, params api.V1AuthRefreshPostParams) (api.V1AuthRefreshPostRes, error)
-	V1AuthLogoutDelete(ctx context.Context, params api.V1AuthLogoutDeleteParams) (api.V1AuthLogoutDeleteRes, error)
+	V1AuthLogoutPost(ctx context.Context, params api.V1AuthLogoutPostParams) (api.V1AuthLogoutPostRes, error)
 
 	HandleCookieAuth(ctx context.Context, operationName string, t api.CookieAuth) (context.Context, error)
 	HandleBearerAuth(ctx context.Context, operationName string, t api.BearerAuth) (context.Context, error)

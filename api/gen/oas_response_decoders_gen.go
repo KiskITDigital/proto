@@ -16,11 +16,11 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func decodeV1AuthLogoutDeleteResponse(resp *http.Response) (res V1AuthLogoutDeleteRes, _ error) {
+func decodeV1AuthLogoutPostResponse(resp *http.Response) (res V1AuthLogoutPostRes, _ error) {
 	switch resp.StatusCode {
 	case 204:
 		// Code 204.
-		var wrapper V1AuthLogoutDeleteNoContent
+		var wrapper V1AuthLogoutPostNoContent
 		h := uri.NewHeaderDecoder(resp.Header)
 		// Parse "Set-Cookie" header.
 		{
@@ -62,7 +62,7 @@ func decodeV1AuthLogoutDeleteResponse(resp *http.Response) (res V1AuthLogoutDele
 		return &wrapper, nil
 	}
 	// Default response.
-	res, err := func() (res V1AuthLogoutDeleteRes, err error) {
+	res, err := func() (res V1AuthLogoutPostRes, err error) {
 		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
 		if err != nil {
 			return res, errors.Wrap(err, "parse media type")
