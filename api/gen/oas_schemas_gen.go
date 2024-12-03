@@ -457,6 +457,8 @@ func (*ErrorStatusCode) v1OrganizationsOrganizationIDTendersGetRes()        {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDVerificationsGetRes()  {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDVerificationsPostRes() {}
 func (*ErrorStatusCode) v1OrganizationsVerificationsGetRes()                {}
+func (*ErrorStatusCode) v1QuestionnaireGetRes()                             {}
+func (*ErrorStatusCode) v1QuestionnairePostRes()                            {}
 func (*ErrorStatusCode) v1SuggestCityGetRes()                               {}
 func (*ErrorStatusCode) v1SuggestCompanyGetRes()                            {}
 func (*ErrorStatusCode) v1SurveyPostRes()                                   {}
@@ -2155,6 +2157,171 @@ func (s *Organization) SetUpdatedAt(val time.Time) {
 type Password string
 
 type Phone string
+
+// Ref: #
+type Questionnaire struct {
+	ID           int                   `json:"id"`
+	Organization Organization          `json:"organization"`
+	Answers      []QuestionnaireAnswer `json:"answers"`
+	IsCompleted  bool                  `json:"is_completed"`
+	CompletedAt  OptDateTime           `json:"completed_at"`
+	CreatedAt    time.Time             `json:"created_at"`
+}
+
+// GetID returns the value of ID.
+func (s *Questionnaire) GetID() int {
+	return s.ID
+}
+
+// GetOrganization returns the value of Organization.
+func (s *Questionnaire) GetOrganization() Organization {
+	return s.Organization
+}
+
+// GetAnswers returns the value of Answers.
+func (s *Questionnaire) GetAnswers() []QuestionnaireAnswer {
+	return s.Answers
+}
+
+// GetIsCompleted returns the value of IsCompleted.
+func (s *Questionnaire) GetIsCompleted() bool {
+	return s.IsCompleted
+}
+
+// GetCompletedAt returns the value of CompletedAt.
+func (s *Questionnaire) GetCompletedAt() OptDateTime {
+	return s.CompletedAt
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Questionnaire) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetID sets the value of ID.
+func (s *Questionnaire) SetID(val int) {
+	s.ID = val
+}
+
+// SetOrganization sets the value of Organization.
+func (s *Questionnaire) SetOrganization(val Organization) {
+	s.Organization = val
+}
+
+// SetAnswers sets the value of Answers.
+func (s *Questionnaire) SetAnswers(val []QuestionnaireAnswer) {
+	s.Answers = val
+}
+
+// SetIsCompleted sets the value of IsCompleted.
+func (s *Questionnaire) SetIsCompleted(val bool) {
+	s.IsCompleted = val
+}
+
+// SetCompletedAt sets the value of CompletedAt.
+func (s *Questionnaire) SetCompletedAt(val OptDateTime) {
+	s.CompletedAt = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Questionnaire) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// Ref: #
+type QuestionnaireAnswer struct {
+	// The answer to the question.
+	Answer QuestionnaireAnswerAnswer `json:"answer"`
+	// Optional comment for the answer.
+	Comment OptString `json:"comment"`
+}
+
+// GetAnswer returns the value of Answer.
+func (s *QuestionnaireAnswer) GetAnswer() QuestionnaireAnswerAnswer {
+	return s.Answer
+}
+
+// GetComment returns the value of Comment.
+func (s *QuestionnaireAnswer) GetComment() OptString {
+	return s.Comment
+}
+
+// SetAnswer sets the value of Answer.
+func (s *QuestionnaireAnswer) SetAnswer(val QuestionnaireAnswerAnswer) {
+	s.Answer = val
+}
+
+// SetComment sets the value of Comment.
+func (s *QuestionnaireAnswer) SetComment(val OptString) {
+	s.Comment = val
+}
+
+// The answer to the question.
+// QuestionnaireAnswerAnswer represents sum type.
+type QuestionnaireAnswerAnswer struct {
+	Type        QuestionnaireAnswerAnswerType // switch on this field
+	String      string
+	StringArray []string
+}
+
+// QuestionnaireAnswerAnswerType is oneOf type of QuestionnaireAnswerAnswer.
+type QuestionnaireAnswerAnswerType string
+
+// Possible values for QuestionnaireAnswerAnswerType.
+const (
+	StringQuestionnaireAnswerAnswer      QuestionnaireAnswerAnswerType = "string"
+	StringArrayQuestionnaireAnswerAnswer QuestionnaireAnswerAnswerType = "[]string"
+)
+
+// IsString reports whether QuestionnaireAnswerAnswer is string.
+func (s QuestionnaireAnswerAnswer) IsString() bool { return s.Type == StringQuestionnaireAnswerAnswer }
+
+// IsStringArray reports whether QuestionnaireAnswerAnswer is []string.
+func (s QuestionnaireAnswerAnswer) IsStringArray() bool {
+	return s.Type == StringArrayQuestionnaireAnswerAnswer
+}
+
+// SetString sets QuestionnaireAnswerAnswer to string.
+func (s *QuestionnaireAnswerAnswer) SetString(v string) {
+	s.Type = StringQuestionnaireAnswerAnswer
+	s.String = v
+}
+
+// GetString returns string and true boolean if QuestionnaireAnswerAnswer is string.
+func (s QuestionnaireAnswerAnswer) GetString() (v string, ok bool) {
+	if !s.IsString() {
+		return v, false
+	}
+	return s.String, true
+}
+
+// NewStringQuestionnaireAnswerAnswer returns new QuestionnaireAnswerAnswer from string.
+func NewStringQuestionnaireAnswerAnswer(v string) QuestionnaireAnswerAnswer {
+	var s QuestionnaireAnswerAnswer
+	s.SetString(v)
+	return s
+}
+
+// SetStringArray sets QuestionnaireAnswerAnswer to []string.
+func (s *QuestionnaireAnswerAnswer) SetStringArray(v []string) {
+	s.Type = StringArrayQuestionnaireAnswerAnswer
+	s.StringArray = v
+}
+
+// GetStringArray returns []string and true boolean if QuestionnaireAnswerAnswer is []string.
+func (s QuestionnaireAnswerAnswer) GetStringArray() (v []string, ok bool) {
+	if !s.IsStringArray() {
+		return v, false
+	}
+	return s.StringArray, true
+}
+
+// NewStringArrayQuestionnaireAnswerAnswer returns new QuestionnaireAnswerAnswer from []string.
+func NewStringArrayQuestionnaireAnswerAnswer(v []string) QuestionnaireAnswerAnswer {
+	var s QuestionnaireAnswerAnswer
+	s.SetStringArray(v)
+	return s
+}
 
 // Ref: #
 type Region struct {
@@ -4082,6 +4249,53 @@ func (s *V1OrganizationsVerificationsGetSort) UnmarshalText(data []byte) error {
 	default:
 		return errors.Errorf("invalid value: %q", data)
 	}
+}
+
+type V1QuestionnaireGetOK struct {
+	Data []Questionnaire `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1QuestionnaireGetOK) GetData() []Questionnaire {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1QuestionnaireGetOK) SetData(val []Questionnaire) {
+	s.Data = val
+}
+
+func (*V1QuestionnaireGetOK) v1QuestionnaireGetRes() {}
+
+// V1QuestionnairePostOK is response for V1QuestionnairePost operation.
+type V1QuestionnairePostOK struct{}
+
+func (*V1QuestionnairePostOK) v1QuestionnairePostRes() {}
+
+type V1QuestionnairePostReq struct {
+	Answers []QuestionnaireAnswer `json:"answers"`
+	// The questionnaire is completed.
+	IsCompleted bool `json:"is_completed"`
+}
+
+// GetAnswers returns the value of Answers.
+func (s *V1QuestionnairePostReq) GetAnswers() []QuestionnaireAnswer {
+	return s.Answers
+}
+
+// GetIsCompleted returns the value of IsCompleted.
+func (s *V1QuestionnairePostReq) GetIsCompleted() bool {
+	return s.IsCompleted
+}
+
+// SetAnswers sets the value of Answers.
+func (s *V1QuestionnairePostReq) SetAnswers(val []QuestionnaireAnswer) {
+	s.Answers = val
+}
+
+// SetIsCompleted sets the value of IsCompleted.
+func (s *V1QuestionnairePostReq) SetIsCompleted(val bool) {
+	s.IsCompleted = val
 }
 
 type V1SuggestCityGetOK struct {
