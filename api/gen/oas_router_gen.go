@@ -523,6 +523,29 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
+			case 'q': // Prefix: "questionnaire"
+				origElem := elem
+				if l := len("questionnaire"); len(elem) >= l && elem[0:l] == "questionnaire" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "GET":
+						s.handleV1QuestionnaireGetRequest([0]string{}, elemIsEscaped, w, r)
+					case "POST":
+						s.handleV1QuestionnairePostRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET,POST")
+					}
+
+					return
+				}
+
+				elem = origElem
 			case 's': // Prefix: "su"
 				origElem := elem
 				if l := len("su"); len(elem) >= l && elem[0:l] == "su" {
@@ -1663,6 +1686,39 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					elem = origElem
+				}
+
+				elem = origElem
+			case 'q': // Prefix: "questionnaire"
+				origElem := elem
+				if l := len("questionnaire"); len(elem) >= l && elem[0:l] == "questionnaire" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "GET":
+						r.name = "V1QuestionnaireGet"
+						r.summary = "Get all contractor's questionnaire answers"
+						r.operationID = ""
+						r.pathPattern = "/v1/questionnaire"
+						r.args = args
+						r.count = 0
+						return r, true
+					case "POST":
+						r.name = "V1QuestionnairePost"
+						r.summary = "Save the contractor's answers to the questionnaire"
+						r.operationID = ""
+						r.pathPattern = "/v1/questionnaire"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
 				}
 
 				elem = origElem

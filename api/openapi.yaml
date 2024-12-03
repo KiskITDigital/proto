@@ -44,6 +44,9 @@ paths:
   /v1/users/{userID}:
     $ref: "v1/paths/users/_id/_index.yaml"
 
+  /v1/questionnaire:
+    $ref: "v1/paths/questionnaire/_index.yaml"
+
   /v1/employee:
     $ref: "v1/paths/employee/_index.yaml"
 
@@ -86,6 +89,7 @@ paths:
     $ref: "v1/paths/suggest/company.yaml"
   /v1/suggest/city:
     $ref: "v1/paths/suggest/city.yaml"
+
 components:
   securitySchemes:
     cookieAuth:

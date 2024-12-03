@@ -123,6 +123,20 @@ func encodeV1OrganizationsOrganizationIDVerificationsPostRequest(
 	return nil
 }
 
+func encodeV1QuestionnairePostRequest(
+	req *V1QuestionnairePostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeV1SurveyPostRequest(
 	req *V1SurveyPostReq,
 	r *http.Request,

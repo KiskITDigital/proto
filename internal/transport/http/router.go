@@ -21,6 +21,7 @@ type Router struct {
 	Suggest
 	Verification
 	Employee
+	Questionnaire
 }
 
 type Error interface {
@@ -100,32 +101,39 @@ type Employee interface {
 	V1EmployeePost(ctx context.Context, req *api.V1EmployeePostReq) (api.V1EmployeePostRes, error)
 }
 
+type Questionnaire interface {
+	V1QuestionnairePost(ctx context.Context, req *api.V1QuestionnairePostReq) (api.V1QuestionnairePostRes, error)
+	V1QuestionnaireGet(ctx context.Context, params api.V1QuestionnaireGetParams) (api.V1QuestionnaireGetRes, error)
+}
+
 type RouterParams struct {
-	Error        Error
-	Auth         Auth
-	Tenders      Tenders
-	Catalog      Catalog
-	Users        Users
-	Survey       Survey
-	Organization Organization
-	Comments     Comments
-	Suggest      Suggest
-	Verification Verification
-	Employee     Employee
+	Error         Error
+	Auth          Auth
+	Tenders       Tenders
+	Catalog       Catalog
+	Users         Users
+	Survey        Survey
+	Organization  Organization
+	Comments      Comments
+	Suggest       Suggest
+	Verification  Verification
+	Employee      Employee
+	Questionnaire Questionnaire
 }
 
 func NewRouter(params RouterParams) *Router {
 	return &Router{
-		Auth:         params.Auth,
-		Error:        params.Error,
-		Tenders:      params.Tenders,
-		Catalog:      params.Catalog,
-		Users:        params.Users,
-		Survey:       params.Survey,
-		Organization: params.Organization,
-		Comments:     params.Comments,
-		Suggest:      params.Suggest,
-		Verification: params.Verification,
-		Employee:     params.Employee,
+		Auth:          params.Auth,
+		Error:         params.Error,
+		Tenders:       params.Tenders,
+		Catalog:       params.Catalog,
+		Users:         params.Users,
+		Survey:        params.Survey,
+		Organization:  params.Organization,
+		Comments:      params.Comments,
+		Suggest:       params.Suggest,
+		Verification:  params.Verification,
+		Employee:      params.Employee,
+		Questionnaire: params.Questionnaire,
 	}
 }

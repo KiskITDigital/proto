@@ -81,6 +81,14 @@ type V1OrganizationsVerificationsGetRes interface {
 	v1OrganizationsVerificationsGetRes()
 }
 
+type V1QuestionnaireGetRes interface {
+	v1QuestionnaireGetRes()
+}
+
+type V1QuestionnairePostRes interface {
+	v1QuestionnairePostRes()
+}
+
 type V1SuggestCityGetRes interface {
 	v1SuggestCityGetRes()
 }

@@ -209,6 +209,26 @@ func (UnimplementedHandler) V1OrganizationsVerificationsGet(ctx context.Context,
 	return r, ht.ErrNotImplemented
 }
 
+// V1QuestionnaireGet implements GET /v1/questionnaire operation.
+//
+// Get all contractor's questionnaire answers with pagination
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+// 'Employee' or higher.
+//
+// GET /v1/questionnaire
+func (UnimplementedHandler) V1QuestionnaireGet(ctx context.Context, params V1QuestionnaireGetParams) (r V1QuestionnaireGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1QuestionnairePost implements POST /v1/questionnaire operation.
+//
+// Save the contractor's answers to the questionnaire.
+//
+// POST /v1/questionnaire
+func (UnimplementedHandler) V1QuestionnairePost(ctx context.Context, req *V1QuestionnairePostReq) (r V1QuestionnairePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1SuggestCityGet implements GET /v1/suggest/city operation.
 //
 // Suggests a city with provided city name.

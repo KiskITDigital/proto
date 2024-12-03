@@ -22,6 +22,7 @@ var (
 	CodeValidate           Code = "ERR_VALIDATE"
 	CodeNotFound           Code = "ERR_NOT_FOUND"
 	CodeInvalidCredentials Code = "ERR_INVALID_CREDENTIALS"
+	CodeConflict           Code = "ERR_CONFLICT"
 )
 
 var codes = map[Code]int{
@@ -30,4 +31,5 @@ var codes = map[Code]int{
 	CodeInvalidCredentials: http.StatusBadRequest,
 	CodeUnauthorized:       http.StatusUnauthorized,
 	CodeNotPermitted:       http.StatusForbidden,
+	CodeConflict:           http.StatusConflict,
 }

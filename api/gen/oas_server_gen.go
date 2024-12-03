@@ -144,6 +144,20 @@ type Handler interface {
 	//
 	// GET /v1/organizations/verifications
 	V1OrganizationsVerificationsGet(ctx context.Context, params V1OrganizationsVerificationsGetParams) (V1OrganizationsVerificationsGetRes, error)
+	// V1QuestionnaireGet implements GET /v1/questionnaire operation.
+	//
+	// Get all contractor's questionnaire answers with pagination
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+	// 'Employee' or higher.
+	//
+	// GET /v1/questionnaire
+	V1QuestionnaireGet(ctx context.Context, params V1QuestionnaireGetParams) (V1QuestionnaireGetRes, error)
+	// V1QuestionnairePost implements POST /v1/questionnaire operation.
+	//
+	// Save the contractor's answers to the questionnaire.
+	//
+	// POST /v1/questionnaire
+	V1QuestionnairePost(ctx context.Context, req *V1QuestionnairePostReq) (V1QuestionnairePostRes, error)
 	// V1SuggestCityGet implements GET /v1/suggest/city operation.
 	//
 	// Suggests a city with provided city name.

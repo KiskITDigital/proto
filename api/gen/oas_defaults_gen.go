@@ -3,6 +3,14 @@
 package api
 
 // setDefaults set default value of fields.
+func (s *V1QuestionnairePostReq) setDefaults() {
+	{
+		val := bool(false)
+		s.IsCompleted = val
+	}
+}
+
+// setDefaults set default value of fields.
 func (s *V1TendersPostReq) setDefaults() {
 	{
 		val := bool(false)

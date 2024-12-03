@@ -14,6 +14,7 @@ import (
 	authService "gitlab.ubrato.ru/ubrato/core/internal/service/auth"
 	catalogService "gitlab.ubrato.ru/ubrato/core/internal/service/catalog"
 	organizationService "gitlab.ubrato.ru/ubrato/core/internal/service/organization"
+	questionnaireService "gitlab.ubrato.ru/ubrato/core/internal/service/questionnaire"
 	suggestService "gitlab.ubrato.ru/ubrato/core/internal/service/suggest"
 	surveyService "gitlab.ubrato.ru/ubrato/core/internal/service/survey"
 	tenderService "gitlab.ubrato.ru/ubrato/core/internal/service/tender"
@@ -28,6 +29,7 @@ import (
 	tenderStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/tender"
 	userStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/user"
 	verificationStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/verification"
+	questionnaireStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/questionnaire"
 	"gitlab.ubrato.ru/ubrato/core/internal/transport/http"
 	authHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/auth"
 	catalogHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/catalog"
@@ -35,6 +37,7 @@ import (
 	employeeHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/employee"
 	errorHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/error"
 	organizationHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/organization"
+	questionnaireHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/questionnaire"
 	suggestHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/suggest"
 	surveyHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/survey"
 	tenderHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/tender"
@@ -82,6 +85,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	catalogStore := catalogStore.NewCatalogStore()
 	verificationStore := verificationStore.NewVerificationRequestStore()
 	commentStore := commentStore.NewCommentStore()
+	questionnaireStore := questionnaireStore.NewQuestionnaireStore()
 
 	dadataGateway := dadataGateway.NewClient(cfg.Gateway.Dadata.APIKey)
 
@@ -139,7 +143,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		catalogStore,
 	)
 
-	verificationServise := verificationService.New(
+	verificationService := verificationService.New(
 		psql,
 		verificationStore,
 		tenderStore,
@@ -147,18 +151,25 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		organizationStore,
 	)
 
+	questionnaireService := questionnaireService.New(
+		psql,
+		questionnaireStore,
+		organizationStore,
+	)
+
 	router := http.NewRouter(http.RouterParams{
-		Error:        errorHandler.New(logger),
-		Auth:         authHandler.New(logger, authService, userService),
-		Tenders:      tenderHandler.New(logger, tenderService, verificationServise),
-		Catalog:      catalogHandler.New(logger, catalogService),
-		Users:        userHandler.New(logger, userService),
-		Survey:       surveyHandler.New(logger, surveyService),
-		Organization: organizationHandler.New(logger, organizationService, verificationServise),
-		Comments:     commentHandler.New(logger, nil, verificationServise),
-		Suggest:      suggestHandler.New(logger, suggestService),
-		Verification: verificationHandler.New(logger, verificationServise),
-		Employee:     employeeHandler.New(logger, userService),
+		Error:         errorHandler.New(logger),
+		Auth:          authHandler.New(logger, authService, userService),
+		Tenders:       tenderHandler.New(logger, tenderService, verificationService),
+		Catalog:       catalogHandler.New(logger, catalogService),
+		Users:         userHandler.New(logger, userService),
+		Survey:        surveyHandler.New(logger, surveyService),
+		Organization:  organizationHandler.New(logger, organizationService, verificationService),
+		Comments:      commentHandler.New(logger, nil, verificationService),
+		Suggest:       suggestHandler.New(logger, suggestService),
+		Verification:  verificationHandler.New(logger, verificationService),
+		Employee:      employeeHandler.New(logger, userService),
+		Questionnaire: questionnaireHandler.New(logger, questionnaireService),
 	})
 
 	server, err := http.NewServer(logger, cfg.Transport.HTTP, router)

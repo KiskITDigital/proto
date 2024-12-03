@@ -865,6 +865,80 @@ paths:
                     $ref: '#/components/schemas/RegularUser'
         default:
           $ref: '#/components/responses/Error'
+  /v1/questionnaire:
+    post:
+      tags:
+        - questionnaire
+      summary: Save the contractor's answers to the questionnaire
+      description: Save the contractor's answers to the questionnaire
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - answers
+                - is_completed
+              properties:
+                answers:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/QuestionnaireAnswer'
+                is_completed:
+                  type: boolean
+                  description: the questionnaire is completed
+                  default: false
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
+    get:
+      tags:
+        - questionnaire
+      summary: Get all contractor's questionnaire answers
+      description: |-
+        Get all contractor's questionnaire answers with pagination
+
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+        'Employee' or higher.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: offset
+          in: query
+          description: Сдвиг начала каждой страницы на указанное количество единиц.
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: Максимальное количество объектов, которое может вернуть запрос.
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+            default: 100
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Questionnaire'
+        default:
+          $ref: '#/components/responses/Error'
   /v1/employee:
     post:
       tags:
@@ -2223,6 +2297,55 @@ components:
         reviewed_at:
           type: string
           format: date-time
+    QuestionnaireAnswer:
+      type: object
+      required:
+        - answer
+      properties:
+        answer:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+          description: The answer to the question
+        comment:
+          type: string
+          description: Optional comment for the answer
+      example:
+        answer:
+          - Удобно
+          - Неудобно
+        comment: Смешанные чувства
+    Questionnaire:
+      type: object
+      required:
+        - id
+        - organization
+        - answers
+        - is_completed
+        - created_at
+      properties:
+        id:
+          type: integer
+          example: 123
+        organization:
+          $ref: '#/components/schemas/Organization'
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionnaireAnswer'
+        is_completed:
+          type: boolean
+          example: true
+        completed_at:
+          type: string
+          format: date-time
+          example: '2024-12-02T15:30:00Z'
+        created_at:
+          type: string
+          format: date-time
+          example: '2024-12-02T15:30:00Z'
     survey:
       type: string
       enum:
