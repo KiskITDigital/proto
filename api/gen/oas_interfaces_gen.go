@@ -65,6 +65,10 @@ type V1OrganizationsOrganizationIDGetRes interface {
 	v1OrganizationsOrganizationIDGetRes()
 }
 
+type V1OrganizationsOrganizationIDPortfolioGetRes interface {
+	v1OrganizationsOrganizationIDPortfolioGetRes()
+}
+
 type V1OrganizationsOrganizationIDTendersGetRes interface {
 	v1OrganizationsOrganizationIDTendersGetRes()
 }
@@ -75,6 +79,34 @@ type V1OrganizationsOrganizationIDVerificationsGetRes interface {
 
 type V1OrganizationsOrganizationIDVerificationsPostRes interface {
 	v1OrganizationsOrganizationIDVerificationsPostRes()
+}
+
+type V1OrganizationsPortfolioPortfolioIDDeleteRes interface {
+	v1OrganizationsPortfolioPortfolioIDDeleteRes()
+}
+
+type V1OrganizationsPortfolioPortfolioIDPutRes interface {
+	v1OrganizationsPortfolioPortfolioIDPutRes()
+}
+
+type V1OrganizationsPortfolioPostRes interface {
+	v1OrganizationsPortfolioPostRes()
+}
+
+type V1OrganizationsProfileBrandPutRes interface {
+	v1OrganizationsProfileBrandPutRes()
+}
+
+type V1OrganizationsProfileContactsPutRes interface {
+	v1OrganizationsProfileContactsPutRes()
+}
+
+type V1OrganizationsProfileContractorPutRes interface {
+	v1OrganizationsProfileContractorPutRes()
+}
+
+type V1OrganizationsProfileCustomerPutRes interface {
+	v1OrganizationsProfileCustomerPutRes()
 }
 
 type V1OrganizationsVerificationsGetRes interface {
@@ -143,6 +175,10 @@ type V1UsersConfirmPasswordPostRes interface {
 
 type V1UsersGetRes interface {
 	v1UsersGetRes()
+}
+
+type V1UsersPutRes interface {
+	v1UsersPutRes()
 }
 
 type V1UsersRequestEmailVerificationPostRes interface {

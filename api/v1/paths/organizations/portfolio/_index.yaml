@@ -1,0 +1,42 @@
+post:
+  tags:
+    - organizations
+  summary: Add a portfolio to the contractor's profile
+  description: |-
+    Добавляет портфолио в профиль исполнителя.
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+            - description
+            - attachments
+          properties:
+            name:
+              $ref: "../../../properties/name.yaml"
+            description:
+              $ref: "../../../properties/description.yaml"
+            attachments:
+              type: array
+              items:
+                $ref: "../../../properties/url.yaml"
+              maxItems: 8
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                $ref: "../../../schemas/Portfolio.yaml"
+    default:
+      $ref: "../../../responses/Error.yaml"

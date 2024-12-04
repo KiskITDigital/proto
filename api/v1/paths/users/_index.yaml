@@ -69,3 +69,34 @@ get:
                     - $ref: "../../schemas/EmployeeUser.yaml"
     default:
       $ref: "../../responses/Error.yaml"
+
+put:
+  tags:
+    - users
+  summary: Update user profile
+  description: |-
+   Обновляет информацию профиля пользователя.
+  security:
+  - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            first_name:
+              $ref: "../../properties/name.yaml"
+            last_name:
+              $ref: "../../properties/name.yaml"
+            middle_name:
+              $ref: "../../properties/name.yaml"
+            phone:
+              $ref: "../../properties/phone.yaml"
+            avatar_url:
+              $ref: "../../properties/url.yaml"
+  responses:
+    '200':
+      description: Success
+    default:
+      $ref: "../../responses/Error.yaml"

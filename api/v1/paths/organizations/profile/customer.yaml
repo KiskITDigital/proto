@@ -1,0 +1,37 @@
+put:
+  tags:
+    - organizations
+  summary: Update customer organization profile
+  description: |-
+    Обновляет описание компании или список локаций в профиле заказчика.
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            description:
+              $ref: "../../../properties/description.yaml"
+            cities:
+              type: array
+              description: Локаций заказчика
+              items:
+                type: integer
+                example: 1  
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                $ref: "../../../schemas/Organization.yaml"
+    default:
+      $ref: "../../../responses/Error.yaml"

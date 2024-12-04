@@ -118,6 +118,12 @@ type Handler interface {
 	//
 	// GET /v1/organizations/{organizationID}
 	V1OrganizationsOrganizationIDGet(ctx context.Context, params V1OrganizationsOrganizationIDGetParams) (V1OrganizationsOrganizationIDGetRes, error)
+	// V1OrganizationsOrganizationIDPortfolioGet implements GET /v1/organizations/{organizationID}/portfolio operation.
+	//
+	// Получает список всех портфолио для исполнителя.
+	//
+	// GET /v1/organizations/{organizationID}/portfolio
+	V1OrganizationsOrganizationIDPortfolioGet(ctx context.Context, params V1OrganizationsOrganizationIDPortfolioGetParams) (V1OrganizationsOrganizationIDPortfolioGetRes, error)
 	// V1OrganizationsOrganizationIDTendersGet implements GET /v1/organizations/{organizationID}/tenders operation.
 	//
 	// If user is in organization it also returns all drafts.
@@ -136,6 +142,51 @@ type Handler interface {
 	//
 	// POST /v1/organizations/{organizationID}/verifications
 	V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, req *V1OrganizationsOrganizationIDVerificationsPostReq, params V1OrganizationsOrganizationIDVerificationsPostParams) (V1OrganizationsOrganizationIDVerificationsPostRes, error)
+	// V1OrganizationsPortfolioPortfolioIDDelete implements DELETE /v1/organizations/portfolio/{portfolioID} operation.
+	//
+	// Удаляет портфолио из профиля исполнителя.
+	//
+	// DELETE /v1/organizations/portfolio/{portfolioID}
+	V1OrganizationsPortfolioPortfolioIDDelete(ctx context.Context, params V1OrganizationsPortfolioPortfolioIDDeleteParams) (V1OrganizationsPortfolioPortfolioIDDeleteRes, error)
+	// V1OrganizationsPortfolioPortfolioIDPut implements PUT /v1/organizations/portfolio/{portfolioID} operation.
+	//
+	// Обновляет информацию о портфолио в профиле
+	// исполнителя.
+	//
+	// PUT /v1/organizations/portfolio/{portfolioID}
+	V1OrganizationsPortfolioPortfolioIDPut(ctx context.Context, req *V1OrganizationsPortfolioPortfolioIDPutReq, params V1OrganizationsPortfolioPortfolioIDPutParams) (V1OrganizationsPortfolioPortfolioIDPutRes, error)
+	// V1OrganizationsPortfolioPost implements POST /v1/organizations/portfolio operation.
+	//
+	// Добавляет портфолио в профиль исполнителя.
+	//
+	// POST /v1/organizations/portfolio
+	V1OrganizationsPortfolioPost(ctx context.Context, req *V1OrganizationsPortfolioPostReq) (V1OrganizationsPortfolioPostRes, error)
+	// V1OrganizationsProfileBrandPut implements PUT /v1/organizations/profile/brand operation.
+	//
+	// Обновляет название бренда или URL изображения для
+	// организации.
+	//
+	// PUT /v1/organizations/profile/brand
+	V1OrganizationsProfileBrandPut(ctx context.Context, req *V1OrganizationsProfileBrandPutReq) (V1OrganizationsProfileBrandPutRes, error)
+	// V1OrganizationsProfileContactsPut implements PUT /v1/organizations/profile/contacts operation.
+	//
+	// Обновляет контактные данные для организации.
+	//
+	// PUT /v1/organizations/profile/contacts
+	V1OrganizationsProfileContactsPut(ctx context.Context, req *V1OrganizationsProfileContactsPutReq) (V1OrganizationsProfileContactsPutRes, error)
+	// V1OrganizationsProfileContractorPut implements PUT /v1/organizations/profile/contractor operation.
+	//
+	// Обновляет профиль исполнителя.
+	//
+	// PUT /v1/organizations/profile/contractor
+	V1OrganizationsProfileContractorPut(ctx context.Context, req *V1OrganizationsProfileContractorPutReq) (V1OrganizationsProfileContractorPutRes, error)
+	// V1OrganizationsProfileCustomerPut implements PUT /v1/organizations/profile/customer operation.
+	//
+	// Обновляет описание компании или список локаций в
+	// профиле заказчика.
+	//
+	// PUT /v1/organizations/profile/customer
+	V1OrganizationsProfileCustomerPut(ctx context.Context, req *V1OrganizationsProfileCustomerPutReq) (V1OrganizationsProfileCustomerPutRes, error)
 	// V1OrganizationsVerificationsGet implements GET /v1/organizations/verifications operation.
 	//
 	// Get verifications
@@ -253,6 +304,12 @@ type Handler interface {
 	//
 	// GET /v1/users
 	V1UsersGet(ctx context.Context, params V1UsersGetParams) (V1UsersGetRes, error)
+	// V1UsersPut implements PUT /v1/users operation.
+	//
+	// Обновляет информацию профиля пользователя.
+	//
+	// PUT /v1/users
+	V1UsersPut(ctx context.Context, req *V1UsersPutReq) (V1UsersPutRes, error)
 	// V1UsersRequestEmailVerificationPost implements POST /v1/users/request/email-verification operation.
 	//
 	// Requesting send verify code.
