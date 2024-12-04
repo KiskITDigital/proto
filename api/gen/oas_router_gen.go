@@ -408,201 +408,35 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
-					case 'p': // Prefix: "p"
+					case 'p': // Prefix: "portfolio/"
 						origElem := elem
-						if l := len("p"); len(elem) >= l && elem[0:l] == "p" {
+						if l := len("portfolio/"); len(elem) >= l && elem[0:l] == "portfolio/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
+						// Param: "portfolioID"
+						// Leaf parameter
+						args[0] = elem
+						elem = ""
+
 						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'o': // Prefix: "ortfolio"
-							origElem := elem
-							if l := len("ortfolio"); len(elem) >= l && elem[0:l] == "ortfolio" {
-								elem = elem[l:]
-							} else {
-								break
+							// Leaf node.
+							switch r.Method {
+							case "DELETE":
+								s.handleV1OrganizationsPortfolioPortfolioIDDeleteRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							case "PUT":
+								s.handleV1OrganizationsPortfolioPortfolioIDPutRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "DELETE,PUT")
 							}
 
-							if len(elem) == 0 {
-								switch r.Method {
-								case "POST":
-									s.handleV1OrganizationsPortfolioPostRequest([0]string{}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "POST")
-								}
-
-								return
-							}
-							switch elem[0] {
-							case '/': // Prefix: "/"
-								origElem := elem
-								if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								// Param: "portfolioID"
-								// Leaf parameter
-								args[0] = elem
-								elem = ""
-
-								if len(elem) == 0 {
-									// Leaf node.
-									switch r.Method {
-									case "DELETE":
-										s.handleV1OrganizationsPortfolioPortfolioIDDeleteRequest([1]string{
-											args[0],
-										}, elemIsEscaped, w, r)
-									case "PUT":
-										s.handleV1OrganizationsPortfolioPortfolioIDPutRequest([1]string{
-											args[0],
-										}, elemIsEscaped, w, r)
-									default:
-										s.notAllowed(w, r, "DELETE,PUT")
-									}
-
-									return
-								}
-
-								elem = origElem
-							}
-
-							elem = origElem
-						case 'r': // Prefix: "rofile/"
-							origElem := elem
-							if l := len("rofile/"); len(elem) >= l && elem[0:l] == "rofile/" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								break
-							}
-							switch elem[0] {
-							case 'b': // Prefix: "brand"
-								origElem := elem
-								if l := len("brand"); len(elem) >= l && elem[0:l] == "brand" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									// Leaf node.
-									switch r.Method {
-									case "PUT":
-										s.handleV1OrganizationsProfileBrandPutRequest([0]string{}, elemIsEscaped, w, r)
-									default:
-										s.notAllowed(w, r, "PUT")
-									}
-
-									return
-								}
-
-								elem = origElem
-							case 'c': // Prefix: "c"
-								origElem := elem
-								if l := len("c"); len(elem) >= l && elem[0:l] == "c" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									break
-								}
-								switch elem[0] {
-								case 'o': // Prefix: "ont"
-									origElem := elem
-									if l := len("ont"); len(elem) >= l && elem[0:l] == "ont" {
-										elem = elem[l:]
-									} else {
-										break
-									}
-
-									if len(elem) == 0 {
-										break
-									}
-									switch elem[0] {
-									case 'a': // Prefix: "acts"
-										origElem := elem
-										if l := len("acts"); len(elem) >= l && elem[0:l] == "acts" {
-											elem = elem[l:]
-										} else {
-											break
-										}
-
-										if len(elem) == 0 {
-											// Leaf node.
-											switch r.Method {
-											case "PUT":
-												s.handleV1OrganizationsProfileContactsPutRequest([0]string{}, elemIsEscaped, w, r)
-											default:
-												s.notAllowed(w, r, "PUT")
-											}
-
-											return
-										}
-
-										elem = origElem
-									case 'r': // Prefix: "ractor"
-										origElem := elem
-										if l := len("ractor"); len(elem) >= l && elem[0:l] == "ractor" {
-											elem = elem[l:]
-										} else {
-											break
-										}
-
-										if len(elem) == 0 {
-											// Leaf node.
-											switch r.Method {
-											case "PUT":
-												s.handleV1OrganizationsProfileContractorPutRequest([0]string{}, elemIsEscaped, w, r)
-											default:
-												s.notAllowed(w, r, "PUT")
-											}
-
-											return
-										}
-
-										elem = origElem
-									}
-
-									elem = origElem
-								case 'u': // Prefix: "ustomer"
-									origElem := elem
-									if l := len("ustomer"); len(elem) >= l && elem[0:l] == "ustomer" {
-										elem = elem[l:]
-									} else {
-										break
-									}
-
-									if len(elem) == 0 {
-										// Leaf node.
-										switch r.Method {
-										case "PUT":
-											s.handleV1OrganizationsProfileCustomerPutRequest([0]string{}, elemIsEscaped, w, r)
-										default:
-											s.notAllowed(w, r, "PUT")
-										}
-
-										return
-									}
-
-									elem = origElem
-								}
-
-								elem = origElem
-							}
-
-							elem = origElem
+							return
 						}
 
 						elem = origElem
@@ -662,26 +496,182 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							break
 						}
 						switch elem[0] {
-						case 'p': // Prefix: "portfolio"
+						case 'p': // Prefix: "p"
 							origElem := elem
-							if l := len("portfolio"); len(elem) >= l && elem[0:l] == "portfolio" {
+							if l := len("p"); len(elem) >= l && elem[0:l] == "p" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "GET":
-									s.handleV1OrganizationsOrganizationIDPortfolioGetRequest([1]string{
-										args[0],
-									}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "GET")
+								break
+							}
+							switch elem[0] {
+							case 'o': // Prefix: "ortfolio"
+								origElem := elem
+								if l := len("ortfolio"); len(elem) >= l && elem[0:l] == "ortfolio" {
+									elem = elem[l:]
+								} else {
+									break
 								}
 
-								return
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "GET":
+										s.handleV1OrganizationsOrganizationIDPortfolioGetRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									case "POST":
+										s.handleV1OrganizationsOrganizationIDPortfolioPostRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "GET,POST")
+									}
+
+									return
+								}
+
+								elem = origElem
+							case 'r': // Prefix: "rofile/"
+								origElem := elem
+								if l := len("rofile/"); len(elem) >= l && elem[0:l] == "rofile/" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									break
+								}
+								switch elem[0] {
+								case 'b': // Prefix: "brand"
+									origElem := elem
+									if l := len("brand"); len(elem) >= l && elem[0:l] == "brand" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									if len(elem) == 0 {
+										// Leaf node.
+										switch r.Method {
+										case "PUT":
+											s.handleV1OrganizationsOrganizationIDProfileBrandPutRequest([1]string{
+												args[0],
+											}, elemIsEscaped, w, r)
+										default:
+											s.notAllowed(w, r, "PUT")
+										}
+
+										return
+									}
+
+									elem = origElem
+								case 'c': // Prefix: "c"
+									origElem := elem
+									if l := len("c"); len(elem) >= l && elem[0:l] == "c" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									if len(elem) == 0 {
+										break
+									}
+									switch elem[0] {
+									case 'o': // Prefix: "ont"
+										origElem := elem
+										if l := len("ont"); len(elem) >= l && elem[0:l] == "ont" {
+											elem = elem[l:]
+										} else {
+											break
+										}
+
+										if len(elem) == 0 {
+											break
+										}
+										switch elem[0] {
+										case 'a': // Prefix: "acts"
+											origElem := elem
+											if l := len("acts"); len(elem) >= l && elem[0:l] == "acts" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch r.Method {
+												case "PUT":
+													s.handleV1OrganizationsOrganizationIDProfileContactsPutRequest([1]string{
+														args[0],
+													}, elemIsEscaped, w, r)
+												default:
+													s.notAllowed(w, r, "PUT")
+												}
+
+												return
+											}
+
+											elem = origElem
+										case 'r': // Prefix: "ractor"
+											origElem := elem
+											if l := len("ractor"); len(elem) >= l && elem[0:l] == "ractor" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch r.Method {
+												case "PUT":
+													s.handleV1OrganizationsOrganizationIDProfileContractorPutRequest([1]string{
+														args[0],
+													}, elemIsEscaped, w, r)
+												default:
+													s.notAllowed(w, r, "PUT")
+												}
+
+												return
+											}
+
+											elem = origElem
+										}
+
+										elem = origElem
+									case 'u': // Prefix: "ustomer"
+										origElem := elem
+										if l := len("ustomer"); len(elem) >= l && elem[0:l] == "ustomer" {
+											elem = elem[l:]
+										} else {
+											break
+										}
+
+										if len(elem) == 0 {
+											// Leaf node.
+											switch r.Method {
+											case "PUT":
+												s.handleV1OrganizationsOrganizationIDProfileCustomerPutRequest([1]string{
+													args[0],
+												}, elemIsEscaped, w, r)
+											default:
+												s.notAllowed(w, r, "PUT")
+											}
+
+											return
+										}
+
+										elem = origElem
+									}
+
+									elem = origElem
+								}
+
+								elem = origElem
 							}
 
 							elem = origElem
@@ -1024,10 +1014,8 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					switch r.Method {
 					case "GET":
 						s.handleV1UsersGetRequest([0]string{}, elemIsEscaped, w, r)
-					case "PUT":
-						s.handleV1UsersPutRequest([0]string{}, elemIsEscaped, w, r)
 					default:
-						s.notAllowed(w, r, "GET,PUT")
+						s.notAllowed(w, r, "GET")
 					}
 
 					return
@@ -1172,8 +1160,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							s.handleV1UsersUserIDGetRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
+						case "PUT":
+							s.handleV1UsersUserIDPutRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "GET")
+							s.notAllowed(w, r, "GET,PUT")
 						}
 
 						return
@@ -1783,227 +1775,41 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 
 						elem = origElem
-					case 'p': // Prefix: "p"
+					case 'p': // Prefix: "portfolio/"
 						origElem := elem
-						if l := len("p"); len(elem) >= l && elem[0:l] == "p" {
+						if l := len("portfolio/"); len(elem) >= l && elem[0:l] == "portfolio/" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
+						// Param: "portfolioID"
+						// Leaf parameter
+						args[0] = elem
+						elem = ""
+
 						if len(elem) == 0 {
-							break
-						}
-						switch elem[0] {
-						case 'o': // Prefix: "ortfolio"
-							origElem := elem
-							if l := len("ortfolio"); len(elem) >= l && elem[0:l] == "ortfolio" {
-								elem = elem[l:]
-							} else {
-								break
+							// Leaf node.
+							switch method {
+							case "DELETE":
+								r.name = "V1OrganizationsPortfolioPortfolioIDDelete"
+								r.summary = "Remove a portfolio from the contractor's profile"
+								r.operationID = ""
+								r.pathPattern = "/v1/organizations/portfolio/{portfolioID}"
+								r.args = args
+								r.count = 1
+								return r, true
+							case "PUT":
+								r.name = "V1OrganizationsPortfolioPortfolioIDPut"
+								r.summary = "Update a portfolio in the contractor's profile"
+								r.operationID = ""
+								r.pathPattern = "/v1/organizations/portfolio/{portfolioID}"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
 							}
-
-							if len(elem) == 0 {
-								switch method {
-								case "POST":
-									r.name = "V1OrganizationsPortfolioPost"
-									r.summary = "Add a portfolio to the contractor's profile"
-									r.operationID = ""
-									r.pathPattern = "/v1/organizations/portfolio"
-									r.args = args
-									r.count = 0
-									return r, true
-								default:
-									return
-								}
-							}
-							switch elem[0] {
-							case '/': // Prefix: "/"
-								origElem := elem
-								if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								// Param: "portfolioID"
-								// Leaf parameter
-								args[0] = elem
-								elem = ""
-
-								if len(elem) == 0 {
-									// Leaf node.
-									switch method {
-									case "DELETE":
-										r.name = "V1OrganizationsPortfolioPortfolioIDDelete"
-										r.summary = "Remove a portfolio from the contractor's profile"
-										r.operationID = ""
-										r.pathPattern = "/v1/organizations/portfolio/{portfolioID}"
-										r.args = args
-										r.count = 1
-										return r, true
-									case "PUT":
-										r.name = "V1OrganizationsPortfolioPortfolioIDPut"
-										r.summary = "Update a portfolio in the contractor's profile"
-										r.operationID = ""
-										r.pathPattern = "/v1/organizations/portfolio/{portfolioID}"
-										r.args = args
-										r.count = 1
-										return r, true
-									default:
-										return
-									}
-								}
-
-								elem = origElem
-							}
-
-							elem = origElem
-						case 'r': // Prefix: "rofile/"
-							origElem := elem
-							if l := len("rofile/"); len(elem) >= l && elem[0:l] == "rofile/" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								break
-							}
-							switch elem[0] {
-							case 'b': // Prefix: "brand"
-								origElem := elem
-								if l := len("brand"); len(elem) >= l && elem[0:l] == "brand" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									// Leaf node.
-									switch method {
-									case "PUT":
-										r.name = "V1OrganizationsProfileBrandPut"
-										r.summary = "Update organization brand info"
-										r.operationID = ""
-										r.pathPattern = "/v1/organizations/profile/brand"
-										r.args = args
-										r.count = 0
-										return r, true
-									default:
-										return
-									}
-								}
-
-								elem = origElem
-							case 'c': // Prefix: "c"
-								origElem := elem
-								if l := len("c"); len(elem) >= l && elem[0:l] == "c" {
-									elem = elem[l:]
-								} else {
-									break
-								}
-
-								if len(elem) == 0 {
-									break
-								}
-								switch elem[0] {
-								case 'o': // Prefix: "ont"
-									origElem := elem
-									if l := len("ont"); len(elem) >= l && elem[0:l] == "ont" {
-										elem = elem[l:]
-									} else {
-										break
-									}
-
-									if len(elem) == 0 {
-										break
-									}
-									switch elem[0] {
-									case 'a': // Prefix: "acts"
-										origElem := elem
-										if l := len("acts"); len(elem) >= l && elem[0:l] == "acts" {
-											elem = elem[l:]
-										} else {
-											break
-										}
-
-										if len(elem) == 0 {
-											// Leaf node.
-											switch method {
-											case "PUT":
-												r.name = "V1OrganizationsProfileContactsPut"
-												r.summary = "Update organization contacts"
-												r.operationID = ""
-												r.pathPattern = "/v1/organizations/profile/contacts"
-												r.args = args
-												r.count = 0
-												return r, true
-											default:
-												return
-											}
-										}
-
-										elem = origElem
-									case 'r': // Prefix: "ractor"
-										origElem := elem
-										if l := len("ractor"); len(elem) >= l && elem[0:l] == "ractor" {
-											elem = elem[l:]
-										} else {
-											break
-										}
-
-										if len(elem) == 0 {
-											// Leaf node.
-											switch method {
-											case "PUT":
-												r.name = "V1OrganizationsProfileContractorPut"
-												r.summary = "Update contractor organization profile"
-												r.operationID = ""
-												r.pathPattern = "/v1/organizations/profile/contractor"
-												r.args = args
-												r.count = 0
-												return r, true
-											default:
-												return
-											}
-										}
-
-										elem = origElem
-									}
-
-									elem = origElem
-								case 'u': // Prefix: "ustomer"
-									origElem := elem
-									if l := len("ustomer"); len(elem) >= l && elem[0:l] == "ustomer" {
-										elem = elem[l:]
-									} else {
-										break
-									}
-
-									if len(elem) == 0 {
-										// Leaf node.
-										switch method {
-										case "PUT":
-											r.name = "V1OrganizationsProfileCustomerPut"
-											r.summary = "Update customer organization profile"
-											r.operationID = ""
-											r.pathPattern = "/v1/organizations/profile/customer"
-											r.args = args
-											r.count = 0
-											return r, true
-										default:
-											return
-										}
-									}
-
-									elem = origElem
-								}
-
-								elem = origElem
-							}
-
-							elem = origElem
 						}
 
 						elem = origElem
@@ -2069,28 +1875,196 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							break
 						}
 						switch elem[0] {
-						case 'p': // Prefix: "portfolio"
+						case 'p': // Prefix: "p"
 							origElem := elem
-							if l := len("portfolio"); len(elem) >= l && elem[0:l] == "portfolio" {
+							if l := len("p"); len(elem) >= l && elem[0:l] == "p" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "GET":
-									r.name = "V1OrganizationsOrganizationIDPortfolioGet"
-									r.summary = "Get all portfolios for contractor"
-									r.operationID = ""
-									r.pathPattern = "/v1/organizations/{organizationID}/portfolio"
-									r.args = args
-									r.count = 1
-									return r, true
-								default:
-									return
+								break
+							}
+							switch elem[0] {
+							case 'o': // Prefix: "ortfolio"
+								origElem := elem
+								if l := len("ortfolio"); len(elem) >= l && elem[0:l] == "ortfolio" {
+									elem = elem[l:]
+								} else {
+									break
 								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "GET":
+										r.name = "V1OrganizationsOrganizationIDPortfolioGet"
+										r.summary = "Get all portfolios for contractor"
+										r.operationID = ""
+										r.pathPattern = "/v1/organizations/{organizationID}/portfolio"
+										r.args = args
+										r.count = 1
+										return r, true
+									case "POST":
+										r.name = "V1OrganizationsOrganizationIDPortfolioPost"
+										r.summary = "Add a portfolio to the contractor's profile"
+										r.operationID = ""
+										r.pathPattern = "/v1/organizations/{organizationID}/portfolio"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							case 'r': // Prefix: "rofile/"
+								origElem := elem
+								if l := len("rofile/"); len(elem) >= l && elem[0:l] == "rofile/" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									break
+								}
+								switch elem[0] {
+								case 'b': // Prefix: "brand"
+									origElem := elem
+									if l := len("brand"); len(elem) >= l && elem[0:l] == "brand" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									if len(elem) == 0 {
+										// Leaf node.
+										switch method {
+										case "PUT":
+											r.name = "V1OrganizationsOrganizationIDProfileBrandPut"
+											r.summary = "Update organization brand info"
+											r.operationID = ""
+											r.pathPattern = "/v1/organizations/{organizationID}/profile/brand"
+											r.args = args
+											r.count = 1
+											return r, true
+										default:
+											return
+										}
+									}
+
+									elem = origElem
+								case 'c': // Prefix: "c"
+									origElem := elem
+									if l := len("c"); len(elem) >= l && elem[0:l] == "c" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									if len(elem) == 0 {
+										break
+									}
+									switch elem[0] {
+									case 'o': // Prefix: "ont"
+										origElem := elem
+										if l := len("ont"); len(elem) >= l && elem[0:l] == "ont" {
+											elem = elem[l:]
+										} else {
+											break
+										}
+
+										if len(elem) == 0 {
+											break
+										}
+										switch elem[0] {
+										case 'a': // Prefix: "acts"
+											origElem := elem
+											if l := len("acts"); len(elem) >= l && elem[0:l] == "acts" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch method {
+												case "PUT":
+													r.name = "V1OrganizationsOrganizationIDProfileContactsPut"
+													r.summary = "Update organization contacts"
+													r.operationID = ""
+													r.pathPattern = "/v1/organizations/{organizationID}/profile/contacts"
+													r.args = args
+													r.count = 1
+													return r, true
+												default:
+													return
+												}
+											}
+
+											elem = origElem
+										case 'r': // Prefix: "ractor"
+											origElem := elem
+											if l := len("ractor"); len(elem) >= l && elem[0:l] == "ractor" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch method {
+												case "PUT":
+													r.name = "V1OrganizationsOrganizationIDProfileContractorPut"
+													r.summary = "Update contractor organization profile"
+													r.operationID = ""
+													r.pathPattern = "/v1/organizations/{organizationID}/profile/contractor"
+													r.args = args
+													r.count = 1
+													return r, true
+												default:
+													return
+												}
+											}
+
+											elem = origElem
+										}
+
+										elem = origElem
+									case 'u': // Prefix: "ustomer"
+										origElem := elem
+										if l := len("ustomer"); len(elem) >= l && elem[0:l] == "ustomer" {
+											elem = elem[l:]
+										} else {
+											break
+										}
+
+										if len(elem) == 0 {
+											// Leaf node.
+											switch method {
+											case "PUT":
+												r.name = "V1OrganizationsOrganizationIDProfileCustomerPut"
+												r.summary = "Update customer organization profile"
+												r.operationID = ""
+												r.pathPattern = "/v1/organizations/{organizationID}/profile/customer"
+												r.args = args
+												r.count = 1
+												return r, true
+											default:
+												return
+											}
+										}
+
+										elem = origElem
+									}
+
+									elem = origElem
+								}
+
+								elem = origElem
 							}
 
 							elem = origElem
@@ -2497,14 +2471,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						r.args = args
 						r.count = 0
 						return r, true
-					case "PUT":
-						r.name = "V1UsersPut"
-						r.summary = "Update user profile"
-						r.operationID = ""
-						r.pathPattern = "/v1/users"
-						r.args = args
-						r.count = 0
-						return r, true
 					default:
 						return
 					}
@@ -2664,6 +2630,14 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						case "GET":
 							r.name = "V1UsersUserIDGet"
 							r.summary = "Get user by id"
+							r.operationID = ""
+							r.pathPattern = "/v1/users/{userID}"
+							r.args = args
+							r.count = 1
+							return r, true
+						case "PUT":
+							r.name = "V1UsersUserIDPut"
+							r.summary = "Update user profile"
 							r.operationID = ""
 							r.pathPattern = "/v1/users/{userID}"
 							r.args = args

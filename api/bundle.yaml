@@ -735,35 +735,6 @@ paths:
                         - $ref: '#/components/schemas/EmployeeUser'
         default:
           $ref: '#/components/responses/Error'
-    put:
-      tags:
-        - users
-      summary: Update user profile
-      description: Обновляет информацию профиля пользователя.
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                first_name:
-                  $ref: '#/components/schemas/name'
-                last_name:
-                  $ref: '#/components/schemas/name'
-                middle_name:
-                  $ref: '#/components/schemas/name'
-                phone:
-                  $ref: '#/components/schemas/phone'
-                avatar_url:
-                  $ref: '#/components/schemas/url'
-      responses:
-        '200':
-          description: Success
-        default:
-          $ref: '#/components/responses/Error'
   /v1/users/confirm/email:
     post:
       tags:
@@ -892,6 +863,44 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/RegularUser'
+        default:
+          $ref: '#/components/responses/Error'
+    put:
+      tags:
+        - users
+      summary: Update user profile
+      description: Обновляет информацию профиля пользователя.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: userID
+          required: true
+          in: path
+          description: ID of user
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  $ref: '#/components/schemas/name'
+                last_name:
+                  $ref: '#/components/schemas/name'
+                middle_name:
+                  $ref: '#/components/schemas/name'
+                phone:
+                  $ref: '#/components/schemas/phone'
+                avatar_url:
+                  $ref: '#/components/schemas/url'
+      responses:
+        '200':
+          description: Success
         default:
           $ref: '#/components/responses/Error'
   /v1/questionnaire:
@@ -1162,7 +1171,7 @@ paths:
                       $ref: '#/components/schemas/Organization'
         default:
           $ref: '#/components/responses/Error'
-  /v1/organizations/profile/brand:
+  /v1/organizations/{organizationID}/profile/brand:
     put:
       tags:
         - organizations
@@ -1170,6 +1179,14 @@ paths:
       description: Обновляет название бренда или URL изображения для организации.
       security:
         - bearerAuth: []
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
       requestBody:
         required: true
         content:
@@ -1188,7 +1205,7 @@ paths:
           description: Success
         default:
           $ref: '#/components/responses/Error'
-  /v1/organizations/profile/contacts:
+  /v1/organizations/{organizationID}/profile/contacts:
     put:
       tags:
         - organizations
@@ -1196,6 +1213,14 @@ paths:
       description: Обновляет контактные данные для организации.
       security:
         - bearerAuth: []
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
       requestBody:
         required: true
         content:
@@ -1220,7 +1245,7 @@ paths:
           description: Success
         default:
           $ref: '#/components/responses/Error'
-  /v1/organizations/profile/customer:
+  /v1/organizations/{organizationID}/profile/customer:
     put:
       tags:
         - organizations
@@ -1228,6 +1253,14 @@ paths:
       description: Обновляет описание компании или список локаций в профиле заказчика.
       security:
         - bearerAuth: []
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
       requestBody:
         required: true
         content:
@@ -1257,7 +1290,7 @@ paths:
                     $ref: '#/components/schemas/Organization'
         default:
           $ref: '#/components/responses/Error'
-  /v1/organizations/profile/contractor:
+  /v1/organizations/{organizationID}/profile/contractor:
     put:
       tags:
         - organizations
@@ -1265,6 +1298,14 @@ paths:
       description: Обновляет профиль исполнителя.
       security:
         - bearerAuth: []
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
       requestBody:
         required: true
         content:
@@ -1306,48 +1347,6 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/Organization'
-        default:
-          $ref: '#/components/responses/Error'
-  /v1/organizations/portfolio:
-    post:
-      tags:
-        - organizations
-      summary: Add a portfolio to the contractor's profile
-      description: Добавляет портфолио в профиль исполнителя.
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - name
-                - description
-                - attachments
-              properties:
-                name:
-                  $ref: '#/components/schemas/name'
-                description:
-                  $ref: '#/components/schemas/description'
-                attachments:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/url'
-                  maxItems: 8
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - data
-                properties:
-                  data:
-                    $ref: '#/components/schemas/Portfolio'
         default:
           $ref: '#/components/responses/Error'
   /v1/organizations/portfolio/{portfolioID}:
@@ -1454,6 +1453,55 @@ paths:
                     items:
                       $ref: '#/components/schemas/Portfolio'
                     maxItems: 10
+        default:
+          $ref: '#/components/responses/Error'
+    post:
+      tags:
+        - organizations
+      summary: Add a portfolio to the contractor's profile
+      description: Добавляет портфолио в профиль исполнителя.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - attachments
+              properties:
+                name:
+                  $ref: '#/components/schemas/name'
+                description:
+                  $ref: '#/components/schemas/description'
+                attachments:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/url'
+                  maxItems: 8
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Portfolio'
         default:
           $ref: '#/components/responses/Error'
   /v1/organizations/verifications:

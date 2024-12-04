@@ -25,19 +25,19 @@ func (h *Handler) V1OrganizationsOrganizationIDVerificationsPost(
 }
 
 // Профиль
-func (h *Handler) V1OrganizationsProfileBrandPut(ctx context.Context, req *api.V1OrganizationsProfileBrandPutReq) (api.V1OrganizationsProfileBrandPutRes, error) {
+func (h *Handler) V1OrganizationsOrganizationIDProfileBrandPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileBrandPutReq, params api.V1OrganizationsOrganizationIDProfileBrandPutParams) (api.V1OrganizationsOrganizationIDProfileBrandPutRes, error) {
 	return nil, cerr.Wrap(fmt.Errorf("not impl"), cerr.CodeInternal, "func not impl", nil)
 }
 
-func (h *Handler) V1OrganizationsProfileContactsPut(ctx context.Context, req *api.V1OrganizationsProfileContactsPutReq) (api.V1OrganizationsProfileContactsPutRes, error) {
+func (h *Handler) V1OrganizationsOrganizationIDProfileContactsPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileContactsPutReq, params api.V1OrganizationsOrganizationIDProfileContactsPutParams) (api.V1OrganizationsOrganizationIDProfileContactsPutRes, error) {
 	return nil, cerr.Wrap(fmt.Errorf("not impl"), cerr.CodeInternal, "func not impl", nil)
 }
 
-func (h *Handler) V1OrganizationsProfileContractorPut(ctx context.Context, req *api.V1OrganizationsProfileContractorPutReq) (api.V1OrganizationsProfileContractorPutRes, error) {
+func (h *Handler) V1OrganizationsOrganizationIDProfileContractorPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileContractorPutReq, params api.V1OrganizationsOrganizationIDProfileContractorPutParams) (api.V1OrganizationsOrganizationIDProfileContractorPutRes, error) {
 	return nil, cerr.Wrap(fmt.Errorf("not impl"), cerr.CodeInternal, "func not impl", nil)
 }
 
-func (h *Handler) V1OrganizationsProfileCustomerPut(ctx context.Context, req *api.V1OrganizationsProfileCustomerPutReq) (api.V1OrganizationsProfileCustomerPutRes, error) {
+func (h *Handler) V1OrganizationsOrganizationIDProfileCustomerPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileCustomerPutReq, params api.V1OrganizationsOrganizationIDProfileCustomerPutParams) (api.V1OrganizationsOrganizationIDProfileCustomerPutRes, error) {
 	return nil, cerr.Wrap(fmt.Errorf("not impl"), cerr.CodeInternal, "func not impl", nil)
 }
 
@@ -50,7 +50,7 @@ func (h *Handler) V1OrganizationsPortfolioPortfolioIDPut(ctx context.Context, re
 	return nil, cerr.Wrap(fmt.Errorf("not impl"), cerr.CodeInternal, "func not impl", nil)
 }
 
-func (h *Handler) V1OrganizationsPortfolioPost(ctx context.Context, req *api.V1OrganizationsPortfolioPostReq) (api.V1OrganizationsPortfolioPostRes, error) {
+func (h *Handler) V1OrganizationsOrganizationIDPortfolioPost(ctx context.Context, req *api.V1OrganizationsOrganizationIDPortfolioPostReq, params api.V1OrganizationsOrganizationIDPortfolioPostParams) (api.V1OrganizationsOrganizationIDPortfolioPostRes, error) {
 	return nil, cerr.Wrap(fmt.Errorf("not impl"), cerr.CodeInternal, "func not impl", nil)
 }
 

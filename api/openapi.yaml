@@ -56,20 +56,18 @@ paths:
     $ref: "v1/paths/organizations/_id/_index.yaml"
   /v1/organizations/contractors:
     $ref: "v1/paths/organizations/contractors.yaml"
-  /v1/organizations/profile/brand:
+  /v1/organizations/{organizationID}/profile/brand:
     $ref: "v1/paths/organizations/profile/brand.yaml"
-  /v1/organizations/profile/contacts:
+  /v1/organizations/{organizationID}/profile/contacts:
     $ref: "v1/paths/organizations/profile/contacts.yaml"
-  /v1/organizations/profile/customer:
+  /v1/organizations/{organizationID}/profile/customer:
     $ref: "v1/paths/organizations/profile/customer.yaml"
-  /v1/organizations/profile/contractor:
+  /v1/organizations/{organizationID}/profile/contractor:
     $ref: "v1/paths/organizations/profile/contractor.yaml"
-  /v1/organizations/portfolio:
-    $ref: "v1/paths/organizations/portfolio/_index.yaml"
   /v1/organizations/portfolio/{portfolioID}:
     $ref: "v1/paths/organizations/portfolio/_id.yaml"
   /v1/organizations/{organizationID}/portfolio:
-    $ref: "v1/paths/organizations/portfolios.yaml"
+    $ref: "v1/paths/organizations/portfolio/_index.yaml"
   
   /v1/organizations/verifications:
     $ref: "v1/paths/organizations/verifications.yaml"

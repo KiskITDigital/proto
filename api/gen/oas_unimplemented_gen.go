@@ -180,6 +180,53 @@ func (UnimplementedHandler) V1OrganizationsOrganizationIDPortfolioGet(ctx contex
 	return r, ht.ErrNotImplemented
 }
 
+// V1OrganizationsOrganizationIDPortfolioPost implements POST /v1/organizations/{organizationID}/portfolio operation.
+//
+// Добавляет портфолио в профиль исполнителя.
+//
+// POST /v1/organizations/{organizationID}/portfolio
+func (UnimplementedHandler) V1OrganizationsOrganizationIDPortfolioPost(ctx context.Context, req *V1OrganizationsOrganizationIDPortfolioPostReq, params V1OrganizationsOrganizationIDPortfolioPostParams) (r V1OrganizationsOrganizationIDPortfolioPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1OrganizationsOrganizationIDProfileBrandPut implements PUT /v1/organizations/{organizationID}/profile/brand operation.
+//
+// Обновляет название бренда или URL изображения для
+// организации.
+//
+// PUT /v1/organizations/{organizationID}/profile/brand
+func (UnimplementedHandler) V1OrganizationsOrganizationIDProfileBrandPut(ctx context.Context, req *V1OrganizationsOrganizationIDProfileBrandPutReq, params V1OrganizationsOrganizationIDProfileBrandPutParams) (r V1OrganizationsOrganizationIDProfileBrandPutRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1OrganizationsOrganizationIDProfileContactsPut implements PUT /v1/organizations/{organizationID}/profile/contacts operation.
+//
+// Обновляет контактные данные для организации.
+//
+// PUT /v1/organizations/{organizationID}/profile/contacts
+func (UnimplementedHandler) V1OrganizationsOrganizationIDProfileContactsPut(ctx context.Context, req *V1OrganizationsOrganizationIDProfileContactsPutReq, params V1OrganizationsOrganizationIDProfileContactsPutParams) (r V1OrganizationsOrganizationIDProfileContactsPutRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1OrganizationsOrganizationIDProfileContractorPut implements PUT /v1/organizations/{organizationID}/profile/contractor operation.
+//
+// Обновляет профиль исполнителя.
+//
+// PUT /v1/organizations/{organizationID}/profile/contractor
+func (UnimplementedHandler) V1OrganizationsOrganizationIDProfileContractorPut(ctx context.Context, req *V1OrganizationsOrganizationIDProfileContractorPutReq, params V1OrganizationsOrganizationIDProfileContractorPutParams) (r V1OrganizationsOrganizationIDProfileContractorPutRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1OrganizationsOrganizationIDProfileCustomerPut implements PUT /v1/organizations/{organizationID}/profile/customer operation.
+//
+// Обновляет описание компании или список локаций в
+// профиле заказчика.
+//
+// PUT /v1/organizations/{organizationID}/profile/customer
+func (UnimplementedHandler) V1OrganizationsOrganizationIDProfileCustomerPut(ctx context.Context, req *V1OrganizationsOrganizationIDProfileCustomerPutReq, params V1OrganizationsOrganizationIDProfileCustomerPutParams) (r V1OrganizationsOrganizationIDProfileCustomerPutRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1OrganizationsOrganizationIDTendersGet implements GET /v1/organizations/{organizationID}/tenders operation.
 //
 // If user is in organization it also returns all drafts.
@@ -223,53 +270,6 @@ func (UnimplementedHandler) V1OrganizationsPortfolioPortfolioIDDelete(ctx contex
 //
 // PUT /v1/organizations/portfolio/{portfolioID}
 func (UnimplementedHandler) V1OrganizationsPortfolioPortfolioIDPut(ctx context.Context, req *V1OrganizationsPortfolioPortfolioIDPutReq, params V1OrganizationsPortfolioPortfolioIDPutParams) (r V1OrganizationsPortfolioPortfolioIDPutRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsPortfolioPost implements POST /v1/organizations/portfolio operation.
-//
-// Добавляет портфолио в профиль исполнителя.
-//
-// POST /v1/organizations/portfolio
-func (UnimplementedHandler) V1OrganizationsPortfolioPost(ctx context.Context, req *V1OrganizationsPortfolioPostReq) (r V1OrganizationsPortfolioPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsProfileBrandPut implements PUT /v1/organizations/profile/brand operation.
-//
-// Обновляет название бренда или URL изображения для
-// организации.
-//
-// PUT /v1/organizations/profile/brand
-func (UnimplementedHandler) V1OrganizationsProfileBrandPut(ctx context.Context, req *V1OrganizationsProfileBrandPutReq) (r V1OrganizationsProfileBrandPutRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsProfileContactsPut implements PUT /v1/organizations/profile/contacts operation.
-//
-// Обновляет контактные данные для организации.
-//
-// PUT /v1/organizations/profile/contacts
-func (UnimplementedHandler) V1OrganizationsProfileContactsPut(ctx context.Context, req *V1OrganizationsProfileContactsPutReq) (r V1OrganizationsProfileContactsPutRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsProfileContractorPut implements PUT /v1/organizations/profile/contractor operation.
-//
-// Обновляет профиль исполнителя.
-//
-// PUT /v1/organizations/profile/contractor
-func (UnimplementedHandler) V1OrganizationsProfileContractorPut(ctx context.Context, req *V1OrganizationsProfileContractorPutReq) (r V1OrganizationsProfileContractorPutRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsProfileCustomerPut implements PUT /v1/organizations/profile/customer operation.
-//
-// Обновляет описание компании или список локаций в
-// профиле заказчика.
-//
-// PUT /v1/organizations/profile/customer
-func (UnimplementedHandler) V1OrganizationsProfileCustomerPut(ctx context.Context, req *V1OrganizationsProfileCustomerPutReq) (r V1OrganizationsProfileCustomerPutRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -441,15 +441,6 @@ func (UnimplementedHandler) V1UsersGet(ctx context.Context, params V1UsersGetPar
 	return r, ht.ErrNotImplemented
 }
 
-// V1UsersPut implements PUT /v1/users operation.
-//
-// Обновляет информацию профиля пользователя.
-//
-// PUT /v1/users
-func (UnimplementedHandler) V1UsersPut(ctx context.Context, req *V1UsersPutReq) (r V1UsersPutRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // V1UsersRequestEmailVerificationPost implements POST /v1/users/request/email-verification operation.
 //
 // Requesting send verify code.
@@ -476,6 +467,15 @@ func (UnimplementedHandler) V1UsersRequestResetPasswordPost(ctx context.Context,
 //
 // GET /v1/users/{userID}
 func (UnimplementedHandler) V1UsersUserIDGet(ctx context.Context, params V1UsersUserIDGetParams) (r V1UsersUserIDGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1UsersUserIDPut implements PUT /v1/users/{userID} operation.
+//
+// Обновляет информацию профиля пользователя.
+//
+// PUT /v1/users/{userID}
+func (UnimplementedHandler) V1UsersUserIDPut(ctx context.Context, req *V1UsersUserIDPutReq, params V1UsersUserIDPutParams) (r V1UsersUserIDPutRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

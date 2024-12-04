@@ -1897,6 +1897,421 @@ func decodeV1OrganizationsOrganizationIDPortfolioGetParams(args [1]string, argsE
 	return params, nil
 }
 
+// V1OrganizationsOrganizationIDPortfolioPostParams is parameters of POST /v1/organizations/{organizationID}/portfolio operation.
+type V1OrganizationsOrganizationIDPortfolioPostParams struct {
+	// ID of organization.
+	OrganizationID int
+}
+
+func unpackV1OrganizationsOrganizationIDPortfolioPostParams(packed middleware.Parameters) (params V1OrganizationsOrganizationIDPortfolioPostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "organizationID",
+			In:   "path",
+		}
+		params.OrganizationID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1OrganizationsOrganizationIDPortfolioPostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1OrganizationsOrganizationIDPortfolioPostParams, _ error) {
+	// Decode path: organizationID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "organizationID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.OrganizationID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.OrganizationID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "organizationID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1OrganizationsOrganizationIDProfileBrandPutParams is parameters of PUT /v1/organizations/{organizationID}/profile/brand operation.
+type V1OrganizationsOrganizationIDProfileBrandPutParams struct {
+	// ID of organization.
+	OrganizationID int
+}
+
+func unpackV1OrganizationsOrganizationIDProfileBrandPutParams(packed middleware.Parameters) (params V1OrganizationsOrganizationIDProfileBrandPutParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "organizationID",
+			In:   "path",
+		}
+		params.OrganizationID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1OrganizationsOrganizationIDProfileBrandPutParams(args [1]string, argsEscaped bool, r *http.Request) (params V1OrganizationsOrganizationIDProfileBrandPutParams, _ error) {
+	// Decode path: organizationID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "organizationID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.OrganizationID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.OrganizationID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "organizationID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1OrganizationsOrganizationIDProfileContactsPutParams is parameters of PUT /v1/organizations/{organizationID}/profile/contacts operation.
+type V1OrganizationsOrganizationIDProfileContactsPutParams struct {
+	// ID of organization.
+	OrganizationID int
+}
+
+func unpackV1OrganizationsOrganizationIDProfileContactsPutParams(packed middleware.Parameters) (params V1OrganizationsOrganizationIDProfileContactsPutParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "organizationID",
+			In:   "path",
+		}
+		params.OrganizationID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1OrganizationsOrganizationIDProfileContactsPutParams(args [1]string, argsEscaped bool, r *http.Request) (params V1OrganizationsOrganizationIDProfileContactsPutParams, _ error) {
+	// Decode path: organizationID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "organizationID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.OrganizationID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.OrganizationID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "organizationID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1OrganizationsOrganizationIDProfileContractorPutParams is parameters of PUT /v1/organizations/{organizationID}/profile/contractor operation.
+type V1OrganizationsOrganizationIDProfileContractorPutParams struct {
+	// ID of organization.
+	OrganizationID int
+}
+
+func unpackV1OrganizationsOrganizationIDProfileContractorPutParams(packed middleware.Parameters) (params V1OrganizationsOrganizationIDProfileContractorPutParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "organizationID",
+			In:   "path",
+		}
+		params.OrganizationID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1OrganizationsOrganizationIDProfileContractorPutParams(args [1]string, argsEscaped bool, r *http.Request) (params V1OrganizationsOrganizationIDProfileContractorPutParams, _ error) {
+	// Decode path: organizationID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "organizationID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.OrganizationID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.OrganizationID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "organizationID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1OrganizationsOrganizationIDProfileCustomerPutParams is parameters of PUT /v1/organizations/{organizationID}/profile/customer operation.
+type V1OrganizationsOrganizationIDProfileCustomerPutParams struct {
+	// ID of organization.
+	OrganizationID int
+}
+
+func unpackV1OrganizationsOrganizationIDProfileCustomerPutParams(packed middleware.Parameters) (params V1OrganizationsOrganizationIDProfileCustomerPutParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "organizationID",
+			In:   "path",
+		}
+		params.OrganizationID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1OrganizationsOrganizationIDProfileCustomerPutParams(args [1]string, argsEscaped bool, r *http.Request) (params V1OrganizationsOrganizationIDProfileCustomerPutParams, _ error) {
+	// Decode path: organizationID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "organizationID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.OrganizationID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.OrganizationID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "organizationID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // V1OrganizationsOrganizationIDTendersGetParams is parameters of GET /v1/organizations/{organizationID}/tenders operation.
 type V1OrganizationsOrganizationIDTendersGetParams struct {
 	// ID of organization.
@@ -4638,6 +5053,89 @@ func unpackV1UsersUserIDGetParams(packed middleware.Parameters) (params V1UsersU
 }
 
 func decodeV1UsersUserIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1UsersUserIDGetParams, _ error) {
+	// Decode path: userID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "userID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.UserID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.UserID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "userID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1UsersUserIDPutParams is parameters of PUT /v1/users/{userID} operation.
+type V1UsersUserIDPutParams struct {
+	// ID of user.
+	UserID int
+}
+
+func unpackV1UsersUserIDPutParams(packed middleware.Parameters) (params V1UsersUserIDPutParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "userID",
+			In:   "path",
+		}
+		params.UserID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1UsersUserIDPutParams(args [1]string, argsEscaped bool, r *http.Request) (params V1UsersUserIDPutParams, _ error) {
 	// Decode path: userID.
 	if err := func() error {
 		param := args[0]

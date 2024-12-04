@@ -109,6 +109,76 @@ func encodeV1EmployeePostRequest(
 	return nil
 }
 
+func encodeV1OrganizationsOrganizationIDPortfolioPostRequest(
+	req *V1OrganizationsOrganizationIDPortfolioPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeV1OrganizationsOrganizationIDProfileBrandPutRequest(
+	req *V1OrganizationsOrganizationIDProfileBrandPutReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeV1OrganizationsOrganizationIDProfileContactsPutRequest(
+	req *V1OrganizationsOrganizationIDProfileContactsPutReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeV1OrganizationsOrganizationIDProfileContractorPutRequest(
+	req *V1OrganizationsOrganizationIDProfileContractorPutReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeV1OrganizationsOrganizationIDProfileCustomerPutRequest(
+	req *V1OrganizationsOrganizationIDProfileCustomerPutReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeV1OrganizationsOrganizationIDVerificationsPostRequest(
 	req *V1OrganizationsOrganizationIDVerificationsPostReq,
 	r *http.Request,
@@ -125,76 +195,6 @@ func encodeV1OrganizationsOrganizationIDVerificationsPostRequest(
 
 func encodeV1OrganizationsPortfolioPortfolioIDPutRequest(
 	req *V1OrganizationsPortfolioPortfolioIDPutReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeV1OrganizationsPortfolioPostRequest(
-	req *V1OrganizationsPortfolioPostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeV1OrganizationsProfileBrandPutRequest(
-	req *V1OrganizationsProfileBrandPutReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeV1OrganizationsProfileContactsPutRequest(
-	req *V1OrganizationsProfileContactsPutReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeV1OrganizationsProfileContractorPutRequest(
-	req *V1OrganizationsProfileContractorPutReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeV1OrganizationsProfileCustomerPutRequest(
-	req *V1OrganizationsProfileCustomerPutReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -319,20 +319,6 @@ func encodeV1UsersConfirmPasswordPostRequest(
 	return nil
 }
 
-func encodeV1UsersPutRequest(
-	req *V1UsersPutReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
 func encodeV1UsersRequestEmailVerificationPostRequest(
 	req *V1UsersRequestEmailVerificationPostReq,
 	r *http.Request,
@@ -349,6 +335,20 @@ func encodeV1UsersRequestEmailVerificationPostRequest(
 
 func encodeV1UsersRequestResetPasswordPostRequest(
 	req *V1UsersRequestResetPasswordPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeV1UsersUserIDPutRequest(
+	req *V1UsersUserIDPutReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
