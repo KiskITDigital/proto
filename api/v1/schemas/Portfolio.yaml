@@ -1,0 +1,26 @@
+type: object
+required:
+  - id
+  - name
+  - description
+  - attachments
+  - created_at
+properties:
+  id:
+    type: integer
+    example: 123
+  name:
+    $ref: "../properties/name.yaml"
+  description:
+    $ref: "../properties/description.yaml"
+  attachments:
+    type: array
+    items:
+      $ref: "../properties/url.yaml"
+    maxItems: 8
+  created_at:
+    type: string
+    format: date-time
+  updated_at:
+    type: string
+    format: date-time

@@ -1,0 +1,32 @@
+put:
+  tags:
+    - organizations
+  summary: Update organization contacts
+  description: |-
+    Обновляет контактные данные для организации.
+  security:
+  - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            emails:
+              type: array
+              items:
+                $ref: "../../../schemas/ContactInfo.yaml"
+            phones:
+              type: array
+              items:
+                $ref: "../../../schemas/ContactInfo.yaml"
+            messengers:
+              type: array
+              items:
+                $ref: "../../../schemas/ContactInfo.yaml"  
+  responses:
+    '200':
+      description: Success
+    default:
+      $ref: "../../../responses/Error.yaml"

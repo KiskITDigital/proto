@@ -169,17 +169,51 @@ func (s *ContactInfo) SetInfo(val string) {
 
 // Ref: #
 type ContractorInfo struct {
-	Todo string `json:"todo"`
+	Description Description `json:"description"`
+	// Локации заказчика.
+	Cities   []City   `json:"cities"`
+	Services Services `json:"services"`
+	Objects  Objects  `json:"objects"`
 }
 
-// GetTodo returns the value of Todo.
-func (s *ContractorInfo) GetTodo() string {
-	return s.Todo
+// GetDescription returns the value of Description.
+func (s *ContractorInfo) GetDescription() Description {
+	return s.Description
 }
 
-// SetTodo sets the value of Todo.
-func (s *ContractorInfo) SetTodo(val string) {
-	s.Todo = val
+// GetCities returns the value of Cities.
+func (s *ContractorInfo) GetCities() []City {
+	return s.Cities
+}
+
+// GetServices returns the value of Services.
+func (s *ContractorInfo) GetServices() Services {
+	return s.Services
+}
+
+// GetObjects returns the value of Objects.
+func (s *ContractorInfo) GetObjects() Objects {
+	return s.Objects
+}
+
+// SetDescription sets the value of Description.
+func (s *ContractorInfo) SetDescription(val Description) {
+	s.Description = val
+}
+
+// SetCities sets the value of Cities.
+func (s *ContractorInfo) SetCities(val []City) {
+	s.Cities = val
+}
+
+// SetServices sets the value of Services.
+func (s *ContractorInfo) SetServices(val Services) {
+	s.Services = val
+}
+
+// SetObjects sets the value of Objects.
+func (s *ContractorInfo) SetObjects(val Objects) {
+	s.Objects = val
 }
 
 type CookieAuth struct {
@@ -198,18 +232,32 @@ func (s *CookieAuth) SetAPIKey(val string) {
 
 // Ref: #
 type CustomerInfo struct {
-	Todo string `json:"todo"`
+	Description Description `json:"description"`
+	// Локации заказчика.
+	Cities []City `json:"cities"`
 }
 
-// GetTodo returns the value of Todo.
-func (s *CustomerInfo) GetTodo() string {
-	return s.Todo
+// GetDescription returns the value of Description.
+func (s *CustomerInfo) GetDescription() Description {
+	return s.Description
 }
 
-// SetTodo sets the value of Todo.
-func (s *CustomerInfo) SetTodo(val string) {
-	s.Todo = val
+// GetCities returns the value of Cities.
+func (s *CustomerInfo) GetCities() []City {
+	return s.Cities
 }
+
+// SetDescription sets the value of Description.
+func (s *CustomerInfo) SetDescription(val Description) {
+	s.Description = val
+}
+
+// SetCities sets the value of Cities.
+func (s *CustomerInfo) SetCities(val []City) {
+	s.Cities = val
+}
+
+type Description string
 
 type Email string
 
@@ -453,9 +501,17 @@ func (*ErrorStatusCode) v1EmployeePostRes()                                 {}
 func (*ErrorStatusCode) v1OrganizationsContractorsGetRes()                  {}
 func (*ErrorStatusCode) v1OrganizationsGetRes()                             {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDGetRes()               {}
+func (*ErrorStatusCode) v1OrganizationsOrganizationIDPortfolioGetRes()      {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDTendersGetRes()        {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDVerificationsGetRes()  {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDVerificationsPostRes() {}
+func (*ErrorStatusCode) v1OrganizationsPortfolioPortfolioIDDeleteRes()      {}
+func (*ErrorStatusCode) v1OrganizationsPortfolioPortfolioIDPutRes()         {}
+func (*ErrorStatusCode) v1OrganizationsPortfolioPostRes()                   {}
+func (*ErrorStatusCode) v1OrganizationsProfileBrandPutRes()                 {}
+func (*ErrorStatusCode) v1OrganizationsProfileContactsPutRes()              {}
+func (*ErrorStatusCode) v1OrganizationsProfileContractorPutRes()            {}
+func (*ErrorStatusCode) v1OrganizationsProfileCustomerPutRes()              {}
 func (*ErrorStatusCode) v1OrganizationsVerificationsGetRes()                {}
 func (*ErrorStatusCode) v1QuestionnaireGetRes()                             {}
 func (*ErrorStatusCode) v1QuestionnairePostRes()                            {}
@@ -473,6 +529,7 @@ func (*ErrorStatusCode) v1TendersVerificationsGetRes()                      {}
 func (*ErrorStatusCode) v1UsersConfirmEmailPostRes()                        {}
 func (*ErrorStatusCode) v1UsersConfirmPasswordPostRes()                     {}
 func (*ErrorStatusCode) v1UsersGetRes()                                     {}
+func (*ErrorStatusCode) v1UsersPutRes()                                     {}
 func (*ErrorStatusCode) v1UsersRequestEmailVerificationPostRes()            {}
 func (*ErrorStatusCode) v1UsersRequestResetPasswordPostRes()                {}
 func (*ErrorStatusCode) v1UsersUserIDGetRes()                               {}
@@ -769,6 +826,52 @@ func (o OptDateTime) Or(d time.Time) time.Time {
 	return d
 }
 
+// NewOptDescription returns new OptDescription with value set to v.
+func NewOptDescription(v Description) OptDescription {
+	return OptDescription{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDescription is optional Description.
+type OptDescription struct {
+	Value Description
+	Set   bool
+}
+
+// IsSet returns true if OptDescription was set.
+func (o OptDescription) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDescription) Reset() {
+	var v Description
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDescription) SetTo(v Description) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDescription) Get() (v Description, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDescription) Or(d Description) Description {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptEmployeeUser returns new OptEmployeeUser with value set to v.
 func NewOptEmployeeUser(v EmployeeUser) OptEmployeeUser {
 	return OptEmployeeUser{
@@ -993,6 +1096,52 @@ func (o OptOrganization) Get() (v Organization, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptOrganization) Or(d Organization) Organization {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptPhone returns new OptPhone with value set to v.
+func NewOptPhone(v Phone) OptPhone {
+	return OptPhone{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptPhone is optional Phone.
+type OptPhone struct {
+	Value Phone
+	Set   bool
+}
+
+// IsSet returns true if OptPhone was set.
+func (o OptPhone) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptPhone) Reset() {
+	var v Phone
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptPhone) SetTo(v Phone) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptPhone) Get() (v Phone, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptPhone) Or(d Phone) Phone {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -2157,6 +2306,76 @@ func (s *Organization) SetUpdatedAt(val time.Time) {
 type Password string
 
 type Phone string
+
+// Ref: #
+type Portfolio struct {
+	ID          int         `json:"id"`
+	Name        Name        `json:"name"`
+	Description Description `json:"description"`
+	Attachments []URL       `json:"attachments"`
+	CreatedAt   time.Time   `json:"created_at"`
+	UpdatedAt   OptDateTime `json:"updated_at"`
+}
+
+// GetID returns the value of ID.
+func (s *Portfolio) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *Portfolio) GetName() Name {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *Portfolio) GetDescription() Description {
+	return s.Description
+}
+
+// GetAttachments returns the value of Attachments.
+func (s *Portfolio) GetAttachments() []URL {
+	return s.Attachments
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Portfolio) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// GetUpdatedAt returns the value of UpdatedAt.
+func (s *Portfolio) GetUpdatedAt() OptDateTime {
+	return s.UpdatedAt
+}
+
+// SetID sets the value of ID.
+func (s *Portfolio) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *Portfolio) SetName(val Name) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *Portfolio) SetDescription(val Description) {
+	s.Description = val
+}
+
+// SetAttachments sets the value of Attachments.
+func (s *Portfolio) SetAttachments(val []URL) {
+	s.Attachments = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Portfolio) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// SetUpdatedAt sets the value of UpdatedAt.
+func (s *Portfolio) SetUpdatedAt(val OptDateTime) {
+	s.UpdatedAt = val
+}
 
 // Ref: #
 type Questionnaire struct {
@@ -4074,6 +4293,22 @@ func (s *V1OrganizationsOrganizationIDGetOK) SetData(val Organization) {
 
 func (*V1OrganizationsOrganizationIDGetOK) v1OrganizationsOrganizationIDGetRes() {}
 
+type V1OrganizationsOrganizationIDPortfolioGetOK struct {
+	Data []Portfolio `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1OrganizationsOrganizationIDPortfolioGetOK) GetData() []Portfolio {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1OrganizationsOrganizationIDPortfolioGetOK) SetData(val []Portfolio) {
+	s.Data = val
+}
+
+func (*V1OrganizationsOrganizationIDPortfolioGetOK) v1OrganizationsOrganizationIDPortfolioGetRes() {}
+
 type V1OrganizationsOrganizationIDTendersGetOK struct {
 	Data []Tender `json:"data"`
 }
@@ -4158,6 +4393,293 @@ func (s *V1OrganizationsOrganizationIDVerificationsPostReq) SetAuthorityProof(va
 // SetCompanyConstitution sets the value of CompanyConstitution.
 func (s *V1OrganizationsOrganizationIDVerificationsPostReq) SetCompanyConstitution(val string) {
 	s.CompanyConstitution = val
+}
+
+// V1OrganizationsPortfolioPortfolioIDDeleteOK is response for V1OrganizationsPortfolioPortfolioIDDelete operation.
+type V1OrganizationsPortfolioPortfolioIDDeleteOK struct{}
+
+func (*V1OrganizationsPortfolioPortfolioIDDeleteOK) v1OrganizationsPortfolioPortfolioIDDeleteRes() {}
+
+type V1OrganizationsPortfolioPortfolioIDPutOK struct {
+	Data Portfolio `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1OrganizationsPortfolioPortfolioIDPutOK) GetData() Portfolio {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1OrganizationsPortfolioPortfolioIDPutOK) SetData(val Portfolio) {
+	s.Data = val
+}
+
+func (*V1OrganizationsPortfolioPortfolioIDPutOK) v1OrganizationsPortfolioPortfolioIDPutRes() {}
+
+type V1OrganizationsPortfolioPortfolioIDPutReq struct {
+	Name        Name        `json:"name"`
+	Description Description `json:"description"`
+	Attachments []URL       `json:"attachments"`
+}
+
+// GetName returns the value of Name.
+func (s *V1OrganizationsPortfolioPortfolioIDPutReq) GetName() Name {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *V1OrganizationsPortfolioPortfolioIDPutReq) GetDescription() Description {
+	return s.Description
+}
+
+// GetAttachments returns the value of Attachments.
+func (s *V1OrganizationsPortfolioPortfolioIDPutReq) GetAttachments() []URL {
+	return s.Attachments
+}
+
+// SetName sets the value of Name.
+func (s *V1OrganizationsPortfolioPortfolioIDPutReq) SetName(val Name) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *V1OrganizationsPortfolioPortfolioIDPutReq) SetDescription(val Description) {
+	s.Description = val
+}
+
+// SetAttachments sets the value of Attachments.
+func (s *V1OrganizationsPortfolioPortfolioIDPutReq) SetAttachments(val []URL) {
+	s.Attachments = val
+}
+
+type V1OrganizationsPortfolioPostOK struct {
+	Data Portfolio `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1OrganizationsPortfolioPostOK) GetData() Portfolio {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1OrganizationsPortfolioPostOK) SetData(val Portfolio) {
+	s.Data = val
+}
+
+func (*V1OrganizationsPortfolioPostOK) v1OrganizationsPortfolioPostRes() {}
+
+type V1OrganizationsPortfolioPostReq struct {
+	Name        Name        `json:"name"`
+	Description Description `json:"description"`
+	Attachments []URL       `json:"attachments"`
+}
+
+// GetName returns the value of Name.
+func (s *V1OrganizationsPortfolioPostReq) GetName() Name {
+	return s.Name
+}
+
+// GetDescription returns the value of Description.
+func (s *V1OrganizationsPortfolioPostReq) GetDescription() Description {
+	return s.Description
+}
+
+// GetAttachments returns the value of Attachments.
+func (s *V1OrganizationsPortfolioPostReq) GetAttachments() []URL {
+	return s.Attachments
+}
+
+// SetName sets the value of Name.
+func (s *V1OrganizationsPortfolioPostReq) SetName(val Name) {
+	s.Name = val
+}
+
+// SetDescription sets the value of Description.
+func (s *V1OrganizationsPortfolioPostReq) SetDescription(val Description) {
+	s.Description = val
+}
+
+// SetAttachments sets the value of Attachments.
+func (s *V1OrganizationsPortfolioPostReq) SetAttachments(val []URL) {
+	s.Attachments = val
+}
+
+// V1OrganizationsProfileBrandPutOK is response for V1OrganizationsProfileBrandPut operation.
+type V1OrganizationsProfileBrandPutOK struct{}
+
+func (*V1OrganizationsProfileBrandPutOK) v1OrganizationsProfileBrandPutRes() {}
+
+type V1OrganizationsProfileBrandPutReq struct {
+	// Название бренда.
+	Brand     OptString `json:"brand"`
+	AvatarURL OptURL    `json:"avatar_url"`
+}
+
+// GetBrand returns the value of Brand.
+func (s *V1OrganizationsProfileBrandPutReq) GetBrand() OptString {
+	return s.Brand
+}
+
+// GetAvatarURL returns the value of AvatarURL.
+func (s *V1OrganizationsProfileBrandPutReq) GetAvatarURL() OptURL {
+	return s.AvatarURL
+}
+
+// SetBrand sets the value of Brand.
+func (s *V1OrganizationsProfileBrandPutReq) SetBrand(val OptString) {
+	s.Brand = val
+}
+
+// SetAvatarURL sets the value of AvatarURL.
+func (s *V1OrganizationsProfileBrandPutReq) SetAvatarURL(val OptURL) {
+	s.AvatarURL = val
+}
+
+// V1OrganizationsProfileContactsPutOK is response for V1OrganizationsProfileContactsPut operation.
+type V1OrganizationsProfileContactsPutOK struct{}
+
+func (*V1OrganizationsProfileContactsPutOK) v1OrganizationsProfileContactsPutRes() {}
+
+type V1OrganizationsProfileContactsPutReq struct {
+	Emails     []ContactInfo `json:"emails"`
+	Phones     []ContactInfo `json:"phones"`
+	Messengers []ContactInfo `json:"messengers"`
+}
+
+// GetEmails returns the value of Emails.
+func (s *V1OrganizationsProfileContactsPutReq) GetEmails() []ContactInfo {
+	return s.Emails
+}
+
+// GetPhones returns the value of Phones.
+func (s *V1OrganizationsProfileContactsPutReq) GetPhones() []ContactInfo {
+	return s.Phones
+}
+
+// GetMessengers returns the value of Messengers.
+func (s *V1OrganizationsProfileContactsPutReq) GetMessengers() []ContactInfo {
+	return s.Messengers
+}
+
+// SetEmails sets the value of Emails.
+func (s *V1OrganizationsProfileContactsPutReq) SetEmails(val []ContactInfo) {
+	s.Emails = val
+}
+
+// SetPhones sets the value of Phones.
+func (s *V1OrganizationsProfileContactsPutReq) SetPhones(val []ContactInfo) {
+	s.Phones = val
+}
+
+// SetMessengers sets the value of Messengers.
+func (s *V1OrganizationsProfileContactsPutReq) SetMessengers(val []ContactInfo) {
+	s.Messengers = val
+}
+
+type V1OrganizationsProfileContractorPutOK struct {
+	Data Organization `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1OrganizationsProfileContractorPutOK) GetData() Organization {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1OrganizationsProfileContractorPutOK) SetData(val Organization) {
+	s.Data = val
+}
+
+func (*V1OrganizationsProfileContractorPutOK) v1OrganizationsProfileContractorPutRes() {}
+
+type V1OrganizationsProfileContractorPutReq struct {
+	Description OptDescription `json:"description"`
+	// Локации заказчика.
+	Cities   []int `json:"cities"`
+	Services []int `json:"services"`
+	Objects  []int `json:"objects"`
+}
+
+// GetDescription returns the value of Description.
+func (s *V1OrganizationsProfileContractorPutReq) GetDescription() OptDescription {
+	return s.Description
+}
+
+// GetCities returns the value of Cities.
+func (s *V1OrganizationsProfileContractorPutReq) GetCities() []int {
+	return s.Cities
+}
+
+// GetServices returns the value of Services.
+func (s *V1OrganizationsProfileContractorPutReq) GetServices() []int {
+	return s.Services
+}
+
+// GetObjects returns the value of Objects.
+func (s *V1OrganizationsProfileContractorPutReq) GetObjects() []int {
+	return s.Objects
+}
+
+// SetDescription sets the value of Description.
+func (s *V1OrganizationsProfileContractorPutReq) SetDescription(val OptDescription) {
+	s.Description = val
+}
+
+// SetCities sets the value of Cities.
+func (s *V1OrganizationsProfileContractorPutReq) SetCities(val []int) {
+	s.Cities = val
+}
+
+// SetServices sets the value of Services.
+func (s *V1OrganizationsProfileContractorPutReq) SetServices(val []int) {
+	s.Services = val
+}
+
+// SetObjects sets the value of Objects.
+func (s *V1OrganizationsProfileContractorPutReq) SetObjects(val []int) {
+	s.Objects = val
+}
+
+type V1OrganizationsProfileCustomerPutOK struct {
+	Data Organization `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1OrganizationsProfileCustomerPutOK) GetData() Organization {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1OrganizationsProfileCustomerPutOK) SetData(val Organization) {
+	s.Data = val
+}
+
+func (*V1OrganizationsProfileCustomerPutOK) v1OrganizationsProfileCustomerPutRes() {}
+
+type V1OrganizationsProfileCustomerPutReq struct {
+	Description OptDescription `json:"description"`
+	// Локаций заказчика.
+	Cities []int `json:"cities"`
+}
+
+// GetDescription returns the value of Description.
+func (s *V1OrganizationsProfileCustomerPutReq) GetDescription() OptDescription {
+	return s.Description
+}
+
+// GetCities returns the value of Cities.
+func (s *V1OrganizationsProfileCustomerPutReq) GetCities() []int {
+	return s.Cities
+}
+
+// SetDescription sets the value of Description.
+func (s *V1OrganizationsProfileCustomerPutReq) SetDescription(val OptDescription) {
+	s.Description = val
+}
+
+// SetCities sets the value of Cities.
+func (s *V1OrganizationsProfileCustomerPutReq) SetCities(val []int) {
+	s.Cities = val
 }
 
 type V1OrganizationsVerificationsGetDirection string
@@ -5323,6 +5845,69 @@ func (s *V1UsersGetSort) UnmarshalText(data []byte) error {
 	default:
 		return errors.Errorf("invalid value: %q", data)
 	}
+}
+
+// V1UsersPutOK is response for V1UsersPut operation.
+type V1UsersPutOK struct{}
+
+func (*V1UsersPutOK) v1UsersPutRes() {}
+
+type V1UsersPutReq struct {
+	FirstName  OptName  `json:"first_name"`
+	LastName   OptName  `json:"last_name"`
+	MiddleName OptName  `json:"middle_name"`
+	Phone      OptPhone `json:"phone"`
+	AvatarURL  OptURL   `json:"avatar_url"`
+}
+
+// GetFirstName returns the value of FirstName.
+func (s *V1UsersPutReq) GetFirstName() OptName {
+	return s.FirstName
+}
+
+// GetLastName returns the value of LastName.
+func (s *V1UsersPutReq) GetLastName() OptName {
+	return s.LastName
+}
+
+// GetMiddleName returns the value of MiddleName.
+func (s *V1UsersPutReq) GetMiddleName() OptName {
+	return s.MiddleName
+}
+
+// GetPhone returns the value of Phone.
+func (s *V1UsersPutReq) GetPhone() OptPhone {
+	return s.Phone
+}
+
+// GetAvatarURL returns the value of AvatarURL.
+func (s *V1UsersPutReq) GetAvatarURL() OptURL {
+	return s.AvatarURL
+}
+
+// SetFirstName sets the value of FirstName.
+func (s *V1UsersPutReq) SetFirstName(val OptName) {
+	s.FirstName = val
+}
+
+// SetLastName sets the value of LastName.
+func (s *V1UsersPutReq) SetLastName(val OptName) {
+	s.LastName = val
+}
+
+// SetMiddleName sets the value of MiddleName.
+func (s *V1UsersPutReq) SetMiddleName(val OptName) {
+	s.MiddleName = val
+}
+
+// SetPhone sets the value of Phone.
+func (s *V1UsersPutReq) SetPhone(val OptPhone) {
+	s.Phone = val
+}
+
+// SetAvatarURL sets the value of AvatarURL.
+func (s *V1UsersPutReq) SetAvatarURL(val OptURL) {
+	s.AvatarURL = val
 }
 
 // V1UsersRequestEmailVerificationPostOK is response for V1UsersRequestEmailVerificationPost operation.

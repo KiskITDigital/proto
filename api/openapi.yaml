@@ -50,18 +50,33 @@ paths:
   /v1/employee:
     $ref: "v1/paths/employee/_index.yaml"
 
-  /v1/organizations/{organizationID}/tenders:
-    $ref: "v1/paths/organizations/_id/tenders.yaml"
   /v1/organizations:
     $ref: "v1/paths/organizations/_index.yaml"
-  /v1/organizations/contractors:
-    $ref: "v1/paths/organizations/contractors.yaml"
   /v1/organizations/{organizationID}: 
     $ref: "v1/paths/organizations/_id/_index.yaml"
+  /v1/organizations/contractors:
+    $ref: "v1/paths/organizations/contractors.yaml"
+  /v1/organizations/profile/brand:
+    $ref: "v1/paths/organizations/profile/brand.yaml"
+  /v1/organizations/profile/contacts:
+    $ref: "v1/paths/organizations/profile/contacts.yaml"
+  /v1/organizations/profile/customer:
+    $ref: "v1/paths/organizations/profile/customer.yaml"
+  /v1/organizations/profile/contractor:
+    $ref: "v1/paths/organizations/profile/contractor.yaml"
+  /v1/organizations/portfolio:
+    $ref: "v1/paths/organizations/portfolio/_index.yaml"
+  /v1/organizations/portfolio/{portfolioID}:
+    $ref: "v1/paths/organizations/portfolio/_id.yaml"
+  /v1/organizations/{organizationID}/portfolio:
+    $ref: "v1/paths/organizations/portfolios.yaml"
+  
   /v1/organizations/verifications:
     $ref: "v1/paths/organizations/verifications.yaml"
   /v1/organizations/{organizationID}/verifications:
     $ref: "v1/paths/organizations/_id/verifications.yaml"
+  /v1/organizations/{organizationID}/tenders:
+    $ref: "v1/paths/organizations/_id/tenders.yaml"
 
   /v1/verifications/{requestID}/aprove:
     $ref: "v1/paths/verifications/_id/aprove.yaml"

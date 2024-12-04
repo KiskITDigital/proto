@@ -735,6 +735,35 @@ paths:
                         - $ref: '#/components/schemas/EmployeeUser'
         default:
           $ref: '#/components/responses/Error'
+    put:
+      tags:
+        - users
+      summary: Update user profile
+      description: Обновляет информацию профиля пользователя.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  $ref: '#/components/schemas/name'
+                last_name:
+                  $ref: '#/components/schemas/name'
+                middle_name:
+                  $ref: '#/components/schemas/name'
+                phone:
+                  $ref: '#/components/schemas/phone'
+                avatar_url:
+                  $ref: '#/components/schemas/url'
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
   /v1/users/confirm/email:
     post:
       tags:
@@ -989,39 +1018,6 @@ paths:
                     $ref: '#/components/schemas/EmployeeUser'
         default:
           $ref: '#/components/responses/Error'
-  /v1/organizations/{organizationID}/tenders:
-    get:
-      tags:
-        - organizations
-      summary: Get all of organization tenders
-      description: if user is in organization it also returns all drafts
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: organizationID
-          required: true
-          in: path
-          description: ID of organization
-          schema:
-            type: integer
-            minimum: 1
-          example: 1
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - data
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Tender'
-        default:
-          $ref: '#/components/responses/Error'
   /v1/organizations:
     get:
       tags:
@@ -1097,6 +1093,37 @@ paths:
                           $ref: '#/components/schemas/Organization'
         default:
           $ref: '#/components/responses/Error'
+  /v1/organizations/{organizationID}:
+    get:
+      tags:
+        - organizations
+      summary: Get organization by id
+      description: Returns organization by id
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Organization'
+        default:
+          $ref: '#/components/responses/Error'
   /v1/organizations/contractors:
     get:
       tags:
@@ -1135,23 +1162,87 @@ paths:
                       $ref: '#/components/schemas/Organization'
         default:
           $ref: '#/components/responses/Error'
-  /v1/organizations/{organizationID}:
-    get:
+  /v1/organizations/profile/brand:
+    put:
       tags:
         - organizations
-      summary: Get organization by id
-      description: Returns organization by id
+      summary: Update organization brand info
+      description: Обновляет название бренда или URL изображения для организации.
       security:
         - bearerAuth: []
-      parameters:
-        - name: organizationID
-          required: true
-          in: path
-          description: ID of organization
-          schema:
-            type: integer
-            minimum: 1
-          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                brand:
+                  type: string
+                  description: Название бренда
+                  example: Ubrato
+                avatar_url:
+                  $ref: '#/components/schemas/url'
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/organizations/profile/contacts:
+    put:
+      tags:
+        - organizations
+      summary: Update organization contacts
+      description: Обновляет контактные данные для организации.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emails:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ContactInfo'
+                phones:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ContactInfo'
+                messengers:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ContactInfo'
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/organizations/profile/customer:
+    put:
+      tags:
+        - organizations
+      summary: Update customer organization profile
+      description: Обновляет описание компании или список локаций в профиле заказчика.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  $ref: '#/components/schemas/description'
+                cities:
+                  type: array
+                  description: Локаций заказчика
+                  items:
+                    type: integer
+                    example: 1
       responses:
         '200':
           description: Success
@@ -1164,6 +1255,205 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/Organization'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/organizations/profile/contractor:
+    put:
+      tags:
+        - organizations
+      summary: Update contractor organization profile
+      description: Обновляет профиль исполнителя.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  $ref: '#/components/schemas/description'
+                cities:
+                  type: array
+                  description: Локации заказчика
+                  items:
+                    type: integer
+                    example: 1
+                services:
+                  type: array
+                  items:
+                    type: integer
+                    example:
+                      - 1
+                      - 2
+                objects:
+                  type: array
+                  items:
+                    type: integer
+                  example:
+                    - 1
+                    - 2
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Organization'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/organizations/portfolio:
+    post:
+      tags:
+        - organizations
+      summary: Add a portfolio to the contractor's profile
+      description: Добавляет портфолио в профиль исполнителя.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - attachments
+              properties:
+                name:
+                  $ref: '#/components/schemas/name'
+                description:
+                  $ref: '#/components/schemas/description'
+                attachments:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/url'
+                  maxItems: 8
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Portfolio'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/organizations/portfolio/{portfolioID}:
+    delete:
+      tags:
+        - organizations
+      summary: Remove a portfolio from the contractor's profile
+      description: Удаляет портфолио из профиля исполнителя.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: portfolioID
+          in: path
+          required: true
+          description: Уникальный идентификатор портфолио
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Успешное удаление
+        default:
+          $ref: '#/components/responses/Error'
+    put:
+      tags:
+        - organizations
+      summary: Update a portfolio in the contractor's profile
+      description: Обновляет информацию о портфолио в профиле исполнителя.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: portfolioID
+          in: path
+          required: true
+          description: Уникальный идентификатор портфолио
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - attachments
+              properties:
+                name:
+                  $ref: '#/components/schemas/name'
+                description:
+                  $ref: '#/components/schemas/description'
+                attachments:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/url'
+                  maxItems: 8
+      responses:
+        '200':
+          description: Успешное обновление
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Portfolio'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/organizations/{organizationID}/portfolio:
+    get:
+      tags:
+        - organizations
+      summary: Get all portfolios for contractor
+      description: Получает список всех портфолио для исполнителя.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizationID
+          in: path
+          required: true
+          description: Уникальный идентификатор организации
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Список портфолио
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Portfolio'
+                    maxItems: 10
         default:
           $ref: '#/components/responses/Error'
   /v1/organizations/verifications:
@@ -1312,6 +1602,39 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/VerificationRequest'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/organizations/{organizationID}/tenders:
+    get:
+      tags:
+        - organizations
+      summary: Get all of organization tenders
+      description: if user is in organization it also returns all drafts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tender'
         default:
           $ref: '#/components/responses/Error'
   /v1/verifications/{requestID}/aprove:
@@ -1970,20 +2293,98 @@ components:
         - in_review
         - declined
         - approved
+    description:
+      type: string
+      description: Описание компании
+      example: Мы являемся мировым лидером в области устойчивых решений.
+    Region:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: Москва и Московская область
+    City:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: Москва
+        region:
+          $ref: '#/components/schemas/Region'
     CustomerInfo:
       type: object
       required:
-        - todo
+        - description
+        - cities
       properties:
-        todo:
+        description:
+          $ref: '#/components/schemas/description'
+        cities:
+          type: array
+          description: Локации заказчика
+          items:
+            $ref: '#/components/schemas/City'
+    Service:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        parent_id:
+          type: integer
+        name:
           type: string
+    Services:
+      type: array
+      items:
+        $ref: '#/components/schemas/Service'
+    Object:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        parent_id:
+          type: integer
+        name:
+          type: string
+    Objects:
+      type: array
+      items:
+        $ref: '#/components/schemas/Object'
     ContractorInfo:
       type: object
       required:
-        - todo
+        - description
+        - cities
+        - services
+        - objects
       properties:
-        todo:
-          type: string
+        description:
+          $ref: '#/components/schemas/description'
+        cities:
+          type: array
+          description: Локации заказчика
+          items:
+            $ref: '#/components/schemas/City'
+        services:
+          $ref: '#/components/schemas/Services'
+        objects:
+          $ref: '#/components/schemas/Objects'
     Organization:
       type: object
       required:
@@ -2066,62 +2467,6 @@ components:
           properties:
             organization:
               $ref: '#/components/schemas/Organization'
-    Region:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-          example: Москва и Московская область
-    City:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-          example: Москва
-        region:
-          $ref: '#/components/schemas/Region'
-    Service:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-        parent_id:
-          type: integer
-        name:
-          type: string
-    Services:
-      type: array
-      items:
-        $ref: '#/components/schemas/Service'
-    Object:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-        parent_id:
-          type: integer
-        name:
-          type: string
-    Objects:
-      type: array
-      items:
-        $ref: '#/components/schemas/Object'
     Tender:
       type: object
       required:
@@ -2346,6 +2691,33 @@ components:
           type: string
           format: date-time
           example: '2024-12-02T15:30:00Z'
+    Portfolio:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - attachments
+        - created_at
+      properties:
+        id:
+          type: integer
+          example: 123
+        name:
+          $ref: '#/components/schemas/name'
+        description:
+          $ref: '#/components/schemas/description'
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/url'
+          maxItems: 8
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
     survey:
       type: string
       enum:

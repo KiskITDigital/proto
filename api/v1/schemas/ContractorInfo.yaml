@@ -1,6 +1,18 @@
 type: object
 required:
-  - todo
+  - description
+  - cities
+  - services
+  - objects
 properties:
-  todo:
-    type: string
+  description:
+    $ref: "../properties/description.yaml"
+  cities:
+    type: array
+    description: Локации заказчика
+    items:
+      $ref: "./City.yaml"
+  services:
+    $ref: "catalog/Services.yaml"
+  objects:
+    $ref: "catalog/Objects.yaml"

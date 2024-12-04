@@ -1814,6 +1814,89 @@ func decodeV1OrganizationsOrganizationIDGetParams(args [1]string, argsEscaped bo
 	return params, nil
 }
 
+// V1OrganizationsOrganizationIDPortfolioGetParams is parameters of GET /v1/organizations/{organizationID}/portfolio operation.
+type V1OrganizationsOrganizationIDPortfolioGetParams struct {
+	// Уникальный идентификатор организации.
+	OrganizationID int
+}
+
+func unpackV1OrganizationsOrganizationIDPortfolioGetParams(packed middleware.Parameters) (params V1OrganizationsOrganizationIDPortfolioGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "organizationID",
+			In:   "path",
+		}
+		params.OrganizationID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1OrganizationsOrganizationIDPortfolioGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1OrganizationsOrganizationIDPortfolioGetParams, _ error) {
+	// Decode path: organizationID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "organizationID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.OrganizationID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.OrganizationID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "organizationID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // V1OrganizationsOrganizationIDTendersGetParams is parameters of GET /v1/organizations/{organizationID}/tenders operation.
 type V1OrganizationsOrganizationIDTendersGetParams struct {
 	// ID of organization.
@@ -2056,6 +2139,172 @@ func decodeV1OrganizationsOrganizationIDVerificationsPostParams(args [1]string, 
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
 			Name: "organizationID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1OrganizationsPortfolioPortfolioIDDeleteParams is parameters of DELETE /v1/organizations/portfolio/{portfolioID} operation.
+type V1OrganizationsPortfolioPortfolioIDDeleteParams struct {
+	// Уникальный идентификатор портфолио.
+	PortfolioID int
+}
+
+func unpackV1OrganizationsPortfolioPortfolioIDDeleteParams(packed middleware.Parameters) (params V1OrganizationsPortfolioPortfolioIDDeleteParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "portfolioID",
+			In:   "path",
+		}
+		params.PortfolioID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1OrganizationsPortfolioPortfolioIDDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params V1OrganizationsPortfolioPortfolioIDDeleteParams, _ error) {
+	// Decode path: portfolioID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "portfolioID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.PortfolioID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.PortfolioID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "portfolioID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1OrganizationsPortfolioPortfolioIDPutParams is parameters of PUT /v1/organizations/portfolio/{portfolioID} operation.
+type V1OrganizationsPortfolioPortfolioIDPutParams struct {
+	// Уникальный идентификатор портфолио.
+	PortfolioID int
+}
+
+func unpackV1OrganizationsPortfolioPortfolioIDPutParams(packed middleware.Parameters) (params V1OrganizationsPortfolioPortfolioIDPutParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "portfolioID",
+			In:   "path",
+		}
+		params.PortfolioID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1OrganizationsPortfolioPortfolioIDPutParams(args [1]string, argsEscaped bool, r *http.Request) (params V1OrganizationsPortfolioPortfolioIDPutParams, _ error) {
+	// Decode path: portfolioID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "portfolioID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.PortfolioID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.PortfolioID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "portfolioID",
 			In:   "path",
 			Err:  err,
 		}
