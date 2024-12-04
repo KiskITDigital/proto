@@ -124,6 +124,38 @@ type Handler interface {
 	//
 	// GET /v1/organizations/{organizationID}/portfolio
 	V1OrganizationsOrganizationIDPortfolioGet(ctx context.Context, params V1OrganizationsOrganizationIDPortfolioGetParams) (V1OrganizationsOrganizationIDPortfolioGetRes, error)
+	// V1OrganizationsOrganizationIDPortfolioPost implements POST /v1/organizations/{organizationID}/portfolio operation.
+	//
+	// Добавляет портфолио в профиль исполнителя.
+	//
+	// POST /v1/organizations/{organizationID}/portfolio
+	V1OrganizationsOrganizationIDPortfolioPost(ctx context.Context, req *V1OrganizationsOrganizationIDPortfolioPostReq, params V1OrganizationsOrganizationIDPortfolioPostParams) (V1OrganizationsOrganizationIDPortfolioPostRes, error)
+	// V1OrganizationsOrganizationIDProfileBrandPut implements PUT /v1/organizations/{organizationID}/profile/brand operation.
+	//
+	// Обновляет название бренда или URL изображения для
+	// организации.
+	//
+	// PUT /v1/organizations/{organizationID}/profile/brand
+	V1OrganizationsOrganizationIDProfileBrandPut(ctx context.Context, req *V1OrganizationsOrganizationIDProfileBrandPutReq, params V1OrganizationsOrganizationIDProfileBrandPutParams) (V1OrganizationsOrganizationIDProfileBrandPutRes, error)
+	// V1OrganizationsOrganizationIDProfileContactsPut implements PUT /v1/organizations/{organizationID}/profile/contacts operation.
+	//
+	// Обновляет контактные данные для организации.
+	//
+	// PUT /v1/organizations/{organizationID}/profile/contacts
+	V1OrganizationsOrganizationIDProfileContactsPut(ctx context.Context, req *V1OrganizationsOrganizationIDProfileContactsPutReq, params V1OrganizationsOrganizationIDProfileContactsPutParams) (V1OrganizationsOrganizationIDProfileContactsPutRes, error)
+	// V1OrganizationsOrganizationIDProfileContractorPut implements PUT /v1/organizations/{organizationID}/profile/contractor operation.
+	//
+	// Обновляет профиль исполнителя.
+	//
+	// PUT /v1/organizations/{organizationID}/profile/contractor
+	V1OrganizationsOrganizationIDProfileContractorPut(ctx context.Context, req *V1OrganizationsOrganizationIDProfileContractorPutReq, params V1OrganizationsOrganizationIDProfileContractorPutParams) (V1OrganizationsOrganizationIDProfileContractorPutRes, error)
+	// V1OrganizationsOrganizationIDProfileCustomerPut implements PUT /v1/organizations/{organizationID}/profile/customer operation.
+	//
+	// Обновляет описание компании или список локаций в
+	// профиле заказчика.
+	//
+	// PUT /v1/organizations/{organizationID}/profile/customer
+	V1OrganizationsOrganizationIDProfileCustomerPut(ctx context.Context, req *V1OrganizationsOrganizationIDProfileCustomerPutReq, params V1OrganizationsOrganizationIDProfileCustomerPutParams) (V1OrganizationsOrganizationIDProfileCustomerPutRes, error)
 	// V1OrganizationsOrganizationIDTendersGet implements GET /v1/organizations/{organizationID}/tenders operation.
 	//
 	// If user is in organization it also returns all drafts.
@@ -155,38 +187,6 @@ type Handler interface {
 	//
 	// PUT /v1/organizations/portfolio/{portfolioID}
 	V1OrganizationsPortfolioPortfolioIDPut(ctx context.Context, req *V1OrganizationsPortfolioPortfolioIDPutReq, params V1OrganizationsPortfolioPortfolioIDPutParams) (V1OrganizationsPortfolioPortfolioIDPutRes, error)
-	// V1OrganizationsPortfolioPost implements POST /v1/organizations/portfolio operation.
-	//
-	// Добавляет портфолио в профиль исполнителя.
-	//
-	// POST /v1/organizations/portfolio
-	V1OrganizationsPortfolioPost(ctx context.Context, req *V1OrganizationsPortfolioPostReq) (V1OrganizationsPortfolioPostRes, error)
-	// V1OrganizationsProfileBrandPut implements PUT /v1/organizations/profile/brand operation.
-	//
-	// Обновляет название бренда или URL изображения для
-	// организации.
-	//
-	// PUT /v1/organizations/profile/brand
-	V1OrganizationsProfileBrandPut(ctx context.Context, req *V1OrganizationsProfileBrandPutReq) (V1OrganizationsProfileBrandPutRes, error)
-	// V1OrganizationsProfileContactsPut implements PUT /v1/organizations/profile/contacts operation.
-	//
-	// Обновляет контактные данные для организации.
-	//
-	// PUT /v1/organizations/profile/contacts
-	V1OrganizationsProfileContactsPut(ctx context.Context, req *V1OrganizationsProfileContactsPutReq) (V1OrganizationsProfileContactsPutRes, error)
-	// V1OrganizationsProfileContractorPut implements PUT /v1/organizations/profile/contractor operation.
-	//
-	// Обновляет профиль исполнителя.
-	//
-	// PUT /v1/organizations/profile/contractor
-	V1OrganizationsProfileContractorPut(ctx context.Context, req *V1OrganizationsProfileContractorPutReq) (V1OrganizationsProfileContractorPutRes, error)
-	// V1OrganizationsProfileCustomerPut implements PUT /v1/organizations/profile/customer operation.
-	//
-	// Обновляет описание компании или список локаций в
-	// профиле заказчика.
-	//
-	// PUT /v1/organizations/profile/customer
-	V1OrganizationsProfileCustomerPut(ctx context.Context, req *V1OrganizationsProfileCustomerPutReq) (V1OrganizationsProfileCustomerPutRes, error)
 	// V1OrganizationsVerificationsGet implements GET /v1/organizations/verifications operation.
 	//
 	// Get verifications
@@ -304,12 +304,6 @@ type Handler interface {
 	//
 	// GET /v1/users
 	V1UsersGet(ctx context.Context, params V1UsersGetParams) (V1UsersGetRes, error)
-	// V1UsersPut implements PUT /v1/users operation.
-	//
-	// Обновляет информацию профиля пользователя.
-	//
-	// PUT /v1/users
-	V1UsersPut(ctx context.Context, req *V1UsersPutReq) (V1UsersPutRes, error)
 	// V1UsersRequestEmailVerificationPost implements POST /v1/users/request/email-verification operation.
 	//
 	// Requesting send verify code.
@@ -330,6 +324,12 @@ type Handler interface {
 	//
 	// GET /v1/users/{userID}
 	V1UsersUserIDGet(ctx context.Context, params V1UsersUserIDGetParams) (V1UsersUserIDGetRes, error)
+	// V1UsersUserIDPut implements PUT /v1/users/{userID} operation.
+	//
+	// Обновляет информацию профиля пользователя.
+	//
+	// PUT /v1/users/{userID}
+	V1UsersUserIDPut(ctx context.Context, req *V1UsersUserIDPutReq, params V1UsersUserIDPutParams) (V1UsersUserIDPutRes, error)
 	// V1VerificationsRequestIDAprovePost implements POST /v1/verifications/{requestID}/aprove operation.
 	//
 	// Aproving verification

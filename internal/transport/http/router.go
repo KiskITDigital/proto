@@ -56,7 +56,7 @@ type Users interface {
 	V1UsersConfirmEmailPost(ctx context.Context, req *api.V1UsersConfirmEmailPostReq) (api.V1UsersConfirmEmailPostRes, error)
 	V1UsersConfirmPasswordPost(ctx context.Context, req *api.V1UsersConfirmPasswordPostReq) (api.V1UsersConfirmPasswordPostRes, error)
 	V1UsersGet(ctx context.Context, params api.V1UsersGetParams) (api.V1UsersGetRes, error)
-	V1UsersPut(ctx context.Context, req *api.V1UsersPutReq) (api.V1UsersPutRes, error)
+	V1UsersUserIDPut(ctx context.Context, req *api.V1UsersUserIDPutReq, params api.V1UsersUserIDPutParams) (api.V1UsersUserIDPutRes, error)
 	V1UsersRequestEmailVerificationPost(ctx context.Context, req *api.V1UsersRequestEmailVerificationPostReq) (api.V1UsersRequestEmailVerificationPostRes, error)
 	V1UsersRequestResetPasswordPost(ctx context.Context, req *api.V1UsersRequestResetPasswordPostReq) (api.V1UsersRequestResetPasswordPostRes, error)
 }
@@ -81,13 +81,15 @@ type Organization interface {
 	V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, req *api.V1OrganizationsOrganizationIDVerificationsPostReq, params api.V1OrganizationsOrganizationIDVerificationsPostParams) (api.V1OrganizationsOrganizationIDVerificationsPostRes, error)
 	V1OrganizationsVerificationsGet(ctx context.Context, params api.V1OrganizationsVerificationsGetParams) (api.V1OrganizationsVerificationsGetRes, error)
 	V1OrganizationsContractorsGet(ctx context.Context, params api.V1OrganizationsContractorsGetParams) (api.V1OrganizationsContractorsGetRes, error)
-	V1OrganizationsProfileBrandPut(ctx context.Context, req *api.V1OrganizationsProfileBrandPutReq) (api.V1OrganizationsProfileBrandPutRes, error)
-	V1OrganizationsProfileContactsPut(ctx context.Context, req *api.V1OrganizationsProfileContactsPutReq) (api.V1OrganizationsProfileContactsPutRes, error)
-	V1OrganizationsProfileContractorPut(ctx context.Context, req *api.V1OrganizationsProfileContractorPutReq) (api.V1OrganizationsProfileContractorPutRes, error)
-	V1OrganizationsProfileCustomerPut(ctx context.Context, req *api.V1OrganizationsProfileCustomerPutReq) (api.V1OrganizationsProfileCustomerPutRes, error)
+	
+	V1OrganizationsOrganizationIDProfileBrandPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileBrandPutReq, params api.V1OrganizationsOrganizationIDProfileBrandPutParams) (api.V1OrganizationsOrganizationIDProfileBrandPutRes, error)
+	V1OrganizationsOrganizationIDProfileContactsPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileContactsPutReq, params api.V1OrganizationsOrganizationIDProfileContactsPutParams) (api.V1OrganizationsOrganizationIDProfileContactsPutRes, error)
+	V1OrganizationsOrganizationIDProfileContractorPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileContractorPutReq, params api.V1OrganizationsOrganizationIDProfileContractorPutParams) (api.V1OrganizationsOrganizationIDProfileContractorPutRes, error)
+	V1OrganizationsOrganizationIDProfileCustomerPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileCustomerPutReq, params api.V1OrganizationsOrganizationIDProfileCustomerPutParams) (api.V1OrganizationsOrganizationIDProfileCustomerPutRes, error)
+	
 	V1OrganizationsPortfolioPortfolioIDDelete(ctx context.Context, params api.V1OrganizationsPortfolioPortfolioIDDeleteParams) (api.V1OrganizationsPortfolioPortfolioIDDeleteRes, error)
 	V1OrganizationsPortfolioPortfolioIDPut(ctx context.Context, req *api.V1OrganizationsPortfolioPortfolioIDPutReq, params api.V1OrganizationsPortfolioPortfolioIDPutParams) (api.V1OrganizationsPortfolioPortfolioIDPutRes, error)
-	V1OrganizationsPortfolioPost(ctx context.Context, req *api.V1OrganizationsPortfolioPostReq) (api.V1OrganizationsPortfolioPostRes, error)
+	V1OrganizationsOrganizationIDPortfolioPost(ctx context.Context, req *api.V1OrganizationsOrganizationIDPortfolioPostReq, params api.V1OrganizationsOrganizationIDPortfolioPostParams) (api.V1OrganizationsOrganizationIDPortfolioPostRes, error)
 	V1OrganizationsOrganizationIDPortfolioGet(ctx context.Context, params api.V1OrganizationsOrganizationIDPortfolioGetParams) (api.V1OrganizationsOrganizationIDPortfolioGetRes, error)
 }
 

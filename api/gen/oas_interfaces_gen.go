@@ -69,6 +69,26 @@ type V1OrganizationsOrganizationIDPortfolioGetRes interface {
 	v1OrganizationsOrganizationIDPortfolioGetRes()
 }
 
+type V1OrganizationsOrganizationIDPortfolioPostRes interface {
+	v1OrganizationsOrganizationIDPortfolioPostRes()
+}
+
+type V1OrganizationsOrganizationIDProfileBrandPutRes interface {
+	v1OrganizationsOrganizationIDProfileBrandPutRes()
+}
+
+type V1OrganizationsOrganizationIDProfileContactsPutRes interface {
+	v1OrganizationsOrganizationIDProfileContactsPutRes()
+}
+
+type V1OrganizationsOrganizationIDProfileContractorPutRes interface {
+	v1OrganizationsOrganizationIDProfileContractorPutRes()
+}
+
+type V1OrganizationsOrganizationIDProfileCustomerPutRes interface {
+	v1OrganizationsOrganizationIDProfileCustomerPutRes()
+}
+
 type V1OrganizationsOrganizationIDTendersGetRes interface {
 	v1OrganizationsOrganizationIDTendersGetRes()
 }
@@ -87,26 +107,6 @@ type V1OrganizationsPortfolioPortfolioIDDeleteRes interface {
 
 type V1OrganizationsPortfolioPortfolioIDPutRes interface {
 	v1OrganizationsPortfolioPortfolioIDPutRes()
-}
-
-type V1OrganizationsPortfolioPostRes interface {
-	v1OrganizationsPortfolioPostRes()
-}
-
-type V1OrganizationsProfileBrandPutRes interface {
-	v1OrganizationsProfileBrandPutRes()
-}
-
-type V1OrganizationsProfileContactsPutRes interface {
-	v1OrganizationsProfileContactsPutRes()
-}
-
-type V1OrganizationsProfileContractorPutRes interface {
-	v1OrganizationsProfileContractorPutRes()
-}
-
-type V1OrganizationsProfileCustomerPutRes interface {
-	v1OrganizationsProfileCustomerPutRes()
 }
 
 type V1OrganizationsVerificationsGetRes interface {
@@ -177,10 +177,6 @@ type V1UsersGetRes interface {
 	v1UsersGetRes()
 }
 
-type V1UsersPutRes interface {
-	v1UsersPutRes()
-}
-
 type V1UsersRequestEmailVerificationPostRes interface {
 	v1UsersRequestEmailVerificationPostRes()
 }
@@ -191,6 +187,10 @@ type V1UsersRequestResetPasswordPostRes interface {
 
 type V1UsersUserIDGetRes interface {
 	v1UsersUserIDGetRes()
+}
+
+type V1UsersUserIDPutRes interface {
+	v1UsersUserIDPutRes()
 }
 
 type V1VerificationsRequestIDAprovePostRes interface {

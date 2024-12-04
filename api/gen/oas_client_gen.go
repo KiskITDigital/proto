@@ -139,6 +139,38 @@ type Invoker interface {
 	//
 	// GET /v1/organizations/{organizationID}/portfolio
 	V1OrganizationsOrganizationIDPortfolioGet(ctx context.Context, params V1OrganizationsOrganizationIDPortfolioGetParams) (V1OrganizationsOrganizationIDPortfolioGetRes, error)
+	// V1OrganizationsOrganizationIDPortfolioPost invokes POST /v1/organizations/{organizationID}/portfolio operation.
+	//
+	// Добавляет портфолио в профиль исполнителя.
+	//
+	// POST /v1/organizations/{organizationID}/portfolio
+	V1OrganizationsOrganizationIDPortfolioPost(ctx context.Context, request *V1OrganizationsOrganizationIDPortfolioPostReq, params V1OrganizationsOrganizationIDPortfolioPostParams) (V1OrganizationsOrganizationIDPortfolioPostRes, error)
+	// V1OrganizationsOrganizationIDProfileBrandPut invokes PUT /v1/organizations/{organizationID}/profile/brand operation.
+	//
+	// Обновляет название бренда или URL изображения для
+	// организации.
+	//
+	// PUT /v1/organizations/{organizationID}/profile/brand
+	V1OrganizationsOrganizationIDProfileBrandPut(ctx context.Context, request *V1OrganizationsOrganizationIDProfileBrandPutReq, params V1OrganizationsOrganizationIDProfileBrandPutParams) (V1OrganizationsOrganizationIDProfileBrandPutRes, error)
+	// V1OrganizationsOrganizationIDProfileContactsPut invokes PUT /v1/organizations/{organizationID}/profile/contacts operation.
+	//
+	// Обновляет контактные данные для организации.
+	//
+	// PUT /v1/organizations/{organizationID}/profile/contacts
+	V1OrganizationsOrganizationIDProfileContactsPut(ctx context.Context, request *V1OrganizationsOrganizationIDProfileContactsPutReq, params V1OrganizationsOrganizationIDProfileContactsPutParams) (V1OrganizationsOrganizationIDProfileContactsPutRes, error)
+	// V1OrganizationsOrganizationIDProfileContractorPut invokes PUT /v1/organizations/{organizationID}/profile/contractor operation.
+	//
+	// Обновляет профиль исполнителя.
+	//
+	// PUT /v1/organizations/{organizationID}/profile/contractor
+	V1OrganizationsOrganizationIDProfileContractorPut(ctx context.Context, request *V1OrganizationsOrganizationIDProfileContractorPutReq, params V1OrganizationsOrganizationIDProfileContractorPutParams) (V1OrganizationsOrganizationIDProfileContractorPutRes, error)
+	// V1OrganizationsOrganizationIDProfileCustomerPut invokes PUT /v1/organizations/{organizationID}/profile/customer operation.
+	//
+	// Обновляет описание компании или список локаций в
+	// профиле заказчика.
+	//
+	// PUT /v1/organizations/{organizationID}/profile/customer
+	V1OrganizationsOrganizationIDProfileCustomerPut(ctx context.Context, request *V1OrganizationsOrganizationIDProfileCustomerPutReq, params V1OrganizationsOrganizationIDProfileCustomerPutParams) (V1OrganizationsOrganizationIDProfileCustomerPutRes, error)
 	// V1OrganizationsOrganizationIDTendersGet invokes GET /v1/organizations/{organizationID}/tenders operation.
 	//
 	// If user is in organization it also returns all drafts.
@@ -170,38 +202,6 @@ type Invoker interface {
 	//
 	// PUT /v1/organizations/portfolio/{portfolioID}
 	V1OrganizationsPortfolioPortfolioIDPut(ctx context.Context, request *V1OrganizationsPortfolioPortfolioIDPutReq, params V1OrganizationsPortfolioPortfolioIDPutParams) (V1OrganizationsPortfolioPortfolioIDPutRes, error)
-	// V1OrganizationsPortfolioPost invokes POST /v1/organizations/portfolio operation.
-	//
-	// Добавляет портфолио в профиль исполнителя.
-	//
-	// POST /v1/organizations/portfolio
-	V1OrganizationsPortfolioPost(ctx context.Context, request *V1OrganizationsPortfolioPostReq) (V1OrganizationsPortfolioPostRes, error)
-	// V1OrganizationsProfileBrandPut invokes PUT /v1/organizations/profile/brand operation.
-	//
-	// Обновляет название бренда или URL изображения для
-	// организации.
-	//
-	// PUT /v1/organizations/profile/brand
-	V1OrganizationsProfileBrandPut(ctx context.Context, request *V1OrganizationsProfileBrandPutReq) (V1OrganizationsProfileBrandPutRes, error)
-	// V1OrganizationsProfileContactsPut invokes PUT /v1/organizations/profile/contacts operation.
-	//
-	// Обновляет контактные данные для организации.
-	//
-	// PUT /v1/organizations/profile/contacts
-	V1OrganizationsProfileContactsPut(ctx context.Context, request *V1OrganizationsProfileContactsPutReq) (V1OrganizationsProfileContactsPutRes, error)
-	// V1OrganizationsProfileContractorPut invokes PUT /v1/organizations/profile/contractor operation.
-	//
-	// Обновляет профиль исполнителя.
-	//
-	// PUT /v1/organizations/profile/contractor
-	V1OrganizationsProfileContractorPut(ctx context.Context, request *V1OrganizationsProfileContractorPutReq) (V1OrganizationsProfileContractorPutRes, error)
-	// V1OrganizationsProfileCustomerPut invokes PUT /v1/organizations/profile/customer operation.
-	//
-	// Обновляет описание компании или список локаций в
-	// профиле заказчика.
-	//
-	// PUT /v1/organizations/profile/customer
-	V1OrganizationsProfileCustomerPut(ctx context.Context, request *V1OrganizationsProfileCustomerPutReq) (V1OrganizationsProfileCustomerPutRes, error)
 	// V1OrganizationsVerificationsGet invokes GET /v1/organizations/verifications operation.
 	//
 	// Get verifications
@@ -319,12 +319,6 @@ type Invoker interface {
 	//
 	// GET /v1/users
 	V1UsersGet(ctx context.Context, params V1UsersGetParams) (V1UsersGetRes, error)
-	// V1UsersPut invokes PUT /v1/users operation.
-	//
-	// Обновляет информацию профиля пользователя.
-	//
-	// PUT /v1/users
-	V1UsersPut(ctx context.Context, request *V1UsersPutReq) (V1UsersPutRes, error)
 	// V1UsersRequestEmailVerificationPost invokes POST /v1/users/request/email-verification operation.
 	//
 	// Requesting send verify code.
@@ -345,6 +339,12 @@ type Invoker interface {
 	//
 	// GET /v1/users/{userID}
 	V1UsersUserIDGet(ctx context.Context, params V1UsersUserIDGetParams) (V1UsersUserIDGetRes, error)
+	// V1UsersUserIDPut invokes PUT /v1/users/{userID} operation.
+	//
+	// Обновляет информацию профиля пользователя.
+	//
+	// PUT /v1/users/{userID}
+	V1UsersUserIDPut(ctx context.Context, request *V1UsersUserIDPutReq, params V1UsersUserIDPutParams) (V1UsersUserIDPutRes, error)
 	// V1VerificationsRequestIDAprovePost invokes POST /v1/verifications/{requestID}/aprove operation.
 	//
 	// Aproving verification
@@ -2530,6 +2530,638 @@ func (c *Client) sendV1OrganizationsOrganizationIDPortfolioGet(ctx context.Conte
 	return result, nil
 }
 
+// V1OrganizationsOrganizationIDPortfolioPost invokes POST /v1/organizations/{organizationID}/portfolio operation.
+//
+// Добавляет портфолио в профиль исполнителя.
+//
+// POST /v1/organizations/{organizationID}/portfolio
+func (c *Client) V1OrganizationsOrganizationIDPortfolioPost(ctx context.Context, request *V1OrganizationsOrganizationIDPortfolioPostReq, params V1OrganizationsOrganizationIDPortfolioPostParams) (V1OrganizationsOrganizationIDPortfolioPostRes, error) {
+	res, err := c.sendV1OrganizationsOrganizationIDPortfolioPost(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendV1OrganizationsOrganizationIDPortfolioPost(ctx context.Context, request *V1OrganizationsOrganizationIDPortfolioPostReq, params V1OrganizationsOrganizationIDPortfolioPostParams) (res V1OrganizationsOrganizationIDPortfolioPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationID}/portfolio"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsOrganizationIDPortfolioPost",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/v1/organizations/"
+	{
+		// Encode "organizationID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.OrganizationID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/portfolio"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1OrganizationsOrganizationIDPortfolioPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1OrganizationsOrganizationIDPortfolioPost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1OrganizationsOrganizationIDPortfolioPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1OrganizationsOrganizationIDProfileBrandPut invokes PUT /v1/organizations/{organizationID}/profile/brand operation.
+//
+// Обновляет название бренда или URL изображения для
+// организации.
+//
+// PUT /v1/organizations/{organizationID}/profile/brand
+func (c *Client) V1OrganizationsOrganizationIDProfileBrandPut(ctx context.Context, request *V1OrganizationsOrganizationIDProfileBrandPutReq, params V1OrganizationsOrganizationIDProfileBrandPutParams) (V1OrganizationsOrganizationIDProfileBrandPutRes, error) {
+	res, err := c.sendV1OrganizationsOrganizationIDProfileBrandPut(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendV1OrganizationsOrganizationIDProfileBrandPut(ctx context.Context, request *V1OrganizationsOrganizationIDProfileBrandPutReq, params V1OrganizationsOrganizationIDProfileBrandPutParams) (res V1OrganizationsOrganizationIDProfileBrandPutRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("PUT"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationID}/profile/brand"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsOrganizationIDProfileBrandPut",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/v1/organizations/"
+	{
+		// Encode "organizationID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.OrganizationID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/profile/brand"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PUT", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1OrganizationsOrganizationIDProfileBrandPutRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1OrganizationsOrganizationIDProfileBrandPut", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1OrganizationsOrganizationIDProfileBrandPutResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1OrganizationsOrganizationIDProfileContactsPut invokes PUT /v1/organizations/{organizationID}/profile/contacts operation.
+//
+// Обновляет контактные данные для организации.
+//
+// PUT /v1/organizations/{organizationID}/profile/contacts
+func (c *Client) V1OrganizationsOrganizationIDProfileContactsPut(ctx context.Context, request *V1OrganizationsOrganizationIDProfileContactsPutReq, params V1OrganizationsOrganizationIDProfileContactsPutParams) (V1OrganizationsOrganizationIDProfileContactsPutRes, error) {
+	res, err := c.sendV1OrganizationsOrganizationIDProfileContactsPut(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendV1OrganizationsOrganizationIDProfileContactsPut(ctx context.Context, request *V1OrganizationsOrganizationIDProfileContactsPutReq, params V1OrganizationsOrganizationIDProfileContactsPutParams) (res V1OrganizationsOrganizationIDProfileContactsPutRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("PUT"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationID}/profile/contacts"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsOrganizationIDProfileContactsPut",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/v1/organizations/"
+	{
+		// Encode "organizationID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.OrganizationID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/profile/contacts"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PUT", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1OrganizationsOrganizationIDProfileContactsPutRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1OrganizationsOrganizationIDProfileContactsPut", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1OrganizationsOrganizationIDProfileContactsPutResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1OrganizationsOrganizationIDProfileContractorPut invokes PUT /v1/organizations/{organizationID}/profile/contractor operation.
+//
+// Обновляет профиль исполнителя.
+//
+// PUT /v1/organizations/{organizationID}/profile/contractor
+func (c *Client) V1OrganizationsOrganizationIDProfileContractorPut(ctx context.Context, request *V1OrganizationsOrganizationIDProfileContractorPutReq, params V1OrganizationsOrganizationIDProfileContractorPutParams) (V1OrganizationsOrganizationIDProfileContractorPutRes, error) {
+	res, err := c.sendV1OrganizationsOrganizationIDProfileContractorPut(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendV1OrganizationsOrganizationIDProfileContractorPut(ctx context.Context, request *V1OrganizationsOrganizationIDProfileContractorPutReq, params V1OrganizationsOrganizationIDProfileContractorPutParams) (res V1OrganizationsOrganizationIDProfileContractorPutRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("PUT"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationID}/profile/contractor"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsOrganizationIDProfileContractorPut",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/v1/organizations/"
+	{
+		// Encode "organizationID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.OrganizationID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/profile/contractor"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PUT", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1OrganizationsOrganizationIDProfileContractorPutRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1OrganizationsOrganizationIDProfileContractorPut", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1OrganizationsOrganizationIDProfileContractorPutResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1OrganizationsOrganizationIDProfileCustomerPut invokes PUT /v1/organizations/{organizationID}/profile/customer operation.
+//
+// Обновляет описание компании или список локаций в
+// профиле заказчика.
+//
+// PUT /v1/organizations/{organizationID}/profile/customer
+func (c *Client) V1OrganizationsOrganizationIDProfileCustomerPut(ctx context.Context, request *V1OrganizationsOrganizationIDProfileCustomerPutReq, params V1OrganizationsOrganizationIDProfileCustomerPutParams) (V1OrganizationsOrganizationIDProfileCustomerPutRes, error) {
+	res, err := c.sendV1OrganizationsOrganizationIDProfileCustomerPut(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendV1OrganizationsOrganizationIDProfileCustomerPut(ctx context.Context, request *V1OrganizationsOrganizationIDProfileCustomerPutReq, params V1OrganizationsOrganizationIDProfileCustomerPutParams) (res V1OrganizationsOrganizationIDProfileCustomerPutRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("PUT"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationID}/profile/customer"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsOrganizationIDProfileCustomerPut",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/v1/organizations/"
+	{
+		// Encode "organizationID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.OrganizationID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/profile/customer"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PUT", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1OrganizationsOrganizationIDProfileCustomerPutRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1OrganizationsOrganizationIDProfileCustomerPut", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1OrganizationsOrganizationIDProfileCustomerPutResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // V1OrganizationsOrganizationIDTendersGet invokes GET /v1/organizations/{organizationID}/tenders operation.
 //
 // If user is in organization it also returns all drafts.
@@ -3143,543 +3775,6 @@ func (c *Client) sendV1OrganizationsPortfolioPortfolioIDPut(ctx context.Context,
 
 	stage = "DecodeResponse"
 	result, err := decodeV1OrganizationsPortfolioPortfolioIDPutResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// V1OrganizationsPortfolioPost invokes POST /v1/organizations/portfolio operation.
-//
-// Добавляет портфолио в профиль исполнителя.
-//
-// POST /v1/organizations/portfolio
-func (c *Client) V1OrganizationsPortfolioPost(ctx context.Context, request *V1OrganizationsPortfolioPostReq) (V1OrganizationsPortfolioPostRes, error) {
-	res, err := c.sendV1OrganizationsPortfolioPost(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendV1OrganizationsPortfolioPost(ctx context.Context, request *V1OrganizationsPortfolioPostReq) (res V1OrganizationsPortfolioPostRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/portfolio"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsPortfolioPost",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/v1/organizations/portfolio"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeV1OrganizationsPortfolioPostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "V1OrganizationsPortfolioPost", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"BearerAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeV1OrganizationsPortfolioPostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// V1OrganizationsProfileBrandPut invokes PUT /v1/organizations/profile/brand operation.
-//
-// Обновляет название бренда или URL изображения для
-// организации.
-//
-// PUT /v1/organizations/profile/brand
-func (c *Client) V1OrganizationsProfileBrandPut(ctx context.Context, request *V1OrganizationsProfileBrandPutReq) (V1OrganizationsProfileBrandPutRes, error) {
-	res, err := c.sendV1OrganizationsProfileBrandPut(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendV1OrganizationsProfileBrandPut(ctx context.Context, request *V1OrganizationsProfileBrandPutReq) (res V1OrganizationsProfileBrandPutRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("PUT"),
-		semconv.HTTPRouteKey.String("/v1/organizations/profile/brand"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsProfileBrandPut",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/v1/organizations/profile/brand"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PUT", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeV1OrganizationsProfileBrandPutRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "V1OrganizationsProfileBrandPut", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"BearerAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeV1OrganizationsProfileBrandPutResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// V1OrganizationsProfileContactsPut invokes PUT /v1/organizations/profile/contacts operation.
-//
-// Обновляет контактные данные для организации.
-//
-// PUT /v1/organizations/profile/contacts
-func (c *Client) V1OrganizationsProfileContactsPut(ctx context.Context, request *V1OrganizationsProfileContactsPutReq) (V1OrganizationsProfileContactsPutRes, error) {
-	res, err := c.sendV1OrganizationsProfileContactsPut(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendV1OrganizationsProfileContactsPut(ctx context.Context, request *V1OrganizationsProfileContactsPutReq) (res V1OrganizationsProfileContactsPutRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("PUT"),
-		semconv.HTTPRouteKey.String("/v1/organizations/profile/contacts"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsProfileContactsPut",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/v1/organizations/profile/contacts"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PUT", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeV1OrganizationsProfileContactsPutRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "V1OrganizationsProfileContactsPut", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"BearerAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeV1OrganizationsProfileContactsPutResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// V1OrganizationsProfileContractorPut invokes PUT /v1/organizations/profile/contractor operation.
-//
-// Обновляет профиль исполнителя.
-//
-// PUT /v1/organizations/profile/contractor
-func (c *Client) V1OrganizationsProfileContractorPut(ctx context.Context, request *V1OrganizationsProfileContractorPutReq) (V1OrganizationsProfileContractorPutRes, error) {
-	res, err := c.sendV1OrganizationsProfileContractorPut(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendV1OrganizationsProfileContractorPut(ctx context.Context, request *V1OrganizationsProfileContractorPutReq) (res V1OrganizationsProfileContractorPutRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("PUT"),
-		semconv.HTTPRouteKey.String("/v1/organizations/profile/contractor"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsProfileContractorPut",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/v1/organizations/profile/contractor"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PUT", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeV1OrganizationsProfileContractorPutRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "V1OrganizationsProfileContractorPut", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"BearerAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeV1OrganizationsProfileContractorPutResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// V1OrganizationsProfileCustomerPut invokes PUT /v1/organizations/profile/customer operation.
-//
-// Обновляет описание компании или список локаций в
-// профиле заказчика.
-//
-// PUT /v1/organizations/profile/customer
-func (c *Client) V1OrganizationsProfileCustomerPut(ctx context.Context, request *V1OrganizationsProfileCustomerPutReq) (V1OrganizationsProfileCustomerPutRes, error) {
-	res, err := c.sendV1OrganizationsProfileCustomerPut(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendV1OrganizationsProfileCustomerPut(ctx context.Context, request *V1OrganizationsProfileCustomerPutReq) (res V1OrganizationsProfileCustomerPutRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("PUT"),
-		semconv.HTTPRouteKey.String("/v1/organizations/profile/customer"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsProfileCustomerPut",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/v1/organizations/profile/customer"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PUT", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeV1OrganizationsProfileCustomerPutRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "V1OrganizationsProfileCustomerPut", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"BearerAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeV1OrganizationsProfileCustomerPutResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -5886,113 +5981,6 @@ func (c *Client) sendV1UsersGet(ctx context.Context, params V1UsersGetParams) (r
 	return result, nil
 }
 
-// V1UsersPut invokes PUT /v1/users operation.
-//
-// Обновляет информацию профиля пользователя.
-//
-// PUT /v1/users
-func (c *Client) V1UsersPut(ctx context.Context, request *V1UsersPutReq) (V1UsersPutRes, error) {
-	res, err := c.sendV1UsersPut(ctx, request)
-	return res, err
-}
-
-func (c *Client) sendV1UsersPut(ctx context.Context, request *V1UsersPutReq) (res V1UsersPutRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("PUT"),
-		semconv.HTTPRouteKey.String("/v1/users"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "V1UsersPut",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/v1/users"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "PUT", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeV1UsersPutRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "V1UsersPut", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"BearerAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeV1UsersPutResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
 // V1UsersRequestEmailVerificationPost invokes POST /v1/users/request/email-verification operation.
 //
 // Requesting send verify code.
@@ -6258,6 +6246,131 @@ func (c *Client) sendV1UsersUserIDGet(ctx context.Context, params V1UsersUserIDG
 
 	stage = "DecodeResponse"
 	result, err := decodeV1UsersUserIDGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1UsersUserIDPut invokes PUT /v1/users/{userID} operation.
+//
+// Обновляет информацию профиля пользователя.
+//
+// PUT /v1/users/{userID}
+func (c *Client) V1UsersUserIDPut(ctx context.Context, request *V1UsersUserIDPutReq, params V1UsersUserIDPutParams) (V1UsersUserIDPutRes, error) {
+	res, err := c.sendV1UsersUserIDPut(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendV1UsersUserIDPut(ctx context.Context, request *V1UsersUserIDPutReq, params V1UsersUserIDPutParams) (res V1UsersUserIDPutRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("PUT"),
+		semconv.HTTPRouteKey.String("/v1/users/{userID}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1UsersUserIDPut",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/v1/users/"
+	{
+		// Encode "userID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "userID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.UserID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PUT", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1UsersUserIDPutRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1UsersUserIDPut", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1UsersUserIDPutResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
