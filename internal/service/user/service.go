@@ -25,6 +25,7 @@ type UserStore interface {
 	CreateEmployee(ctx context.Context, qe store.QueryExecutor, params store.UserCreateEmployeeParams) error
 	GetWithOrganiztion(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) ([]models.RegularUser, error)
 	Get(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) ([]models.FullUser, error)
+	Update(ctx context.Context, qe store.QueryExecutor, params store.UserUpdateParams) error
 
 	SetEmailVerified(ctx context.Context, qe store.QueryExecutor, userID int) error
 	ResetPassword(ctx context.Context, qe store.QueryExecutor, params store.ResetPasswordParams) error
