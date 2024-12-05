@@ -47,6 +47,18 @@ func (s *OrganizationStore) Update(ctx context.Context, qe store.QueryExecutor, 
 		builder = builder.Set("avatar_url", params.AvatarURL.Value)
 	}
 
+	if params.Emails.Set {
+		builder = builder.Set("emails", params.Emails.Value)
+	}
+
+	if params.Phones.Set {
+		builder = builder.Set("phones", params.Phones.Value)
+	}
+
+	if params.Messengers.Set {
+		builder = builder.Set("messengers", params.Messengers.Value)
+	}
+
 	result, err := builder.RunWith(qe).ExecContext(ctx)
 	if err != nil {
 		return fmt.Errorf("exec row: %w", err)
