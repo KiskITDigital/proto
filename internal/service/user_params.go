@@ -12,3 +12,12 @@ type UserCreateEmployeeParams struct {
 	Role       models.UserRole
 	Position   string
 }
+
+type UserUpdateParams struct {
+	UserID     int
+	Phone      models.Optional[string]
+	FirstName  models.Optional[string]
+	LastName   models.Optional[string]
+	MiddleName models.Optional[string]
+	AvatarURL  models.Optional[string]
+}

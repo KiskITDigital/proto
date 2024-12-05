@@ -14,6 +14,15 @@ type UserCreateParams struct {
 	AvatarURL     string
 }
 
+type UserUpdateParams struct {
+	UserID        int
+	Phone         models.Optional[string]
+	FirstName     models.Optional[string]
+	LastName      models.Optional[string]
+	MiddleName    models.Optional[string]
+	AvatarURL     models.Optional[string]
+}
+
 type UserCreateEmployeeParams struct {
 	UserID    int
 	Role      models.UserRole

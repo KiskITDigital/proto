@@ -32,4 +32,5 @@ var codes = map[Code]int{
 	CodeUnauthorized:       http.StatusUnauthorized,
 	CodeNotPermitted:       http.StatusForbidden,
 	CodeConflict:           http.StatusConflict,
+	CodeNotFound:           http.StatusNotFound,
 }

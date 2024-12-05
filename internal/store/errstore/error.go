@@ -12,3 +12,7 @@ const (
 var (
 	ErrQuestionnaireExist = errors.New("the questionnaire has been completed")
 )
+
+var (
+	ErrUserNotFound = errors.New("user not found")
+)
