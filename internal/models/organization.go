@@ -103,7 +103,7 @@ func ConvertOrganizationModelToApi(organization Organization) api.Organization {
 
 func ConvertContactInfoModelToApi(info ContactInfo) api.ContactInfo {
 	return api.ContactInfo{
-		Contact: info.Info,
+		Contact: info.Contact,
 		Info:    info.Info,
 	}
 }
