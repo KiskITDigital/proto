@@ -173,7 +173,7 @@ type Handler interface {
 	// Ask verify organization.
 	//
 	// POST /v1/organizations/{organizationID}/verifications
-	V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, req *V1OrganizationsOrganizationIDVerificationsPostReq, params V1OrganizationsOrganizationIDVerificationsPostParams) (V1OrganizationsOrganizationIDVerificationsPostRes, error)
+	V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, req []Attachment, params V1OrganizationsOrganizationIDVerificationsPostParams) (V1OrganizationsOrganizationIDVerificationsPostRes, error)
 	// V1OrganizationsPortfolioPortfolioIDDelete implements DELETE /v1/organizations/portfolio/{portfolioID} operation.
 	//
 	// Удаляет портфолио из профиля исполнителя.

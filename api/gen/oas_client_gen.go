@@ -188,7 +188,7 @@ type Invoker interface {
 	// Ask verify organization.
 	//
 	// POST /v1/organizations/{organizationID}/verifications
-	V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, request *V1OrganizationsOrganizationIDVerificationsPostReq, params V1OrganizationsOrganizationIDVerificationsPostParams) (V1OrganizationsOrganizationIDVerificationsPostRes, error)
+	V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, request []Attachment, params V1OrganizationsOrganizationIDVerificationsPostParams) (V1OrganizationsOrganizationIDVerificationsPostRes, error)
 	// V1OrganizationsPortfolioPortfolioIDDelete invokes DELETE /v1/organizations/portfolio/{portfolioID} operation.
 	//
 	// Удаляет портфолио из профиля исполнителя.
@@ -3413,12 +3413,12 @@ func (c *Client) sendV1OrganizationsOrganizationIDVerificationsGet(ctx context.C
 // Ask verify organization.
 //
 // POST /v1/organizations/{organizationID}/verifications
-func (c *Client) V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, request *V1OrganizationsOrganizationIDVerificationsPostReq, params V1OrganizationsOrganizationIDVerificationsPostParams) (V1OrganizationsOrganizationIDVerificationsPostRes, error) {
+func (c *Client) V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, request []Attachment, params V1OrganizationsOrganizationIDVerificationsPostParams) (V1OrganizationsOrganizationIDVerificationsPostRes, error) {
 	res, err := c.sendV1OrganizationsOrganizationIDVerificationsPost(ctx, request, params)
 	return res, err
 }
 
-func (c *Client) sendV1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, request *V1OrganizationsOrganizationIDVerificationsPostReq, params V1OrganizationsOrganizationIDVerificationsPostParams) (res V1OrganizationsOrganizationIDVerificationsPostRes, err error) {
+func (c *Client) sendV1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, request []Attachment, params V1OrganizationsOrganizationIDVerificationsPostParams) (res V1OrganizationsOrganizationIDVerificationsPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/v1/organizations/{organizationID}/verifications"),

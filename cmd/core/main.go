@@ -135,6 +135,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	organizationService := organizationService.New(
 		psql,
 		organizationStore,
+		verificationStore,
 	)
 
 	suggestService := suggestService.New(

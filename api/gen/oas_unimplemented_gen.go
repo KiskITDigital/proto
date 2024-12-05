@@ -250,7 +250,7 @@ func (UnimplementedHandler) V1OrganizationsOrganizationIDVerificationsGet(ctx co
 // Ask verify organization.
 //
 // POST /v1/organizations/{organizationID}/verifications
-func (UnimplementedHandler) V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, req *V1OrganizationsOrganizationIDVerificationsPostReq, params V1OrganizationsOrganizationIDVerificationsPostParams) (r V1OrganizationsOrganizationIDVerificationsPostRes, _ error) {
+func (UnimplementedHandler) V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, req []Attachment, params V1OrganizationsOrganizationIDVerificationsPostParams) (r V1OrganizationsOrganizationIDVerificationsPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
