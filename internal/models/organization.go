@@ -108,6 +108,13 @@ func ConvertContactInfoModelToApi(info ContactInfo) api.ContactInfo {
 	}
 }
 
+func ConvertAPIToContactInfo(info api.ContactInfo) ContactInfo {
+	return ContactInfo{
+		Contact: info.Contact,
+		Info:    info.Info,
+	}
+}
+
 type CustomerInfo struct{}
 
 func (a CustomerInfo) Value() (driver.Value, error) {

@@ -25,6 +25,9 @@ type OrganizationUpdateParams struct {
 	OrganizationID int
 	Brand          models.Optional[string]
 	AvatarURL      models.Optional[string]
+	Emails         models.Optional[models.ContactInfos]
+	Phones         models.Optional[models.ContactInfos]
+	Messengers     models.Optional[models.ContactInfos]
 }
 
 type OrganizationAddUserParams struct {
