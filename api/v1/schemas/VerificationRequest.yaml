@@ -24,7 +24,7 @@ properties:
   attachments:
     type: array
     items:
-      type: string
+      $ref: "./Attachment.yaml"
   status:
     $ref: "../properties/verification_status.yaml"
   review_comment:

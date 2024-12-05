@@ -19,6 +19,7 @@ type OrganizationService interface {
 	GetByID(ctx context.Context, id int) (models.Organization, error)
 	UpdateBrand(ctx context.Context, params service.OrganizationUpdateBrandParams) error
 	UpdateContacts(ctx context.Context, params service.OrganizationUpdateContactsParams) error
+	CreateVerificationRequest(ctx context.Context, params service.OrganizationCreateVerificationRequestParams) error
 }
 
 type VerificationService interface {

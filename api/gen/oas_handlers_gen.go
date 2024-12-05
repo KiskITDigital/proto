@@ -3834,7 +3834,7 @@ func (s *Server) handleV1OrganizationsOrganizationIDVerificationsPostRequest(arg
 		}
 
 		type (
-			Request  = *V1OrganizationsOrganizationIDVerificationsPostReq
+			Request  = []Attachment
 			Params   = V1OrganizationsOrganizationIDVerificationsPostParams
 			Response = V1OrganizationsOrganizationIDVerificationsPostRes
 		)

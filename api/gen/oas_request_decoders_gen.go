@@ -3,6 +3,7 @@
 package api
 
 import (
+	"fmt"
 	"io"
 	"mime"
 	"net/http"
@@ -820,7 +821,7 @@ func (s *Server) decodeV1OrganizationsOrganizationIDProfileCustomerPutRequest(r 
 }
 
 func (s *Server) decodeV1OrganizationsOrganizationIDVerificationsPostRequest(r *http.Request) (
-	req *V1OrganizationsOrganizationIDVerificationsPostReq,
+	req []Attachment,
 	close func() error,
 	rerr error,
 ) {
@@ -859,9 +860,17 @@ func (s *Server) decodeV1OrganizationsOrganizationIDVerificationsPostRequest(r *
 
 		d := jx.DecodeBytes(buf)
 
-		var request V1OrganizationsOrganizationIDVerificationsPostReq
+		var request []Attachment
 		if err := func() error {
-			if err := request.Decode(d); err != nil {
+			request = make([]Attachment, 0)
+			if err := d.Arr(func(d *jx.Decoder) error {
+				var elem Attachment
+				if err := elem.Decode(d); err != nil {
+					return err
+				}
+				request = append(request, elem)
+				return nil
+			}); err != nil {
 				return err
 			}
 			if err := d.Skip(); err != io.EOF {
@@ -876,7 +885,40 @@ func (s *Server) decodeV1OrganizationsOrganizationIDVerificationsPostRequest(r *
 			}
 			return req, close, err
 		}
-		return &request, close, nil
+		if err := func() error {
+			if request == nil {
+				return errors.New("nil is invalid value")
+			}
+			if err := (validate.Array{
+				MinLength:    4,
+				MinLengthSet: true,
+				MaxLength:    4,
+				MaxLengthSet: true,
+			}).ValidateLength(len(request)); err != nil {
+				return errors.Wrap(err, "array")
+			}
+			var failures []validate.FieldError
+			for i, elem := range request {
+				if err := func() error {
+					if err := elem.Validate(); err != nil {
+						return err
+					}
+					return nil
+				}(); err != nil {
+					failures = append(failures, validate.FieldError{
+						Name:  fmt.Sprintf("[%d]", i),
+						Error: err,
+					})
+				}
+			}
+			if len(failures) > 0 {
+				return &validate.Error{Fields: failures}
+			}
+			return nil
+		}(); err != nil {
+			return req, close, errors.Wrap(err, "validate")
+		}
+		return request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}

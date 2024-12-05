@@ -20,25 +20,11 @@ post:
     content:
       application/json:
         schema:
-          type: object
-          required:
-            - egrul
-            - company_card
-            - authority_proof
-            - company_constitution
-          properties:
-            egrul:
-              type: string
-              format: binary
-            company_card:
-              type: string
-              format: binary
-            authority_proof:
-              type: string
-              format: binary
-            company_constitution:
-              type: string
-              format: binary
+          type: array
+          minItems: 4
+          maxItems: 4
+          items:
+            $ref: "../../../schemas/Attachment.yaml"
   responses:
     '200':
       description: Success

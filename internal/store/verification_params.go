@@ -5,7 +5,7 @@ import "gitlab.ubrato.ru/ubrato/core/internal/models"
 type VerificationRequestCreateParams struct {
 	ObjectID    int
 	ObjectType  models.ObjectType
-	Attachments []string
+	Attachments models.Attachments
 }
 
 type VerificationRequestUpdateStatusParams struct {

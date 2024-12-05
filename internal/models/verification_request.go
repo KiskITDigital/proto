@@ -1,10 +1,56 @@
 package models
 
 import (
+	"database/sql/driver"
+	"encoding/json"
+	"errors"
 	"time"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
 )
+
+type Attachment struct {
+	Name Optional[string] `json:"name"`
+	Url  string           `json:"url"`
+}
+
+type Attachments []Attachment
+
+func (a Attachments) Value() (driver.Value, error) {
+	if a == nil {
+		return []byte("[]"), nil
+	}
+
+	return json.Marshal(a)
+}
+
+func (a *Attachments) Scan(value interface{}) error {
+	if value == nil {
+		return nil
+	}
+
+	b, ok := value.([]byte)
+	if !ok {
+		return errors.New("type assertion to []byte failed")
+	}
+
+	return json.Unmarshal(b, &a)
+}
+
+func ConvertAPIToAttachment(attachment api.Attachment) Attachment {
+	return Attachment{
+		Name: Optional[string]{Value: attachment.Name.Value, Set: attachment.Name.Set},
+		Url:  string(attachment.URL),
+	}
+}
+
+func ConvertAttachmentToApi(attachment Attachment) api.Attachment {
+	return api.Attachment{
+		Name: api.OptString{Value: attachment.Name.Value, Set: attachment.Name.Set},
+		URL:  api.URL(attachment.Url),
+	}
+}
 
 type VerificationObject interface {
 	ToVerificationObject() api.VerificationRequestObject
@@ -17,7 +63,7 @@ type VerificationRequest[T VerificationObject] struct {
 	ObjectID      int
 	Object        T
 	Content       string
-	Attachments   []string
+	Attachments   Attachments
 	Status        VerificationStatus
 	ReviewComment string
 	CreatedAt     time.Time
@@ -31,7 +77,7 @@ func VerificationRequestModelToApi[T VerificationObject](request VerificationReq
 		ObjectType:    api.ObjectType(request.ObjectType.ToAPI()),
 		Object:        request.Object.ToVerificationObject(),
 		Content:       request.Content,
-		Attachments:   request.Attachments,
+		Attachments:   convert.Slice[Attachments, []api.Attachment](request.Attachments, ConvertAttachmentToApi),
 		Status:        request.Status.ToAPI(),
 		ReviewComment: api.OptString{Value: request.ReviewComment, Set: request.ReviewComment != ""},
 		CreatedAt:     request.CreatedAt,

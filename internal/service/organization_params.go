@@ -20,3 +20,8 @@ type OrganizationUpdateContactsParams struct {
 	Phones         models.Optional[models.ContactInfos]
 	Messengers     models.Optional[models.ContactInfos]
 }
+
+type OrganizationCreateVerificationRequestParams struct {
+	OrganizationID int
+	Attachments    models.Attachments
+}

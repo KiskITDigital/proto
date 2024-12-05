@@ -9,6 +9,33 @@ import (
 	"github.com/go-faster/jx"
 )
 
+// Ref: #
+type Attachment struct {
+	// Название элемента.
+	Name OptString `json:"name"`
+	URL  URL       `json:"url"`
+}
+
+// GetName returns the value of Name.
+func (s *Attachment) GetName() OptString {
+	return s.Name
+}
+
+// GetURL returns the value of URL.
+func (s *Attachment) GetURL() URL {
+	return s.URL
+}
+
+// SetName sets the value of Name.
+func (s *Attachment) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetURL sets the value of URL.
+func (s *Attachment) SetURL(val URL) {
+	s.URL = val
+}
+
 type BearerAuth struct {
 	Token string
 }
@@ -4583,53 +4610,6 @@ type V1OrganizationsOrganizationIDVerificationsPostOK struct{}
 func (*V1OrganizationsOrganizationIDVerificationsPostOK) v1OrganizationsOrganizationIDVerificationsPostRes() {
 }
 
-type V1OrganizationsOrganizationIDVerificationsPostReq struct {
-	Egrul               string `json:"egrul"`
-	CompanyCard         string `json:"company_card"`
-	AuthorityProof      string `json:"authority_proof"`
-	CompanyConstitution string `json:"company_constitution"`
-}
-
-// GetEgrul returns the value of Egrul.
-func (s *V1OrganizationsOrganizationIDVerificationsPostReq) GetEgrul() string {
-	return s.Egrul
-}
-
-// GetCompanyCard returns the value of CompanyCard.
-func (s *V1OrganizationsOrganizationIDVerificationsPostReq) GetCompanyCard() string {
-	return s.CompanyCard
-}
-
-// GetAuthorityProof returns the value of AuthorityProof.
-func (s *V1OrganizationsOrganizationIDVerificationsPostReq) GetAuthorityProof() string {
-	return s.AuthorityProof
-}
-
-// GetCompanyConstitution returns the value of CompanyConstitution.
-func (s *V1OrganizationsOrganizationIDVerificationsPostReq) GetCompanyConstitution() string {
-	return s.CompanyConstitution
-}
-
-// SetEgrul sets the value of Egrul.
-func (s *V1OrganizationsOrganizationIDVerificationsPostReq) SetEgrul(val string) {
-	s.Egrul = val
-}
-
-// SetCompanyCard sets the value of CompanyCard.
-func (s *V1OrganizationsOrganizationIDVerificationsPostReq) SetCompanyCard(val string) {
-	s.CompanyCard = val
-}
-
-// SetAuthorityProof sets the value of AuthorityProof.
-func (s *V1OrganizationsOrganizationIDVerificationsPostReq) SetAuthorityProof(val string) {
-	s.AuthorityProof = val
-}
-
-// SetCompanyConstitution sets the value of CompanyConstitution.
-func (s *V1OrganizationsOrganizationIDVerificationsPostReq) SetCompanyConstitution(val string) {
-	s.CompanyConstitution = val
-}
-
 // V1OrganizationsPortfolioPortfolioIDDeleteOK is response for V1OrganizationsPortfolioPortfolioIDDelete operation.
 type V1OrganizationsPortfolioPortfolioIDDeleteOK struct{}
 
@@ -6002,7 +5982,7 @@ type VerificationRequest struct {
 	ObjectType    ObjectType                `json:"object_type"`
 	Object        VerificationRequestObject `json:"object"`
 	Content       string                    `json:"content"`
-	Attachments   []string                  `json:"attachments"`
+	Attachments   []Attachment              `json:"attachments"`
 	Status        VerificationStatus        `json:"status"`
 	ReviewComment OptString                 `json:"review_comment"`
 	CreatedAt     time.Time                 `json:"created_at"`
@@ -6035,7 +6015,7 @@ func (s *VerificationRequest) GetContent() string {
 }
 
 // GetAttachments returns the value of Attachments.
-func (s *VerificationRequest) GetAttachments() []string {
+func (s *VerificationRequest) GetAttachments() []Attachment {
 	return s.Attachments
 }
 
@@ -6085,7 +6065,7 @@ func (s *VerificationRequest) SetContent(val string) {
 }
 
 // SetAttachments sets the value of Attachments.
-func (s *VerificationRequest) SetAttachments(val []string) {
+func (s *VerificationRequest) SetAttachments(val []Attachment) {
 	s.Attachments = val
 }
 

@@ -180,13 +180,17 @@ func encodeV1OrganizationsOrganizationIDProfileCustomerPutRequest(
 }
 
 func encodeV1OrganizationsOrganizationIDVerificationsPostRequest(
-	req *V1OrganizationsOrganizationIDVerificationsPostReq,
+	req []Attachment,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
 	e := new(jx.Encoder)
 	{
-		req.Encode(e)
+		e.ArrStart()
+		for _, elem := range req {
+			elem.Encode(e)
+		}
+		e.ArrEnd()
 	}
 	encoded := e.Bytes()
 	ht.SetBody(r, bytes.NewReader(encoded), contentType)

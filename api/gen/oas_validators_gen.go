@@ -10,6 +10,29 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
+func (s *Attachment) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.URL.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "url",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
 func (s *Comment) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -3400,6 +3423,23 @@ func (s *VerificationRequest) Validate() error {
 	if err := func() error {
 		if s.Attachments == nil {
 			return errors.New("nil is invalid value")
+		}
+		var failures []validate.FieldError
+		for i, elem := range s.Attachments {
+			if err := func() error {
+				if err := elem.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				failures = append(failures, validate.FieldError{
+					Name:  fmt.Sprintf("[%d]", i),
+					Error: err,
+				})
+			}
+		}
+		if len(failures) > 0 {
+			return &validate.Error{Fields: failures}
 		}
 		return nil
 	}(); err != nil {

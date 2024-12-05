@@ -1596,25 +1596,11 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - egrul
-                - company_card
-                - authority_proof
-                - company_constitution
-              properties:
-                egrul:
-                  type: string
-                  format: binary
-                company_card:
-                  type: string
-                  format: binary
-                authority_proof:
-                  type: string
-                  format: binary
-                company_constitution:
-                  type: string
-                  format: binary
+              type: array
+              minItems: 4
+              maxItems: 4
+              items:
+                $ref: '#/components/schemas/Attachment'
       responses:
         '200':
           description: Success
@@ -2652,6 +2638,17 @@ components:
         created_at:
           type: string
           format: date-time
+    Attachment:
+      type: object
+      required:
+        - url
+      properties:
+        name:
+          type: string
+          description: Название элемента
+          example: example
+        url:
+          $ref: '#/components/schemas/url'
     VerificationRequest:
       type: object
       required:
@@ -2679,7 +2676,7 @@ components:
         attachments:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/Attachment'
         status:
           $ref: '#/components/schemas/verification_status'
         review_comment:

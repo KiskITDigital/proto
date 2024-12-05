@@ -10,6 +10,7 @@ import (
 type Service struct {
 	psql              DBTX
 	organizationStore OrganizationStore
+	verificationStore VerificationStore
 }
 
 type DBTX interface {
@@ -24,9 +25,17 @@ type OrganizationStore interface {
 	Update(ctx context.Context, qe store.QueryExecutor, params store.OrganizationUpdateParams) error
 }
 
-func New(psql DBTX, organizationStore OrganizationStore) *Service {
+type VerificationStore interface {
+	Create(ctx context.Context, qe store.QueryExecutor, params store.VerificationRequestCreateParams) error
+}
+
+func New(
+	psql DBTX, 
+	organizationStore OrganizationStore,
+	verificationStore VerificationStore) *Service {
 	return &Service{
 		psql:              psql,
 		organizationStore: organizationStore,
+		verificationStore: verificationStore,
 	}
 }
