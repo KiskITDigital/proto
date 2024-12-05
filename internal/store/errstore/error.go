@@ -16,3 +16,7 @@ var (
 var (
 	ErrUserNotFound = errors.New("user not found")
 )
+
+var (
+	ErrOrganizationNotFound = errors.New("organization not found")
+)
