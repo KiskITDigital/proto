@@ -2,10 +2,10 @@ package store
 
 import "gitlab.ubrato.ru/ubrato/core/internal/models"
 
-type OrganizationGetParams struct{
+type OrganizationGetParams struct {
 	IsContractor models.Optional[bool]
-	Offset     uint64
-	Limit      uint64
+	Offset       uint64
+	Limit        uint64
 }
 
 type OrganizationCreateParams struct {
@@ -19,6 +19,12 @@ type OrganizationCreateParams struct {
 	KPP          string
 	TaxCode      string
 	Address      string
+}
+
+type OrganizationUpdateParams struct {
+	OrganizationID int
+	Brand          models.Optional[string]
+	AvatarURL      models.Optional[string]
 }
 
 type OrganizationAddUserParams struct {
