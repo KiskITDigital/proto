@@ -206,14 +206,21 @@ func (s *VerificationStore) GetOrganizationRequests(ctx context.Context, qe stor
 		LeftJoin("users u ON vr.reviewer_user_id = u.id").
 		LeftJoin("employee e ON e.user_id = u.id").
 		Join("organizations o ON vr.object_id = o.id").
-		Where(
-			squirrel.Eq{
-				"vr.object_type": models.ObjectTypeOrganization,
-				"vr.status":      params.Status},
-		).
+		Where(squirrel.Eq{"vr.object_type": models.ObjectTypeOrganization}).
 		Offset(params.Offset).
-		Limit(params.Limit).
 		PlaceholderFormat(squirrel.Dollar)
+
+	if params.Limit > 0 {
+		builder = builder.Limit(params.Limit)
+	}
+
+	if len(params.Status) != 0 {
+		builder = builder.Where(squirrel.Eq{"vr.status": params.Status})
+	}
+
+	if params.ObjectID.Set {
+		builder = builder.Where(squirrel.Eq{"vr.object_id": params.ObjectID.Value}).OrderBy("vr.reviewed_at DESC")
+	}
 
 	rows, err := builder.RunWith(qe).QueryContext(ctx)
 	if err != nil {

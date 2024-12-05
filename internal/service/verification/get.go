@@ -39,6 +39,7 @@ func (s *Service) GetByID(ctx context.Context, requestID int) (models.Verificati
 func (s *Service) Get(ctx context.Context, params service.VerificationRequestsObjectGetParams) ([]models.VerificationRequest[models.VerificationObject], error) {
 	storeParams := store.VerificationRequestsObjectGetParams{
 		ObjectType: models.NewOptional(params.ObjectType),
+		ObjectID:   params.ObjectID,
 		Status:     params.Status,
 		Offset:     params.Offset,
 		Limit:      params.Limit,

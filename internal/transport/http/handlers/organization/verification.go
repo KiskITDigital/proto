@@ -23,10 +23,30 @@ func (h *Handler) V1OrganizationsOrganizationIDVerificationsPost(
 
 	if err := h.organizationService.CreateVerificationRequest(ctx, service.OrganizationCreateVerificationRequestParams{
 		OrganizationID: params.OrganizationID,
-		Attachments: convert.Slice[[]api.Attachment, []models.Attachment](req, models.ConvertAPIToAttachment),
+		Attachments:    convert.Slice[[]api.Attachment, []models.Attachment](req, models.ConvertAPIToAttachment),
 	}); err != nil {
 		return nil, fmt.Errorf("create verif req: %w", err)
 	}
 
 	return &api.V1OrganizationsOrganizationIDVerificationsPostOK{}, nil
+}
+
+func (h *Handler) V1OrganizationsOrganizationIDVerificationsGet(
+	ctx context.Context,
+	params api.V1OrganizationsOrganizationIDVerificationsGetParams,
+) (api.V1OrganizationsOrganizationIDVerificationsGetRes, error) {
+	if params.OrganizationID != contextor.GetOrganizationID(ctx) {
+		return nil, cerr.Wrap(cerr.ErrPermission, cerr.CodeNotPermitted, "not enough permissions to get verification requests of the organization", nil)
+	}
+
+	request, err := h.verificationService.Get(ctx, service.VerificationRequestsObjectGetParams{
+		ObjectType: models.ObjectTypeOrganization,
+		ObjectID:   models.NewOptional(params.OrganizationID)})
+	if err != nil {
+		return nil, fmt.Errorf("get verif requests: %w", err)
+	}
+
+	return &api.V1OrganizationsOrganizationIDVerificationsGetOK{
+		Data: convert.Slice[[]models.VerificationRequest[models.VerificationObject], []api.VerificationRequest](request, models.VerificationRequestModelToApi),
+	}, nil
 }
