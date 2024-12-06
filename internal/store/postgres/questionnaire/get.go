@@ -3,12 +3,14 @@ package questionnaire
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"time"
 
 	"github.com/Masterminds/squirrel"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
+	"gitlab.ubrato.ru/ubrato/core/internal/store/errstore"
 )
 
 func (s *QuestionnaireStore) Get(ctx context.Context, qe store.QueryExecutor, params store.QuestionnaireGetParams) ([]models.Questionnaire, error) {
@@ -98,4 +100,21 @@ func (s *QuestionnaireStore) Get(ctx context.Context, qe store.QueryExecutor, pa
 	}
 
 	return questionnaires, nil
+}
+
+func (s *QuestionnaireStore) GetStatus(ctx context.Context, qe store.QueryExecutor, organizationID int) (bool, error) {
+	builder := squirrel.Select("q.is_completed").
+		From("questionnaire AS q").
+		Where(squirrel.Eq{"q.organization_id": organizationID}).
+		PlaceholderFormat(squirrel.Dollar)
+
+	var isCompleted bool
+	if err := builder.RunWith(qe).QueryRowContext(ctx).Scan(&isCompleted); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return false, errstore.ErrQuestionnaireNotFound
+		}
+		return false, fmt.Errorf("query row: %w", err)
+	}
+
+	return isCompleted, nil
 }

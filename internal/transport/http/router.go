@@ -81,12 +81,12 @@ type Organization interface {
 	V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, req []api.Attachment, params api.V1OrganizationsOrganizationIDVerificationsPostParams) (api.V1OrganizationsOrganizationIDVerificationsPostRes, error)
 	V1OrganizationsVerificationsGet(ctx context.Context, params api.V1OrganizationsVerificationsGetParams) (api.V1OrganizationsVerificationsGetRes, error)
 	V1OrganizationsContractorsGet(ctx context.Context, params api.V1OrganizationsContractorsGetParams) (api.V1OrganizationsContractorsGetRes, error)
-	
+
 	V1OrganizationsOrganizationIDProfileBrandPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileBrandPutReq, params api.V1OrganizationsOrganizationIDProfileBrandPutParams) (api.V1OrganizationsOrganizationIDProfileBrandPutRes, error)
 	V1OrganizationsOrganizationIDProfileContactsPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileContactsPutReq, params api.V1OrganizationsOrganizationIDProfileContactsPutParams) (api.V1OrganizationsOrganizationIDProfileContactsPutRes, error)
 	V1OrganizationsOrganizationIDProfileContractorPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileContractorPutReq, params api.V1OrganizationsOrganizationIDProfileContractorPutParams) (api.V1OrganizationsOrganizationIDProfileContractorPutRes, error)
 	V1OrganizationsOrganizationIDProfileCustomerPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileCustomerPutReq, params api.V1OrganizationsOrganizationIDProfileCustomerPutParams) (api.V1OrganizationsOrganizationIDProfileCustomerPutRes, error)
-	
+
 	V1OrganizationsPortfolioPortfolioIDDelete(ctx context.Context, params api.V1OrganizationsPortfolioPortfolioIDDeleteParams) (api.V1OrganizationsPortfolioPortfolioIDDeleteRes, error)
 	V1OrganizationsPortfolioPortfolioIDPut(ctx context.Context, req *api.V1OrganizationsPortfolioPortfolioIDPutReq, params api.V1OrganizationsPortfolioPortfolioIDPutParams) (api.V1OrganizationsPortfolioPortfolioIDPutRes, error)
 	V1OrganizationsOrganizationIDPortfolioPost(ctx context.Context, req *api.V1OrganizationsOrganizationIDPortfolioPostReq, params api.V1OrganizationsOrganizationIDPortfolioPostParams) (api.V1OrganizationsOrganizationIDPortfolioPostRes, error)
@@ -113,7 +113,8 @@ type Employee interface {
 }
 
 type Questionnaire interface {
-	V1QuestionnairePost(ctx context.Context, req *api.V1QuestionnairePostReq) (api.V1QuestionnairePostRes, error)
+	V1QuestionnaireOrganizationIDPost(ctx context.Context, req *api.V1QuestionnaireOrganizationIDPostReq, params api.V1QuestionnaireOrganizationIDPostParams) (api.V1QuestionnaireOrganizationIDPostRes, error)
+	V1QuestionnaireOrganizationIDStatusGet(ctx context.Context, params api.V1QuestionnaireOrganizationIDStatusGetParams) (api.V1QuestionnaireOrganizationIDStatusGetRes, error)
 	V1QuestionnaireGet(ctx context.Context, params api.V1QuestionnaireGetParams) (api.V1QuestionnaireGetRes, error)
 }
 

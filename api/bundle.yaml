@@ -904,36 +904,6 @@ paths:
         default:
           $ref: '#/components/responses/Error'
   /v1/questionnaire:
-    post:
-      tags:
-        - questionnaire
-      summary: Save the contractor's answers to the questionnaire
-      description: Save the contractor's answers to the questionnaire
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - answers
-                - is_completed
-              properties:
-                answers:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/QuestionnaireAnswer'
-                is_completed:
-                  type: boolean
-                  description: the questionnaire is completed
-                  default: false
-      responses:
-        '200':
-          description: Success
-        default:
-          $ref: '#/components/responses/Error'
     get:
       tags:
         - questionnaire
@@ -975,6 +945,84 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Questionnaire'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/questionnaire/{organizationID}:
+    post:
+      tags:
+        - questionnaire
+      summary: Save the contractor's answers to the questionnaire
+      description: Save the contractor's answers to the questionnaire
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - answers
+                - is_completed
+              properties:
+                answers:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/QuestionnaireAnswer'
+                is_completed:
+                  type: boolean
+                  description: the questionnaire is completed
+                  default: false
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/questionnaire/{organizationID}/status:
+    get:
+      tags:
+        - questionnaire
+      summary: Get contractor's questionnaire status
+      description: Retrieve the status of a contractor's questionnaire.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - is_completed
+                    properties:
+                      is_completed:
+                        type: boolean
+                        description: the questionnaire is completed
+                        default: false
         default:
           $ref: '#/components/responses/Error'
   /v1/employee:

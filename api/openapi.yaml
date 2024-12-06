@@ -46,6 +46,10 @@ paths:
 
   /v1/questionnaire:
     $ref: "v1/paths/questionnaire/_index.yaml"
+  /v1/questionnaire/{organizationID}:
+    $ref: "v1/paths/questionnaire/organization_id/_index.yaml"
+  /v1/questionnaire/{organizationID}/status:
+    $ref: "v1/paths/questionnaire/organization_id/status.yaml"
 
   /v1/employee:
     $ref: "v1/paths/employee/_index.yaml"
