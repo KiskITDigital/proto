@@ -117,8 +117,12 @@ type V1QuestionnaireGetRes interface {
 	v1QuestionnaireGetRes()
 }
 
-type V1QuestionnairePostRes interface {
-	v1QuestionnairePostRes()
+type V1QuestionnaireOrganizationIDPostRes interface {
+	v1QuestionnaireOrganizationIDPostRes()
+}
+
+type V1QuestionnaireOrganizationIDStatusGetRes interface {
+	v1QuestionnaireOrganizationIDStatusGetRes()
 }
 
 type V1SuggestCityGetRes interface {

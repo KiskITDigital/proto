@@ -295,12 +295,21 @@ func (UnimplementedHandler) V1QuestionnaireGet(ctx context.Context, params V1Que
 	return r, ht.ErrNotImplemented
 }
 
-// V1QuestionnairePost implements POST /v1/questionnaire operation.
+// V1QuestionnaireOrganizationIDPost implements POST /v1/questionnaire/{organizationID} operation.
 //
 // Save the contractor's answers to the questionnaire.
 //
-// POST /v1/questionnaire
-func (UnimplementedHandler) V1QuestionnairePost(ctx context.Context, req *V1QuestionnairePostReq) (r V1QuestionnairePostRes, _ error) {
+// POST /v1/questionnaire/{organizationID}
+func (UnimplementedHandler) V1QuestionnaireOrganizationIDPost(ctx context.Context, req *V1QuestionnaireOrganizationIDPostReq, params V1QuestionnaireOrganizationIDPostParams) (r V1QuestionnaireOrganizationIDPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1QuestionnaireOrganizationIDStatusGet implements GET /v1/questionnaire/{organizationID}/status operation.
+//
+// Retrieve the status of a contractor's questionnaire.
+//
+// GET /v1/questionnaire/{organizationID}/status
+func (UnimplementedHandler) V1QuestionnaireOrganizationIDStatusGet(ctx context.Context, params V1QuestionnaireOrganizationIDStatusGetParams) (r V1QuestionnaireOrganizationIDStatusGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

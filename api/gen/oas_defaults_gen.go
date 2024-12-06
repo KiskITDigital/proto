@@ -3,7 +3,15 @@
 package api
 
 // setDefaults set default value of fields.
-func (s *V1QuestionnairePostReq) setDefaults() {
+func (s *V1QuestionnaireOrganizationIDPostReq) setDefaults() {
+	{
+		val := bool(false)
+		s.IsCompleted = val
+	}
+}
+
+// setDefaults set default value of fields.
+func (s *V1QuestionnaireOrganizationIDStatusGetOKData) setDefaults() {
 	{
 		val := bool(false)
 		s.IsCompleted = val

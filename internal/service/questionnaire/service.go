@@ -22,6 +22,7 @@ type DBTX interface {
 type QuestionnaireStore interface {
 	Create(ctx context.Context, qe store.QueryExecutor, params store.QuestionnaireCreateParams) error
 	Get(ctx context.Context, qe store.QueryExecutor, params store.QuestionnaireGetParams) ([]models.Questionnaire, error)
+	GetStatus(ctx context.Context, qe store.QueryExecutor, organizationID int) (bool, error)
 }
 
 type OrganizationStore interface {

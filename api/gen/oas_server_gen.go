@@ -203,12 +203,18 @@ type Handler interface {
 	//
 	// GET /v1/questionnaire
 	V1QuestionnaireGet(ctx context.Context, params V1QuestionnaireGetParams) (V1QuestionnaireGetRes, error)
-	// V1QuestionnairePost implements POST /v1/questionnaire operation.
+	// V1QuestionnaireOrganizationIDPost implements POST /v1/questionnaire/{organizationID} operation.
 	//
 	// Save the contractor's answers to the questionnaire.
 	//
-	// POST /v1/questionnaire
-	V1QuestionnairePost(ctx context.Context, req *V1QuestionnairePostReq) (V1QuestionnairePostRes, error)
+	// POST /v1/questionnaire/{organizationID}
+	V1QuestionnaireOrganizationIDPost(ctx context.Context, req *V1QuestionnaireOrganizationIDPostReq, params V1QuestionnaireOrganizationIDPostParams) (V1QuestionnaireOrganizationIDPostRes, error)
+	// V1QuestionnaireOrganizationIDStatusGet implements GET /v1/questionnaire/{organizationID}/status operation.
+	//
+	// Retrieve the status of a contractor's questionnaire.
+	//
+	// GET /v1/questionnaire/{organizationID}/status
+	V1QuestionnaireOrganizationIDStatusGet(ctx context.Context, params V1QuestionnaireOrganizationIDStatusGetParams) (V1QuestionnaireOrganizationIDStatusGetRes, error)
 	// V1SuggestCityGet implements GET /v1/suggest/city operation.
 	//
 	// Suggests a city with provided city name.

@@ -4529,19 +4529,19 @@ func (s *Server) handleV1QuestionnaireGetRequest(args [0]string, argsEscaped boo
 	}
 }
 
-// handleV1QuestionnairePostRequest handles POST /v1/questionnaire operation.
+// handleV1QuestionnaireOrganizationIDPostRequest handles POST /v1/questionnaire/{organizationID} operation.
 //
 // Save the contractor's answers to the questionnaire.
 //
-// POST /v1/questionnaire
-func (s *Server) handleV1QuestionnairePostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+// POST /v1/questionnaire/{organizationID}
+func (s *Server) handleV1QuestionnaireOrganizationIDPostRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/questionnaire"),
+		semconv.HTTPRouteKey.String("/v1/questionnaire/{organizationID}"),
 	}
 
 	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), "V1QuestionnairePost",
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "V1QuestionnaireOrganizationIDPost",
 		trace.WithAttributes(otelAttrs...),
 		serverSpanKind,
 	)
@@ -4572,7 +4572,7 @@ func (s *Server) handleV1QuestionnairePostRequest(args [0]string, argsEscaped bo
 		}
 		err          error
 		opErrContext = ogenerrors.OperationContext{
-			Name: "V1QuestionnairePost",
+			Name: "V1QuestionnaireOrganizationIDPost",
 			ID:   "",
 		}
 	)
@@ -4580,7 +4580,7 @@ func (s *Server) handleV1QuestionnairePostRequest(args [0]string, argsEscaped bo
 		type bitset = [1]uint8
 		var satisfied bitset
 		{
-			sctx, ok, err := s.securityBearerAuth(ctx, "V1QuestionnairePost", r)
+			sctx, ok, err := s.securityBearerAuth(ctx, "V1QuestionnaireOrganizationIDPost", r)
 			if err != nil {
 				err = &ogenerrors.SecurityError{
 					OperationContext: opErrContext,
@@ -4620,7 +4620,17 @@ func (s *Server) handleV1QuestionnairePostRequest(args [0]string, argsEscaped bo
 			return
 		}
 	}
-	request, close, err := s.decodeV1QuestionnairePostRequest(r)
+	params, err := decodeV1QuestionnaireOrganizationIDPostParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+	request, close, err := s.decodeV1QuestionnaireOrganizationIDPostRequest(r)
 	if err != nil {
 		err = &ogenerrors.DecodeRequestError{
 			OperationContext: opErrContext,
@@ -4636,22 +4646,27 @@ func (s *Server) handleV1QuestionnairePostRequest(args [0]string, argsEscaped bo
 		}
 	}()
 
-	var response V1QuestionnairePostRes
+	var response V1QuestionnaireOrganizationIDPostRes
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
-			OperationName:    "V1QuestionnairePost",
+			OperationName:    "V1QuestionnaireOrganizationIDPost",
 			OperationSummary: "Save the contractor's answers to the questionnaire",
 			OperationID:      "",
 			Body:             request,
-			Params:           middleware.Parameters{},
-			Raw:              r,
+			Params: middleware.Parameters{
+				{
+					Name: "organizationID",
+					In:   "path",
+				}: params.OrganizationID,
+			},
+			Raw: r,
 		}
 
 		type (
-			Request  = *V1QuestionnairePostReq
-			Params   = struct{}
-			Response = V1QuestionnairePostRes
+			Request  = *V1QuestionnaireOrganizationIDPostReq
+			Params   = V1QuestionnaireOrganizationIDPostParams
+			Response = V1QuestionnaireOrganizationIDPostRes
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -4660,14 +4675,14 @@ func (s *Server) handleV1QuestionnairePostRequest(args [0]string, argsEscaped bo
 		](
 			m,
 			mreq,
-			nil,
+			unpackV1QuestionnaireOrganizationIDPostParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.V1QuestionnairePost(ctx, request)
+				response, err = s.h.V1QuestionnaireOrganizationIDPost(ctx, request, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.V1QuestionnairePost(ctx, request)
+		response, err = s.h.V1QuestionnaireOrganizationIDPost(ctx, request, params)
 	}
 	if err != nil {
 		defer recordError("Internal", err)
@@ -4675,7 +4690,162 @@ func (s *Server) handleV1QuestionnairePostRequest(args [0]string, argsEscaped bo
 		return
 	}
 
-	if err := encodeV1QuestionnairePostResponse(response, w, span); err != nil {
+	if err := encodeV1QuestionnaireOrganizationIDPostResponse(response, w, span); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handleV1QuestionnaireOrganizationIDStatusGetRequest handles GET /v1/questionnaire/{organizationID}/status operation.
+//
+// Retrieve the status of a contractor's questionnaire.
+//
+// GET /v1/questionnaire/{organizationID}/status
+func (s *Server) handleV1QuestionnaireOrganizationIDStatusGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/questionnaire/{organizationID}/status"),
+	}
+
+	// Start a span for this request.
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "V1QuestionnaireOrganizationIDStatusGet",
+		trace.WithAttributes(otelAttrs...),
+		serverSpanKind,
+	)
+	defer span.End()
+
+	// Add Labeler to context.
+	labeler := &Labeler{attrs: otelAttrs}
+	ctx = contextWithLabeler(ctx, labeler)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+		attrOpt := metric.WithAttributeSet(labeler.AttributeSet())
+
+		// Increment request counter.
+		s.requests.Add(ctx, 1, attrOpt)
+
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		s.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), attrOpt)
+	}()
+
+	var (
+		recordError = func(stage string, err error) {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			s.errors.Add(ctx, 1, metric.WithAttributeSet(labeler.AttributeSet()))
+		}
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: "V1QuestionnaireOrganizationIDStatusGet",
+			ID:   "",
+		}
+	)
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			sctx, ok, err := s.securityBearerAuth(ctx, "V1QuestionnaireOrganizationIDStatusGet", r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "BearerAuth",
+					Err:              err,
+				}
+				defer recordError("Security:BearerAuth", err)
+				s.cfg.ErrorHandler(ctx, w, r, err)
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 0
+				ctx = sctx
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			err = &ogenerrors.SecurityError{
+				OperationContext: opErrContext,
+				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+			}
+			defer recordError("Security", err)
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+	}
+	params, err := decodeV1QuestionnaireOrganizationIDStatusGetParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var response V1QuestionnaireOrganizationIDStatusGetRes
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    "V1QuestionnaireOrganizationIDStatusGet",
+			OperationSummary: "Get contractor's questionnaire status",
+			OperationID:      "",
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "organizationID",
+					In:   "path",
+				}: params.OrganizationID,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = V1QuestionnaireOrganizationIDStatusGetParams
+			Response = V1QuestionnaireOrganizationIDStatusGetRes
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackV1QuestionnaireOrganizationIDStatusGetParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1QuestionnaireOrganizationIDStatusGet(ctx, params)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1QuestionnaireOrganizationIDStatusGet(ctx, params)
+	}
+	if err != nil {
+		defer recordError("Internal", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	if err := encodeV1QuestionnaireOrganizationIDStatusGetResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

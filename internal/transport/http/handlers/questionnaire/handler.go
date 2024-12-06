@@ -16,6 +16,7 @@ type Handler struct {
 type QuestionnaireService interface {
 	Create(ctx context.Context, params service.QuestionnaireCreateParams) error
 	Get(ctx context.Context, params service.QuestionnaireGetParams) ([]models.Questionnaire, error)
+	GetStatus(ctx context.Context, organizationID int) (bool, error)
 }
 
 func New(

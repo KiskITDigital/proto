@@ -14,9 +14,13 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/store/errstore"
 )
 
-func (h *Handler) V1QuestionnairePost(ctx context.Context, req *api.V1QuestionnairePostReq) (api.V1QuestionnairePostRes, error) {
+func (h *Handler) V1QuestionnaireOrganizationIDPost(ctx context.Context, req *api.V1QuestionnaireOrganizationIDPostReq, params api.V1QuestionnaireOrganizationIDPostParams) (api.V1QuestionnaireOrganizationIDPostRes, error) {
+	if params.OrganizationID != contextor.GetOrganizationID(ctx) {
+		return nil, cerr.Wrap(cerr.ErrPermission, cerr.CodeNotPermitted, "not enough permissions to submit questionnaire answers", nil)
+	}
+
 	if err := h.questionnaireService.Create(ctx, service.QuestionnaireCreateParams{
-		OrganizationID: contextor.GetOrganizationID(ctx),
+		OrganizationID: params.OrganizationID,
 		Answers:        convert.Slice[[]api.QuestionnaireAnswer, []models.Answer](req.Answers, models.ConvertAPIToAnswer),
 		IsCompleted:    req.GetIsCompleted(),
 	}); err != nil {
@@ -26,5 +30,5 @@ func (h *Handler) V1QuestionnairePost(ctx context.Context, req *api.V1Questionna
 		return nil, fmt.Errorf("create questionnaire: %w", err)
 	}
 
-	return &api.V1QuestionnairePostOK{}, nil
+	return &api.V1QuestionnaireOrganizationIDPostOK{}, nil
 }

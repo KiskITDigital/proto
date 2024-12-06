@@ -541,7 +541,8 @@ func (*ErrorStatusCode) v1OrganizationsPortfolioPortfolioIDDeleteRes()         {
 func (*ErrorStatusCode) v1OrganizationsPortfolioPortfolioIDPutRes()            {}
 func (*ErrorStatusCode) v1OrganizationsVerificationsGetRes()                   {}
 func (*ErrorStatusCode) v1QuestionnaireGetRes()                                {}
-func (*ErrorStatusCode) v1QuestionnairePostRes()                               {}
+func (*ErrorStatusCode) v1QuestionnaireOrganizationIDPostRes()                 {}
+func (*ErrorStatusCode) v1QuestionnaireOrganizationIDStatusGetRes()            {}
 func (*ErrorStatusCode) v1SuggestCityGetRes()                                  {}
 func (*ErrorStatusCode) v1SuggestCompanyGetRes()                               {}
 func (*ErrorStatusCode) v1SurveyPostRes()                                      {}
@@ -4774,34 +4775,65 @@ func (s *V1QuestionnaireGetOK) SetData(val []Questionnaire) {
 
 func (*V1QuestionnaireGetOK) v1QuestionnaireGetRes() {}
 
-// V1QuestionnairePostOK is response for V1QuestionnairePost operation.
-type V1QuestionnairePostOK struct{}
+// V1QuestionnaireOrganizationIDPostOK is response for V1QuestionnaireOrganizationIDPost operation.
+type V1QuestionnaireOrganizationIDPostOK struct{}
 
-func (*V1QuestionnairePostOK) v1QuestionnairePostRes() {}
+func (*V1QuestionnaireOrganizationIDPostOK) v1QuestionnaireOrganizationIDPostRes() {}
 
-type V1QuestionnairePostReq struct {
+type V1QuestionnaireOrganizationIDPostReq struct {
 	Answers []QuestionnaireAnswer `json:"answers"`
 	// The questionnaire is completed.
 	IsCompleted bool `json:"is_completed"`
 }
 
 // GetAnswers returns the value of Answers.
-func (s *V1QuestionnairePostReq) GetAnswers() []QuestionnaireAnswer {
+func (s *V1QuestionnaireOrganizationIDPostReq) GetAnswers() []QuestionnaireAnswer {
 	return s.Answers
 }
 
 // GetIsCompleted returns the value of IsCompleted.
-func (s *V1QuestionnairePostReq) GetIsCompleted() bool {
+func (s *V1QuestionnaireOrganizationIDPostReq) GetIsCompleted() bool {
 	return s.IsCompleted
 }
 
 // SetAnswers sets the value of Answers.
-func (s *V1QuestionnairePostReq) SetAnswers(val []QuestionnaireAnswer) {
+func (s *V1QuestionnaireOrganizationIDPostReq) SetAnswers(val []QuestionnaireAnswer) {
 	s.Answers = val
 }
 
 // SetIsCompleted sets the value of IsCompleted.
-func (s *V1QuestionnairePostReq) SetIsCompleted(val bool) {
+func (s *V1QuestionnaireOrganizationIDPostReq) SetIsCompleted(val bool) {
+	s.IsCompleted = val
+}
+
+type V1QuestionnaireOrganizationIDStatusGetOK struct {
+	Data V1QuestionnaireOrganizationIDStatusGetOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1QuestionnaireOrganizationIDStatusGetOK) GetData() V1QuestionnaireOrganizationIDStatusGetOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1QuestionnaireOrganizationIDStatusGetOK) SetData(val V1QuestionnaireOrganizationIDStatusGetOKData) {
+	s.Data = val
+}
+
+func (*V1QuestionnaireOrganizationIDStatusGetOK) v1QuestionnaireOrganizationIDStatusGetRes() {}
+
+type V1QuestionnaireOrganizationIDStatusGetOKData struct {
+	// The questionnaire is completed.
+	IsCompleted bool `json:"is_completed"`
+}
+
+// GetIsCompleted returns the value of IsCompleted.
+func (s *V1QuestionnaireOrganizationIDStatusGetOKData) GetIsCompleted() bool {
+	return s.IsCompleted
+}
+
+// SetIsCompleted sets the value of IsCompleted.
+func (s *V1QuestionnaireOrganizationIDStatusGetOKData) SetIsCompleted(val bool) {
 	s.IsCompleted = val
 }
 

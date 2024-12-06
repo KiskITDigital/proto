@@ -218,12 +218,18 @@ type Invoker interface {
 	//
 	// GET /v1/questionnaire
 	V1QuestionnaireGet(ctx context.Context, params V1QuestionnaireGetParams) (V1QuestionnaireGetRes, error)
-	// V1QuestionnairePost invokes POST /v1/questionnaire operation.
+	// V1QuestionnaireOrganizationIDPost invokes POST /v1/questionnaire/{organizationID} operation.
 	//
 	// Save the contractor's answers to the questionnaire.
 	//
-	// POST /v1/questionnaire
-	V1QuestionnairePost(ctx context.Context, request *V1QuestionnairePostReq) (V1QuestionnairePostRes, error)
+	// POST /v1/questionnaire/{organizationID}
+	V1QuestionnaireOrganizationIDPost(ctx context.Context, request *V1QuestionnaireOrganizationIDPostReq, params V1QuestionnaireOrganizationIDPostParams) (V1QuestionnaireOrganizationIDPostRes, error)
+	// V1QuestionnaireOrganizationIDStatusGet invokes GET /v1/questionnaire/{organizationID}/status operation.
+	//
+	// Retrieve the status of a contractor's questionnaire.
+	//
+	// GET /v1/questionnaire/{organizationID}/status
+	V1QuestionnaireOrganizationIDStatusGet(ctx context.Context, params V1QuestionnaireOrganizationIDStatusGetParams) (V1QuestionnaireOrganizationIDStatusGetRes, error)
 	// V1SuggestCityGet invokes GET /v1/suggest/city operation.
 	//
 	// Suggests a city with provided city name.
@@ -4130,20 +4136,20 @@ func (c *Client) sendV1QuestionnaireGet(ctx context.Context, params V1Questionna
 	return result, nil
 }
 
-// V1QuestionnairePost invokes POST /v1/questionnaire operation.
+// V1QuestionnaireOrganizationIDPost invokes POST /v1/questionnaire/{organizationID} operation.
 //
 // Save the contractor's answers to the questionnaire.
 //
-// POST /v1/questionnaire
-func (c *Client) V1QuestionnairePost(ctx context.Context, request *V1QuestionnairePostReq) (V1QuestionnairePostRes, error) {
-	res, err := c.sendV1QuestionnairePost(ctx, request)
+// POST /v1/questionnaire/{organizationID}
+func (c *Client) V1QuestionnaireOrganizationIDPost(ctx context.Context, request *V1QuestionnaireOrganizationIDPostReq, params V1QuestionnaireOrganizationIDPostParams) (V1QuestionnaireOrganizationIDPostRes, error) {
+	res, err := c.sendV1QuestionnaireOrganizationIDPost(ctx, request, params)
 	return res, err
 }
 
-func (c *Client) sendV1QuestionnairePost(ctx context.Context, request *V1QuestionnairePostReq) (res V1QuestionnairePostRes, err error) {
+func (c *Client) sendV1QuestionnaireOrganizationIDPost(ctx context.Context, request *V1QuestionnaireOrganizationIDPostReq, params V1QuestionnaireOrganizationIDPostParams) (res V1QuestionnaireOrganizationIDPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/questionnaire"),
+		semconv.HTTPRouteKey.String("/v1/questionnaire/{organizationID}"),
 	}
 
 	// Run stopwatch.
@@ -4158,7 +4164,7 @@ func (c *Client) sendV1QuestionnairePost(ctx context.Context, request *V1Questio
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "V1QuestionnairePost",
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1QuestionnaireOrganizationIDPost",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -4175,8 +4181,26 @@ func (c *Client) sendV1QuestionnairePost(ctx context.Context, request *V1Questio
 
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/v1/questionnaire"
+	var pathParts [2]string
+	pathParts[0] = "/v1/questionnaire/"
+	{
+		// Encode "organizationID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.OrganizationID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
@@ -4184,7 +4208,7 @@ func (c *Client) sendV1QuestionnairePost(ctx context.Context, request *V1Questio
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
-	if err := encodeV1QuestionnairePostRequest(request, r); err != nil {
+	if err := encodeV1QuestionnaireOrganizationIDPostRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
 	}
 
@@ -4193,7 +4217,7 @@ func (c *Client) sendV1QuestionnairePost(ctx context.Context, request *V1Questio
 		var satisfied bitset
 		{
 			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "V1QuestionnairePost", r); {
+			switch err := c.securityBearerAuth(ctx, "V1QuestionnaireOrganizationIDPost", r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -4229,7 +4253,130 @@ func (c *Client) sendV1QuestionnairePost(ctx context.Context, request *V1Questio
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeV1QuestionnairePostResponse(resp)
+	result, err := decodeV1QuestionnaireOrganizationIDPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1QuestionnaireOrganizationIDStatusGet invokes GET /v1/questionnaire/{organizationID}/status operation.
+//
+// Retrieve the status of a contractor's questionnaire.
+//
+// GET /v1/questionnaire/{organizationID}/status
+func (c *Client) V1QuestionnaireOrganizationIDStatusGet(ctx context.Context, params V1QuestionnaireOrganizationIDStatusGetParams) (V1QuestionnaireOrganizationIDStatusGetRes, error) {
+	res, err := c.sendV1QuestionnaireOrganizationIDStatusGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1QuestionnaireOrganizationIDStatusGet(ctx context.Context, params V1QuestionnaireOrganizationIDStatusGetParams) (res V1QuestionnaireOrganizationIDStatusGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/questionnaire/{organizationID}/status"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1QuestionnaireOrganizationIDStatusGet",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/v1/questionnaire/"
+	{
+		// Encode "organizationID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.OrganizationID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/status"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1QuestionnaireOrganizationIDStatusGet", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1QuestionnaireOrganizationIDStatusGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

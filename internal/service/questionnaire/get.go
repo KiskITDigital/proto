@@ -10,7 +10,11 @@ import (
 
 func (s *Service) Get(ctx context.Context, params service.QuestionnaireGetParams) ([]models.Questionnaire, error) {
 	return s.questionnaireStore.Get(ctx, s.psql.DB(), store.QuestionnaireGetParams{
-		Limit: params.Limit,
+		Limit:  params.Limit,
 		Offset: params.Offset,
 	})
+}
+
+func (s *Service) GetStatus(ctx context.Context, organizationID int) (bool, error) {
+	return s.questionnaireStore.GetStatus(ctx, s.psql.DB(), organizationID)
 }

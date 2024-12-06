@@ -10,7 +10,8 @@ const (
 )
 
 var (
-	ErrQuestionnaireExist = errors.New("the questionnaire has been completed")
+	ErrQuestionnaireExist = errors.New("questionnaire has been completed")
+	ErrQuestionnaireNotFound = errors.New("questionnaire not found")
 )
 
 var (

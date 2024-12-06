@@ -2577,7 +2577,7 @@ func (s *V1QuestionnaireGetOK) Validate() error {
 	return nil
 }
 
-func (s *V1QuestionnairePostReq) Validate() error {
+func (s *V1QuestionnaireOrganizationIDPostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
 	}

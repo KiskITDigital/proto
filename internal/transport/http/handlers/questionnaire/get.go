@@ -2,6 +2,7 @@ package questionnaire
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
@@ -10,6 +11,7 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/service"
+	"gitlab.ubrato.ru/ubrato/core/internal/store/errstore"
 )
 
 func (h *Handler) V1QuestionnaireGet(ctx context.Context, params api.V1QuestionnaireGetParams) (api.V1QuestionnaireGetRes, error) {
@@ -28,5 +30,22 @@ func (h *Handler) V1QuestionnaireGet(ctx context.Context, params api.V1Questionn
 	return &api.V1QuestionnaireGetOK{
 		Data: convert.Slice[[]models.Questionnaire, []api.Questionnaire](questionnaires, models.ConvertQuestionnaireToAPI),
 	}, nil
+}
 
+func (h *Handler) V1QuestionnaireOrganizationIDStatusGet(ctx context.Context, params api.V1QuestionnaireOrganizationIDStatusGetParams) (api.V1QuestionnaireOrganizationIDStatusGetRes, error) {
+	status, err := h.questionnaireService.GetStatus(ctx, params.OrganizationID)
+	if err != nil {
+		if errors.Is(err, errstore.ErrQuestionnaireNotFound) {
+			return nil, cerr.Wrap(err, cerr.CodeNotFound, "Анкета не найдена", map[string]interface{}{
+				"organization_id": params.OrganizationID,
+			})
+		}
+		return nil, fmt.Errorf("get questionnaire status: %w", err)
+	}
+
+	return &api.V1QuestionnaireOrganizationIDStatusGetOK{
+		Data: api.V1QuestionnaireOrganizationIDStatusGetOKData{
+			IsCompleted: status,
+		},
+	}, nil
 }

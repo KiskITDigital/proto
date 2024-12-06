@@ -211,8 +211,8 @@ func encodeV1OrganizationsPortfolioPortfolioIDPutRequest(
 	return nil
 }
 
-func encodeV1QuestionnairePostRequest(
-	req *V1QuestionnairePostReq,
+func encodeV1QuestionnaireOrganizationIDPostRequest(
+	req *V1QuestionnaireOrganizationIDPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

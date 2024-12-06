@@ -995,8 +995,8 @@ func (s *Server) decodeV1OrganizationsPortfolioPortfolioIDPutRequest(r *http.Req
 	}
 }
 
-func (s *Server) decodeV1QuestionnairePostRequest(r *http.Request) (
-	req *V1QuestionnairePostReq,
+func (s *Server) decodeV1QuestionnaireOrganizationIDPostRequest(r *http.Request) (
+	req *V1QuestionnaireOrganizationIDPostReq,
 	close func() error,
 	rerr error,
 ) {
@@ -1035,7 +1035,7 @@ func (s *Server) decodeV1QuestionnairePostRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request V1QuestionnairePostReq
+		var request V1QuestionnaireOrganizationIDPostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
