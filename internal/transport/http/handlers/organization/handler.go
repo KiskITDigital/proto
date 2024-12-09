@@ -20,6 +20,7 @@ type OrganizationService interface {
 	UpdateBrand(ctx context.Context, params service.OrganizationUpdateBrandParams) error
 	UpdateContacts(ctx context.Context, params service.OrganizationUpdateContactsParams) error
 	CreateVerificationRequest(ctx context.Context, params service.OrganizationCreateVerificationRequestParams) error
+	UpdateCustomer(ctx context.Context, params service.OrganizationUpdateCustomerParams) (models.Organization, error)
 }
 
 type VerificationService interface {

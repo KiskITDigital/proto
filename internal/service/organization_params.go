@@ -25,3 +25,17 @@ type OrganizationCreateVerificationRequestParams struct {
 	OrganizationID int
 	Attachments    models.Attachments
 }
+
+type OrganizationUpdateContractorParams struct {
+	OrganizationID int
+	Description    models.Optional[string]
+	Cities         models.Optional[[]int]
+	Services       models.Optional[[]int]
+	Objects        models.Optional[[]int]
+}
+
+type OrganizationUpdateCustomerParams struct {
+	OrganizationID int
+	Description    models.Optional[string]
+	CityIDs        []int
+}

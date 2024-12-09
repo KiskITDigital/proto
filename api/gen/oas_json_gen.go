@@ -587,24 +587,32 @@ func (s *ContractorInfo) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *ContractorInfo) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("description")
-		s.Description.Encode(e)
-	}
-	{
-		e.FieldStart("cities")
-		e.ArrStart()
-		for _, elem := range s.Cities {
-			elem.Encode(e)
+		if s.Description.Set {
+			e.FieldStart("description")
+			s.Description.Encode(e)
 		}
-		e.ArrEnd()
 	}
 	{
-		e.FieldStart("services")
-		s.Services.Encode(e)
+		if s.Cities != nil {
+			e.FieldStart("cities")
+			e.ArrStart()
+			for _, elem := range s.Cities {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
 	}
 	{
-		e.FieldStart("objects")
-		s.Objects.Encode(e)
+		if s.Services != nil {
+			e.FieldStart("services")
+			s.Services.Encode(e)
+		}
+	}
+	{
+		if s.Objects != nil {
+			e.FieldStart("objects")
+			s.Objects.Encode(e)
+		}
 	}
 }
 
@@ -620,13 +628,12 @@ func (s *ContractorInfo) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode ContractorInfo to nil")
 	}
-	var requiredBitSet [1]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "description":
-			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
+				s.Description.Reset()
 				if err := s.Description.Decode(d); err != nil {
 					return err
 				}
@@ -635,7 +642,6 @@ func (s *ContractorInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"description\"")
 			}
 		case "cities":
-			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
 				s.Cities = make([]City, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
@@ -653,7 +659,6 @@ func (s *ContractorInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"cities\"")
 			}
 		case "services":
-			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
 				if err := s.Services.Decode(d); err != nil {
 					return err
@@ -663,7 +668,6 @@ func (s *ContractorInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"services\"")
 			}
 		case "objects":
-			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
 				if err := s.Objects.Decode(d); err != nil {
 					return err
@@ -678,38 +682,6 @@ func (s *ContractorInfo) Decode(d *jx.Decoder) error {
 		return nil
 	}); err != nil {
 		return errors.Wrap(err, "decode ContractorInfo")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00001111,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfContractorInfo) {
-					name = jsonFieldsNameOfContractorInfo[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
 	}
 
 	return nil
@@ -738,16 +710,20 @@ func (s *CustomerInfo) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *CustomerInfo) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("description")
-		s.Description.Encode(e)
+		if s.Description.Set {
+			e.FieldStart("description")
+			s.Description.Encode(e)
+		}
 	}
 	{
-		e.FieldStart("cities")
-		e.ArrStart()
-		for _, elem := range s.Cities {
-			elem.Encode(e)
+		if s.Cities != nil {
+			e.FieldStart("cities")
+			e.ArrStart()
+			for _, elem := range s.Cities {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
 		}
-		e.ArrEnd()
 	}
 }
 
@@ -761,13 +737,12 @@ func (s *CustomerInfo) Decode(d *jx.Decoder) error {
 	if s == nil {
 		return errors.New("invalid: unable to decode CustomerInfo to nil")
 	}
-	var requiredBitSet [1]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "description":
-			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
+				s.Description.Reset()
 				if err := s.Description.Decode(d); err != nil {
 					return err
 				}
@@ -776,7 +751,6 @@ func (s *CustomerInfo) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"description\"")
 			}
 		case "cities":
-			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
 				s.Cities = make([]City, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
@@ -799,38 +773,6 @@ func (s *CustomerInfo) Decode(d *jx.Decoder) error {
 		return nil
 	}); err != nil {
 		return errors.Wrap(err, "decode CustomerInfo")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000011,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfCustomerInfo) {
-					name = jsonFieldsNameOfCustomerInfo[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
 	}
 
 	return nil
@@ -1703,12 +1645,17 @@ func (s *ObjectType) UnmarshalJSON(data []byte) error {
 // Encode encodes Objects as json.
 func (s Objects) Encode(e *jx.Encoder) {
 	unwrapped := []Object(s)
-
-	e.ArrStart()
-	for _, elem := range unwrapped {
-		elem.Encode(e)
+	if unwrapped == nil {
+		e.ArrEmpty()
+		return
 	}
-	e.ArrEnd()
+	if unwrapped != nil {
+		e.ArrStart()
+		for _, elem := range unwrapped {
+			elem.Encode(e)
+		}
+		e.ArrEnd()
+	}
 }
 
 // Decode decodes Objects from json.
@@ -1861,72 +1808,6 @@ func (s OptBool) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptBool) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes ContractorInfo as json.
-func (o OptContractorInfo) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	o.Value.Encode(e)
-}
-
-// Decode decodes ContractorInfo from json.
-func (o *OptContractorInfo) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptContractorInfo to nil")
-	}
-	o.Set = true
-	if err := o.Value.Decode(d); err != nil {
-		return err
-	}
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptContractorInfo) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptContractorInfo) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes CustomerInfo as json.
-func (o OptCustomerInfo) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	o.Value.Encode(e)
-}
-
-// Decode decodes CustomerInfo from json.
-func (o *OptCustomerInfo) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptCustomerInfo to nil")
-	}
-	o.Set = true
-	if err := o.Value.Decode(d); err != nil {
-		return err
-	}
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptCustomerInfo) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptCustomerInfo) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -2429,16 +2310,12 @@ func (s *Organization) encodeFields(e *jx.Encoder) {
 		e.Bool(s.IsBanned)
 	}
 	{
-		if s.CustomerInfo.Set {
-			e.FieldStart("customer_info")
-			s.CustomerInfo.Encode(e)
-		}
+		e.FieldStart("customer_info")
+		s.CustomerInfo.Encode(e)
 	}
 	{
-		if s.ContractorInfo.Set {
-			e.FieldStart("contractor_info")
-			s.ContractorInfo.Encode(e)
-		}
+		e.FieldStart("contractor_info")
+		s.ContractorInfo.Encode(e)
 	}
 	{
 		e.FieldStart("created_at")
@@ -2686,8 +2563,8 @@ func (s *Organization) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"is_banned\"")
 			}
 		case "customer_info":
+			requiredBitSet[2] |= 1 << 1
 			if err := func() error {
-				s.CustomerInfo.Reset()
 				if err := s.CustomerInfo.Decode(d); err != nil {
 					return err
 				}
@@ -2696,8 +2573,8 @@ func (s *Organization) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"customer_info\"")
 			}
 		case "contractor_info":
+			requiredBitSet[2] |= 1 << 2
 			if err := func() error {
-				s.ContractorInfo.Reset()
 				if err := s.ContractorInfo.Decode(d); err != nil {
 					return err
 				}
@@ -2741,7 +2618,7 @@ func (s *Organization) Decode(d *jx.Decoder) error {
 	for i, mask := range [3]uint8{
 		0b11111111,
 		0b10111011,
-		0b00011001,
+		0b00011111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -3980,12 +3857,17 @@ func (s *Service) UnmarshalJSON(data []byte) error {
 // Encode encodes Services as json.
 func (s Services) Encode(e *jx.Encoder) {
 	unwrapped := []Service(s)
-
-	e.ArrStart()
-	for _, elem := range unwrapped {
-		elem.Encode(e)
+	if unwrapped == nil {
+		e.ArrEmpty()
+		return
 	}
-	e.ArrEnd()
+	if unwrapped != nil {
+		e.ArrStart()
+		for _, elem := range unwrapped {
+			elem.Encode(e)
+		}
+		e.ArrEnd()
+	}
 }
 
 // Decode decodes Services from json.
@@ -4181,12 +4063,16 @@ func (s *Tender) encodeFields(e *jx.Encoder) {
 		e.ArrEnd()
 	}
 	{
-		e.FieldStart("services")
-		s.Services.Encode(e)
+		if s.Services != nil {
+			e.FieldStart("services")
+			s.Services.Encode(e)
+		}
 	}
 	{
-		e.FieldStart("objects")
-		s.Objects.Encode(e)
+		if s.Objects != nil {
+			e.FieldStart("objects")
+			s.Objects.Encode(e)
+		}
 	}
 	{
 		e.FieldStart("status")
@@ -6247,8 +6133,10 @@ func (s *V1CatalogObjectsGetOK) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *V1CatalogObjectsGetOK) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("data")
-		s.Data.Encode(e)
+		if s.Data != nil {
+			e.FieldStart("data")
+			s.Data.Encode(e)
+		}
 	}
 }
 
@@ -6738,8 +6626,10 @@ func (s *V1CatalogServicesGetOK) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *V1CatalogServicesGetOK) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("data")
-		s.Data.Encode(e)
+		if s.Data != nil {
+			e.FieldStart("data")
+			s.Data.Encode(e)
+		}
 	}
 }
 
@@ -8735,10 +8625,10 @@ func (s *V1OrganizationsOrganizationIDProfileCustomerPutReq) encodeFields(e *jx.
 		}
 	}
 	{
-		if s.Cities != nil {
-			e.FieldStart("cities")
+		if s.CityIds != nil {
+			e.FieldStart("city_ids")
 			e.ArrStart()
-			for _, elem := range s.Cities {
+			for _, elem := range s.CityIds {
 				e.Int(elem)
 			}
 			e.ArrEnd()
@@ -8748,7 +8638,7 @@ func (s *V1OrganizationsOrganizationIDProfileCustomerPutReq) encodeFields(e *jx.
 
 var jsonFieldsNameOfV1OrganizationsOrganizationIDProfileCustomerPutReq = [2]string{
 	0: "description",
-	1: "cities",
+	1: "city_ids",
 }
 
 // Decode decodes V1OrganizationsOrganizationIDProfileCustomerPutReq from json.
@@ -8769,9 +8659,9 @@ func (s *V1OrganizationsOrganizationIDProfileCustomerPutReq) Decode(d *jx.Decode
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"description\"")
 			}
-		case "cities":
+		case "city_ids":
 			if err := func() error {
-				s.Cities = make([]int, 0)
+				s.CityIds = make([]int, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
 					var elem int
 					v, err := d.Int()
@@ -8779,14 +8669,14 @@ func (s *V1OrganizationsOrganizationIDProfileCustomerPutReq) Decode(d *jx.Decode
 					if err != nil {
 						return err
 					}
-					s.Cities = append(s.Cities, elem)
+					s.CityIds = append(s.CityIds, elem)
 					return nil
 				}); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"cities\"")
+				return errors.Wrap(err, "decode field \"city_ids\"")
 			}
 		default:
 			return d.Skip()

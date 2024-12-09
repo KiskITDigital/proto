@@ -3,9 +3,10 @@ package store
 import "gitlab.ubrato.ru/ubrato/core/internal/models"
 
 type OrganizationGetParams struct {
-	IsContractor models.Optional[bool]
-	Offset       uint64
-	Limit        uint64
+	IsContractor   models.Optional[bool]
+	OrganizationID models.Optional[int]
+	Offset         uint64
+	Limit          models.Optional[uint64]
 }
 
 type OrganizationCreateParams struct {
@@ -28,6 +29,13 @@ type OrganizationUpdateParams struct {
 	Emails         models.Optional[models.ContactInfos]
 	Phones         models.Optional[models.ContactInfos]
 	Messengers     models.Optional[models.ContactInfos]
+	CustomerInfo   models.Optional[models.CustomerInfo]
+	ContractorInfo models.Optional[models.ContractorInfo]
+}
+
+type OrganizationUpdateCustomerParams struct {
+	OrganizationID int
+	CustomerInfo   models.CustomerInfo
 }
 
 type OrganizationAddUserParams struct {

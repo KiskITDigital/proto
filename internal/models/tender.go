@@ -43,35 +43,6 @@ func (t Tender) ToVerificationObject() api.VerificationRequestObject {
 	}
 }
 
-type City struct {
-	ID     int
-	Name   string
-	Region Region
-}
-
-func ConvertCityModelToApi(city City) api.City {
-	return api.City{
-		ID:   city.ID,
-		Name: city.Name,
-		Region: api.OptRegion{
-			Value: ConvertRegionModelToApi(city.Region),
-			Set:   city.Region.ID != 0,
-		},
-	}
-}
-
-type Region struct {
-	ID   int
-	Name string
-}
-
-func ConvertRegionModelToApi(region Region) api.Region {
-	return api.Region{
-		ID:   region.ID,
-		Name: region.Name,
-	}
-}
-
 type Object struct {
 	ID       int
 	ParentID int

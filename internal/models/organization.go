@@ -96,8 +96,9 @@ func ConvertOrganizationModelToApi(organization Organization) api.Organization {
 		Messengers: convert.Slice[ContactInfos, []api.ContactInfo](
 			organization.Messengers, ConvertContactInfoModelToApi,
 		),
-		CreatedAt: organization.CreatedAt,
-		UpdatedAt: organization.UpdatedAt,
+		CustomerInfo: ConvertCustomerInfoToApi(organization.CustomerInfo),
+		CreatedAt:    organization.CreatedAt,
+		UpdatedAt:    organization.UpdatedAt,
 	}
 }
 
@@ -115,9 +116,24 @@ func ConvertAPIToContactInfo(info api.ContactInfo) ContactInfo {
 	}
 }
 
-type CustomerInfo struct{}
+type CustomerInfo struct {
+	Description Optional[string] `json:"description"`
+	CityIDs     []int            `json:"city_ids"`
+	Cities      []City           `json:"-"`
+}
+
+func ConvertCustomerInfoToApi(info CustomerInfo) api.CustomerInfo {
+	return api.CustomerInfo{
+		Description: api.OptDescription{Value: api.Description(info.Description.Value), Set: info.Description.Set},
+		Cities:      convert.Slice[[]City, []api.City](info.Cities, ConvertCityModelToApi),
+	}
+}
 
 func (a CustomerInfo) Value() (driver.Value, error) {
+	if !a.Description.Set && len(a.Cities) == 0 {
+		return []byte("{}"), nil
+	}
+
 	return json.Marshal(a)
 }
 

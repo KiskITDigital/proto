@@ -30,7 +30,7 @@ type VerificationStore interface {
 }
 
 func New(
-	psql DBTX, 
+	psql DBTX,
 	organizationStore OrganizationStore,
 	verificationStore VerificationStore) *Service {
 	return &Service{
