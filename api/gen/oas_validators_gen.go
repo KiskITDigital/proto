@@ -106,74 +106,6 @@ func (s *ContactInfo) Validate() error {
 	return nil
 }
 
-func (s *ContractorInfo) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if s.Cities == nil {
-			return errors.New("nil is invalid value")
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "cities",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if err := s.Services.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "services",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if err := s.Objects.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "objects",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
-func (s *CustomerInfo) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if s.Cities == nil {
-			return errors.New("nil is invalid value")
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "cities",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
 func (s Email) Validate() error {
 	alias := (string)(s)
 	if err := (validate.String{
@@ -354,14 +286,6 @@ func (s ObjectType) Validate() error {
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
-}
-
-func (s Objects) Validate() error {
-	alias := ([]Object)(s)
-	if alias == nil {
-		return errors.New("nil is invalid value")
-	}
-	return nil
 }
 
 func (s Ogrn) Validate() error {
@@ -607,42 +531,6 @@ func (s *Organization) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "verification_status",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if value, ok := s.CustomerInfo.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "customer_info",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if value, ok := s.ContractorInfo.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "contractor_info",
 			Error: err,
 		})
 	}
@@ -949,14 +837,6 @@ func (s Role) Validate() error {
 	}
 }
 
-func (s Services) Validate() error {
-	alias := ([]Service)(s)
-	if alias == nil {
-		return errors.New("nil is invalid value")
-	}
-	return nil
-}
-
 func (s Survey) Validate() error {
 	switch s {
 	case "SURVEY_TYPE_REGISTRATION":
@@ -1076,28 +956,6 @@ func (s *Tender) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "attachments",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if err := s.Services.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "services",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if err := s.Objects.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "objects",
 			Error: err,
 		})
 	}
@@ -1622,29 +1480,6 @@ func (s V1CatalogObjectsGetDirection) Validate() error {
 	}
 }
 
-func (s *V1CatalogObjectsGetOK) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.Data.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "data",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
 func (s V1CatalogObjectsGetSort) Validate() error {
 	switch s {
 	case "id":
@@ -1663,29 +1498,6 @@ func (s V1CatalogServicesGetDirection) Validate() error {
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
-}
-
-func (s *V1CatalogServicesGetOK) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.Data.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "data",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
 }
 
 func (s V1CatalogServicesGetSort) Validate() error {

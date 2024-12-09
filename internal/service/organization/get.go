@@ -11,8 +11,8 @@ import (
 func (s *Service) Get(ctx context.Context, params service.OrganizationGetParams) ([]models.Organization, error) {
 	return s.organizationStore.Get(ctx, s.psql.DB(), store.OrganizationGetParams{
 		IsContractor: params.IsContractor,
-		Limit: params.Limit,
-		Offset: params.Offset,
+		Limit:        models.NewOptional(params.Limit),
+		Offset:       params.Offset,
 	})
 }
 

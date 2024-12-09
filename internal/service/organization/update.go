@@ -2,7 +2,9 @@ package organization
 
 import (
 	"context"
+	"fmt"
 
+	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/service"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
@@ -22,4 +24,18 @@ func (s *Service) UpdateContacts(ctx context.Context, params service.Organizatio
 		Phones:         params.Phones,
 		Messengers:     params.Messengers,
 	})
+}
+
+func (s *Service) UpdateCustomer(ctx context.Context, params service.OrganizationUpdateCustomerParams) (models.Organization, error) {
+	if err := s.organizationStore.Update(ctx, s.psql.DB(), store.OrganizationUpdateParams{
+		OrganizationID: params.OrganizationID,
+		CustomerInfo: models.NewOptional(models.CustomerInfo{
+			Description: params.Description,
+			CityIDs:     params.CityIDs,
+		}),
+	}); err != nil {
+		return models.Organization{}, fmt.Errorf("update organization: %w", err)
+	}
+
+	return s.organizationStore.GetByID(ctx, s.psql.DB(), params.OrganizationID)
 }

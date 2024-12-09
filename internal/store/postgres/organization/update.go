@@ -59,6 +59,14 @@ func (s *OrganizationStore) Update(ctx context.Context, qe store.QueryExecutor, 
 		builder = builder.Set("messengers", params.Messengers.Value)
 	}
 
+	if params.CustomerInfo.Set {
+		builder = builder.Set("customer_info", params.CustomerInfo.Value)
+	}
+
+	if params.ContractorInfo.Set {
+		builder = builder.Set("contractor_info", params.ContractorInfo.Value)
+	}
+
 	result, err := builder.RunWith(qe).ExecContext(ctx)
 	if err != nil {
 		return fmt.Errorf("exec row: %w", err)

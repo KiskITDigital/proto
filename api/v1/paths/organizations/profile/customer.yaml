@@ -23,7 +23,7 @@ put:
           properties:
             description:
               $ref: "../../../properties/description.yaml"
-            cities:
+            city_ids:
               type: array
               description: Локаций заказчика
               items:

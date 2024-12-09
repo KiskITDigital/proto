@@ -196,7 +196,7 @@ func (s *ContactInfo) SetInfo(val string) {
 
 // Ref: #
 type ContractorInfo struct {
-	Description Description `json:"description"`
+	Description OptDescription `json:"description"`
 	// Локации заказчика.
 	Cities   []City   `json:"cities"`
 	Services Services `json:"services"`
@@ -204,7 +204,7 @@ type ContractorInfo struct {
 }
 
 // GetDescription returns the value of Description.
-func (s *ContractorInfo) GetDescription() Description {
+func (s *ContractorInfo) GetDescription() OptDescription {
 	return s.Description
 }
 
@@ -224,7 +224,7 @@ func (s *ContractorInfo) GetObjects() Objects {
 }
 
 // SetDescription sets the value of Description.
-func (s *ContractorInfo) SetDescription(val Description) {
+func (s *ContractorInfo) SetDescription(val OptDescription) {
 	s.Description = val
 }
 
@@ -259,13 +259,13 @@ func (s *CookieAuth) SetAPIKey(val string) {
 
 // Ref: #
 type CustomerInfo struct {
-	Description Description `json:"description"`
+	Description OptDescription `json:"description"`
 	// Локации заказчика.
 	Cities []City `json:"cities"`
 }
 
 // GetDescription returns the value of Description.
-func (s *CustomerInfo) GetDescription() Description {
+func (s *CustomerInfo) GetDescription() OptDescription {
 	return s.Description
 }
 
@@ -275,7 +275,7 @@ func (s *CustomerInfo) GetCities() []City {
 }
 
 // SetDescription sets the value of Description.
-func (s *CustomerInfo) SetDescription(val Description) {
+func (s *CustomerInfo) SetDescription(val OptDescription) {
 	s.Description = val
 }
 
@@ -710,98 +710,6 @@ func (o OptBool) Get() (v bool, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptBool) Or(d bool) bool {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptContractorInfo returns new OptContractorInfo with value set to v.
-func NewOptContractorInfo(v ContractorInfo) OptContractorInfo {
-	return OptContractorInfo{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptContractorInfo is optional ContractorInfo.
-type OptContractorInfo struct {
-	Value ContractorInfo
-	Set   bool
-}
-
-// IsSet returns true if OptContractorInfo was set.
-func (o OptContractorInfo) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptContractorInfo) Reset() {
-	var v ContractorInfo
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptContractorInfo) SetTo(v ContractorInfo) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptContractorInfo) Get() (v ContractorInfo, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptContractorInfo) Or(d ContractorInfo) ContractorInfo {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptCustomerInfo returns new OptCustomerInfo with value set to v.
-func NewOptCustomerInfo(v CustomerInfo) OptCustomerInfo {
-	return OptCustomerInfo{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptCustomerInfo is optional CustomerInfo.
-type OptCustomerInfo struct {
-	Value CustomerInfo
-	Set   bool
-}
-
-// IsSet returns true if OptCustomerInfo was set.
-func (o OptCustomerInfo) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptCustomerInfo) Reset() {
-	var v CustomerInfo
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptCustomerInfo) SetTo(v CustomerInfo) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptCustomerInfo) Get() (v CustomerInfo, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptCustomerInfo) Or(d CustomerInfo) CustomerInfo {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -2115,8 +2023,8 @@ type Organization struct {
 	VerificationStatus OptVerificationStatus `json:"verification_status"`
 	IsContractor       bool                  `json:"is_contractor"`
 	IsBanned           bool                  `json:"is_banned"`
-	CustomerInfo       OptCustomerInfo       `json:"customer_info"`
-	ContractorInfo     OptContractorInfo     `json:"contractor_info"`
+	CustomerInfo       CustomerInfo          `json:"customer_info"`
+	ContractorInfo     ContractorInfo        `json:"contractor_info"`
 	CreatedAt          time.Time             `json:"created_at"`
 	UpdatedAt          time.Time             `json:"updated_at"`
 }
@@ -2207,12 +2115,12 @@ func (s *Organization) GetIsBanned() bool {
 }
 
 // GetCustomerInfo returns the value of CustomerInfo.
-func (s *Organization) GetCustomerInfo() OptCustomerInfo {
+func (s *Organization) GetCustomerInfo() CustomerInfo {
 	return s.CustomerInfo
 }
 
 // GetContractorInfo returns the value of ContractorInfo.
-func (s *Organization) GetContractorInfo() OptContractorInfo {
+func (s *Organization) GetContractorInfo() ContractorInfo {
 	return s.ContractorInfo
 }
 
@@ -2312,12 +2220,12 @@ func (s *Organization) SetIsBanned(val bool) {
 }
 
 // SetCustomerInfo sets the value of CustomerInfo.
-func (s *Organization) SetCustomerInfo(val OptCustomerInfo) {
+func (s *Organization) SetCustomerInfo(val CustomerInfo) {
 	s.CustomerInfo = val
 }
 
 // SetContractorInfo sets the value of ContractorInfo.
-func (s *Organization) SetContractorInfo(val OptContractorInfo) {
+func (s *Organization) SetContractorInfo(val ContractorInfo) {
 	s.ContractorInfo = val
 }
 
@@ -4549,7 +4457,7 @@ func (*V1OrganizationsOrganizationIDProfileCustomerPutOK) v1OrganizationsOrganiz
 type V1OrganizationsOrganizationIDProfileCustomerPutReq struct {
 	Description OptDescription `json:"description"`
 	// Локаций заказчика.
-	Cities []int `json:"cities"`
+	CityIds []int `json:"city_ids"`
 }
 
 // GetDescription returns the value of Description.
@@ -4557,9 +4465,9 @@ func (s *V1OrganizationsOrganizationIDProfileCustomerPutReq) GetDescription() Op
 	return s.Description
 }
 
-// GetCities returns the value of Cities.
-func (s *V1OrganizationsOrganizationIDProfileCustomerPutReq) GetCities() []int {
-	return s.Cities
+// GetCityIds returns the value of CityIds.
+func (s *V1OrganizationsOrganizationIDProfileCustomerPutReq) GetCityIds() []int {
+	return s.CityIds
 }
 
 // SetDescription sets the value of Description.
@@ -4567,9 +4475,9 @@ func (s *V1OrganizationsOrganizationIDProfileCustomerPutReq) SetDescription(val 
 	s.Description = val
 }
 
-// SetCities sets the value of Cities.
-func (s *V1OrganizationsOrganizationIDProfileCustomerPutReq) SetCities(val []int) {
-	s.Cities = val
+// SetCityIds sets the value of CityIds.
+func (s *V1OrganizationsOrganizationIDProfileCustomerPutReq) SetCityIds(val []int) {
+	s.CityIds = val
 }
 
 type V1OrganizationsOrganizationIDTendersGetOK struct {

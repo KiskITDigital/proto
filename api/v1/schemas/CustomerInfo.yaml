@@ -1,7 +1,4 @@
 type: object
-required:
-  - description
-  - cities
 properties:
   description:
     $ref: "../properties/description.yaml"

@@ -71,3 +71,27 @@ func (h *Handler) V1OrganizationsOrganizationIDProfileContactsPut(ctx context.Co
 
 	return &api.V1OrganizationsOrganizationIDProfileContactsPutOK{}, nil
 }
+
+func (h *Handler) V1OrganizationsOrganizationIDProfileCustomerPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileCustomerPutReq, params api.V1OrganizationsOrganizationIDProfileCustomerPutParams) (api.V1OrganizationsOrganizationIDProfileCustomerPutRes, error) {
+	if params.OrganizationID != contextor.GetOrganizationID(ctx) {
+		return nil, cerr.Wrap(cerr.ErrPermission, cerr.CodeNotPermitted, "not enough permissions to edit the organization", nil)
+	}
+
+	organization, err := h.organizationService.UpdateCustomer(ctx, service.OrganizationUpdateCustomerParams{
+		OrganizationID: params.OrganizationID,
+		Description: models.Optional[string]{Value: string(req.GetDescription().Value), Set: req.GetDescription().Set},
+		CityIDs: req.GetCityIds()})
+	if err != nil {
+		if errors.Is(err, errstore.ErrOrganizationNotFound) {
+			return nil, cerr.Wrap(err, cerr.CodeNotFound, "Организация не найдена", map[string]interface{}{
+				"organization_id": params.OrganizationID,
+			})
+		}
+
+		return nil, fmt.Errorf("update organization brand: %w", err)
+	}
+
+	return &api.V1OrganizationsOrganizationIDProfileCustomerPutOK{
+		Data: models.ConvertOrganizationModelToApi(organization),
+	}, nil
+}

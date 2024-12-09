@@ -1318,7 +1318,7 @@ paths:
               properties:
                 description:
                   $ref: '#/components/schemas/description'
-                cities:
+                city_ids:
                   type: array
                   description: Локаций заказчика
                   items:
@@ -2405,9 +2405,6 @@ components:
           $ref: '#/components/schemas/Region'
     CustomerInfo:
       type: object
-      required:
-        - description
-        - cities
       properties:
         description:
           $ref: '#/components/schemas/description'
@@ -2450,11 +2447,7 @@ components:
         $ref: '#/components/schemas/Object'
     ContractorInfo:
       type: object
-      required:
-        - description
-        - cities
-        - services
-        - objects
+      required: null
       properties:
         description:
           $ref: '#/components/schemas/description'
@@ -2486,6 +2479,8 @@ components:
         - emails
         - phones
         - messengers
+        - customer_info
+        - contractor_info
         - created_at
         - updated_at
       properties:

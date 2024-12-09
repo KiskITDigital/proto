@@ -16,6 +16,8 @@ required:
   - emails
   - phones
   - messengers
+  - customer_info
+  - contractor_info
   - created_at
   - updated_at
 properties:
