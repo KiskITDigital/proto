@@ -1363,20 +1363,21 @@ paths:
               properties:
                 description:
                   $ref: '#/components/schemas/description'
-                cities:
-                  type: array
-                  description: Локации заказчика
-                  items:
-                    type: integer
-                    example: 1
-                services:
+                city_ids:
                   type: array
                   items:
                     type: integer
-                    example:
-                      - 1
-                      - 2
-                objects:
+                  example:
+                    - 1
+                    - 2
+                service_ids:
+                  type: array
+                  items:
+                    type: integer
+                  example:
+                    - 1
+                    - 2
+                objects_ids:
                   type: array
                   items:
                     type: integer

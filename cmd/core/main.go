@@ -79,10 +79,10 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	psql := store.New(psqlDB)
 
 	userStore := userStore.NewUserStore()
-	organizationStore := organizationStore.NewOrganizationStore()
 	sessionStore := sessionStore.NewSessionStore()
-	tenderStore := tenderStore.NewTenderStore()
 	catalogStore := catalogStore.NewCatalogStore()
+	organizationStore := organizationStore.NewOrganizationStore(catalogStore)
+	tenderStore := tenderStore.NewTenderStore(catalogStore)
 	verificationStore := verificationStore.NewVerificationRequestStore()
 	commentStore := commentStore.NewCommentStore()
 	questionnaireStore := questionnaireStore.NewQuestionnaireStore()

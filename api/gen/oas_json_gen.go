@@ -8378,30 +8378,30 @@ func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) encodeFields(e *j
 		}
 	}
 	{
-		if s.Cities != nil {
-			e.FieldStart("cities")
+		if s.CityIds != nil {
+			e.FieldStart("city_ids")
 			e.ArrStart()
-			for _, elem := range s.Cities {
+			for _, elem := range s.CityIds {
 				e.Int(elem)
 			}
 			e.ArrEnd()
 		}
 	}
 	{
-		if s.Services != nil {
-			e.FieldStart("services")
+		if s.ServiceIds != nil {
+			e.FieldStart("service_ids")
 			e.ArrStart()
-			for _, elem := range s.Services {
+			for _, elem := range s.ServiceIds {
 				e.Int(elem)
 			}
 			e.ArrEnd()
 		}
 	}
 	{
-		if s.Objects != nil {
-			e.FieldStart("objects")
+		if s.ObjectsIds != nil {
+			e.FieldStart("objects_ids")
 			e.ArrStart()
-			for _, elem := range s.Objects {
+			for _, elem := range s.ObjectsIds {
 				e.Int(elem)
 			}
 			e.ArrEnd()
@@ -8411,9 +8411,9 @@ func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) encodeFields(e *j
 
 var jsonFieldsNameOfV1OrganizationsOrganizationIDProfileContractorPutReq = [4]string{
 	0: "description",
-	1: "cities",
-	2: "services",
-	3: "objects",
+	1: "city_ids",
+	2: "service_ids",
+	3: "objects_ids",
 }
 
 // Decode decodes V1OrganizationsOrganizationIDProfileContractorPutReq from json.
@@ -8434,9 +8434,9 @@ func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) Decode(d *jx.Deco
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"description\"")
 			}
-		case "cities":
+		case "city_ids":
 			if err := func() error {
-				s.Cities = make([]int, 0)
+				s.CityIds = make([]int, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
 					var elem int
 					v, err := d.Int()
@@ -8444,18 +8444,18 @@ func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) Decode(d *jx.Deco
 					if err != nil {
 						return err
 					}
-					s.Cities = append(s.Cities, elem)
+					s.CityIds = append(s.CityIds, elem)
 					return nil
 				}); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"cities\"")
+				return errors.Wrap(err, "decode field \"city_ids\"")
 			}
-		case "services":
+		case "service_ids":
 			if err := func() error {
-				s.Services = make([]int, 0)
+				s.ServiceIds = make([]int, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
 					var elem int
 					v, err := d.Int()
@@ -8463,18 +8463,18 @@ func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) Decode(d *jx.Deco
 					if err != nil {
 						return err
 					}
-					s.Services = append(s.Services, elem)
+					s.ServiceIds = append(s.ServiceIds, elem)
 					return nil
 				}); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"services\"")
+				return errors.Wrap(err, "decode field \"service_ids\"")
 			}
-		case "objects":
+		case "objects_ids":
 			if err := func() error {
-				s.Objects = make([]int, 0)
+				s.ObjectsIds = make([]int, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
 					var elem int
 					v, err := d.Int()
@@ -8482,14 +8482,14 @@ func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) Decode(d *jx.Deco
 					if err != nil {
 						return err
 					}
-					s.Objects = append(s.Objects, elem)
+					s.ObjectsIds = append(s.ObjectsIds, elem)
 					return nil
 				}); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"objects\"")
+				return errors.Wrap(err, "decode field \"objects_ids\"")
 			}
 		default:
 			return d.Skip()
