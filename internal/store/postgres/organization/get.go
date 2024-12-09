@@ -63,6 +63,8 @@ func (s *OrganizationStore) Get(ctx context.Context, qe store.QueryExecutor, par
 	defer rows.Close()
 
 	cityIDs := []int{}
+	serviceIDs := []int{}
+	objectIDs := []int{}
 
 	organizations := []models.Organization{}
 	for rows.Next() {
@@ -101,17 +103,53 @@ func (s *OrganizationStore) Get(ctx context.Context, qe store.QueryExecutor, par
 
 		organizations = append(organizations, org)
 		cityIDs = append(cityIDs, org.CustomerInfo.CityIDs...)
+
+		if org.IsContractor {
+			cityIDs = append(cityIDs, org.ContractorInfo.CityIDs...)
+			serviceIDs = append(serviceIDs, org.ContractorInfo.ServiceIDs...)
+			objectIDs = append(objectIDs, org.ContractorInfo.ObjectIDs...)
+		}
 	}
 
-	cities, err := s.GetCities(ctx, qe, deduplicate.Deduplicate(cityIDs))
+	cities, err := s.catalogStore.GetCitiesByIDs(ctx, qe, deduplicate.Deduplicate(cityIDs))
 	if err != nil {
 		return nil, fmt.Errorf("get cities by ids: %w", err)
+	}
+
+	objects, err := s.catalogStore.GetObjectsByIDs(ctx, qe, deduplicate.Deduplicate(objectIDs))
+	if err != nil {
+		return nil, fmt.Errorf("get objects by ids: %w", err)
+	}
+
+	services, err := s.catalogStore.GetServicesByIDs(ctx, qe, deduplicate.Deduplicate(serviceIDs))
+	if err != nil {
+		return nil, fmt.Errorf("get services by ids: %w", err)
 	}
 
 	for i, org := range organizations {
 		for _, cityID := range org.CustomerInfo.CityIDs {
 			if city, ok := cities[cityID]; ok {
 				org.CustomerInfo.Cities = append(org.CustomerInfo.Cities, city)
+			}
+		}
+
+		if org.IsContractor {
+			for _, cityID := range org.ContractorInfo.CityIDs {
+				if city, ok := cities[cityID]; ok {
+					org.ContractorInfo.Cities = append(org.ContractorInfo.Cities, city)
+				}
+			}
+
+			for _, serviceID := range org.ContractorInfo.ServiceIDs {
+				if service, ok := services[serviceID]; ok {
+					org.ContractorInfo.Services = append(org.ContractorInfo.Services, service)
+				}
+			}
+
+			for _, objectID := range org.ContractorInfo.ObjectIDs {
+				if object, ok := objects[objectID]; ok {
+					org.ContractorInfo.Objects = append(org.ContractorInfo.Objects, object)
+				}
 			}
 		}
 

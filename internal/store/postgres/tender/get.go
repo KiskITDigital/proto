@@ -284,12 +284,12 @@ func (s *TenderStore) List(ctx context.Context, qe store.QueryExecutor, params s
 		objectIDs = append(objectIDs, tenderObjectIDsConverted...)
 	}
 
-	services, err := s.GetServices(ctx, qe, deduplicate.Deduplicate(serviceIDs))
+	services, err := s.catalogStore.GetServicesByIDs(ctx, qe, deduplicate.Deduplicate(serviceIDs))
 	if err != nil {
 		return nil, fmt.Errorf("get services: %w", err)
 	}
 
-	objects, err := s.GetObjects(ctx, qe, deduplicate.Deduplicate(objectIDs))
+	objects, err := s.catalogStore.GetObjectsByIDs(ctx, qe, deduplicate.Deduplicate(objectIDs))
 	if err != nil {
 		return nil, fmt.Errorf("get objects: %w", err)
 	}

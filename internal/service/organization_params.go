@@ -29,9 +29,9 @@ type OrganizationCreateVerificationRequestParams struct {
 type OrganizationUpdateContractorParams struct {
 	OrganizationID int
 	Description    models.Optional[string]
-	Cities         models.Optional[[]int]
-	Services       models.Optional[[]int]
-	Objects        models.Optional[[]int]
+	CityIDs        []int
+	ServiceIDs     []int
+	ObjectIDs      []int
 }
 
 type OrganizationUpdateCustomerParams struct {

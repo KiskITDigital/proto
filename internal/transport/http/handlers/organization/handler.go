@@ -21,6 +21,7 @@ type OrganizationService interface {
 	UpdateContacts(ctx context.Context, params service.OrganizationUpdateContactsParams) error
 	CreateVerificationRequest(ctx context.Context, params service.OrganizationCreateVerificationRequestParams) error
 	UpdateCustomer(ctx context.Context, params service.OrganizationUpdateCustomerParams) (models.Organization, error)
+	UpdateContractor(ctx context.Context, params service.OrganizationUpdateContractorParams) (models.Organization, error)
 }
 
 type VerificationService interface {

@@ -4391,10 +4391,9 @@ func (*V1OrganizationsOrganizationIDProfileContractorPutOK) v1OrganizationsOrgan
 
 type V1OrganizationsOrganizationIDProfileContractorPutReq struct {
 	Description OptDescription `json:"description"`
-	// Локации заказчика.
-	Cities   []int `json:"cities"`
-	Services []int `json:"services"`
-	Objects  []int `json:"objects"`
+	CityIds     []int          `json:"city_ids"`
+	ServiceIds  []int          `json:"service_ids"`
+	ObjectsIds  []int          `json:"objects_ids"`
 }
 
 // GetDescription returns the value of Description.
@@ -4402,19 +4401,19 @@ func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) GetDescription() 
 	return s.Description
 }
 
-// GetCities returns the value of Cities.
-func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) GetCities() []int {
-	return s.Cities
+// GetCityIds returns the value of CityIds.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) GetCityIds() []int {
+	return s.CityIds
 }
 
-// GetServices returns the value of Services.
-func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) GetServices() []int {
-	return s.Services
+// GetServiceIds returns the value of ServiceIds.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) GetServiceIds() []int {
+	return s.ServiceIds
 }
 
-// GetObjects returns the value of Objects.
-func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) GetObjects() []int {
-	return s.Objects
+// GetObjectsIds returns the value of ObjectsIds.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) GetObjectsIds() []int {
+	return s.ObjectsIds
 }
 
 // SetDescription sets the value of Description.
@@ -4422,19 +4421,19 @@ func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) SetDescription(va
 	s.Description = val
 }
 
-// SetCities sets the value of Cities.
-func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) SetCities(val []int) {
-	s.Cities = val
+// SetCityIds sets the value of CityIds.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) SetCityIds(val []int) {
+	s.CityIds = val
 }
 
-// SetServices sets the value of Services.
-func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) SetServices(val []int) {
-	s.Services = val
+// SetServiceIds sets the value of ServiceIds.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) SetServiceIds(val []int) {
+	s.ServiceIds = val
 }
 
-// SetObjects sets the value of Objects.
-func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) SetObjects(val []int) {
-	s.Objects = val
+// SetObjectsIds sets the value of ObjectsIds.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) SetObjectsIds(val []int) {
+	s.ObjectsIds = val
 }
 
 type V1OrganizationsOrganizationIDProfileCustomerPutOK struct {

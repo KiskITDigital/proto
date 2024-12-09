@@ -79,8 +79,8 @@ func (h *Handler) V1OrganizationsOrganizationIDProfileCustomerPut(ctx context.Co
 
 	organization, err := h.organizationService.UpdateCustomer(ctx, service.OrganizationUpdateCustomerParams{
 		OrganizationID: params.OrganizationID,
-		Description: models.Optional[string]{Value: string(req.GetDescription().Value), Set: req.GetDescription().Set},
-		CityIDs: req.GetCityIds()})
+		Description:    models.Optional[string]{Value: string(req.GetDescription().Value), Set: req.GetDescription().Set},
+		CityIDs:        req.GetCityIds()})
 	if err != nil {
 		if errors.Is(err, errstore.ErrOrganizationNotFound) {
 			return nil, cerr.Wrap(err, cerr.CodeNotFound, "Организация не найдена", map[string]interface{}{
@@ -92,6 +92,33 @@ func (h *Handler) V1OrganizationsOrganizationIDProfileCustomerPut(ctx context.Co
 	}
 
 	return &api.V1OrganizationsOrganizationIDProfileCustomerPutOK{
+		Data: models.ConvertOrganizationModelToApi(organization),
+	}, nil
+}
+
+func (h *Handler) V1OrganizationsOrganizationIDProfileContractorPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileContractorPutReq, params api.V1OrganizationsOrganizationIDProfileContractorPutParams) (api.V1OrganizationsOrganizationIDProfileContractorPutRes, error) {
+	if params.OrganizationID != contextor.GetOrganizationID(ctx) {
+		return nil, cerr.Wrap(cerr.ErrPermission, cerr.CodeNotPermitted, "not enough permissions to edit the organization", nil)
+	}
+
+	organization, err := h.organizationService.UpdateContractor(ctx, service.OrganizationUpdateContractorParams{
+		OrganizationID: params.OrganizationID,
+		Description:    models.Optional[string]{Value: string(req.GetDescription().Value), Set: req.GetDescription().Set},
+		CityIDs:        req.GetCityIds(),
+		ServiceIDs:     req.GetServiceIds(),
+		ObjectIDs:      req.GetObjectsIds(),
+	})
+	if err != nil {
+		if errors.Is(err, errstore.ErrOrganizationNotFound) {
+			return nil, cerr.Wrap(err, cerr.CodeNotFound, "Организация не найдена", map[string]interface{}{
+				"organization_id": params.OrganizationID,
+			})
+		}
+
+		return nil, fmt.Errorf("update organization brand: %w", err)
+	}
+
+	return &api.V1OrganizationsOrganizationIDProfileContractorPutOK{
 		Data: models.ConvertOrganizationModelToApi(organization),
 	}, nil
 }

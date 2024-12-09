@@ -39,3 +39,19 @@ func (s *Service) UpdateCustomer(ctx context.Context, params service.Organizatio
 
 	return s.organizationStore.GetByID(ctx, s.psql.DB(), params.OrganizationID)
 }
+
+func (s *Service) UpdateContractor(ctx context.Context, params service.OrganizationUpdateContractorParams) (models.Organization, error) {
+	if err := s.organizationStore.Update(ctx, s.psql.DB(), store.OrganizationUpdateParams{
+		OrganizationID: params.OrganizationID,
+		ContractorInfo: models.NewOptional(models.ContractorInfo{
+			Description: params.Description,
+			CityIDs:     params.CityIDs,
+			ObjectIDs:   params.ObjectIDs,
+			ServiceIDs:  params.ServiceIDs,
+		}),
+	}); err != nil {
+		return models.Organization{}, fmt.Errorf("update organization: %w", err)
+	}
+
+	return s.organizationStore.GetByID(ctx, s.psql.DB(), params.OrganizationID)
+}

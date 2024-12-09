@@ -96,9 +96,10 @@ func ConvertOrganizationModelToApi(organization Organization) api.Organization {
 		Messengers: convert.Slice[ContactInfos, []api.ContactInfo](
 			organization.Messengers, ConvertContactInfoModelToApi,
 		),
-		CustomerInfo: ConvertCustomerInfoToApi(organization.CustomerInfo),
-		CreatedAt:    organization.CreatedAt,
-		UpdatedAt:    organization.UpdatedAt,
+		CustomerInfo:   ConvertCustomerInfoToApi(organization.CustomerInfo),
+		ContractorInfo: ConvertContractorInfoToApi(organization.ContractorInfo),
+		CreatedAt:      organization.CreatedAt,
+		UpdatedAt:      organization.UpdatedAt,
 	}
 }
 
@@ -130,10 +131,6 @@ func ConvertCustomerInfoToApi(info CustomerInfo) api.CustomerInfo {
 }
 
 func (a CustomerInfo) Value() (driver.Value, error) {
-	if !a.Description.Set && len(a.Cities) == 0 {
-		return []byte("{}"), nil
-	}
-
 	return json.Marshal(a)
 }
 
@@ -150,7 +147,25 @@ func (a *CustomerInfo) Scan(value interface{}) error {
 	return json.Unmarshal(b, &a)
 }
 
-type ContractorInfo struct{}
+type ContractorInfo struct {
+	Description Optional[string] `json:"description"`
+	Cities      []City           `json:"-"`
+	Objects     []Object         `json:"-"`
+	Services    []Service        `json:"-"`
+
+	CityIDs    []int `json:"city_ids"`
+	ServiceIDs []int `json:"service_ids"`
+	ObjectIDs  []int `json:"object_ids"`
+}
+
+func ConvertContractorInfoToApi(info ContractorInfo) api.ContractorInfo {
+	return api.ContractorInfo{
+		Description: api.OptDescription{Value: api.Description(info.Description.Value), Set: info.Description.Set},
+		Cities:      convert.Slice[[]City, []api.City](info.Cities, ConvertCityModelToApi),
+		Objects:     convert.Slice[[]Object, []api.Object](info.Objects, ConvertObjectModelToApi),
+		Services:    convert.Slice[[]Service, []api.Service](info.Services, ConvertServiceModelToApi),
+	}
+}
 
 func (a ContractorInfo) Value() (driver.Value, error) {
 	return json.Marshal(a)
