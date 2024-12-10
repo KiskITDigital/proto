@@ -1,0 +1,20 @@
+type: object
+required:
+  - id
+  - type
+  - content
+properties:
+  id:
+    type: integer
+    description: Уникальный идентификатор
+    example: 2
+  parent_id:
+    type: integer
+    description: Идентификатор вопроса, для которого создан ответ (null для вопросов)
+    example: 1
+  type:
+     $ref: "../properties/question_answer_type.yaml"
+  content:
+    type: string
+    description: Текст вопроса или ответа
+    example: Какова минимальная цена?

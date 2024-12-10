@@ -10,7 +10,7 @@ const (
 )
 
 var (
-	ErrQuestionnaireExist = errors.New("questionnaire has been completed")
+	ErrQuestionnaireExist    = errors.New("questionnaire has been completed")
 	ErrQuestionnaireNotFound = errors.New("questionnaire not found")
 )
 
@@ -20,4 +20,9 @@ var (
 
 var (
 	ErrOrganizationNotFound = errors.New("organization not found")
+)
+
+var (
+	ErrQuestionAnswerUniqueViolation = errors.New("answer to question already exists")
+	ErrQuestionAnswerFKViolation     = errors.New("foreign key violation on question_answer")
 )

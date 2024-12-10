@@ -3062,6 +3062,193 @@ func (s *Portfolio) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
+func (s *QuestionAnswer) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *QuestionAnswer) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("id")
+		e.Int(s.ID)
+	}
+	{
+		if s.ParentID.Set {
+			e.FieldStart("parent_id")
+			s.ParentID.Encode(e)
+		}
+	}
+	{
+		e.FieldStart("type")
+		s.Type.Encode(e)
+	}
+	{
+		e.FieldStart("content")
+		e.Str(s.Content)
+	}
+}
+
+var jsonFieldsNameOfQuestionAnswer = [4]string{
+	0: "id",
+	1: "parent_id",
+	2: "type",
+	3: "content",
+}
+
+// Decode decodes QuestionAnswer from json.
+func (s *QuestionAnswer) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode QuestionAnswer to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "parent_id":
+			if err := func() error {
+				s.ParentID.Reset()
+				if err := s.ParentID.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"parent_id\"")
+			}
+		case "type":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				if err := s.Type.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"type\"")
+			}
+		case "content":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Str()
+				s.Content = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"content\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode QuestionAnswer")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00001101,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfQuestionAnswer) {
+					name = jsonFieldsNameOfQuestionAnswer[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *QuestionAnswer) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *QuestionAnswer) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes QuestionAnswerType as json.
+func (s QuestionAnswerType) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes QuestionAnswerType from json.
+func (s *QuestionAnswerType) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode QuestionAnswerType to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch QuestionAnswerType(v) {
+	case QuestionAnswerTypeInvalid:
+		*s = QuestionAnswerTypeInvalid
+	case QuestionAnswerTypeQuestion:
+		*s = QuestionAnswerTypeQuestion
+	case QuestionAnswerTypeAnswer:
+		*s = QuestionAnswerTypeAnswer
+	default:
+		*s = QuestionAnswerType(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s QuestionAnswerType) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *QuestionAnswerType) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
 func (s *Questionnaire) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -11667,6 +11854,319 @@ func (s *V1TendersTenderIDPutReq) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *V1TendersTenderIDPutReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *V1TendersTenderIDQuestionAnswerGetOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *V1TendersTenderIDQuestionAnswerGetOK) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("data")
+		e.ArrStart()
+		for _, elem := range s.Data {
+			elem.Encode(e)
+		}
+		e.ArrEnd()
+	}
+}
+
+var jsonFieldsNameOfV1TendersTenderIDQuestionAnswerGetOK = [1]string{
+	0: "data",
+}
+
+// Decode decodes V1TendersTenderIDQuestionAnswerGetOK from json.
+func (s *V1TendersTenderIDQuestionAnswerGetOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode V1TendersTenderIDQuestionAnswerGetOK to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "data":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				s.Data = make([]QuestionAnswer, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem QuestionAnswer
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Data = append(s.Data, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"data\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode V1TendersTenderIDQuestionAnswerGetOK")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfV1TendersTenderIDQuestionAnswerGetOK) {
+					name = jsonFieldsNameOfV1TendersTenderIDQuestionAnswerGetOK[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *V1TendersTenderIDQuestionAnswerGetOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *V1TendersTenderIDQuestionAnswerGetOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *V1TendersTenderIDQuestionAnswerPostCreated) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *V1TendersTenderIDQuestionAnswerPostCreated) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("data")
+		s.Data.Encode(e)
+	}
+}
+
+var jsonFieldsNameOfV1TendersTenderIDQuestionAnswerPostCreated = [1]string{
+	0: "data",
+}
+
+// Decode decodes V1TendersTenderIDQuestionAnswerPostCreated from json.
+func (s *V1TendersTenderIDQuestionAnswerPostCreated) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode V1TendersTenderIDQuestionAnswerPostCreated to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "data":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				if err := s.Data.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"data\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode V1TendersTenderIDQuestionAnswerPostCreated")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfV1TendersTenderIDQuestionAnswerPostCreated) {
+					name = jsonFieldsNameOfV1TendersTenderIDQuestionAnswerPostCreated[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *V1TendersTenderIDQuestionAnswerPostCreated) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *V1TendersTenderIDQuestionAnswerPostCreated) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *V1TendersTenderIDQuestionAnswerPostReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *V1TendersTenderIDQuestionAnswerPostReq) encodeFields(e *jx.Encoder) {
+	{
+		if s.ParentID.Set {
+			e.FieldStart("parent_id")
+			s.ParentID.Encode(e)
+		}
+	}
+	{
+		e.FieldStart("content")
+		e.Str(s.Content)
+	}
+}
+
+var jsonFieldsNameOfV1TendersTenderIDQuestionAnswerPostReq = [2]string{
+	0: "parent_id",
+	1: "content",
+}
+
+// Decode decodes V1TendersTenderIDQuestionAnswerPostReq from json.
+func (s *V1TendersTenderIDQuestionAnswerPostReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode V1TendersTenderIDQuestionAnswerPostReq to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "parent_id":
+			if err := func() error {
+				s.ParentID.Reset()
+				if err := s.ParentID.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"parent_id\"")
+			}
+		case "content":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Str()
+				s.Content = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"content\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode V1TendersTenderIDQuestionAnswerPostReq")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000010,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfV1TendersTenderIDQuestionAnswerPostReq) {
+					name = jsonFieldsNameOfV1TendersTenderIDQuestionAnswerPostReq[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *V1TendersTenderIDQuestionAnswerPostReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *V1TendersTenderIDQuestionAnswerPostReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

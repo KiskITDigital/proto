@@ -650,6 +650,94 @@ paths:
           description: Success
         default:
           $ref: '#/components/responses/Error'
+  /v1/tenders/{tenderID}/question-answer:
+    post:
+      tags:
+        - tenders
+      summary: Create tender question or answer
+      description: |
+        Заказчик: Отвечает на вопрос
+
+        Исполнитель: Создает вопрос для тендера
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: tenderID
+          required: true
+          in: path
+          description: ID of tender
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+        - name: type
+          required: true
+          in: query
+          description: Тип записи
+          schema:
+            $ref: '#/components/schemas/question_answer_type'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                parent_id:
+                  type: integer
+                  description: Идентификатор вопроса, для которого создан ответ (null для вопросов)
+                  example: 1
+                content:
+                  type: string
+                  description: Текст вопроса или ответа
+                  example: Какова минимальная цена?
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/QuestionAnswer'
+        default:
+          $ref: '#/components/responses/Error'
+    get:
+      tags:
+        - tenders
+      summary: Get questions and answers for a tender
+      description: |
+        Получить все вопросы и ответы, связанные с конкретным тендером. 
+      parameters:
+        - name: tenderID
+          required: true
+          in: path
+          description: ID of tender
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/QuestionAnswer'
+        default:
+          $ref: '#/components/responses/Error'
   /v1/users:
     get:
       tags:
@@ -2734,6 +2822,33 @@ components:
         reviewed_at:
           type: string
           format: date-time
+    question_answer_type:
+      type: string
+      enum:
+        - invalid
+        - question
+        - answer
+    QuestionAnswer:
+      type: object
+      required:
+        - id
+        - type
+        - content
+      properties:
+        id:
+          type: integer
+          description: Уникальный идентификатор
+          example: 2
+        parent_id:
+          type: integer
+          description: Идентификатор вопроса, для которого создан ответ (null для вопросов)
+          example: 1
+        type:
+          $ref: '#/components/schemas/question_answer_type'
+        content:
+          type: string
+          description: Текст вопроса или ответа
+          example: Какова минимальная цена?
     QuestionnaireAnswer:
       type: object
       required:

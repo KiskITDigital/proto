@@ -49,6 +49,8 @@ type Tenders interface {
 	V1TendersTenderIDCommentsPost(ctx context.Context, req *api.V1TendersTenderIDCommentsPostReq, params api.V1TendersTenderIDCommentsPostParams) (api.V1TendersTenderIDCommentsPostRes, error)
 	V1TendersTenderIDRespondPost(ctx context.Context, req *api.V1TendersTenderIDRespondPostReq, params api.V1TendersTenderIDRespondPostParams) (api.V1TendersTenderIDRespondPostRes, error)
 	V1TendersVerificationsGet(ctx context.Context, params api.V1TendersVerificationsGetParams) (api.V1TendersVerificationsGetRes, error)
+	V1TendersTenderIDQuestionAnswerPost(ctx context.Context, req *api.V1TendersTenderIDQuestionAnswerPostReq, params api.V1TendersTenderIDQuestionAnswerPostParams) (api.V1TendersTenderIDQuestionAnswerPostRes, error) 
+	V1TendersTenderIDQuestionAnswerGet(ctx context.Context, params api.V1TendersTenderIDQuestionAnswerGetParams) (api.V1TendersTenderIDQuestionAnswerGetRes, error)
 }
 
 type Users interface {
