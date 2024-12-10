@@ -7,6 +7,11 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
 )
 
+type TendersRes struct {
+	Tenders []Tender
+	Pagination Pagination
+}
+
 type Tender struct {
 	VerificationObject
 

@@ -5234,11 +5234,10 @@ func (s *Server) handleV1SurveyPostRequest(args [0]string, argsEscaped bool, w h
 
 // handleV1TendersGetRequest handles GET /v1/tenders operation.
 //
-// Returns all tenders
-// Для получения всех тендеров (включая
-// неверифицированные)
-// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-// 'Employee' or higher.
+// **Без JWT или с ролью "User"**:
+// Возвращает тендеры только со статусом "Approved".
+// **Для сотрудников ("Employee") и выше**:
+// Возвращает все тендеры, включая неверифицированные.
 //
 // GET /v1/tenders
 func (s *Server) handleV1TendersGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
@@ -5308,6 +5307,7 @@ func (s *Server) handleV1TendersGetRequest(args [0]string, argsEscaped bool, w h
 		nextRequirement:
 			for _, requirement := range []bitset{
 				{0b00000001},
+				{},
 			} {
 				for i, mask := range requirement {
 					if satisfied[i]&mask != mask {
@@ -5352,21 +5352,13 @@ func (s *Server) handleV1TendersGetRequest(args [0]string, argsEscaped bool, w h
 					In:   "query",
 				}: params.Verified,
 				{
-					Name: "offset",
+					Name: "page",
 					In:   "query",
-				}: params.Offset,
+				}: params.Page,
 				{
-					Name: "limit",
+					Name: "per_page",
 					In:   "query",
-				}: params.Limit,
-				{
-					Name: "sort",
-					In:   "query",
-				}: params.Sort,
-				{
-					Name: "direction",
-					In:   "query",
-				}: params.Direction,
+				}: params.PerPage,
 			},
 			Raw: r,
 		}

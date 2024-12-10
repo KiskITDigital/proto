@@ -26,6 +26,7 @@ type TenderStore interface {
 	List(ctx context.Context, qe store.QueryExecutor, params store.TenderListParams) ([]models.Tender, error)
 	Update(ctx context.Context, qe store.QueryExecutor, params store.TenderUpdateParams) (int, error)
 	CreateResponse(ctx context.Context, qe store.QueryExecutor, params store.TenderCreateResponseParams) error
+	Count(ctx context.Context, qe store.QueryExecutor, params store.TenderGetCountParams) (int, error) 
 }
 
 type CommentStore interface {

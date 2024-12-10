@@ -124,8 +124,15 @@ func (s *TenderStore) List(ctx context.Context, qe store.QueryExecutor, params s
 		builder = builder.Where(squirrel.Eq{"t.verification_status": models.VerificationStatusApproved})
 	}
 
-	var tenders []models.Tender
+	if params.Limit.Set {
+		builder = builder.Limit(params.Limit.Value)
+	}
 
+	if params.Offset.Set {
+		builder = builder.Offset(params.Offset.Value)
+	}
+
+	var tenders []models.Tender
 	rows, err := builder.RunWith(qe).QueryContext(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("query row: %w", err)
@@ -312,6 +319,6 @@ func (s *TenderStore) List(ctx context.Context, qe store.QueryExecutor, params s
 		tenders[i].Services = tenderServices
 		tenders[i].Objects = tenderObjects
 	}
-
+	
 	return tenders, nil
 }

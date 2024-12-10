@@ -24,13 +24,22 @@ func (h *Handler) V1TendersTenderIDGet(ctx context.Context, params api.V1Tenders
 }
 
 func (h *Handler) V1TendersGet(ctx context.Context, params api.V1TendersGetParams) (api.V1TendersGetRes, error) {
-	tenders, err := h.tenderService.List(ctx, service.TenderListParams{})
+	if contextor.GetRole(ctx) < models.UserRoleEmployee {
+		// Только employee и выше может получать неверифицированные тендеры
+		params.Verified = api.NewOptBool(true)
+	}
+
+	tenders, err := h.tenderService.List(ctx, service.TenderListParams{
+		VerifiedOnly: params.Verified.Value,
+		Page:         uint64(params.Page.Or(models.Page)),
+		PerPage:      uint64(params.PerPage.Or(models.PerPage))})
 	if err != nil {
-		return nil, fmt.Errorf("get tender: %w", err)
+		return nil, fmt.Errorf("get tenders: %w", err)
 	}
 
 	return &api.V1TendersGetOK{
-		Data: convert.Slice[[]models.Tender, []api.Tender](tenders, models.ConvertTenderModelToApi),
+		Data:       convert.Slice[[]models.Tender, []api.Tender](tenders.Tenders, models.ConvertTenderModelToApi),
+		Pagination: models.ConvertPaginationToAPI(tenders.Pagination),
 	}, nil
 }
 
@@ -49,7 +58,7 @@ func (h *Handler) V1OrganizationsOrganizationIDTendersGet(
 	}
 
 	return &api.V1OrganizationsOrganizationIDTendersGetOK{
-		Data: convert.Slice[[]models.Tender, []api.Tender](tenders, models.ConvertTenderModelToApi),
+		Data: convert.Slice[[]models.Tender, []api.Tender](tenders.Tenders, models.ConvertTenderModelToApi),
 	}, nil
 }
 

@@ -2486,17 +2486,6 @@ func (s *V1SurveyPostReq) Validate() error {
 	return nil
 }
 
-func (s V1TendersGetDirection) Validate() error {
-	switch s {
-	case "ASC":
-		return nil
-	case "DESC":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
-}
-
 func (s *V1TendersGetOK) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -2535,15 +2524,6 @@ func (s *V1TendersGetOK) Validate() error {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
-}
-
-func (s V1TendersGetSort) Validate() error {
-	switch s {
-	case "id":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
 }
 
 func (s *V1TendersPostCreated) Validate() error {

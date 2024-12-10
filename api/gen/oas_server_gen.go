@@ -235,11 +235,10 @@ type Handler interface {
 	V1SurveyPost(ctx context.Context, req *V1SurveyPostReq) (V1SurveyPostRes, error)
 	// V1TendersGet implements GET /v1/tenders operation.
 	//
-	// Returns all tenders
-	// Для получения всех тендеров (включая
-	// неверифицированные)
-	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-	// 'Employee' or higher.
+	// **Без JWT или с ролью "User"**:
+	// Возвращает тендеры только со статусом "Approved".
+	// **Для сотрудников ("Employee") и выше**:
+	// Возвращает все тендеры, включая неверифицированные.
 	//
 	// GET /v1/tenders
 	V1TendersGet(ctx context.Context, params V1TendersGetParams) (V1TendersGetRes, error)
