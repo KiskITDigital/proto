@@ -3,13 +3,14 @@ get:
     - tenders
   summary: Get tenders
   description: |-
-    Returns all tenders
-
-    Для получения всех тендеров (включая неверифицированные)
-    **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-    'Employee' or higher.
+    **Без JWT или с ролью "User"**:
+    Возвращает тендеры только со статусом "Approved".
+  
+    **Для сотрудников ("Employee") и выше**:
+    Возвращает все тендеры, включая неверифицированные.
   security:
     - bearerAuth: []
+    - {}  
   parameters:
     - name: verified
       in: query
@@ -17,40 +18,23 @@ get:
       schema:
         type: boolean
         default: true
-    - name: offset
+    - name: page
       in: query
-      description: Сдвиг начала каждой страницы на указанное количество единиц.
+      description: Номер страницы
+      required: false
       schema:
         type: integer
-        minimum: 0
         default: 0
-    - name: limit
+        minimum: 0
+    - name: per_page
       in: query
-      description: Максимальное количество объектов, которое может вернуть запрос.
+      description: Количество элементов на странице
+      required: false
       schema:
         type: integer
-        minimum: 0
+        minimum: 1
         maximum: 100
         default: 100
-    - name: sort
-      in: query
-      description: Определяет атрибут, по которому сортируются элементы.
-      schema:
-        type: string
-        enum:
-          - id
-        default: id
-    - name: direction
-      in: query
-      description: |-
-        Направление сортировки результатов.
-        Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
-      schema:
-        type: string
-        enum:
-          - ASC
-          - DESC
-        default: ASC
   responses:
     '200':
       description: Success
@@ -60,13 +44,17 @@ get:
             type: object
             required:
               - data
+              - pagination
             properties:
               data:
                 type: array
                 items:
                   $ref: "../../schemas/Tender.yaml"
+              pagination:
+                $ref: "../../schemas/Pagination.yaml"
     default:
       $ref: "../../responses/Error.yaml"
+
 post:
   tags:
     - tenders

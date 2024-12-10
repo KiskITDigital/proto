@@ -10,6 +10,8 @@ type TenderListParams struct {
 	OrganizationID models.Optional[int]
 	WithDrafts     bool
 	VerifiedOnly   bool
+	Page           uint64
+	PerPage        uint64
 }
 
 type TenderCreateParams struct {

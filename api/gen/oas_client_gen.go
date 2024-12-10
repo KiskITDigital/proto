@@ -250,11 +250,10 @@ type Invoker interface {
 	V1SurveyPost(ctx context.Context, request *V1SurveyPostReq) (V1SurveyPostRes, error)
 	// V1TendersGet invokes GET /v1/tenders operation.
 	//
-	// Returns all tenders
-	// Для получения всех тендеров (включая
-	// неверифицированные)
-	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-	// 'Employee' or higher.
+	// **Без JWT или с ролью "User"**:
+	// Возвращает тендеры только со статусом "Approved".
+	// **Для сотрудников ("Employee") и выше**:
+	// Возвращает все тендеры, включая неверифицированные.
 	//
 	// GET /v1/tenders
 	V1TendersGet(ctx context.Context, params V1TendersGetParams) (V1TendersGetRes, error)
@@ -4678,11 +4677,10 @@ func (c *Client) sendV1SurveyPost(ctx context.Context, request *V1SurveyPostReq)
 
 // V1TendersGet invokes GET /v1/tenders operation.
 //
-// Returns all tenders
-// Для получения всех тендеров (включая
-// неверифицированные)
-// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-// 'Employee' or higher.
+// **Без JWT или с ролью "User"**:
+// Возвращает тендеры только со статусом "Approved".
+// **Для сотрудников ("Employee") и выше**:
+// Возвращает все тендеры, включая неверифицированные.
 //
 // GET /v1/tenders
 func (c *Client) V1TendersGet(ctx context.Context, params V1TendersGetParams) (V1TendersGetRes, error) {
@@ -4749,15 +4747,15 @@ func (c *Client) sendV1TendersGet(ctx context.Context, params V1TendersGetParams
 		}
 	}
 	{
-		// Encode "offset" parameter.
+		// Encode "page" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "offset",
+			Name:    "page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Offset.Get(); ok {
+			if val, ok := params.Page.Get(); ok {
 				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
@@ -4766,50 +4764,16 @@ func (c *Client) sendV1TendersGet(ctx context.Context, params V1TendersGetParams
 		}
 	}
 	{
-		// Encode "limit" parameter.
+		// Encode "per_page" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "limit",
+			Name:    "per_page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Limit.Get(); ok {
+			if val, ok := params.PerPage.Get(); ok {
 				return e.EncodeValue(conv.IntToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "sort" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "sort",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Sort.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "direction" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "direction",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Direction.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
 			}
 			return nil
 		}); err != nil {
@@ -4843,6 +4807,7 @@ func (c *Client) sendV1TendersGet(ctx context.Context, params V1TendersGetParams
 		nextRequirement:
 			for _, requirement := range []bitset{
 				{0b00000001},
+				{},
 			} {
 				for i, mask := range requirement {
 					if satisfied[i]&mask != mask {

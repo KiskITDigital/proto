@@ -1682,98 +1682,6 @@ func (o OptV1OrganizationsVerificationsGetSort) Or(d V1OrganizationsVerification
 	return d
 }
 
-// NewOptV1TendersGetDirection returns new OptV1TendersGetDirection with value set to v.
-func NewOptV1TendersGetDirection(v V1TendersGetDirection) OptV1TendersGetDirection {
-	return OptV1TendersGetDirection{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptV1TendersGetDirection is optional V1TendersGetDirection.
-type OptV1TendersGetDirection struct {
-	Value V1TendersGetDirection
-	Set   bool
-}
-
-// IsSet returns true if OptV1TendersGetDirection was set.
-func (o OptV1TendersGetDirection) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptV1TendersGetDirection) Reset() {
-	var v V1TendersGetDirection
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptV1TendersGetDirection) SetTo(v V1TendersGetDirection) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptV1TendersGetDirection) Get() (v V1TendersGetDirection, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptV1TendersGetDirection) Or(d V1TendersGetDirection) V1TendersGetDirection {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptV1TendersGetSort returns new OptV1TendersGetSort with value set to v.
-func NewOptV1TendersGetSort(v V1TendersGetSort) OptV1TendersGetSort {
-	return OptV1TendersGetSort{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptV1TendersGetSort is optional V1TendersGetSort.
-type OptV1TendersGetSort struct {
-	Value V1TendersGetSort
-	Set   bool
-}
-
-// IsSet returns true if OptV1TendersGetSort was set.
-func (o OptV1TendersGetSort) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptV1TendersGetSort) Reset() {
-	var v V1TendersGetSort
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptV1TendersGetSort) SetTo(v V1TendersGetSort) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptV1TendersGetSort) Get() (v V1TendersGetSort, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptV1TendersGetSort) Or(d V1TendersGetSort) V1TendersGetSort {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewOptV1TendersVerificationsGetDirection returns new OptV1TendersVerificationsGetDirection with value set to v.
 func NewOptV1TendersVerificationsGetDirection(v V1TendersVerificationsGetDirection) OptV1TendersVerificationsGetDirection {
 	return OptV1TendersVerificationsGetDirection{
@@ -2237,6 +2145,43 @@ func (s *Organization) SetCreatedAt(val time.Time) {
 // SetUpdatedAt sets the value of UpdatedAt.
 func (s *Organization) SetUpdatedAt(val time.Time) {
 	s.UpdatedAt = val
+}
+
+// Ref: #
+type Pagination struct {
+	Page    int `json:"page"`
+	Pages   int `json:"pages"`
+	PerPage int `json:"per_page"`
+}
+
+// GetPage returns the value of Page.
+func (s *Pagination) GetPage() int {
+	return s.Page
+}
+
+// GetPages returns the value of Pages.
+func (s *Pagination) GetPages() int {
+	return s.Pages
+}
+
+// GetPerPage returns the value of PerPage.
+func (s *Pagination) GetPerPage() int {
+	return s.PerPage
+}
+
+// SetPage sets the value of Page.
+func (s *Pagination) SetPage(val int) {
+	s.Page = val
+}
+
+// SetPages sets the value of Pages.
+func (s *Pagination) SetPages(val int) {
+	s.Pages = val
+}
+
+// SetPerPage sets the value of PerPage.
+func (s *Pagination) SetPerPage(val int) {
+	s.PerPage = val
 }
 
 type Password string
@@ -4842,49 +4787,9 @@ func (s *V1SurveyPostReq) SetQuestion(val string) {
 	s.Question = val
 }
 
-type V1TendersGetDirection string
-
-const (
-	V1TendersGetDirectionASC  V1TendersGetDirection = "ASC"
-	V1TendersGetDirectionDESC V1TendersGetDirection = "DESC"
-)
-
-// AllValues returns all V1TendersGetDirection values.
-func (V1TendersGetDirection) AllValues() []V1TendersGetDirection {
-	return []V1TendersGetDirection{
-		V1TendersGetDirectionASC,
-		V1TendersGetDirectionDESC,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s V1TendersGetDirection) MarshalText() ([]byte, error) {
-	switch s {
-	case V1TendersGetDirectionASC:
-		return []byte(s), nil
-	case V1TendersGetDirectionDESC:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *V1TendersGetDirection) UnmarshalText(data []byte) error {
-	switch V1TendersGetDirection(data) {
-	case V1TendersGetDirectionASC:
-		*s = V1TendersGetDirectionASC
-		return nil
-	case V1TendersGetDirectionDESC:
-		*s = V1TendersGetDirectionDESC
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
 type V1TendersGetOK struct {
-	Data []Tender `json:"data"`
+	Data       []Tender   `json:"data"`
+	Pagination Pagination `json:"pagination"`
 }
 
 // GetData returns the value of Data.
@@ -4892,46 +4797,22 @@ func (s *V1TendersGetOK) GetData() []Tender {
 	return s.Data
 }
 
+// GetPagination returns the value of Pagination.
+func (s *V1TendersGetOK) GetPagination() Pagination {
+	return s.Pagination
+}
+
 // SetData sets the value of Data.
 func (s *V1TendersGetOK) SetData(val []Tender) {
 	s.Data = val
 }
 
+// SetPagination sets the value of Pagination.
+func (s *V1TendersGetOK) SetPagination(val Pagination) {
+	s.Pagination = val
+}
+
 func (*V1TendersGetOK) v1TendersGetRes() {}
-
-type V1TendersGetSort string
-
-const (
-	V1TendersGetSortID V1TendersGetSort = "id"
-)
-
-// AllValues returns all V1TendersGetSort values.
-func (V1TendersGetSort) AllValues() []V1TendersGetSort {
-	return []V1TendersGetSort{
-		V1TendersGetSortID,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s V1TendersGetSort) MarshalText() ([]byte, error) {
-	switch s {
-	case V1TendersGetSortID:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *V1TendersGetSort) UnmarshalText(data []byte) error {
-	switch V1TendersGetSort(data) {
-	case V1TendersGetSortID:
-		*s = V1TendersGetSortID
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
 
 type V1TendersPostCreated struct {
 	Data Tender `json:"data"`

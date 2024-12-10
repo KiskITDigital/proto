@@ -34,6 +34,8 @@ type TenderListParams struct {
 	TenderIDs      models.Optional[[]int]
 	WithDrafts     bool
 	VerifiedOnly   bool
+	Limit          models.Optional[uint64]
+	Offset         models.Optional[uint64]
 }
 
 type TenderUpdateParams struct {
@@ -87,4 +89,11 @@ type TenderCreateResponseParams struct {
 type TenderUpdateVerifStatusParams struct {
 	TenderID           int
 	VerificationStatus models.VerificationStatus
+}
+
+type TenderGetCountParams struct {
+	OrganizationID models.Optional[int]
+	TenderIDs      models.Optional[[]int]
+	WithDrafts     bool
+	VerifiedOnly   bool
 }

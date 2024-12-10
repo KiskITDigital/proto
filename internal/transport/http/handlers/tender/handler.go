@@ -18,7 +18,7 @@ type TenderService interface {
 	Create(ctx context.Context, params service.TenderCreateParams) (models.Tender, error)
 	Update(ctx context.Context, params service.TenderUpdateParams) (models.Tender, error)
 	GetByID(ctx context.Context, tenderID int) (models.Tender, error)
-	List(ctx context.Context, params service.TenderListParams) ([]models.Tender, error)
+	List(ctx context.Context, params service.TenderListParams) (models.TendersRes, error) 
 	Respond(ctx context.Context, params service.TenderRespondParams) error
 	CreateComment(ctx context.Context, params service.CommentCreateParams) error
 	GetComments(ctx context.Context, params service.GetCommentParams) ([]models.Comment, error)
