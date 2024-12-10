@@ -400,6 +400,26 @@ func (UnimplementedHandler) V1TendersTenderIDPut(ctx context.Context, req *V1Ten
 	return r, ht.ErrNotImplemented
 }
 
+// V1TendersTenderIDQuestionAnswerGet implements GET /v1/tenders/{tenderID}/question-answer operation.
+//
+// Получить все вопросы и ответы, связанные с конкретным
+// тендером.
+//
+// GET /v1/tenders/{tenderID}/question-answer
+func (UnimplementedHandler) V1TendersTenderIDQuestionAnswerGet(ctx context.Context, params V1TendersTenderIDQuestionAnswerGetParams) (r V1TendersTenderIDQuestionAnswerGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1TendersTenderIDQuestionAnswerPost implements POST /v1/tenders/{tenderID}/question-answer operation.
+//
+// Заказчик: Отвечает на вопрос
+// Исполнитель: Создает вопрос для тендера.
+//
+// POST /v1/tenders/{tenderID}/question-answer
+func (UnimplementedHandler) V1TendersTenderIDQuestionAnswerPost(ctx context.Context, req *V1TendersTenderIDQuestionAnswerPostReq, params V1TendersTenderIDQuestionAnswerPostParams) (r V1TendersTenderIDQuestionAnswerPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1TendersTenderIDRespondPost implements POST /v1/tenders/{tenderID}/respond operation.
 //
 // Responds to a tender.

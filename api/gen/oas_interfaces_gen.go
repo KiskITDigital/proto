@@ -161,6 +161,14 @@ type V1TendersTenderIDPutRes interface {
 	v1TendersTenderIDPutRes()
 }
 
+type V1TendersTenderIDQuestionAnswerGetRes interface {
+	v1TendersTenderIDQuestionAnswerGetRes()
+}
+
+type V1TendersTenderIDQuestionAnswerPostRes interface {
+	v1TendersTenderIDQuestionAnswerPostRes()
+}
+
 type V1TendersTenderIDRespondPostRes interface {
 	v1TendersTenderIDRespondPostRes()
 }

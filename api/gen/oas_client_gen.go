@@ -290,6 +290,20 @@ type Invoker interface {
 	//
 	// PUT /v1/tenders/{tenderID}
 	V1TendersTenderIDPut(ctx context.Context, request *V1TendersTenderIDPutReq, params V1TendersTenderIDPutParams) (V1TendersTenderIDPutRes, error)
+	// V1TendersTenderIDQuestionAnswerGet invokes GET /v1/tenders/{tenderID}/question-answer operation.
+	//
+	// Получить все вопросы и ответы, связанные с конкретным
+	// тендером.
+	//
+	// GET /v1/tenders/{tenderID}/question-answer
+	V1TendersTenderIDQuestionAnswerGet(ctx context.Context, params V1TendersTenderIDQuestionAnswerGetParams) (V1TendersTenderIDQuestionAnswerGetRes, error)
+	// V1TendersTenderIDQuestionAnswerPost invokes POST /v1/tenders/{tenderID}/question-answer operation.
+	//
+	// Заказчик: Отвечает на вопрос
+	// Исполнитель: Создает вопрос для тендера.
+	//
+	// POST /v1/tenders/{tenderID}/question-answer
+	V1TendersTenderIDQuestionAnswerPost(ctx context.Context, request *V1TendersTenderIDQuestionAnswerPostReq, params V1TendersTenderIDQuestionAnswerPostParams) (V1TendersTenderIDQuestionAnswerPostRes, error)
 	// V1TendersTenderIDRespondPost invokes POST /v1/tenders/{tenderID}/respond operation.
 	//
 	// Responds to a tender.
@@ -5404,6 +5418,242 @@ func (c *Client) sendV1TendersTenderIDPut(ctx context.Context, request *V1Tender
 
 	stage = "DecodeResponse"
 	result, err := decodeV1TendersTenderIDPutResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1TendersTenderIDQuestionAnswerGet invokes GET /v1/tenders/{tenderID}/question-answer operation.
+//
+// Получить все вопросы и ответы, связанные с конкретным
+// тендером.
+//
+// GET /v1/tenders/{tenderID}/question-answer
+func (c *Client) V1TendersTenderIDQuestionAnswerGet(ctx context.Context, params V1TendersTenderIDQuestionAnswerGetParams) (V1TendersTenderIDQuestionAnswerGetRes, error) {
+	res, err := c.sendV1TendersTenderIDQuestionAnswerGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1TendersTenderIDQuestionAnswerGet(ctx context.Context, params V1TendersTenderIDQuestionAnswerGetParams) (res V1TendersTenderIDQuestionAnswerGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/tenders/{tenderID}/question-answer"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1TendersTenderIDQuestionAnswerGet",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/v1/tenders/"
+	{
+		// Encode "tenderID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "tenderID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.TenderID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/question-answer"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1TendersTenderIDQuestionAnswerGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1TendersTenderIDQuestionAnswerPost invokes POST /v1/tenders/{tenderID}/question-answer operation.
+//
+// Заказчик: Отвечает на вопрос
+// Исполнитель: Создает вопрос для тендера.
+//
+// POST /v1/tenders/{tenderID}/question-answer
+func (c *Client) V1TendersTenderIDQuestionAnswerPost(ctx context.Context, request *V1TendersTenderIDQuestionAnswerPostReq, params V1TendersTenderIDQuestionAnswerPostParams) (V1TendersTenderIDQuestionAnswerPostRes, error) {
+	res, err := c.sendV1TendersTenderIDQuestionAnswerPost(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendV1TendersTenderIDQuestionAnswerPost(ctx context.Context, request *V1TendersTenderIDQuestionAnswerPostReq, params V1TendersTenderIDQuestionAnswerPostParams) (res V1TendersTenderIDQuestionAnswerPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/tenders/{tenderID}/question-answer"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1TendersTenderIDQuestionAnswerPost",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/v1/tenders/"
+	{
+		// Encode "tenderID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "tenderID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.TenderID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/question-answer"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "type" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "type",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			return e.EncodeValue(conv.StringToString(string(params.Type)))
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1TendersTenderIDQuestionAnswerPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1TendersTenderIDQuestionAnswerPost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1TendersTenderIDQuestionAnswerPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

@@ -275,6 +275,20 @@ type Handler interface {
 	//
 	// PUT /v1/tenders/{tenderID}
 	V1TendersTenderIDPut(ctx context.Context, req *V1TendersTenderIDPutReq, params V1TendersTenderIDPutParams) (V1TendersTenderIDPutRes, error)
+	// V1TendersTenderIDQuestionAnswerGet implements GET /v1/tenders/{tenderID}/question-answer operation.
+	//
+	// Получить все вопросы и ответы, связанные с конкретным
+	// тендером.
+	//
+	// GET /v1/tenders/{tenderID}/question-answer
+	V1TendersTenderIDQuestionAnswerGet(ctx context.Context, params V1TendersTenderIDQuestionAnswerGetParams) (V1TendersTenderIDQuestionAnswerGetRes, error)
+	// V1TendersTenderIDQuestionAnswerPost implements POST /v1/tenders/{tenderID}/question-answer operation.
+	//
+	// Заказчик: Отвечает на вопрос
+	// Исполнитель: Создает вопрос для тендера.
+	//
+	// POST /v1/tenders/{tenderID}/question-answer
+	V1TendersTenderIDQuestionAnswerPost(ctx context.Context, req *V1TendersTenderIDQuestionAnswerPostReq, params V1TendersTenderIDQuestionAnswerPostParams) (V1TendersTenderIDQuestionAnswerPostRes, error)
 	// V1TendersTenderIDRespondPost implements POST /v1/tenders/{tenderID}/respond operation.
 	//
 	// Responds to a tender.

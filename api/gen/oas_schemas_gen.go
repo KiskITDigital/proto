@@ -552,6 +552,8 @@ func (*ErrorStatusCode) v1TendersTenderIDCommentsGetRes()                      {
 func (*ErrorStatusCode) v1TendersTenderIDCommentsPostRes()                     {}
 func (*ErrorStatusCode) v1TendersTenderIDGetRes()                              {}
 func (*ErrorStatusCode) v1TendersTenderIDPutRes()                              {}
+func (*ErrorStatusCode) v1TendersTenderIDQuestionAnswerGetRes()                {}
+func (*ErrorStatusCode) v1TendersTenderIDQuestionAnswerPostRes()               {}
 func (*ErrorStatusCode) v1TendersTenderIDRespondPostRes()                      {}
 func (*ErrorStatusCode) v1TendersVerificationsGetRes()                         {}
 func (*ErrorStatusCode) v1UsersConfirmEmailPostRes()                           {}
@@ -2256,6 +2258,107 @@ func (s *Portfolio) SetCreatedAt(val time.Time) {
 // SetUpdatedAt sets the value of UpdatedAt.
 func (s *Portfolio) SetUpdatedAt(val OptDateTime) {
 	s.UpdatedAt = val
+}
+
+// Ref: #
+type QuestionAnswer struct {
+	// Уникальный идентификатор.
+	ID int `json:"id"`
+	// Идентификатор вопроса, для которого создан ответ (null
+	// для вопросов).
+	ParentID OptInt             `json:"parent_id"`
+	Type     QuestionAnswerType `json:"type"`
+	// Текст вопроса или ответа.
+	Content string `json:"content"`
+}
+
+// GetID returns the value of ID.
+func (s *QuestionAnswer) GetID() int {
+	return s.ID
+}
+
+// GetParentID returns the value of ParentID.
+func (s *QuestionAnswer) GetParentID() OptInt {
+	return s.ParentID
+}
+
+// GetType returns the value of Type.
+func (s *QuestionAnswer) GetType() QuestionAnswerType {
+	return s.Type
+}
+
+// GetContent returns the value of Content.
+func (s *QuestionAnswer) GetContent() string {
+	return s.Content
+}
+
+// SetID sets the value of ID.
+func (s *QuestionAnswer) SetID(val int) {
+	s.ID = val
+}
+
+// SetParentID sets the value of ParentID.
+func (s *QuestionAnswer) SetParentID(val OptInt) {
+	s.ParentID = val
+}
+
+// SetType sets the value of Type.
+func (s *QuestionAnswer) SetType(val QuestionAnswerType) {
+	s.Type = val
+}
+
+// SetContent sets the value of Content.
+func (s *QuestionAnswer) SetContent(val string) {
+	s.Content = val
+}
+
+// Ref: #
+type QuestionAnswerType string
+
+const (
+	QuestionAnswerTypeInvalid  QuestionAnswerType = "invalid"
+	QuestionAnswerTypeQuestion QuestionAnswerType = "question"
+	QuestionAnswerTypeAnswer   QuestionAnswerType = "answer"
+)
+
+// AllValues returns all QuestionAnswerType values.
+func (QuestionAnswerType) AllValues() []QuestionAnswerType {
+	return []QuestionAnswerType{
+		QuestionAnswerTypeInvalid,
+		QuestionAnswerTypeQuestion,
+		QuestionAnswerTypeAnswer,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s QuestionAnswerType) MarshalText() ([]byte, error) {
+	switch s {
+	case QuestionAnswerTypeInvalid:
+		return []byte(s), nil
+	case QuestionAnswerTypeQuestion:
+		return []byte(s), nil
+	case QuestionAnswerTypeAnswer:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *QuestionAnswerType) UnmarshalText(data []byte) error {
+	switch QuestionAnswerType(data) {
+	case QuestionAnswerTypeInvalid:
+		*s = QuestionAnswerTypeInvalid
+		return nil
+	case QuestionAnswerTypeQuestion:
+		*s = QuestionAnswerTypeQuestion
+		return nil
+	case QuestionAnswerTypeAnswer:
+		*s = QuestionAnswerTypeAnswer
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 // Ref: #
@@ -5301,6 +5404,66 @@ func (s *V1TendersTenderIDPutReq) SetWorkStart(val OptDateTime) {
 // SetWorkEnd sets the value of WorkEnd.
 func (s *V1TendersTenderIDPutReq) SetWorkEnd(val OptDateTime) {
 	s.WorkEnd = val
+}
+
+type V1TendersTenderIDQuestionAnswerGetOK struct {
+	Data []QuestionAnswer `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1TendersTenderIDQuestionAnswerGetOK) GetData() []QuestionAnswer {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1TendersTenderIDQuestionAnswerGetOK) SetData(val []QuestionAnswer) {
+	s.Data = val
+}
+
+func (*V1TendersTenderIDQuestionAnswerGetOK) v1TendersTenderIDQuestionAnswerGetRes() {}
+
+type V1TendersTenderIDQuestionAnswerPostCreated struct {
+	Data QuestionAnswer `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1TendersTenderIDQuestionAnswerPostCreated) GetData() QuestionAnswer {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1TendersTenderIDQuestionAnswerPostCreated) SetData(val QuestionAnswer) {
+	s.Data = val
+}
+
+func (*V1TendersTenderIDQuestionAnswerPostCreated) v1TendersTenderIDQuestionAnswerPostRes() {}
+
+type V1TendersTenderIDQuestionAnswerPostReq struct {
+	// Идентификатор вопроса, для которого создан ответ (null
+	// для вопросов).
+	ParentID OptInt `json:"parent_id"`
+	// Текст вопроса или ответа.
+	Content string `json:"content"`
+}
+
+// GetParentID returns the value of ParentID.
+func (s *V1TendersTenderIDQuestionAnswerPostReq) GetParentID() OptInt {
+	return s.ParentID
+}
+
+// GetContent returns the value of Content.
+func (s *V1TendersTenderIDQuestionAnswerPostReq) GetContent() string {
+	return s.Content
+}
+
+// SetParentID sets the value of ParentID.
+func (s *V1TendersTenderIDQuestionAnswerPostReq) SetParentID(val OptInt) {
+	s.ParentID = val
+}
+
+// SetContent sets the value of Content.
+func (s *V1TendersTenderIDQuestionAnswerPostReq) SetContent(val string) {
+	s.Content = val
 }
 
 // V1TendersTenderIDRespondPostOK is response for V1TendersTenderIDRespondPost operation.

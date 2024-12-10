@@ -22,6 +22,7 @@ type TenderService interface {
 	Respond(ctx context.Context, params service.TenderRespondParams) error
 	CreateComment(ctx context.Context, params service.CommentCreateParams) error
 	GetComments(ctx context.Context, params service.GetCommentParams) ([]models.Comment, error)
+	CreateQuestionAnswer(ctx context.Context, params service.CreateQuestionAnswerParams) (models.QuestionAnswer, error)
 }
 
 type VerificationService interface {

@@ -1025,6 +1025,33 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							elem = origElem
+						case 'q': // Prefix: "question-answer"
+							origElem := elem
+							if l := len("question-answer"); len(elem) >= l && elem[0:l] == "question-answer" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleV1TendersTenderIDQuestionAnswerGetRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								case "POST":
+									s.handleV1TendersTenderIDQuestionAnswerPostRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET,POST")
+								}
+
+								return
+							}
+
+							elem = origElem
 						case 'r': // Prefix: "respond"
 							origElem := elem
 							if l := len("respond"); len(elem) >= l && elem[0:l] == "respond" {
@@ -2518,6 +2545,39 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.summary = "Send comment for tender"
 									r.operationID = ""
 									r.pathPattern = "/v1/tenders/{tenderID}/comments"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'q': // Prefix: "question-answer"
+							origElem := elem
+							if l := len("question-answer"); len(elem) >= l && elem[0:l] == "question-answer" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = "V1TendersTenderIDQuestionAnswerGet"
+									r.summary = "Get questions and answers for a tender"
+									r.operationID = ""
+									r.pathPattern = "/v1/tenders/{tenderID}/question-answer"
+									r.args = args
+									r.count = 1
+									return r, true
+								case "POST":
+									r.name = "V1TendersTenderIDQuestionAnswerPost"
+									r.summary = "Create tender question or answer"
+									r.operationID = ""
+									r.pathPattern = "/v1/tenders/{tenderID}/question-answer"
 									r.args = args
 									r.count = 1
 									return r, true
