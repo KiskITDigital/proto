@@ -55,6 +55,7 @@ func (s *VerificationStore) GetWithEmptyObject(ctx context.Context, qe store.Que
 		From("verification_requests vr").
 		LeftJoin("users u ON vr.reviewer_user_id = u.id").
 		LeftJoin("employee e ON e.user_id = u.id").
+		OrderBy("vr.created_at DESC").
 		Offset(params.Offset).
 		Limit(params.Limit).
 		PlaceholderFormat(squirrel.Dollar)
@@ -206,6 +207,7 @@ func (s *VerificationStore) GetOrganizationRequests(ctx context.Context, qe stor
 		LeftJoin("users u ON vr.reviewer_user_id = u.id").
 		LeftJoin("employee e ON e.user_id = u.id").
 		Join("organizations o ON vr.object_id = o.id").
+		OrderBy("vr.created_at DESC").
 		Where(squirrel.Eq{"vr.object_type": models.ObjectTypeOrganization}).
 		Offset(params.Offset).
 		PlaceholderFormat(squirrel.Dollar)
@@ -391,6 +393,7 @@ func (s *VerificationStore) GetCommentRequests(ctx context.Context, qe store.Que
 		Join("comments c ON vr.object_id = c.id").
 		Join("organizations o ON c.organization_id = o.id").
 		Where(squirrel.Eq{"vr.object_type": models.ObjectTypeComment}).
+		OrderBy("vr.created_at DESC").
 		Offset(params.Offset).
 		Limit(params.Limit).
 		PlaceholderFormat(squirrel.Dollar)
