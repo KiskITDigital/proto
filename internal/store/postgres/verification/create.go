@@ -20,7 +20,7 @@ func (s *VerificationStore) Create(ctx context.Context, qe store.QueryExecutor, 
 		).
 		Values(
 			params.ObjectType,
-			params.ObjectType,
+			params.ObjectID,
 			params.Attachments,
 			models.VerificationStatusInReview,
 		).
