@@ -1028,7 +1028,7 @@ func (s URL) Validate() error {
 		MaxLengthSet: false,
 		Email:        false,
 		Hostname:     false,
-		Regex:        regexMap["^https?:\\/\\/[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$"],
+		Regex:        regexMap["^https?:\\/\\/[-a-zA-Z0-9а-яА-Я@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9а-яА-Я()]{1,6}\\b(?:[-a-zA-Z0-9а-яА-Я()@:%_\\+.~#?&\\/=]*)$"],
 	}).Validate(string(alias)); err != nil {
 		return errors.Wrap(err, "string")
 	}
