@@ -22,3 +22,7 @@ func (s *Service) CreateQuestionAnswer(ctx context.Context, params service.Creat
 		Content:              params.Content,
 	})
 }
+
+func (s *Service) GetQuestionAnswer(ctx context.Context, tenderID int) ([]models.QuestionWithAnswer, error) {
+	return s.questionAnswerStore.Get(ctx, s.psql.DB(), tenderID)
+}

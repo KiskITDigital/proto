@@ -52,3 +52,15 @@ func ConvertQuestionAnswerToAPI(qe QuestionAnswer) api.QuestionAnswer {
 		Content:  qe.Content,
 	}
 }
+
+type QuestionWithAnswer struct {
+	Question QuestionAnswer
+	Answer   Optional[QuestionAnswer]
+}
+
+func ConvertQuestionWithAnswerToAPI(qe QuestionWithAnswer) api.V1TendersTenderIDQuestionAnswerGetOKDataItem {
+	return api.V1TendersTenderIDQuestionAnswerGetOKDataItem{
+		Question: ConvertQuestionAnswerToAPI(qe.Question),
+		Answer:   api.OptQuestionAnswer{Value: ConvertQuestionAnswerToAPI(qe.Answer.Value), Set: qe.Answer.Set},
+	}
+}

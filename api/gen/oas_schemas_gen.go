@@ -1086,6 +1086,52 @@ func (o OptPhone) Or(d Phone) Phone {
 	return d
 }
 
+// NewOptQuestionAnswer returns new OptQuestionAnswer with value set to v.
+func NewOptQuestionAnswer(v QuestionAnswer) OptQuestionAnswer {
+	return OptQuestionAnswer{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptQuestionAnswer is optional QuestionAnswer.
+type OptQuestionAnswer struct {
+	Value QuestionAnswer
+	Set   bool
+}
+
+// IsSet returns true if OptQuestionAnswer was set.
+func (o OptQuestionAnswer) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptQuestionAnswer) Reset() {
+	var v QuestionAnswer
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptQuestionAnswer) SetTo(v QuestionAnswer) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptQuestionAnswer) Get() (v QuestionAnswer, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptQuestionAnswer) Or(d QuestionAnswer) QuestionAnswer {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptRegion returns new OptRegion with value set to v.
 func NewOptRegion(v Region) OptRegion {
 	return OptRegion{
@@ -5407,20 +5453,45 @@ func (s *V1TendersTenderIDPutReq) SetWorkEnd(val OptDateTime) {
 }
 
 type V1TendersTenderIDQuestionAnswerGetOK struct {
-	Data []QuestionAnswer `json:"data"`
+	Data []V1TendersTenderIDQuestionAnswerGetOKDataItem `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1TendersTenderIDQuestionAnswerGetOK) GetData() []QuestionAnswer {
+func (s *V1TendersTenderIDQuestionAnswerGetOK) GetData() []V1TendersTenderIDQuestionAnswerGetOKDataItem {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1TendersTenderIDQuestionAnswerGetOK) SetData(val []QuestionAnswer) {
+func (s *V1TendersTenderIDQuestionAnswerGetOK) SetData(val []V1TendersTenderIDQuestionAnswerGetOKDataItem) {
 	s.Data = val
 }
 
 func (*V1TendersTenderIDQuestionAnswerGetOK) v1TendersTenderIDQuestionAnswerGetRes() {}
+
+type V1TendersTenderIDQuestionAnswerGetOKDataItem struct {
+	Question QuestionAnswer    `json:"question"`
+	Answer   OptQuestionAnswer `json:"answer"`
+}
+
+// GetQuestion returns the value of Question.
+func (s *V1TendersTenderIDQuestionAnswerGetOKDataItem) GetQuestion() QuestionAnswer {
+	return s.Question
+}
+
+// GetAnswer returns the value of Answer.
+func (s *V1TendersTenderIDQuestionAnswerGetOKDataItem) GetAnswer() OptQuestionAnswer {
+	return s.Answer
+}
+
+// SetQuestion sets the value of Question.
+func (s *V1TendersTenderIDQuestionAnswerGetOKDataItem) SetQuestion(val QuestionAnswer) {
+	s.Question = val
+}
+
+// SetAnswer sets the value of Answer.
+func (s *V1TendersTenderIDQuestionAnswerGetOKDataItem) SetAnswer(val OptQuestionAnswer) {
+	s.Answer = val
+}
 
 type V1TendersTenderIDQuestionAnswerPostCreated struct {
 	Data QuestionAnswer `json:"data"`

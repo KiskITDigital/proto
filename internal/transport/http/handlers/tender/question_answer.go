@@ -8,6 +8,7 @@ import (
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/contextor"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/service"
 	"gitlab.ubrato.ru/ubrato/core/internal/store/errstore"
@@ -30,5 +31,16 @@ func (h *Handler) V1TendersTenderIDQuestionAnswerPost(ctx context.Context, req *
 
 	return &api.V1TendersTenderIDQuestionAnswerPostCreated{
 		Data: models.ConvertQuestionAnswerToAPI(questionAnswer),
+	}, nil
+}
+
+func (h *Handler) V1TendersTenderIDQuestionAnswerGet(ctx context.Context, params api.V1TendersTenderIDQuestionAnswerGetParams) (api.V1TendersTenderIDQuestionAnswerGetRes, error) {
+	questionWithAnswer, err := h.tenderService.GetQuestionAnswer(ctx, params.TenderID)
+	if err != nil {
+		return nil, fmt.Errorf("get question-answer: %w", err)
+	}
+
+	return &api.V1TendersTenderIDQuestionAnswerGetOK{
+		Data: convert.Slice[[]models.QuestionWithAnswer, []api.V1TendersTenderIDQuestionAnswerGetOKDataItem](questionWithAnswer, models.ConvertQuestionWithAnswerToAPI),
 	}, nil
 }
