@@ -735,7 +735,14 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/QuestionAnswer'
+                      type: object
+                      required:
+                        - question
+                      properties:
+                        question:
+                          $ref: '#/components/schemas/QuestionAnswer'
+                        answer:
+                          $ref: '#/components/schemas/QuestionAnswer'
         default:
           $ref: '#/components/responses/Error'
   /v1/users:

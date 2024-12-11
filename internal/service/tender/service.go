@@ -8,10 +8,10 @@ import (
 )
 
 type Service struct {
-	psql              DBTX
-	tenderStore       TenderStore
-	commentStore      CommentStore
-	verificationStore VerificationStore
+	psql                DBTX
+	tenderStore         TenderStore
+	commentStore        CommentStore
+	verificationStore   VerificationStore
 	questionAnswerStore QuestionAnswerStore
 }
 
@@ -27,11 +27,12 @@ type TenderStore interface {
 	List(ctx context.Context, qe store.QueryExecutor, params store.TenderListParams) ([]models.Tender, error)
 	Update(ctx context.Context, qe store.QueryExecutor, params store.TenderUpdateParams) (int, error)
 	CreateResponse(ctx context.Context, qe store.QueryExecutor, params store.TenderCreateResponseParams) error
-	Count(ctx context.Context, qe store.QueryExecutor, params store.TenderGetCountParams) (int, error) 
+	Count(ctx context.Context, qe store.QueryExecutor, params store.TenderGetCountParams) (int, error)
 }
 
-type QuestionAnswerStore interface{
-	Create(ctx context.Context, qe store.QueryExecutor, params store.CreateQuestionAnswerParams) (models.QuestionAnswer, error) 
+type QuestionAnswerStore interface {
+	Create(ctx context.Context, qe store.QueryExecutor, params store.CreateQuestionAnswerParams) (models.QuestionAnswer, error)
+	Get(ctx context.Context, qe store.QueryExecutor, tenderID int) ([]models.QuestionWithAnswer, error)
 }
 
 type CommentStore interface {
@@ -51,10 +52,10 @@ func New(
 	questionAnswerStore QuestionAnswerStore,
 ) *Service {
 	return &Service{
-		psql:              psql,
-		tenderStore:       tenderStore,
-		commentStore:      commentStore,
-		verificationStore: verificationStore,
+		psql:                psql,
+		tenderStore:         tenderStore,
+		commentStore:        commentStore,
+		verificationStore:   verificationStore,
 		questionAnswerStore: questionAnswerStore,
 	}
 }

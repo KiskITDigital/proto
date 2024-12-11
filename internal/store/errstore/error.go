@@ -19,6 +19,10 @@ var (
 )
 
 var (
+	ErrTenderNotFound = errors.New("tender not found")
+)
+
+var (
 	ErrOrganizationNotFound = errors.New("organization not found")
 )
 

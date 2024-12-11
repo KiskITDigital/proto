@@ -83,6 +83,14 @@ get:
               data:
                 type: array
                 items:
-                  $ref: "../../../schemas/QuestionAnswer.yaml"
+                  type: object
+                  required: 
+                    - question
+                  properties:
+                    question:
+                       $ref: "../../../schemas/QuestionAnswer.yaml"
+                    answer:
+                       $ref: "../../../schemas/QuestionAnswer.yaml"
+                 
     default:
       $ref: "../../../responses/Error.yaml"
