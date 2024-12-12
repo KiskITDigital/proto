@@ -21,6 +21,10 @@ func (s *VerificationStore) UpdateStatus(ctx context.Context, qe store.QueryExec
 		Where(squirrel.Eq{"id": params.RequestID}).
 		PlaceholderFormat(squirrel.Dollar)
 
+	if params.ReviewComment.Set {
+		builder = builder.Set("review_comment", params.ReviewComment.Value)
+	}
+
 	result := store.VerificationObjectUpdateStatusResult{}
 	if err := builder.RunWith(qe).QueryRowContext(ctx).Scan(
 		&result.ObjectID,

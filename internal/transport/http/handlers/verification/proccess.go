@@ -26,7 +26,7 @@ func (h *Handler) V1VerificationsRequestIDAprovePost(ctx context.Context, params
 	return &api.V1VerificationsRequestIDAprovePostOK{}, nil
 }
 
-func (h *Handler) V1VerificationsRequestIDDenyPost(ctx context.Context, params api.V1VerificationsRequestIDDenyPostParams) (api.V1VerificationsRequestIDDenyPostRes, error) {
+func (h *Handler) V1VerificationsRequestIDDenyPost(ctx context.Context, req *api.V1VerificationsRequestIDDenyPostReq, params api.V1VerificationsRequestIDDenyPostParams) (api.V1VerificationsRequestIDDenyPostRes, error) {
 	if contextor.GetRole(ctx) < models.UserRoleEmployee {
 		return nil, cerr.ErrPermission
 	}
@@ -35,6 +35,7 @@ func (h *Handler) V1VerificationsRequestIDDenyPost(ctx context.Context, params a
 		UserID: contextor.GetUserID(ctx),
 		RequesID: params.RequestID,
 		Status: models.VerificationStatusDeclined,
+		ReviewComment: models.NewOptional(req.ReviewComment),
 	}); err != nil {
 		return nil, err
 	}

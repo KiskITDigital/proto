@@ -7997,6 +7997,21 @@ func (s *Server) handleV1VerificationsRequestIDDenyPostRequest(args [1]string, a
 		s.cfg.ErrorHandler(ctx, w, r, err)
 		return
 	}
+	request, close, err := s.decodeV1VerificationsRequestIDDenyPostRequest(r)
+	if err != nil {
+		err = &ogenerrors.DecodeRequestError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeRequest", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+	defer func() {
+		if err := close(); err != nil {
+			recordError("CloseRequest", err)
+		}
+	}()
 
 	var response V1VerificationsRequestIDDenyPostRes
 	if m := s.cfg.Middleware; m != nil {
@@ -8005,7 +8020,7 @@ func (s *Server) handleV1VerificationsRequestIDDenyPostRequest(args [1]string, a
 			OperationName:    "V1VerificationsRequestIDDenyPost",
 			OperationSummary: "Deny verification request",
 			OperationID:      "",
-			Body:             nil,
+			Body:             request,
 			Params: middleware.Parameters{
 				{
 					Name: "requestID",
@@ -8016,7 +8031,7 @@ func (s *Server) handleV1VerificationsRequestIDDenyPostRequest(args [1]string, a
 		}
 
 		type (
-			Request  = struct{}
+			Request  = *V1VerificationsRequestIDDenyPostReq
 			Params   = V1VerificationsRequestIDDenyPostParams
 			Response = V1VerificationsRequestIDDenyPostRes
 		)
@@ -8029,12 +8044,12 @@ func (s *Server) handleV1VerificationsRequestIDDenyPostRequest(args [1]string, a
 			mreq,
 			unpackV1VerificationsRequestIDDenyPostParams,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.V1VerificationsRequestIDDenyPost(ctx, params)
+				response, err = s.h.V1VerificationsRequestIDDenyPost(ctx, request, params)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.V1VerificationsRequestIDDenyPost(ctx, params)
+		response, err = s.h.V1VerificationsRequestIDDenyPost(ctx, request, params)
 	}
 	if err != nil {
 		defer recordError("Internal", err)

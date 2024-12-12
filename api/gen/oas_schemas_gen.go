@@ -6013,6 +6013,20 @@ type V1VerificationsRequestIDDenyPostOK struct{}
 
 func (*V1VerificationsRequestIDDenyPostOK) v1VerificationsRequestIDDenyPostRes() {}
 
+type V1VerificationsRequestIDDenyPostReq struct {
+	ReviewComment string `json:"review_comment"`
+}
+
+// GetReviewComment returns the value of ReviewComment.
+func (s *V1VerificationsRequestIDDenyPostReq) GetReviewComment() string {
+	return s.ReviewComment
+}
+
+// SetReviewComment sets the value of ReviewComment.
+func (s *V1VerificationsRequestIDDenyPostReq) SetReviewComment(val string) {
+	s.ReviewComment = val
+}
+
 type V1VerificationsRequestIDGetOK struct {
 	Data VerificationRequest `json:"data"`
 }

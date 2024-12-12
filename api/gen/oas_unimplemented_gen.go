@@ -525,7 +525,7 @@ func (UnimplementedHandler) V1VerificationsRequestIDAprovePost(ctx context.Conte
 // 'Employee' or higher.
 //
 // POST /v1/verifications/{requestID}/deny
-func (UnimplementedHandler) V1VerificationsRequestIDDenyPost(ctx context.Context, params V1VerificationsRequestIDDenyPostParams) (r V1VerificationsRequestIDDenyPostRes, _ error) {
+func (UnimplementedHandler) V1VerificationsRequestIDDenyPost(ctx context.Context, req *V1VerificationsRequestIDDenyPostReq, params V1VerificationsRequestIDDenyPostParams) (r V1VerificationsRequestIDDenyPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
