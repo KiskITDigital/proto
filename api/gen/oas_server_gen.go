@@ -364,7 +364,7 @@ type Handler interface {
 	// 'Employee' or higher.
 	//
 	// POST /v1/verifications/{requestID}/deny
-	V1VerificationsRequestIDDenyPost(ctx context.Context, params V1VerificationsRequestIDDenyPostParams) (V1VerificationsRequestIDDenyPostRes, error)
+	V1VerificationsRequestIDDenyPost(ctx context.Context, req *V1VerificationsRequestIDDenyPostReq, params V1VerificationsRequestIDDenyPostParams) (V1VerificationsRequestIDDenyPostRes, error)
 	// V1VerificationsRequestIDGet implements GET /v1/verifications/{requestID} operation.
 	//
 	// Returns verification request by id

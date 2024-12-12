@@ -9,9 +9,10 @@ type VerificationRequestCreateParams struct {
 }
 
 type VerificationRequestUpdateStatusParams struct {
-	UserID    int
-	RequestID int
-	Status    models.VerificationStatus
+	UserID        int
+	RequestID     int
+	Status        models.VerificationStatus
+	ReviewComment models.Optional[string]
 }
 
 type VerificationObjectUpdateStatusResult struct {

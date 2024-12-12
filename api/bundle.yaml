@@ -1849,6 +1849,18 @@ paths:
             type: integer
             minimum: 1
           example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - review_comment
+              properties:
+                review_comment:
+                  type: string
+                  example: The provided documents do not meet the verification criteria.
       responses:
         '200':
           description: Success

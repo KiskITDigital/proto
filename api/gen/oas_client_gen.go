@@ -379,7 +379,7 @@ type Invoker interface {
 	// 'Employee' or higher.
 	//
 	// POST /v1/verifications/{requestID}/deny
-	V1VerificationsRequestIDDenyPost(ctx context.Context, params V1VerificationsRequestIDDenyPostParams) (V1VerificationsRequestIDDenyPostRes, error)
+	V1VerificationsRequestIDDenyPost(ctx context.Context, request *V1VerificationsRequestIDDenyPostReq, params V1VerificationsRequestIDDenyPostParams) (V1VerificationsRequestIDDenyPostRes, error)
 	// V1VerificationsRequestIDGet invokes GET /v1/verifications/{requestID} operation.
 	//
 	// Returns verification request by id
@@ -6872,12 +6872,12 @@ func (c *Client) sendV1VerificationsRequestIDAprovePost(ctx context.Context, par
 // 'Employee' or higher.
 //
 // POST /v1/verifications/{requestID}/deny
-func (c *Client) V1VerificationsRequestIDDenyPost(ctx context.Context, params V1VerificationsRequestIDDenyPostParams) (V1VerificationsRequestIDDenyPostRes, error) {
-	res, err := c.sendV1VerificationsRequestIDDenyPost(ctx, params)
+func (c *Client) V1VerificationsRequestIDDenyPost(ctx context.Context, request *V1VerificationsRequestIDDenyPostReq, params V1VerificationsRequestIDDenyPostParams) (V1VerificationsRequestIDDenyPostRes, error) {
+	res, err := c.sendV1VerificationsRequestIDDenyPost(ctx, request, params)
 	return res, err
 }
 
-func (c *Client) sendV1VerificationsRequestIDDenyPost(ctx context.Context, params V1VerificationsRequestIDDenyPostParams) (res V1VerificationsRequestIDDenyPostRes, err error) {
+func (c *Client) sendV1VerificationsRequestIDDenyPost(ctx context.Context, request *V1VerificationsRequestIDDenyPostReq, params V1VerificationsRequestIDDenyPostParams) (res V1VerificationsRequestIDDenyPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/v1/verifications/{requestID}/deny"),
@@ -6939,6 +6939,9 @@ func (c *Client) sendV1VerificationsRequestIDDenyPost(ctx context.Context, param
 	r, err := ht.NewRequest(ctx, "POST", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1VerificationsRequestIDDenyPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
 	}
 
 	{
