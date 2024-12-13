@@ -63,10 +63,7 @@ func (s *TenderStore) Create(ctx context.Context, qe store.QueryExecutor, params
 
 	var id int
 
-	err := builder.RunWith(qe).QueryRowContext(ctx).Scan(
-		&id,
-	)
-	if err != nil {
+	if err := builder.RunWith(qe).QueryRowContext(ctx).Scan(&id); err != nil {
 		return 0, fmt.Errorf("query row: %w", err)
 	}
 

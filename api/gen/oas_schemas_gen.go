@@ -3820,7 +3820,8 @@ func (s *V1OrganizationsOrganizationIDProfileCustomerPutReq) SetCityIds(val []in
 }
 
 type V1OrganizationsOrganizationIDTendersGetOK struct {
-	Data []Tender `json:"data"`
+	Data       []Tender   `json:"data"`
+	Pagination Pagination `json:"pagination"`
 }
 
 // GetData returns the value of Data.
@@ -3828,9 +3829,19 @@ func (s *V1OrganizationsOrganizationIDTendersGetOK) GetData() []Tender {
 	return s.Data
 }
 
+// GetPagination returns the value of Pagination.
+func (s *V1OrganizationsOrganizationIDTendersGetOK) GetPagination() Pagination {
+	return s.Pagination
+}
+
 // SetData sets the value of Data.
 func (s *V1OrganizationsOrganizationIDTendersGetOK) SetData(val []Tender) {
 	s.Data = val
+}
+
+// SetPagination sets the value of Pagination.
+func (s *V1OrganizationsOrganizationIDTendersGetOK) SetPagination(val Pagination) {
+	s.Pagination = val
 }
 
 func (*V1OrganizationsOrganizationIDTendersGetOK) v1OrganizationsOrganizationIDTendersGetRes() {}

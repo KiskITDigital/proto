@@ -3545,7 +3545,10 @@ func (s *Server) handleV1OrganizationsOrganizationIDProfileCustomerPutRequest(ar
 
 // handleV1OrganizationsOrganizationIDTendersGetRequest handles GET /v1/organizations/{organizationID}/tenders operation.
 //
-// If user is in organization it also returns all drafts.
+// **Без JWT или с ролью "User"**:
+// Возвращает тендеры только со статусом "Approved".
+// **Если "User" состоит в организации:** возразщает все
+// тендеры (с черновиками).
 //
 // GET /v1/organizations/{organizationID}/tenders
 func (s *Server) handleV1OrganizationsOrganizationIDTendersGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
@@ -3615,6 +3618,7 @@ func (s *Server) handleV1OrganizationsOrganizationIDTendersGetRequest(args [1]st
 		nextRequirement:
 			for _, requirement := range []bitset{
 				{0b00000001},
+				{},
 			} {
 				for i, mask := range requirement {
 					if satisfied[i]&mask != mask {
@@ -3658,6 +3662,14 @@ func (s *Server) handleV1OrganizationsOrganizationIDTendersGetRequest(args [1]st
 					Name: "organizationID",
 					In:   "path",
 				}: params.OrganizationID,
+				{
+					Name: "page",
+					In:   "query",
+				}: params.Page,
+				{
+					Name: "per_page",
+					In:   "query",
+				}: params.PerPage,
 			},
 			Raw: r,
 		}

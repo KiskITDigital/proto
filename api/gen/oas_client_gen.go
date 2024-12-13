@@ -187,7 +187,10 @@ type Invoker interface {
 	V1OrganizationsOrganizationIDProfileCustomerPut(ctx context.Context, request *V1OrganizationsOrganizationIDProfileCustomerPutReq, params V1OrganizationsOrganizationIDProfileCustomerPutParams) (V1OrganizationsOrganizationIDProfileCustomerPutRes, error)
 	// V1OrganizationsOrganizationIDTendersGet invokes GET /v1/organizations/{organizationID}/tenders operation.
 	//
-	// If user is in organization it also returns all drafts.
+	// **Без JWT или с ролью "User"**:
+	// Возвращает тендеры только со статусом "Approved".
+	// **Если "User" состоит в организации:** возразщает все
+	// тендеры (с черновиками).
 	//
 	// GET /v1/organizations/{organizationID}/tenders
 	V1OrganizationsOrganizationIDTendersGet(ctx context.Context, params V1OrganizationsOrganizationIDTendersGetParams) (V1OrganizationsOrganizationIDTendersGetRes, error)
@@ -3167,7 +3170,10 @@ func (c *Client) sendV1OrganizationsOrganizationIDProfileCustomerPut(ctx context
 
 // V1OrganizationsOrganizationIDTendersGet invokes GET /v1/organizations/{organizationID}/tenders operation.
 //
-// If user is in organization it also returns all drafts.
+// **Без JWT или с ролью "User"**:
+// Возвращает тендеры только со статусом "Approved".
+// **Если "User" состоит в организации:** возразщает все
+// тендеры (с черновиками).
 //
 // GET /v1/organizations/{organizationID}/tenders
 func (c *Client) V1OrganizationsOrganizationIDTendersGet(ctx context.Context, params V1OrganizationsOrganizationIDTendersGetParams) (V1OrganizationsOrganizationIDTendersGetRes, error) {
@@ -3233,6 +3239,44 @@ func (c *Client) sendV1OrganizationsOrganizationIDTendersGet(ctx context.Context
 	pathParts[2] = "/tenders"
 	uri.AddPathParts(u, pathParts[:]...)
 
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "page" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Page.Get(); ok {
+				return e.EncodeValue(conv.IntToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "per_page" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "per_page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.PerPage.Get(); ok {
+				return e.EncodeValue(conv.IntToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
 	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
@@ -3258,6 +3302,7 @@ func (c *Client) sendV1OrganizationsOrganizationIDTendersGet(ctx context.Context
 		nextRequirement:
 			for _, requirement := range []bitset{
 				{0b00000001},
+				{},
 			} {
 				for i, mask := range requirement {
 					if satisfied[i]&mask != mask {
