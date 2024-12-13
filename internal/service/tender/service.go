@@ -8,11 +8,10 @@ import (
 )
 
 type Service struct {
-	psql                DBTX
-	tenderStore         TenderStore
-	commentStore        CommentStore
-	verificationStore   VerificationStore
-	questionAnswerStore QuestionAnswerStore
+	psql              DBTX
+	tenderStore       TenderStore
+	commentStore      CommentStore
+	verificationStore VerificationStore
 }
 
 type DBTX interface {
@@ -30,11 +29,6 @@ type TenderStore interface {
 	Count(ctx context.Context, qe store.QueryExecutor, params store.TenderGetCountParams) (int, error)
 }
 
-type QuestionAnswerStore interface {
-	Create(ctx context.Context, qe store.QueryExecutor, params store.CreateQuestionAnswerParams) (models.QuestionAnswer, error)
-	Get(ctx context.Context, qe store.QueryExecutor, tenderID int) ([]models.QuestionWithAnswer, error)
-}
-
 type CommentStore interface {
 	CreateComment(ctx context.Context, qe store.QueryExecutor, params store.CommentCreateParams) error
 	GetComments(ctx context.Context, qe store.QueryExecutor, params store.CommentGetParams) ([]models.Comment, error)
@@ -49,13 +43,11 @@ func New(
 	tenderStore TenderStore,
 	commentStore CommentStore,
 	verificationStore VerificationStore,
-	questionAnswerStore QuestionAnswerStore,
 ) *Service {
 	return &Service{
-		psql:                psql,
-		tenderStore:         tenderStore,
-		commentStore:        commentStore,
-		verificationStore:   verificationStore,
-		questionAnswerStore: questionAnswerStore,
+		psql:              psql,
+		tenderStore:       tenderStore,
+		commentStore:      commentStore,
+		verificationStore: verificationStore,
 	}
 }

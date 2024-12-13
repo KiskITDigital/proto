@@ -208,12 +208,32 @@ func (UnimplementedHandler) V1OrganizationsOrganizationIDProfileContactsPut(ctx 
 	return r, ht.ErrNotImplemented
 }
 
+// V1OrganizationsOrganizationIDProfileContractorGet implements GET /v1/organizations/{organizationID}/profile/contractor operation.
+//
+// Возвращает информацию об организации и профиле
+// исполнителя.
+//
+// GET /v1/organizations/{organizationID}/profile/contractor
+func (UnimplementedHandler) V1OrganizationsOrganizationIDProfileContractorGet(ctx context.Context, params V1OrganizationsOrganizationIDProfileContractorGetParams) (r V1OrganizationsOrganizationIDProfileContractorGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1OrganizationsOrganizationIDProfileContractorPut implements PUT /v1/organizations/{organizationID}/profile/contractor operation.
 //
 // Обновляет профиль исполнителя.
 //
 // PUT /v1/organizations/{organizationID}/profile/contractor
 func (UnimplementedHandler) V1OrganizationsOrganizationIDProfileContractorPut(ctx context.Context, req *V1OrganizationsOrganizationIDProfileContractorPutReq, params V1OrganizationsOrganizationIDProfileContractorPutParams) (r V1OrganizationsOrganizationIDProfileContractorPutRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1OrganizationsOrganizationIDProfileCustomerGet implements GET /v1/organizations/{organizationID}/profile/customer operation.
+//
+// Возвращает информацию об организации и профиле
+// заказчика.
+//
+// GET /v1/organizations/{organizationID}/profile/customer
+func (UnimplementedHandler) V1OrganizationsOrganizationIDProfileCustomerGet(ctx context.Context, params V1OrganizationsOrganizationIDProfileCustomerGetParams) (r V1OrganizationsOrganizationIDProfileCustomerGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

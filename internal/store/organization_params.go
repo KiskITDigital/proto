@@ -3,10 +3,10 @@ package store
 import "gitlab.ubrato.ru/ubrato/core/internal/models"
 
 type OrganizationGetParams struct {
-	IsContractor   models.Optional[bool]
-	OrganizationID models.Optional[int]
-	Offset         uint64
-	Limit          models.Optional[uint64]
+	IsContractor    models.Optional[bool]
+	OrganizationIDs []int
+	Offset          uint64
+	Limit           uint64
 }
 
 type OrganizationCreateParams struct {

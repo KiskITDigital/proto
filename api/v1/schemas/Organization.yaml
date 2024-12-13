@@ -16,8 +16,6 @@ required:
   - emails
   - phones
   - messengers
-  - customer_info
-  - contractor_info
   - created_at
   - updated_at
 properties:
@@ -62,10 +60,6 @@ properties:
     type: boolean
   is_banned:
     type: boolean
-  customer_info:
-    $ref: "CustomerInfo.yaml"
-  contractor_info:
-    $ref: "ContractorInfo.yaml"
   created_at:
     type: string
     format: date-time

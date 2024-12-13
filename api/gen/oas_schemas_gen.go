@@ -532,7 +532,9 @@ func (*ErrorStatusCode) v1OrganizationsOrganizationIDPortfolioGetRes()         {
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDPortfolioPostRes()        {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDProfileBrandPutRes()      {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDProfileContactsPutRes()   {}
+func (*ErrorStatusCode) v1OrganizationsOrganizationIDProfileContractorGetRes() {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDProfileContractorPutRes() {}
+func (*ErrorStatusCode) v1OrganizationsOrganizationIDProfileCustomerGetRes()   {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDProfileCustomerPutRes()   {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDTendersGetRes()           {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDVerificationsGetRes()     {}
@@ -1979,8 +1981,6 @@ type Organization struct {
 	VerificationStatus OptVerificationStatus `json:"verification_status"`
 	IsContractor       bool                  `json:"is_contractor"`
 	IsBanned           bool                  `json:"is_banned"`
-	CustomerInfo       CustomerInfo          `json:"customer_info"`
-	ContractorInfo     ContractorInfo        `json:"contractor_info"`
 	CreatedAt          time.Time             `json:"created_at"`
 	UpdatedAt          time.Time             `json:"updated_at"`
 }
@@ -2068,16 +2068,6 @@ func (s *Organization) GetIsContractor() bool {
 // GetIsBanned returns the value of IsBanned.
 func (s *Organization) GetIsBanned() bool {
 	return s.IsBanned
-}
-
-// GetCustomerInfo returns the value of CustomerInfo.
-func (s *Organization) GetCustomerInfo() CustomerInfo {
-	return s.CustomerInfo
-}
-
-// GetContractorInfo returns the value of ContractorInfo.
-func (s *Organization) GetContractorInfo() ContractorInfo {
-	return s.ContractorInfo
 }
 
 // GetCreatedAt returns the value of CreatedAt.
@@ -2173,16 +2163,6 @@ func (s *Organization) SetIsContractor(val bool) {
 // SetIsBanned sets the value of IsBanned.
 func (s *Organization) SetIsBanned(val bool) {
 	s.IsBanned = val
-}
-
-// SetCustomerInfo sets the value of CustomerInfo.
-func (s *Organization) SetCustomerInfo(val CustomerInfo) {
-	s.CustomerInfo = val
-}
-
-// SetContractorInfo sets the value of ContractorInfo.
-func (s *Organization) SetContractorInfo(val ContractorInfo) {
-	s.ContractorInfo = val
 }
 
 // SetCreatedAt sets the value of CreatedAt.
@@ -4466,21 +4446,88 @@ func (s *V1OrganizationsOrganizationIDProfileContactsPutReq) SetMessengers(val [
 	s.Messengers = val
 }
 
-type V1OrganizationsOrganizationIDProfileContractorPutOK struct {
-	Data Organization `json:"data"`
+type V1OrganizationsOrganizationIDProfileContractorGetOK struct {
+	Data V1OrganizationsOrganizationIDProfileContractorGetOKData `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1OrganizationsOrganizationIDProfileContractorPutOK) GetData() Organization {
+func (s *V1OrganizationsOrganizationIDProfileContractorGetOK) GetData() V1OrganizationsOrganizationIDProfileContractorGetOKData {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1OrganizationsOrganizationIDProfileContractorPutOK) SetData(val Organization) {
+func (s *V1OrganizationsOrganizationIDProfileContractorGetOK) SetData(val V1OrganizationsOrganizationIDProfileContractorGetOKData) {
+	s.Data = val
+}
+
+func (*V1OrganizationsOrganizationIDProfileContractorGetOK) v1OrganizationsOrganizationIDProfileContractorGetRes() {
+}
+
+type V1OrganizationsOrganizationIDProfileContractorGetOKData struct {
+	Organization Organization   `json:"organization"`
+	Profile      ContractorInfo `json:"profile"`
+}
+
+// GetOrganization returns the value of Organization.
+func (s *V1OrganizationsOrganizationIDProfileContractorGetOKData) GetOrganization() Organization {
+	return s.Organization
+}
+
+// GetProfile returns the value of Profile.
+func (s *V1OrganizationsOrganizationIDProfileContractorGetOKData) GetProfile() ContractorInfo {
+	return s.Profile
+}
+
+// SetOrganization sets the value of Organization.
+func (s *V1OrganizationsOrganizationIDProfileContractorGetOKData) SetOrganization(val Organization) {
+	s.Organization = val
+}
+
+// SetProfile sets the value of Profile.
+func (s *V1OrganizationsOrganizationIDProfileContractorGetOKData) SetProfile(val ContractorInfo) {
+	s.Profile = val
+}
+
+type V1OrganizationsOrganizationIDProfileContractorPutOK struct {
+	Data V1OrganizationsOrganizationIDProfileContractorPutOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutOK) GetData() V1OrganizationsOrganizationIDProfileContractorPutOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutOK) SetData(val V1OrganizationsOrganizationIDProfileContractorPutOKData) {
 	s.Data = val
 }
 
 func (*V1OrganizationsOrganizationIDProfileContractorPutOK) v1OrganizationsOrganizationIDProfileContractorPutRes() {
+}
+
+type V1OrganizationsOrganizationIDProfileContractorPutOKData struct {
+	Organization Organization   `json:"organization"`
+	Profile      ContractorInfo `json:"profile"`
+}
+
+// GetOrganization returns the value of Organization.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutOKData) GetOrganization() Organization {
+	return s.Organization
+}
+
+// GetProfile returns the value of Profile.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutOKData) GetProfile() ContractorInfo {
+	return s.Profile
+}
+
+// SetOrganization sets the value of Organization.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutOKData) SetOrganization(val Organization) {
+	s.Organization = val
+}
+
+// SetProfile sets the value of Profile.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutOKData) SetProfile(val ContractorInfo) {
+	s.Profile = val
 }
 
 type V1OrganizationsOrganizationIDProfileContractorPutReq struct {
@@ -4530,21 +4577,88 @@ func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) SetObjectsIds(val
 	s.ObjectsIds = val
 }
 
-type V1OrganizationsOrganizationIDProfileCustomerPutOK struct {
-	Data Organization `json:"data"`
+type V1OrganizationsOrganizationIDProfileCustomerGetOK struct {
+	Data V1OrganizationsOrganizationIDProfileCustomerGetOKData `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1OrganizationsOrganizationIDProfileCustomerPutOK) GetData() Organization {
+func (s *V1OrganizationsOrganizationIDProfileCustomerGetOK) GetData() V1OrganizationsOrganizationIDProfileCustomerGetOKData {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1OrganizationsOrganizationIDProfileCustomerPutOK) SetData(val Organization) {
+func (s *V1OrganizationsOrganizationIDProfileCustomerGetOK) SetData(val V1OrganizationsOrganizationIDProfileCustomerGetOKData) {
+	s.Data = val
+}
+
+func (*V1OrganizationsOrganizationIDProfileCustomerGetOK) v1OrganizationsOrganizationIDProfileCustomerGetRes() {
+}
+
+type V1OrganizationsOrganizationIDProfileCustomerGetOKData struct {
+	Organization Organization `json:"organization"`
+	Profile      CustomerInfo `json:"profile"`
+}
+
+// GetOrganization returns the value of Organization.
+func (s *V1OrganizationsOrganizationIDProfileCustomerGetOKData) GetOrganization() Organization {
+	return s.Organization
+}
+
+// GetProfile returns the value of Profile.
+func (s *V1OrganizationsOrganizationIDProfileCustomerGetOKData) GetProfile() CustomerInfo {
+	return s.Profile
+}
+
+// SetOrganization sets the value of Organization.
+func (s *V1OrganizationsOrganizationIDProfileCustomerGetOKData) SetOrganization(val Organization) {
+	s.Organization = val
+}
+
+// SetProfile sets the value of Profile.
+func (s *V1OrganizationsOrganizationIDProfileCustomerGetOKData) SetProfile(val CustomerInfo) {
+	s.Profile = val
+}
+
+type V1OrganizationsOrganizationIDProfileCustomerPutOK struct {
+	Data V1OrganizationsOrganizationIDProfileCustomerPutOKData `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1OrganizationsOrganizationIDProfileCustomerPutOK) GetData() V1OrganizationsOrganizationIDProfileCustomerPutOKData {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1OrganizationsOrganizationIDProfileCustomerPutOK) SetData(val V1OrganizationsOrganizationIDProfileCustomerPutOKData) {
 	s.Data = val
 }
 
 func (*V1OrganizationsOrganizationIDProfileCustomerPutOK) v1OrganizationsOrganizationIDProfileCustomerPutRes() {
+}
+
+type V1OrganizationsOrganizationIDProfileCustomerPutOKData struct {
+	Organization Organization `json:"organization"`
+	Profile      CustomerInfo `json:"profile"`
+}
+
+// GetOrganization returns the value of Organization.
+func (s *V1OrganizationsOrganizationIDProfileCustomerPutOKData) GetOrganization() Organization {
+	return s.Organization
+}
+
+// GetProfile returns the value of Profile.
+func (s *V1OrganizationsOrganizationIDProfileCustomerPutOKData) GetProfile() CustomerInfo {
+	return s.Profile
+}
+
+// SetOrganization sets the value of Organization.
+func (s *V1OrganizationsOrganizationIDProfileCustomerPutOKData) SetOrganization(val Organization) {
+	s.Organization = val
+}
+
+// SetProfile sets the value of Profile.
+func (s *V1OrganizationsOrganizationIDProfileCustomerPutOKData) SetProfile(val CustomerInfo) {
+	s.Profile = val
 }
 
 type V1OrganizationsOrganizationIDProfileCustomerPutReq struct {

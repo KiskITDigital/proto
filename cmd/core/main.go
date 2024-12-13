@@ -20,6 +20,7 @@ import (
 	tenderService "gitlab.ubrato.ru/ubrato/core/internal/service/tender"
 	userService "gitlab.ubrato.ru/ubrato/core/internal/service/user"
 	verificationService "gitlab.ubrato.ru/ubrato/core/internal/service/verification"
+	questionAnswerService "gitlab.ubrato.ru/ubrato/core/internal/service/question_answer"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 	"gitlab.ubrato.ru/ubrato/core/internal/store/postgres"
 	catalogStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/catalog"
@@ -116,7 +117,6 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		tenderStore,
 		commentStore,
 		verificationStore,
-		questionaAswerStore,
 	)
 
 	catalogService := catalogService.New(
@@ -161,10 +161,15 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		organizationStore,
 	)
 
+	questionaAswerService := questionAnswerService.New(
+		psql,
+		questionaAswerStore,
+	)
+
 	router := http.NewRouter(http.RouterParams{
 		Error:         errorHandler.New(logger),
 		Auth:          authHandler.New(logger, authService, userService),
-		Tenders:       tenderHandler.New(logger, tenderService, verificationService),
+		Tenders:       tenderHandler.New(logger, tenderService, verificationService, questionaAswerService),
 		Catalog:       catalogHandler.New(logger, catalogService),
 		Users:         userHandler.New(logger, userService),
 		Survey:        surveyHandler.New(logger, surveyService),

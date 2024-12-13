@@ -158,12 +158,26 @@ type Invoker interface {
 	//
 	// PUT /v1/organizations/{organizationID}/profile/contacts
 	V1OrganizationsOrganizationIDProfileContactsPut(ctx context.Context, request *V1OrganizationsOrganizationIDProfileContactsPutReq, params V1OrganizationsOrganizationIDProfileContactsPutParams) (V1OrganizationsOrganizationIDProfileContactsPutRes, error)
+	// V1OrganizationsOrganizationIDProfileContractorGet invokes GET /v1/organizations/{organizationID}/profile/contractor operation.
+	//
+	// Возвращает информацию об организации и профиле
+	// исполнителя.
+	//
+	// GET /v1/organizations/{organizationID}/profile/contractor
+	V1OrganizationsOrganizationIDProfileContractorGet(ctx context.Context, params V1OrganizationsOrganizationIDProfileContractorGetParams) (V1OrganizationsOrganizationIDProfileContractorGetRes, error)
 	// V1OrganizationsOrganizationIDProfileContractorPut invokes PUT /v1/organizations/{organizationID}/profile/contractor operation.
 	//
 	// Обновляет профиль исполнителя.
 	//
 	// PUT /v1/organizations/{organizationID}/profile/contractor
 	V1OrganizationsOrganizationIDProfileContractorPut(ctx context.Context, request *V1OrganizationsOrganizationIDProfileContractorPutReq, params V1OrganizationsOrganizationIDProfileContractorPutParams) (V1OrganizationsOrganizationIDProfileContractorPutRes, error)
+	// V1OrganizationsOrganizationIDProfileCustomerGet invokes GET /v1/organizations/{organizationID}/profile/customer operation.
+	//
+	// Возвращает информацию об организации и профиле
+	// заказчика.
+	//
+	// GET /v1/organizations/{organizationID}/profile/customer
+	V1OrganizationsOrganizationIDProfileCustomerGet(ctx context.Context, params V1OrganizationsOrganizationIDProfileCustomerGetParams) (V1OrganizationsOrganizationIDProfileCustomerGetRes, error)
 	// V1OrganizationsOrganizationIDProfileCustomerPut invokes PUT /v1/organizations/{organizationID}/profile/customer operation.
 	//
 	// Обновляет описание компании или список локаций в
@@ -2928,6 +2942,97 @@ func (c *Client) sendV1OrganizationsOrganizationIDProfileContactsPut(ctx context
 	return result, nil
 }
 
+// V1OrganizationsOrganizationIDProfileContractorGet invokes GET /v1/organizations/{organizationID}/profile/contractor operation.
+//
+// Возвращает информацию об организации и профиле
+// исполнителя.
+//
+// GET /v1/organizations/{organizationID}/profile/contractor
+func (c *Client) V1OrganizationsOrganizationIDProfileContractorGet(ctx context.Context, params V1OrganizationsOrganizationIDProfileContractorGetParams) (V1OrganizationsOrganizationIDProfileContractorGetRes, error) {
+	res, err := c.sendV1OrganizationsOrganizationIDProfileContractorGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1OrganizationsOrganizationIDProfileContractorGet(ctx context.Context, params V1OrganizationsOrganizationIDProfileContractorGetParams) (res V1OrganizationsOrganizationIDProfileContractorGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationID}/profile/contractor"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsOrganizationIDProfileContractorGet",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/v1/organizations/"
+	{
+		// Encode "organizationID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.OrganizationID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/profile/contractor"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1OrganizationsOrganizationIDProfileContractorGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // V1OrganizationsOrganizationIDProfileContractorPut invokes PUT /v1/organizations/{organizationID}/profile/contractor operation.
 //
 // Обновляет профиль исполнителя.
@@ -3047,6 +3152,97 @@ func (c *Client) sendV1OrganizationsOrganizationIDProfileContractorPut(ctx conte
 
 	stage = "DecodeResponse"
 	result, err := decodeV1OrganizationsOrganizationIDProfileContractorPutResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1OrganizationsOrganizationIDProfileCustomerGet invokes GET /v1/organizations/{organizationID}/profile/customer operation.
+//
+// Возвращает информацию об организации и профиле
+// заказчика.
+//
+// GET /v1/organizations/{organizationID}/profile/customer
+func (c *Client) V1OrganizationsOrganizationIDProfileCustomerGet(ctx context.Context, params V1OrganizationsOrganizationIDProfileCustomerGetParams) (V1OrganizationsOrganizationIDProfileCustomerGetRes, error) {
+	res, err := c.sendV1OrganizationsOrganizationIDProfileCustomerGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1OrganizationsOrganizationIDProfileCustomerGet(ctx context.Context, params V1OrganizationsOrganizationIDProfileCustomerGetParams) (res V1OrganizationsOrganizationIDProfileCustomerGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationID}/profile/customer"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsOrganizationIDProfileCustomerGet",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/v1/organizations/"
+	{
+		// Encode "organizationID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.OrganizationID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/profile/customer"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1OrganizationsOrganizationIDProfileCustomerGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

@@ -12,6 +12,7 @@ type Handler struct {
 	logger *slog.Logger
 	tenderService TenderService
 	verificationService VerificationService
+	questionAnswerService QuestionAnswerService
 }
 
 type TenderService interface {
@@ -22,8 +23,11 @@ type TenderService interface {
 	Respond(ctx context.Context, params service.TenderRespondParams) error
 	CreateComment(ctx context.Context, params service.CommentCreateParams) error
 	GetComments(ctx context.Context, params service.GetCommentParams) ([]models.Comment, error)
-	CreateQuestionAnswer(ctx context.Context, params service.CreateQuestionAnswerParams) (models.QuestionAnswer, error)
-	GetQuestionAnswer(ctx context.Context, tenderID int) ([]models.QuestionWithAnswer, error) 
+}
+
+type QuestionAnswerService interface {
+	Create(ctx context.Context, params service.CreateQuestionAnswerParams) (models.QuestionAnswer, error)
+	Get(ctx context.Context, tenderID int) ([]models.QuestionWithAnswer, error) 
 }
 
 type VerificationService interface {
@@ -33,10 +37,12 @@ type VerificationService interface {
 func New(
 	logger *slog.Logger, 
 	tenderService TenderService, 
-	verificationService VerificationService) *Handler {
+	verificationService VerificationService,
+	questionAnswerService QuestionAnswerService) *Handler {
 	return &Handler{
 		logger: logger,
 		tenderService: tenderService,
 		verificationService: verificationService,
+		questionAnswerService: questionAnswerService,
 	}
 }
