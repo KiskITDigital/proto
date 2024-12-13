@@ -319,6 +319,6 @@ func (s *TenderStore) List(ctx context.Context, qe store.QueryExecutor, params s
 		tenders[i].Services = tenderServices
 		tenders[i].Objects = tenderObjects
 	}
-	
+
 	return tenders, nil
 }

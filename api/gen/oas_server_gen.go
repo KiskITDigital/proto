@@ -172,7 +172,10 @@ type Handler interface {
 	V1OrganizationsOrganizationIDProfileCustomerPut(ctx context.Context, req *V1OrganizationsOrganizationIDProfileCustomerPutReq, params V1OrganizationsOrganizationIDProfileCustomerPutParams) (V1OrganizationsOrganizationIDProfileCustomerPutRes, error)
 	// V1OrganizationsOrganizationIDTendersGet implements GET /v1/organizations/{organizationID}/tenders operation.
 	//
-	// If user is in organization it also returns all drafts.
+	// **Без JWT или с ролью "User"**:
+	// Возвращает тендеры только со статусом "Approved".
+	// **Если "User" состоит в организации:** возразщает все
+	// тендеры (с черновиками).
 	//
 	// GET /v1/organizations/{organizationID}/tenders
 	V1OrganizationsOrganizationIDTendersGet(ctx context.Context, params V1OrganizationsOrganizationIDTendersGetParams) (V1OrganizationsOrganizationIDTendersGetRes, error)

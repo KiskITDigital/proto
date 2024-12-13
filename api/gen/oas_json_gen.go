@@ -9664,10 +9664,15 @@ func (s *V1OrganizationsOrganizationIDTendersGetOK) encodeFields(e *jx.Encoder) 
 		}
 		e.ArrEnd()
 	}
+	{
+		e.FieldStart("pagination")
+		s.Pagination.Encode(e)
+	}
 }
 
-var jsonFieldsNameOfV1OrganizationsOrganizationIDTendersGetOK = [1]string{
+var jsonFieldsNameOfV1OrganizationsOrganizationIDTendersGetOK = [2]string{
 	0: "data",
+	1: "pagination",
 }
 
 // Decode decodes V1OrganizationsOrganizationIDTendersGetOK from json.
@@ -9697,6 +9702,16 @@ func (s *V1OrganizationsOrganizationIDTendersGetOK) Decode(d *jx.Decoder) error 
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"data\"")
 			}
+		case "pagination":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				if err := s.Pagination.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"pagination\"")
+			}
 		default:
 			return d.Skip()
 		}
@@ -9707,7 +9722,7 @@ func (s *V1OrganizationsOrganizationIDTendersGetOK) Decode(d *jx.Decoder) error 
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000001,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
