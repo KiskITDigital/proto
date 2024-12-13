@@ -3048,6 +3048,118 @@ func (s *Server) handleV1OrganizationsOrganizationIDProfileContactsPutRequest(ar
 	}
 }
 
+// handleV1OrganizationsOrganizationIDProfileContractorGetRequest handles GET /v1/organizations/{organizationID}/profile/contractor operation.
+//
+// Возвращает информацию об организации и профиле
+// исполнителя.
+//
+// GET /v1/organizations/{organizationID}/profile/contractor
+func (s *Server) handleV1OrganizationsOrganizationIDProfileContractorGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationID}/profile/contractor"),
+	}
+
+	// Start a span for this request.
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "V1OrganizationsOrganizationIDProfileContractorGet",
+		trace.WithAttributes(otelAttrs...),
+		serverSpanKind,
+	)
+	defer span.End()
+
+	// Add Labeler to context.
+	labeler := &Labeler{attrs: otelAttrs}
+	ctx = contextWithLabeler(ctx, labeler)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+		attrOpt := metric.WithAttributeSet(labeler.AttributeSet())
+
+		// Increment request counter.
+		s.requests.Add(ctx, 1, attrOpt)
+
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		s.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), attrOpt)
+	}()
+
+	var (
+		recordError = func(stage string, err error) {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			s.errors.Add(ctx, 1, metric.WithAttributeSet(labeler.AttributeSet()))
+		}
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: "V1OrganizationsOrganizationIDProfileContractorGet",
+			ID:   "",
+		}
+	)
+	params, err := decodeV1OrganizationsOrganizationIDProfileContractorGetParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var response V1OrganizationsOrganizationIDProfileContractorGetRes
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    "V1OrganizationsOrganizationIDProfileContractorGet",
+			OperationSummary: "Get contractor organization profile",
+			OperationID:      "",
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "organizationID",
+					In:   "path",
+				}: params.OrganizationID,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = V1OrganizationsOrganizationIDProfileContractorGetParams
+			Response = V1OrganizationsOrganizationIDProfileContractorGetRes
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackV1OrganizationsOrganizationIDProfileContractorGetParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1OrganizationsOrganizationIDProfileContractorGet(ctx, params)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1OrganizationsOrganizationIDProfileContractorGet(ctx, params)
+	}
+	if err != nil {
+		defer recordError("Internal", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	if err := encodeV1OrganizationsOrganizationIDProfileContractorGetResponse(response, w, span); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
 // handleV1OrganizationsOrganizationIDProfileContractorPutRequest handles PUT /v1/organizations/{organizationID}/profile/contractor operation.
 //
 // Обновляет профиль исполнителя.
@@ -3210,6 +3322,118 @@ func (s *Server) handleV1OrganizationsOrganizationIDProfileContractorPutRequest(
 	}
 
 	if err := encodeV1OrganizationsOrganizationIDProfileContractorPutResponse(response, w, span); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handleV1OrganizationsOrganizationIDProfileCustomerGetRequest handles GET /v1/organizations/{organizationID}/profile/customer operation.
+//
+// Возвращает информацию об организации и профиле
+// заказчика.
+//
+// GET /v1/organizations/{organizationID}/profile/customer
+func (s *Server) handleV1OrganizationsOrganizationIDProfileCustomerGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationID}/profile/customer"),
+	}
+
+	// Start a span for this request.
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "V1OrganizationsOrganizationIDProfileCustomerGet",
+		trace.WithAttributes(otelAttrs...),
+		serverSpanKind,
+	)
+	defer span.End()
+
+	// Add Labeler to context.
+	labeler := &Labeler{attrs: otelAttrs}
+	ctx = contextWithLabeler(ctx, labeler)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+		attrOpt := metric.WithAttributeSet(labeler.AttributeSet())
+
+		// Increment request counter.
+		s.requests.Add(ctx, 1, attrOpt)
+
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		s.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), attrOpt)
+	}()
+
+	var (
+		recordError = func(stage string, err error) {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			s.errors.Add(ctx, 1, metric.WithAttributeSet(labeler.AttributeSet()))
+		}
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: "V1OrganizationsOrganizationIDProfileCustomerGet",
+			ID:   "",
+		}
+	)
+	params, err := decodeV1OrganizationsOrganizationIDProfileCustomerGetParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var response V1OrganizationsOrganizationIDProfileCustomerGetRes
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    "V1OrganizationsOrganizationIDProfileCustomerGet",
+			OperationSummary: "Get customer organization profile",
+			OperationID:      "",
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "organizationID",
+					In:   "path",
+				}: params.OrganizationID,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = V1OrganizationsOrganizationIDProfileCustomerGetParams
+			Response = V1OrganizationsOrganizationIDProfileCustomerGetRes
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackV1OrganizationsOrganizationIDProfileCustomerGetParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1OrganizationsOrganizationIDProfileCustomerGet(ctx, params)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1OrganizationsOrganizationIDProfileCustomerGet(ctx, params)
+	}
+	if err != nil {
+		defer recordError("Internal", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	if err := encodeV1OrganizationsOrganizationIDProfileCustomerGetResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

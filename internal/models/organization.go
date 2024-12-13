@@ -96,8 +96,6 @@ func ConvertOrganizationModelToApi(organization Organization) api.Organization {
 		Messengers: convert.Slice[ContactInfos, []api.ContactInfo](
 			organization.Messengers, ConvertContactInfoModelToApi,
 		),
-		CustomerInfo:   ConvertCustomerInfoToApi(organization.CustomerInfo),
-		ContractorInfo: ConvertContractorInfoToApi(organization.ContractorInfo),
 		CreatedAt:      organization.CreatedAt,
 		UpdatedAt:      organization.UpdatedAt,
 	}

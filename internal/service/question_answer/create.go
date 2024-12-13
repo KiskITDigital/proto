@@ -1,4 +1,4 @@
-package tender
+package questionanswer
 
 import (
 	"context"
@@ -9,9 +9,11 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
-func (s *Service) CreateQuestionAnswer(ctx context.Context, params service.CreateQuestionAnswerParams) (models.QuestionAnswer, error) {
+func (s *Service) Create(ctx context.Context, params service.CreateQuestionAnswerParams) (models.QuestionAnswer, error) {
 	if params.Type == models.QuestionAnswerTypeAnswer && !params.ParentID.Set {
 		return models.QuestionAnswer{}, fmt.Errorf("parent_id must be provided for answer")
+	} else if params.Type == models.QuestionAnswerTypeQuestion && params.ParentID.Set {
+		return models.QuestionAnswer{}, fmt.Errorf("parent_id must not be provided for a question")
 	}
 
 	return s.questionAnswerStore.Create(ctx, s.psql.DB(), store.CreateQuestionAnswerParams{
@@ -21,8 +23,4 @@ func (s *Service) CreateQuestionAnswer(ctx context.Context, params service.Creat
 		Type:                 params.Type,
 		Content:              params.Content,
 	})
-}
-
-func (s *Service) GetQuestionAnswer(ctx context.Context, tenderID int) ([]models.QuestionWithAnswer, error) {
-	return s.questionAnswerStore.Get(ctx, s.psql.DB(), tenderID)
 }

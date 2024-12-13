@@ -1417,7 +1417,50 @@ paths:
                   - data
                 properties:
                   data:
-                    $ref: '#/components/schemas/Organization'
+                    type: object
+                    required:
+                      - organization
+                      - profile
+                    properties:
+                      organization:
+                        $ref: '#/components/schemas/Organization'
+                      profile:
+                        $ref: '#/components/schemas/CustomerInfo'
+        default:
+          $ref: '#/components/responses/Error'
+    get:
+      tags:
+        - organizations
+      summary: Get customer organization profile
+      description: Возвращает информацию об организации и профиле заказчика.
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - organization
+                      - profile
+                    properties:
+                      organization:
+                        $ref: '#/components/schemas/Organization'
+                      profile:
+                        $ref: '#/components/schemas/CustomerInfo'
         default:
           $ref: '#/components/responses/Error'
   /v1/organizations/{organizationID}/profile/contractor:
@@ -1477,7 +1520,50 @@ paths:
                   - data
                 properties:
                   data:
-                    $ref: '#/components/schemas/Organization'
+                    type: object
+                    required:
+                      - organization
+                      - profile
+                    properties:
+                      organization:
+                        $ref: '#/components/schemas/Organization'
+                      profile:
+                        $ref: '#/components/schemas/ContractorInfo'
+        default:
+          $ref: '#/components/responses/Error'
+    get:
+      tags:
+        - organizations
+      summary: Get contractor organization profile
+      description: Возвращает информацию об организации и профиле исполнителя.
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - organization
+                      - profile
+                    properties:
+                      organization:
+                        $ref: '#/components/schemas/Organization'
+                      profile:
+                        $ref: '#/components/schemas/ContractorInfo'
         default:
           $ref: '#/components/responses/Error'
   /v1/organizations/portfolio/{portfolioID}:
@@ -2470,91 +2556,6 @@ components:
         - in_review
         - declined
         - approved
-    description:
-      type: string
-      description: Описание компании
-      example: Мы являемся мировым лидером в области устойчивых решений.
-    Region:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-          example: Москва и Московская область
-    City:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-          example: Москва
-        region:
-          $ref: '#/components/schemas/Region'
-    CustomerInfo:
-      type: object
-      properties:
-        description:
-          $ref: '#/components/schemas/description'
-        cities:
-          type: array
-          description: Локации заказчика
-          items:
-            $ref: '#/components/schemas/City'
-    Service:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-        parent_id:
-          type: integer
-        name:
-          type: string
-    Services:
-      type: array
-      items:
-        $ref: '#/components/schemas/Service'
-    Object:
-      type: object
-      required:
-        - id
-        - name
-      properties:
-        id:
-          type: integer
-        parent_id:
-          type: integer
-        name:
-          type: string
-    Objects:
-      type: array
-      items:
-        $ref: '#/components/schemas/Object'
-    ContractorInfo:
-      type: object
-      required: null
-      properties:
-        description:
-          $ref: '#/components/schemas/description'
-        cities:
-          type: array
-          description: Локации заказчика
-          items:
-            $ref: '#/components/schemas/City'
-        services:
-          $ref: '#/components/schemas/Services'
-        objects:
-          $ref: '#/components/schemas/Objects'
     Organization:
       type: object
       required:
@@ -2574,8 +2575,6 @@ components:
         - emails
         - phones
         - messengers
-        - customer_info
-        - contractor_info
         - created_at
         - updated_at
       properties:
@@ -2620,10 +2619,6 @@ components:
           type: boolean
         is_banned:
           type: boolean
-        customer_info:
-          $ref: '#/components/schemas/CustomerInfo'
-        contractor_info:
-          $ref: '#/components/schemas/ContractorInfo'
         created_at:
           type: string
           format: date-time
@@ -2639,6 +2634,62 @@ components:
           properties:
             organization:
               $ref: '#/components/schemas/Organization'
+    Region:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: Москва и Московская область
+    City:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: Москва
+        region:
+          $ref: '#/components/schemas/Region'
+    Service:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        parent_id:
+          type: integer
+        name:
+          type: string
+    Services:
+      type: array
+      items:
+        $ref: '#/components/schemas/Service'
+    Object:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        parent_id:
+          type: integer
+        name:
+          type: string
+    Objects:
+      type: array
+      items:
+        $ref: '#/components/schemas/Object'
     Tender:
       type: object
       required:
@@ -2917,6 +2968,35 @@ components:
           type: string
           format: date-time
           example: '2024-12-02T15:30:00Z'
+    description:
+      type: string
+      description: Описание компании
+      example: Мы являемся мировым лидером в области устойчивых решений.
+    CustomerInfo:
+      type: object
+      properties:
+        description:
+          $ref: '#/components/schemas/description'
+        cities:
+          type: array
+          description: Локации заказчика
+          items:
+            $ref: '#/components/schemas/City'
+    ContractorInfo:
+      type: object
+      required: null
+      properties:
+        description:
+          $ref: '#/components/schemas/description'
+        cities:
+          type: array
+          description: Локации заказчика
+          items:
+            $ref: '#/components/schemas/City'
+        services:
+          $ref: '#/components/schemas/Services'
+        objects:
+          $ref: '#/components/schemas/Objects'
     Portfolio:
       type: object
       required:

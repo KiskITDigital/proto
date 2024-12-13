@@ -24,6 +24,7 @@ var (
 
 var (
 	ErrOrganizationNotFound = errors.New("organization not found")
+	ErrOrganizationNotAContractor = errors.New("organization is not a contractor")
 )
 
 var (

@@ -22,6 +22,8 @@ type DBTX interface {
 type OrganizationStore interface {
 	Get(ctx context.Context, qe store.QueryExecutor, params store.OrganizationGetParams) ([]models.Organization, error)
 	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Organization, error)
+	GetCustomer(ctx context.Context, qe store.QueryExecutor, organizationID int) (models.Organization, error)
+	GetContractor(ctx context.Context, qe store.QueryExecutor, organizationID int) (models.Organization, error)
 	Update(ctx context.Context, qe store.QueryExecutor, params store.OrganizationUpdateParams) error
 }
 

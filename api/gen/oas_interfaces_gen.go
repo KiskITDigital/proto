@@ -81,8 +81,16 @@ type V1OrganizationsOrganizationIDProfileContactsPutRes interface {
 	v1OrganizationsOrganizationIDProfileContactsPutRes()
 }
 
+type V1OrganizationsOrganizationIDProfileContractorGetRes interface {
+	v1OrganizationsOrganizationIDProfileContractorGetRes()
+}
+
 type V1OrganizationsOrganizationIDProfileContractorPutRes interface {
 	v1OrganizationsOrganizationIDProfileContractorPutRes()
+}
+
+type V1OrganizationsOrganizationIDProfileCustomerGetRes interface {
+	v1OrganizationsOrganizationIDProfileCustomerGetRes()
 }
 
 type V1OrganizationsOrganizationIDProfileCustomerPutRes interface {

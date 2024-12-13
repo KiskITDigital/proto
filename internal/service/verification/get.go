@@ -37,33 +37,44 @@ func (s *Service) GetByID(ctx context.Context, requestID int) (models.Verificati
 }
 
 func (s *Service) Get(ctx context.Context, params service.VerificationRequestsObjectGetParams) ([]models.VerificationRequest[models.VerificationObject], error) {
-	storeParams := store.VerificationRequestsObjectGetParams{
+	requests, err := s.verificationStore.GetWithEmptyObject(ctx, s.psql.DB(), store.VerificationRequestsObjectGetParams{
 		ObjectType: models.NewOptional(params.ObjectType),
 		ObjectID:   params.ObjectID,
 		Status:     params.Status,
 		Offset:     params.Offset,
 		Limit:      params.Limit,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("get object req: %w", err)
+	}
+
+	var objectIDs []int
+	for _, req := range requests {
+		objectIDs = append(objectIDs, req.ObjectID)
 	}
 
 	switch params.ObjectType {
 	case models.ObjectTypeOrganization:
-		return s.verificationStore.GetOrganizationRequests(ctx, s.psql.DB(), storeParams)
+		organizations, err := s.organizationStore.Get(ctx, s.psql.DB(), store.OrganizationGetParams{
+			OrganizationIDs: objectIDs})
+		if err != nil {
+			return nil, fmt.Errorf("get tenders: %w", err)
+		}
+
+		organizationMap := make(map[int]models.Organization)
+		for _, organization := range organizations {
+			organizationMap[organization.ID] = organization
+		}
+
+		for i := range requests {
+			if organization, ok := organizationMap[requests[i].ObjectID]; ok {
+				requests[i].Object = organization
+			}
+		}
 
 	case models.ObjectTypeTender:
-		// 1. get request with tenderID
-		requests, err := s.verificationStore.GetWithEmptyObject(ctx, s.psql.DB(), storeParams)
-		if err != nil {
-			return nil, fmt.Errorf("get tenders req: %w", err)
-		}
-
-		var tenderIDs []int
-		for _, req := range requests {
-			tenderIDs = append(tenderIDs, req.ObjectID)
-		}
-
-		// 2. get tenders by tenderIDs
 		tenders, err := s.tenderStore.List(ctx, s.psql.DB(), store.TenderListParams{
-			TenderIDs: models.Optional[[]int]{Value: tenderIDs, Set: true}})
+			TenderIDs: models.Optional[[]int]{Value: objectIDs, Set: true}})
 		if err != nil {
 			return nil, fmt.Errorf("get tenders: %w", err)
 		}
@@ -79,11 +90,11 @@ func (s *Service) Get(ctx context.Context, params service.VerificationRequestsOb
 			}
 		}
 
-		return requests, nil
-
 	case models.ObjectTypeComment:
-		return s.verificationStore.GetCommentRequests(ctx, s.psql.DB(), storeParams)
+		// return s.verificationStore.GetCommentRequests(ctx, s.psql.DB(), storeParams)
+	default:
+		return nil, fmt.Errorf("invalid object type: %v", params.ObjectType)
 	}
 
-	return nil, fmt.Errorf("invalid object type: %v", params.ObjectType)
+	return requests, nil
 }

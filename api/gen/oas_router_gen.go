@@ -628,12 +628,16 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 											if len(elem) == 0 {
 												// Leaf node.
 												switch r.Method {
+												case "GET":
+													s.handleV1OrganizationsOrganizationIDProfileContractorGetRequest([1]string{
+														args[0],
+													}, elemIsEscaped, w, r)
 												case "PUT":
 													s.handleV1OrganizationsOrganizationIDProfileContractorPutRequest([1]string{
 														args[0],
 													}, elemIsEscaped, w, r)
 												default:
-													s.notAllowed(w, r, "PUT")
+													s.notAllowed(w, r, "GET,PUT")
 												}
 
 												return
@@ -654,12 +658,16 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 										if len(elem) == 0 {
 											// Leaf node.
 											switch r.Method {
+											case "GET":
+												s.handleV1OrganizationsOrganizationIDProfileCustomerGetRequest([1]string{
+													args[0],
+												}, elemIsEscaped, w, r)
 											case "PUT":
 												s.handleV1OrganizationsOrganizationIDProfileCustomerPutRequest([1]string{
 													args[0],
 												}, elemIsEscaped, w, r)
 											default:
-												s.notAllowed(w, r, "PUT")
+												s.notAllowed(w, r, "GET,PUT")
 											}
 
 											return
@@ -2099,6 +2107,14 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 											if len(elem) == 0 {
 												// Leaf node.
 												switch method {
+												case "GET":
+													r.name = "V1OrganizationsOrganizationIDProfileContractorGet"
+													r.summary = "Get contractor organization profile"
+													r.operationID = ""
+													r.pathPattern = "/v1/organizations/{organizationID}/profile/contractor"
+													r.args = args
+													r.count = 1
+													return r, true
 												case "PUT":
 													r.name = "V1OrganizationsOrganizationIDProfileContractorPut"
 													r.summary = "Update contractor organization profile"
@@ -2127,6 +2143,14 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										if len(elem) == 0 {
 											// Leaf node.
 											switch method {
+											case "GET":
+												r.name = "V1OrganizationsOrganizationIDProfileCustomerGet"
+												r.summary = "Get customer organization profile"
+												r.operationID = ""
+												r.pathPattern = "/v1/organizations/{organizationID}/profile/customer"
+												r.args = args
+												r.count = 1
+												return r, true
 											case "PUT":
 												r.name = "V1OrganizationsOrganizationIDProfileCustomerPut"
 												r.summary = "Update customer organization profile"

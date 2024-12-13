@@ -143,12 +143,26 @@ type Handler interface {
 	//
 	// PUT /v1/organizations/{organizationID}/profile/contacts
 	V1OrganizationsOrganizationIDProfileContactsPut(ctx context.Context, req *V1OrganizationsOrganizationIDProfileContactsPutReq, params V1OrganizationsOrganizationIDProfileContactsPutParams) (V1OrganizationsOrganizationIDProfileContactsPutRes, error)
+	// V1OrganizationsOrganizationIDProfileContractorGet implements GET /v1/organizations/{organizationID}/profile/contractor operation.
+	//
+	// Возвращает информацию об организации и профиле
+	// исполнителя.
+	//
+	// GET /v1/organizations/{organizationID}/profile/contractor
+	V1OrganizationsOrganizationIDProfileContractorGet(ctx context.Context, params V1OrganizationsOrganizationIDProfileContractorGetParams) (V1OrganizationsOrganizationIDProfileContractorGetRes, error)
 	// V1OrganizationsOrganizationIDProfileContractorPut implements PUT /v1/organizations/{organizationID}/profile/contractor operation.
 	//
 	// Обновляет профиль исполнителя.
 	//
 	// PUT /v1/organizations/{organizationID}/profile/contractor
 	V1OrganizationsOrganizationIDProfileContractorPut(ctx context.Context, req *V1OrganizationsOrganizationIDProfileContractorPutReq, params V1OrganizationsOrganizationIDProfileContractorPutParams) (V1OrganizationsOrganizationIDProfileContractorPutRes, error)
+	// V1OrganizationsOrganizationIDProfileCustomerGet implements GET /v1/organizations/{organizationID}/profile/customer operation.
+	//
+	// Возвращает информацию об организации и профиле
+	// заказчика.
+	//
+	// GET /v1/organizations/{organizationID}/profile/customer
+	V1OrganizationsOrganizationIDProfileCustomerGet(ctx context.Context, params V1OrganizationsOrganizationIDProfileCustomerGetParams) (V1OrganizationsOrganizationIDProfileCustomerGetRes, error)
 	// V1OrganizationsOrganizationIDProfileCustomerPut implements PUT /v1/organizations/{organizationID}/profile/customer operation.
 	//
 	// Обновляет описание компании или список локаций в
