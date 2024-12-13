@@ -14,8 +14,7 @@ import (
 
 func (s *VerificationStore) GetByIDWithEmptyObject(ctx context.Context, qe store.QueryExecutor, requestID int) (models.VerificationRequest[models.VerificationObject], error) {
 	requests, err := s.GetWithEmptyObject(ctx, qe, store.VerificationRequestsObjectGetParams{
-		ObjectID: models.Optional[int]{Value: requestID, Set: true},
-		Limit:    1,
+		VerificationID: models.NewOptional(requestID),
 	})
 	if err != nil {
 		return models.VerificationRequest[models.VerificationObject]{}, fmt.Errorf("get objects: %w", err)
@@ -67,6 +66,10 @@ func (s *VerificationStore) GetWithEmptyObject(ctx context.Context, qe store.Que
 		builder = builder.Where(squirrel.Eq{"vr.object_type": params.ObjectType.Value})
 	}
 
+	if params.VerificationID.Set {
+		builder = builder.Where(squirrel.Eq{"vr.id": params.VerificationID.Value})
+	}
+
 	if params.ObjectID.Set {
 		builder = builder.Where(squirrel.Eq{"vr.object_id": params.ObjectID.Value})
 	}
@@ -81,8 +84,7 @@ func (s *VerificationStore) GetWithEmptyObject(ctx context.Context, qe store.Que
 	}
 	defer rows.Close()
 
-	var requests []models.VerificationRequest[models.VerificationObject]
-
+	requests := []models.VerificationRequest[models.VerificationObject]{}
 	for rows.Next() {
 		var (
 			request models.VerificationRequest[models.VerificationObject]
@@ -224,8 +226,12 @@ func (s *VerificationStore) GetCommentRequests(ctx context.Context, qe store.Que
 		Limit(params.Limit).
 		PlaceholderFormat(squirrel.Dollar)
 
+	if params.VerificationID.Set {
+		builder = builder.Where(squirrel.Eq{"vr.id": params.VerificationID.Value})
+	}
+
 	if params.ObjectID.Set {
-		builder = builder.Where(squirrel.Eq{"vr.id": params.ObjectID.Value})
+		builder = builder.Where(squirrel.Eq{"vr.object_id": params.ObjectID.Value})
 	}
 
 	if len(params.Status) != 0 {
