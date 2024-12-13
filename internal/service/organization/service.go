@@ -25,6 +25,7 @@ type OrganizationStore interface {
 	GetCustomer(ctx context.Context, qe store.QueryExecutor, organizationID int) (models.Organization, error)
 	GetContractor(ctx context.Context, qe store.QueryExecutor, organizationID int) (models.Organization, error)
 	Update(ctx context.Context, qe store.QueryExecutor, params store.OrganizationUpdateParams) error
+	Count(ctx context.Context, qe store.QueryExecutor, params store.OrganizationGetCountParams) (int, error)
 }
 
 type VerificationStore interface {

@@ -12,12 +12,6 @@ get:
     - bearerAuth: []
     - {}  
   parameters:
-    - name: verified
-      in: query
-      description: Фильтрует результат и включает только верифицированные тендеры.
-      schema:
-        type: boolean
-        default: true
     - name: page
       in: query
       description: Номер страницы

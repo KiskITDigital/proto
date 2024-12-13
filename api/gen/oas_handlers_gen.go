@@ -939,16 +939,6 @@ func (s *Server) handleV1CatalogObjectsGetRequest(args [0]string, argsEscaped bo
 			return
 		}
 	}
-	params, err := decodeV1CatalogObjectsGetParams(args, argsEscaped, r)
-	if err != nil {
-		err = &ogenerrors.DecodeParamsError{
-			OperationContext: opErrContext,
-			Err:              err,
-		}
-		defer recordError("DecodeParams", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
 
 	var response V1CatalogObjectsGetRes
 	if m := s.cfg.Middleware; m != nil {
@@ -958,30 +948,13 @@ func (s *Server) handleV1CatalogObjectsGetRequest(args [0]string, argsEscaped bo
 			OperationSummary: "Get a list of all available objects",
 			OperationID:      "",
 			Body:             nil,
-			Params: middleware.Parameters{
-				{
-					Name: "offset",
-					In:   "query",
-				}: params.Offset,
-				{
-					Name: "limit",
-					In:   "query",
-				}: params.Limit,
-				{
-					Name: "sort",
-					In:   "query",
-				}: params.Sort,
-				{
-					Name: "direction",
-					In:   "query",
-				}: params.Direction,
-			},
-			Raw: r,
+			Params:           middleware.Parameters{},
+			Raw:              r,
 		}
 
 		type (
 			Request  = struct{}
-			Params   = V1CatalogObjectsGetParams
+			Params   = struct{}
 			Response = V1CatalogObjectsGetRes
 		)
 		response, err = middleware.HookMiddleware[
@@ -991,14 +964,14 @@ func (s *Server) handleV1CatalogObjectsGetRequest(args [0]string, argsEscaped bo
 		](
 			m,
 			mreq,
-			unpackV1CatalogObjectsGetParams,
+			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.V1CatalogObjectsGet(ctx, params)
+				response, err = s.h.V1CatalogObjectsGet(ctx)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.V1CatalogObjectsGet(ctx, params)
+		response, err = s.h.V1CatalogObjectsGet(ctx)
 	}
 	if err != nil {
 		defer recordError("Internal", err)
@@ -1420,16 +1393,6 @@ func (s *Server) handleV1CatalogServicesGetRequest(args [0]string, argsEscaped b
 			return
 		}
 	}
-	params, err := decodeV1CatalogServicesGetParams(args, argsEscaped, r)
-	if err != nil {
-		err = &ogenerrors.DecodeParamsError{
-			OperationContext: opErrContext,
-			Err:              err,
-		}
-		defer recordError("DecodeParams", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
 
 	var response V1CatalogServicesGetRes
 	if m := s.cfg.Middleware; m != nil {
@@ -1439,30 +1402,13 @@ func (s *Server) handleV1CatalogServicesGetRequest(args [0]string, argsEscaped b
 			OperationSummary: "Get a list of all available services",
 			OperationID:      "",
 			Body:             nil,
-			Params: middleware.Parameters{
-				{
-					Name: "offset",
-					In:   "query",
-				}: params.Offset,
-				{
-					Name: "limit",
-					In:   "query",
-				}: params.Limit,
-				{
-					Name: "sort",
-					In:   "query",
-				}: params.Sort,
-				{
-					Name: "direction",
-					In:   "query",
-				}: params.Direction,
-			},
-			Raw: r,
+			Params:           middleware.Parameters{},
+			Raw:              r,
 		}
 
 		type (
 			Request  = struct{}
-			Params   = V1CatalogServicesGetParams
+			Params   = struct{}
 			Response = V1CatalogServicesGetRes
 		)
 		response, err = middleware.HookMiddleware[
@@ -1472,14 +1418,14 @@ func (s *Server) handleV1CatalogServicesGetRequest(args [0]string, argsEscaped b
 		](
 			m,
 			mreq,
-			unpackV1CatalogServicesGetParams,
+			nil,
 			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.V1CatalogServicesGet(ctx, params)
+				response, err = s.h.V1CatalogServicesGet(ctx)
 				return response, err
 			},
 		)
 	} else {
-		response, err = s.h.V1CatalogServicesGet(ctx, params)
+		response, err = s.h.V1CatalogServicesGet(ctx)
 	}
 	if err != nil {
 		defer recordError("Internal", err)
@@ -1771,21 +1717,13 @@ func (s *Server) handleV1CommentsVerificationsGetRequest(args [0]string, argsEsc
 					In:   "query",
 				}: params.Status,
 				{
-					Name: "offset",
+					Name: "page",
 					In:   "query",
-				}: params.Offset,
+				}: params.Page,
 				{
-					Name: "limit",
+					Name: "per_page",
 					In:   "query",
-				}: params.Limit,
-				{
-					Name: "sort",
-					In:   "query",
-				}: params.Sort,
-				{
-					Name: "direction",
-					In:   "query",
-				}: params.Direction,
+				}: params.PerPage,
 			},
 			Raw: r,
 		}
@@ -1939,7 +1877,7 @@ func (s *Server) handleV1EmployeePostRequest(args [0]string, argsEscaped bool, w
 
 // handleV1OrganizationsContractorsGetRequest handles GET /v1/organizations/contractors operation.
 //
-// Получить всех исполнителей (verifed=true, banned=false).
+// Получить всех исполнителей статусом approve.
 //
 // GET /v1/organizations/contractors
 func (s *Server) handleV1OrganizationsContractorsGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
@@ -2005,13 +1943,13 @@ func (s *Server) handleV1OrganizationsContractorsGetRequest(args [0]string, args
 			Body:             nil,
 			Params: middleware.Parameters{
 				{
-					Name: "offset",
+					Name: "page",
 					In:   "query",
-				}: params.Offset,
+				}: params.Page,
 				{
-					Name: "limit",
+					Name: "per_page",
 					In:   "query",
-				}: params.Limit,
+				}: params.PerPage,
 			},
 			Raw: r,
 		}
@@ -2172,21 +2110,13 @@ func (s *Server) handleV1OrganizationsGetRequest(args [0]string, argsEscaped boo
 					In:   "query",
 				}: params.Verified,
 				{
-					Name: "offset",
+					Name: "page",
 					In:   "query",
-				}: params.Offset,
+				}: params.Page,
 				{
-					Name: "limit",
+					Name: "per_page",
 					In:   "query",
-				}: params.Limit,
-				{
-					Name: "sort",
-					In:   "query",
-				}: params.Sort,
-				{
-					Name: "direction",
-					In:   "query",
-				}: params.Direction,
+				}: params.PerPage,
 			},
 			Raw: r,
 		}
@@ -4537,21 +4467,13 @@ func (s *Server) handleV1OrganizationsVerificationsGetRequest(args [0]string, ar
 					In:   "query",
 				}: params.Status,
 				{
-					Name: "offset",
+					Name: "page",
 					In:   "query",
-				}: params.Offset,
+				}: params.Page,
 				{
-					Name: "limit",
+					Name: "per_page",
 					In:   "query",
-				}: params.Limit,
-				{
-					Name: "sort",
-					In:   "query",
-				}: params.Sort,
-				{
-					Name: "direction",
-					In:   "query",
-				}: params.Direction,
+				}: params.PerPage,
 			},
 			Raw: r,
 		}
@@ -5571,10 +5493,6 @@ func (s *Server) handleV1TendersGetRequest(args [0]string, argsEscaped bool, w h
 			OperationID:      "",
 			Body:             nil,
 			Params: middleware.Parameters{
-				{
-					Name: "verified",
-					In:   "query",
-				}: params.Verified,
 				{
 					Name: "page",
 					In:   "query",
@@ -6962,21 +6880,13 @@ func (s *Server) handleV1TendersVerificationsGetRequest(args [0]string, argsEsca
 					In:   "query",
 				}: params.Status,
 				{
-					Name: "offset",
+					Name: "page",
 					In:   "query",
-				}: params.Offset,
+				}: params.Page,
 				{
-					Name: "limit",
+					Name: "per_page",
 					In:   "query",
-				}: params.Limit,
-				{
-					Name: "sort",
-					In:   "query",
-				}: params.Sort,
-				{
-					Name: "direction",
-					In:   "query",
-				}: params.Direction,
+				}: params.PerPage,
 			},
 			Raw: r,
 		}
@@ -7357,21 +7267,13 @@ func (s *Server) handleV1UsersGetRequest(args [0]string, argsEscaped bool, w htt
 					In:   "query",
 				}: params.Role,
 				{
-					Name: "offset",
+					Name: "page",
 					In:   "query",
-				}: params.Offset,
+				}: params.Page,
 				{
-					Name: "limit",
+					Name: "per_page",
 					In:   "query",
-				}: params.Limit,
-				{
-					Name: "sort",
-					In:   "query",
-				}: params.Sort,
-				{
-					Name: "direction",
-					In:   "query",
-				}: params.Direction,
+				}: params.PerPage,
 			},
 			Raw: r,
 		}

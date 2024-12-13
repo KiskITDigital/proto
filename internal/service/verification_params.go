@@ -18,6 +18,6 @@ type VerificationRequestsObjectGetParams struct {
 	ObjectType models.ObjectType
 	ObjectID   models.Optional[int]
 	Status     []models.VerificationStatus
-	Offset     uint64
-	Limit      uint64
+	Page       uint64
+	PerPage    uint64
 }

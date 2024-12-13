@@ -55,11 +55,14 @@ func (s *VerificationStore) GetWithEmptyObject(ctx context.Context, qe store.Que
 		LeftJoin("users u ON vr.reviewer_user_id = u.id").
 		LeftJoin("employee e ON e.user_id = u.id").
 		OrderBy("vr.created_at DESC").
-		Offset(params.Offset).
 		PlaceholderFormat(squirrel.Dollar)
 
-	if params.Limit != 0 {
-		builder = builder.Limit(params.Limit)
+	if params.Limit.Set {
+		builder = builder.Limit(params.Limit.Value)
+	}
+
+	if params.Offset.Set {
+		builder = builder.Limit(params.Offset.Value)
 	}
 
 	if params.ObjectType.Set {
@@ -222,10 +225,16 @@ func (s *VerificationStore) GetCommentRequests(ctx context.Context, qe store.Que
 		Join("organizations o ON c.organization_id = o.id").
 		Where(squirrel.Eq{"vr.object_type": models.ObjectTypeComment}).
 		OrderBy("vr.created_at DESC").
-		Offset(params.Offset).
-		Limit(params.Limit).
 		PlaceholderFormat(squirrel.Dollar)
 
+	if params.Limit.Set {
+		builder = builder.Limit(params.Limit.Value)
+	}
+
+	if params.Offset.Set {
+		builder = builder.Limit(params.Offset.Value)
+	}
+	
 	if params.VerificationID.Set {
 		builder = builder.Where(squirrel.Eq{"vr.id": params.VerificationID.Value})
 	}

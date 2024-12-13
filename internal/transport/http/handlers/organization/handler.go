@@ -15,7 +15,7 @@ type Handler struct {
 }
 
 type OrganizationService interface {
-	Get(ctx context.Context, params service.OrganizationGetParams) ([]models.Organization, error)
+	Get(ctx context.Context, params service.OrganizationGetParams) (models.OrganizationsPagination, error)
 	GetByID(ctx context.Context, id int) (models.Organization, error)
 	GetCustomer(ctx context.Context, organizationId int) (models.Organization, error)
 	GetContractor(ctx context.Context, organizationId int) (models.Organization, error)
@@ -27,7 +27,7 @@ type OrganizationService interface {
 }
 
 type VerificationService interface {
-	Get(ctx context.Context, params service.VerificationRequestsObjectGetParams) ([]models.VerificationRequest[models.VerificationObject], error)
+	Get(ctx context.Context, params service.VerificationRequestsObjectGetParams) (models.VerificationRequestPagination[models.VerificationObject], error)
 }
 
 func New(

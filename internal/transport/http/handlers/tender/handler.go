@@ -19,7 +19,7 @@ type TenderService interface {
 	Create(ctx context.Context, params service.TenderCreateParams) (models.Tender, error)
 	Update(ctx context.Context, params service.TenderUpdateParams) (models.Tender, error)
 	GetByID(ctx context.Context, tenderID int) (models.Tender, error)
-	List(ctx context.Context, params service.TenderListParams) (models.TendersRes, error) 
+	List(ctx context.Context, params service.TenderListParams) (models.TendersPagination, error) 
 	Respond(ctx context.Context, params service.TenderRespondParams) error
 	CreateComment(ctx context.Context, params service.CommentCreateParams) error
 	GetComments(ctx context.Context, params service.GetCommentParams) ([]models.Comment, error)
@@ -31,7 +31,7 @@ type QuestionAnswerService interface {
 }
 
 type VerificationService interface {
-	Get(ctx context.Context, params service.VerificationRequestsObjectGetParams) ([]models.VerificationRequest[models.VerificationObject], error)
+	Get(ctx context.Context, params service.VerificationRequestsObjectGetParams) (models.VerificationRequestPagination[models.VerificationObject], error) 
 }
 
 func New(

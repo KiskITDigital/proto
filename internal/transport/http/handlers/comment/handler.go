@@ -19,7 +19,7 @@ type (
 	}
 
 	VerificationService interface {
-		Get(ctx context.Context, params service.VerificationRequestsObjectGetParams) ([]models.VerificationRequest[models.VerificationObject], error)
+		Get(ctx context.Context, params service.VerificationRequestsObjectGetParams) (models.VerificationRequestPagination[models.VerificationObject], error)
 	}
 )
 

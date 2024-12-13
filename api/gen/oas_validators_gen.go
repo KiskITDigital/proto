@@ -1505,57 +1505,6 @@ func (s *V1AuthUserGetOK) Validate() error {
 	return nil
 }
 
-func (s V1CatalogObjectsGetDirection) Validate() error {
-	switch s {
-	case "ASC":
-		return nil
-	case "DESC":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
-}
-
-func (s V1CatalogObjectsGetSort) Validate() error {
-	switch s {
-	case "id":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
-}
-
-func (s V1CatalogServicesGetDirection) Validate() error {
-	switch s {
-	case "ASC":
-		return nil
-	case "DESC":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
-}
-
-func (s V1CatalogServicesGetSort) Validate() error {
-	switch s {
-	case "id":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
-}
-
-func (s V1CommentsVerificationsGetDirection) Validate() error {
-	switch s {
-	case "ASC":
-		return nil
-	case "DESC":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
-}
-
 func (s *V1CommentsVerificationsGetOK) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -1594,15 +1543,6 @@ func (s *V1CommentsVerificationsGetOK) Validate() error {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
-}
-
-func (s V1CommentsVerificationsGetSort) Validate() error {
-	switch s {
-	case "id":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
 }
 
 func (s *V1EmployeePostCreated) Validate() error {
@@ -1764,17 +1704,6 @@ func (s *V1OrganizationsContractorsGetOK) Validate() error {
 	return nil
 }
 
-func (s V1OrganizationsGetDirection) Validate() error {
-	switch s {
-	case "ASC":
-		return nil
-	case "DESC":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
-}
-
 func (s *V1OrganizationsGetOK) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -1782,34 +1711,11 @@ func (s *V1OrganizationsGetOK) Validate() error {
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Data.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "data",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
-func (s *V1OrganizationsGetOKData) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if s.Organizations == nil {
+		if s.Data == nil {
 			return errors.New("nil is invalid value")
 		}
 		var failures []validate.FieldError
-		for i, elem := range s.Organizations {
+		for i, elem := range s.Data {
 			if err := func() error {
 				if err := elem.Validate(); err != nil {
 					return err
@@ -1828,7 +1734,7 @@ func (s *V1OrganizationsGetOKData) Validate() error {
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
-			Name:  "organizations",
+			Name:  "data",
 			Error: err,
 		})
 	}
@@ -1836,15 +1742,6 @@ func (s *V1OrganizationsGetOKData) Validate() error {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
-}
-
-func (s V1OrganizationsGetSort) Validate() error {
-	switch s {
-	case "id":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
 }
 
 func (s *V1OrganizationsOrganizationIDGetOK) Validate() error {
@@ -2463,17 +2360,6 @@ func (s *V1OrganizationsPortfolioPortfolioIDPutReq) Validate() error {
 	return nil
 }
 
-func (s V1OrganizationsVerificationsGetDirection) Validate() error {
-	switch s {
-	case "ASC":
-		return nil
-	case "DESC":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
-}
-
 func (s *V1OrganizationsVerificationsGetOK) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -2512,15 +2398,6 @@ func (s *V1OrganizationsVerificationsGetOK) Validate() error {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
-}
-
-func (s V1OrganizationsVerificationsGetSort) Validate() error {
-	switch s {
-	case "id":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
 }
 
 func (s *V1QuestionnaireGetOK) Validate() error {
@@ -3090,17 +2967,6 @@ func (s *V1TendersTenderIDQuestionAnswerPostCreated) Validate() error {
 	return nil
 }
 
-func (s V1TendersVerificationsGetDirection) Validate() error {
-	switch s {
-	case "ASC":
-		return nil
-	case "DESC":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
-}
-
 func (s *V1TendersVerificationsGetOK) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -3141,15 +3007,6 @@ func (s *V1TendersVerificationsGetOK) Validate() error {
 	return nil
 }
 
-func (s V1TendersVerificationsGetSort) Validate() error {
-	switch s {
-	case "id":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
-}
-
 func (s *V1UsersConfirmPasswordPostReq) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -3171,17 +3028,6 @@ func (s *V1UsersConfirmPasswordPostReq) Validate() error {
 		return &validate.Error{Fields: failures}
 	}
 	return nil
-}
-
-func (s V1UsersGetDirection) Validate() error {
-	switch s {
-	case "ASC":
-		return nil
-	case "DESC":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
-	}
 }
 
 func (s *V1UsersGetOK) Validate() error {
@@ -3238,15 +3084,6 @@ func (s V1UsersGetOKDataItem) Validate() error {
 		return nil
 	default:
 		return errors.Errorf("invalid type %q", s.Type)
-	}
-}
-
-func (s V1UsersGetSort) Validate() error {
-	switch s {
-	case "id":
-		return nil
-	default:
-		return errors.Errorf("invalid value: %v", s)
 	}
 }
 

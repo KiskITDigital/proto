@@ -8,7 +8,13 @@ import (
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/pagination"
 )
+
+type OrganizationsPagination struct {
+	Organizations []Organization
+	Pagination    pagination.Pagination
+}
 
 type ContactInfo struct {
 	Contact string `json:"contact"`
@@ -96,8 +102,8 @@ func ConvertOrganizationModelToApi(organization Organization) api.Organization {
 		Messengers: convert.Slice[ContactInfos, []api.ContactInfo](
 			organization.Messengers, ConvertContactInfoModelToApi,
 		),
-		CreatedAt:      organization.CreatedAt,
-		UpdatedAt:      organization.UpdatedAt,
+		CreatedAt: organization.CreatedAt,
+		UpdatedAt: organization.UpdatedAt,
 	}
 }
 
