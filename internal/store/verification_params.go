@@ -21,9 +21,10 @@ type VerificationObjectUpdateStatusResult struct {
 }
 
 type VerificationRequestsObjectGetParams struct {
-	ObjectID   models.Optional[int]
-	ObjectType models.Optional[models.ObjectType]
-	Status     []models.VerificationStatus
-	Offset     uint64
-	Limit      uint64
+	VerificationID models.Optional[int]
+	ObjectID       models.Optional[int]
+	ObjectType     models.Optional[models.ObjectType]
+	Status         []models.VerificationStatus
+	Offset         uint64
+	Limit          uint64
 }
