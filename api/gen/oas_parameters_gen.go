@@ -128,668 +128,14 @@ func decodeV1AuthRefreshPostParams(args [0]string, argsEscaped bool, r *http.Req
 	return params, nil
 }
 
-// V1CatalogObjectsGetParams is parameters of GET /v1/catalog/objects operation.
-type V1CatalogObjectsGetParams struct {
-	// Сдвиг начала каждой страницы на указанное количество
-	// единиц.
-	Offset OptInt
-	// Максимальное количество объектов, которое может
-	// вернуть запрос.
-	Limit OptInt
-	// Определяет атрибут, по которому сортируются элементы.
-	Sort OptV1CatalogObjectsGetSort
-	// Направление сортировки результатов.
-	// Это может быть либо сортировка по возрастанию (ASC),
-	// либо сортировка по убыванию (DESC).
-	Direction OptV1CatalogObjectsGetDirection
-}
-
-func unpackV1CatalogObjectsGetParams(packed middleware.Parameters) (params V1CatalogObjectsGetParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "offset",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Offset = v.(OptInt)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "limit",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Limit = v.(OptInt)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "sort",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Sort = v.(OptV1CatalogObjectsGetSort)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "direction",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Direction = v.(OptV1CatalogObjectsGetDirection)
-		}
-	}
-	return params
-}
-
-func decodeV1CatalogObjectsGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1CatalogObjectsGetParams, _ error) {
-	q := uri.NewQueryDecoder(r.URL.Query())
-	// Set default value for query: offset.
-	{
-		val := int(0)
-		params.Offset.SetTo(val)
-	}
-	// Decode query: offset.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "offset",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotOffsetVal int
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotOffsetVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Offset.SetTo(paramsDotOffsetVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Offset.Get(); ok {
-					if err := func() error {
-						if err := (validate.Int{
-							MinSet:        true,
-							Min:           0,
-							MaxSet:        false,
-							Max:           0,
-							MinExclusive:  false,
-							MaxExclusive:  false,
-							MultipleOfSet: false,
-							MultipleOf:    0,
-						}).Validate(int64(value)); err != nil {
-							return errors.Wrap(err, "int")
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "offset",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: limit.
-	{
-		val := int(100)
-		params.Limit.SetTo(val)
-	}
-	// Decode query: limit.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "limit",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotLimitVal int
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotLimitVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Limit.SetTo(paramsDotLimitVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Limit.Get(); ok {
-					if err := func() error {
-						if err := (validate.Int{
-							MinSet:        true,
-							Min:           0,
-							MaxSet:        true,
-							Max:           100,
-							MinExclusive:  false,
-							MaxExclusive:  false,
-							MultipleOfSet: false,
-							MultipleOf:    0,
-						}).Validate(int64(value)); err != nil {
-							return errors.Wrap(err, "int")
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "limit",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: sort.
-	{
-		val := V1CatalogObjectsGetSort("id")
-		params.Sort.SetTo(val)
-	}
-	// Decode query: sort.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "sort",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotSortVal V1CatalogObjectsGetSort
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotSortVal = V1CatalogObjectsGetSort(c)
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Sort.SetTo(paramsDotSortVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Sort.Get(); ok {
-					if err := func() error {
-						if err := value.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "sort",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: direction.
-	{
-		val := V1CatalogObjectsGetDirection("ASC")
-		params.Direction.SetTo(val)
-	}
-	// Decode query: direction.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "direction",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotDirectionVal V1CatalogObjectsGetDirection
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDirectionVal = V1CatalogObjectsGetDirection(c)
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Direction.SetTo(paramsDotDirectionVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Direction.Get(); ok {
-					if err := func() error {
-						if err := value.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "direction",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// V1CatalogServicesGetParams is parameters of GET /v1/catalog/services operation.
-type V1CatalogServicesGetParams struct {
-	// Сдвиг начала каждой страницы на указанное количество
-	// единиц.
-	Offset OptInt
-	// Максимальное количество объектов, которое может
-	// вернуть запрос.
-	Limit OptInt
-	// Определяет атрибут, по которому сортируются элементы.
-	Sort OptV1CatalogServicesGetSort
-	// Направление сортировки результатов.
-	// Это может быть либо сортировка по возрастанию (ASC),
-	// либо сортировка по убыванию (DESC).
-	Direction OptV1CatalogServicesGetDirection
-}
-
-func unpackV1CatalogServicesGetParams(packed middleware.Parameters) (params V1CatalogServicesGetParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "offset",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Offset = v.(OptInt)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "limit",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Limit = v.(OptInt)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "sort",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Sort = v.(OptV1CatalogServicesGetSort)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "direction",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Direction = v.(OptV1CatalogServicesGetDirection)
-		}
-	}
-	return params
-}
-
-func decodeV1CatalogServicesGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1CatalogServicesGetParams, _ error) {
-	q := uri.NewQueryDecoder(r.URL.Query())
-	// Set default value for query: offset.
-	{
-		val := int(0)
-		params.Offset.SetTo(val)
-	}
-	// Decode query: offset.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "offset",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotOffsetVal int
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotOffsetVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Offset.SetTo(paramsDotOffsetVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Offset.Get(); ok {
-					if err := func() error {
-						if err := (validate.Int{
-							MinSet:        true,
-							Min:           0,
-							MaxSet:        false,
-							Max:           0,
-							MinExclusive:  false,
-							MaxExclusive:  false,
-							MultipleOfSet: false,
-							MultipleOf:    0,
-						}).Validate(int64(value)); err != nil {
-							return errors.Wrap(err, "int")
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "offset",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: limit.
-	{
-		val := int(100)
-		params.Limit.SetTo(val)
-	}
-	// Decode query: limit.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "limit",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotLimitVal int
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotLimitVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Limit.SetTo(paramsDotLimitVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Limit.Get(); ok {
-					if err := func() error {
-						if err := (validate.Int{
-							MinSet:        true,
-							Min:           0,
-							MaxSet:        true,
-							Max:           100,
-							MinExclusive:  false,
-							MaxExclusive:  false,
-							MultipleOfSet: false,
-							MultipleOf:    0,
-						}).Validate(int64(value)); err != nil {
-							return errors.Wrap(err, "int")
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "limit",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: sort.
-	{
-		val := V1CatalogServicesGetSort("id")
-		params.Sort.SetTo(val)
-	}
-	// Decode query: sort.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "sort",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotSortVal V1CatalogServicesGetSort
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotSortVal = V1CatalogServicesGetSort(c)
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Sort.SetTo(paramsDotSortVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Sort.Get(); ok {
-					if err := func() error {
-						if err := value.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "sort",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: direction.
-	{
-		val := V1CatalogServicesGetDirection("ASC")
-		params.Direction.SetTo(val)
-	}
-	// Decode query: direction.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "direction",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotDirectionVal V1CatalogServicesGetDirection
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDirectionVal = V1CatalogServicesGetDirection(c)
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Direction.SetTo(paramsDotDirectionVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Direction.Get(); ok {
-					if err := func() error {
-						if err := value.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "direction",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
 // V1CommentsVerificationsGetParams is parameters of GET /v1/comments/verifications operation.
 type V1CommentsVerificationsGetParams struct {
 	// Фильтрует результат по статусам.
 	Status []VerificationStatus
-	// Сдвиг начала каждой страницы на указанное количество
-	// единиц.
-	Offset OptInt
-	// Максимальное количество объектов, которое может
-	// вернуть запрос.
-	Limit OptInt
-	// Определяет атрибут, по которому сортируются элементы.
-	Sort OptV1CommentsVerificationsGetSort
-	// Направление сортировки результатов.
-	// Это может быть либо сортировка по возрастанию (ASC),
-	// либо сортировка по убыванию (DESC).
-	Direction OptV1CommentsVerificationsGetDirection
+	// Номер страницы.
+	Page OptInt
+	// Количество элементов на странице.
+	PerPage OptInt
 }
 
 func unpackV1CommentsVerificationsGetParams(packed middleware.Parameters) (params V1CommentsVerificationsGetParams) {
@@ -804,38 +150,20 @@ func unpackV1CommentsVerificationsGetParams(packed middleware.Parameters) (param
 	}
 	{
 		key := middleware.ParameterKey{
-			Name: "offset",
+			Name: "page",
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.Offset = v.(OptInt)
+			params.Page = v.(OptInt)
 		}
 	}
 	{
 		key := middleware.ParameterKey{
-			Name: "limit",
+			Name: "per_page",
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.Limit = v.(OptInt)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "sort",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Sort = v.(OptV1CommentsVerificationsGetSort)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "direction",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Direction = v.(OptV1CommentsVerificationsGetDirection)
+			params.PerPage = v.(OptInt)
 		}
 	}
 	return params
@@ -908,22 +236,22 @@ func decodeV1CommentsVerificationsGetParams(args [0]string, argsEscaped bool, r 
 			Err:  err,
 		}
 	}
-	// Set default value for query: offset.
+	// Set default value for query: page.
 	{
 		val := int(0)
-		params.Offset.SetTo(val)
+		params.Page.SetTo(val)
 	}
-	// Decode query: offset.
+	// Decode query: page.
 	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "offset",
+			Name:    "page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotOffsetVal int
+				var paramsDotPageVal int
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
@@ -935,18 +263,18 @@ func decodeV1CommentsVerificationsGetParams(args [0]string, argsEscaped bool, r 
 						return err
 					}
 
-					paramsDotOffsetVal = c
+					paramsDotPageVal = c
 					return nil
 				}(); err != nil {
 					return err
 				}
-				params.Offset.SetTo(paramsDotOffsetVal)
+				params.Page.SetTo(paramsDotPageVal)
 				return nil
 			}); err != nil {
 				return err
 			}
 			if err := func() error {
-				if value, ok := params.Offset.Get(); ok {
+				if value, ok := params.Page.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
@@ -973,27 +301,27 @@ func decodeV1CommentsVerificationsGetParams(args [0]string, argsEscaped bool, r 
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "offset",
+			Name: "page",
 			In:   "query",
 			Err:  err,
 		}
 	}
-	// Set default value for query: limit.
+	// Set default value for query: per_page.
 	{
 		val := int(100)
-		params.Limit.SetTo(val)
+		params.PerPage.SetTo(val)
 	}
-	// Decode query: limit.
+	// Decode query: per_page.
 	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "limit",
+			Name:    "per_page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotLimitVal int
+				var paramsDotPerPageVal int
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
@@ -1005,22 +333,22 @@ func decodeV1CommentsVerificationsGetParams(args [0]string, argsEscaped bool, r 
 						return err
 					}
 
-					paramsDotLimitVal = c
+					paramsDotPerPageVal = c
 					return nil
 				}(); err != nil {
 					return err
 				}
-				params.Limit.SetTo(paramsDotLimitVal)
+				params.PerPage.SetTo(paramsDotPerPageVal)
 				return nil
 			}); err != nil {
 				return err
 			}
 			if err := func() error {
-				if value, ok := params.Limit.Get(); ok {
+				if value, ok := params.PerPage.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
-							Min:           0,
+							Min:           1,
 							MaxSet:        true,
 							Max:           100,
 							MinExclusive:  false,
@@ -1043,129 +371,7 @@ func decodeV1CommentsVerificationsGetParams(args [0]string, argsEscaped bool, r 
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "limit",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: sort.
-	{
-		val := V1CommentsVerificationsGetSort("id")
-		params.Sort.SetTo(val)
-	}
-	// Decode query: sort.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "sort",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotSortVal V1CommentsVerificationsGetSort
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotSortVal = V1CommentsVerificationsGetSort(c)
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Sort.SetTo(paramsDotSortVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Sort.Get(); ok {
-					if err := func() error {
-						if err := value.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "sort",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: direction.
-	{
-		val := V1CommentsVerificationsGetDirection("ASC")
-		params.Direction.SetTo(val)
-	}
-	// Decode query: direction.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "direction",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotDirectionVal V1CommentsVerificationsGetDirection
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDirectionVal = V1CommentsVerificationsGetDirection(c)
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Direction.SetTo(paramsDotDirectionVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Direction.Get(); ok {
-					if err := func() error {
-						if err := value.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "direction",
+			Name: "per_page",
 			In:   "query",
 			Err:  err,
 		}
@@ -1175,31 +381,29 @@ func decodeV1CommentsVerificationsGetParams(args [0]string, argsEscaped bool, r 
 
 // V1OrganizationsContractorsGetParams is parameters of GET /v1/organizations/contractors operation.
 type V1OrganizationsContractorsGetParams struct {
-	// Сдвиг начала каждой страницы на указанное количество
-	// единиц.
-	Offset OptInt
-	// Максимальное количество объектов, которое может
-	// вернуть запрос.
-	Limit OptInt
+	// Номер страницы.
+	Page OptInt
+	// Количество элементов на странице.
+	PerPage OptInt
 }
 
 func unpackV1OrganizationsContractorsGetParams(packed middleware.Parameters) (params V1OrganizationsContractorsGetParams) {
 	{
 		key := middleware.ParameterKey{
-			Name: "offset",
+			Name: "page",
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.Offset = v.(OptInt)
+			params.Page = v.(OptInt)
 		}
 	}
 	{
 		key := middleware.ParameterKey{
-			Name: "limit",
+			Name: "per_page",
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.Limit = v.(OptInt)
+			params.PerPage = v.(OptInt)
 		}
 	}
 	return params
@@ -1207,22 +411,22 @@ func unpackV1OrganizationsContractorsGetParams(packed middleware.Parameters) (pa
 
 func decodeV1OrganizationsContractorsGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1OrganizationsContractorsGetParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
-	// Set default value for query: offset.
+	// Set default value for query: page.
 	{
 		val := int(0)
-		params.Offset.SetTo(val)
+		params.Page.SetTo(val)
 	}
-	// Decode query: offset.
+	// Decode query: page.
 	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "offset",
+			Name:    "page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotOffsetVal int
+				var paramsDotPageVal int
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
@@ -1234,18 +438,18 @@ func decodeV1OrganizationsContractorsGetParams(args [0]string, argsEscaped bool,
 						return err
 					}
 
-					paramsDotOffsetVal = c
+					paramsDotPageVal = c
 					return nil
 				}(); err != nil {
 					return err
 				}
-				params.Offset.SetTo(paramsDotOffsetVal)
+				params.Page.SetTo(paramsDotPageVal)
 				return nil
 			}); err != nil {
 				return err
 			}
 			if err := func() error {
-				if value, ok := params.Offset.Get(); ok {
+				if value, ok := params.Page.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
@@ -1272,27 +476,27 @@ func decodeV1OrganizationsContractorsGetParams(args [0]string, argsEscaped bool,
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "offset",
+			Name: "page",
 			In:   "query",
 			Err:  err,
 		}
 	}
-	// Set default value for query: limit.
+	// Set default value for query: per_page.
 	{
 		val := int(100)
-		params.Limit.SetTo(val)
+		params.PerPage.SetTo(val)
 	}
-	// Decode query: limit.
+	// Decode query: per_page.
 	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "limit",
+			Name:    "per_page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotLimitVal int
+				var paramsDotPerPageVal int
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
@@ -1304,22 +508,22 @@ func decodeV1OrganizationsContractorsGetParams(args [0]string, argsEscaped bool,
 						return err
 					}
 
-					paramsDotLimitVal = c
+					paramsDotPerPageVal = c
 					return nil
 				}(); err != nil {
 					return err
 				}
-				params.Limit.SetTo(paramsDotLimitVal)
+				params.PerPage.SetTo(paramsDotPerPageVal)
 				return nil
 			}); err != nil {
 				return err
 			}
 			if err := func() error {
-				if value, ok := params.Limit.Get(); ok {
+				if value, ok := params.PerPage.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
-							Min:           0,
+							Min:           1,
 							MaxSet:        true,
 							Max:           100,
 							MinExclusive:  false,
@@ -1342,7 +546,7 @@ func decodeV1OrganizationsContractorsGetParams(args [0]string, argsEscaped bool,
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "limit",
+			Name: "per_page",
 			In:   "query",
 			Err:  err,
 		}
@@ -1353,20 +557,12 @@ func decodeV1OrganizationsContractorsGetParams(args [0]string, argsEscaped bool,
 // V1OrganizationsGetParams is parameters of GET /v1/organizations operation.
 type V1OrganizationsGetParams struct {
 	// Фильтрует результат и включает только
-	// верифицированные компании.
+	// верифицированные компании(не работает).
 	Verified OptBool
-	// Сдвиг начала каждой страницы на указанное количество
-	// единиц.
-	Offset OptInt
-	// Максимальное количество объектов, которое может
-	// вернуть запрос.
-	Limit OptInt
-	// Определяет атрибут, по которому сортируются элементы.
-	Sort OptV1OrganizationsGetSort
-	// Направление сортировки результатов.
-	// Это может быть либо сортировка по возрастанию (ASC),
-	// либо сортировка по убыванию (DESC).
-	Direction OptV1OrganizationsGetDirection
+	// Номер страницы.
+	Page OptInt
+	// Количество элементов на странице.
+	PerPage OptInt
 }
 
 func unpackV1OrganizationsGetParams(packed middleware.Parameters) (params V1OrganizationsGetParams) {
@@ -1381,38 +577,20 @@ func unpackV1OrganizationsGetParams(packed middleware.Parameters) (params V1Orga
 	}
 	{
 		key := middleware.ParameterKey{
-			Name: "offset",
+			Name: "page",
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.Offset = v.(OptInt)
+			params.Page = v.(OptInt)
 		}
 	}
 	{
 		key := middleware.ParameterKey{
-			Name: "limit",
+			Name: "per_page",
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.Limit = v.(OptInt)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "sort",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Sort = v.(OptV1OrganizationsGetSort)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "direction",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Direction = v.(OptV1OrganizationsGetDirection)
+			params.PerPage = v.(OptInt)
 		}
 	}
 	return params
@@ -1466,22 +644,22 @@ func decodeV1OrganizationsGetParams(args [0]string, argsEscaped bool, r *http.Re
 			Err:  err,
 		}
 	}
-	// Set default value for query: offset.
+	// Set default value for query: page.
 	{
 		val := int(0)
-		params.Offset.SetTo(val)
+		params.Page.SetTo(val)
 	}
-	// Decode query: offset.
+	// Decode query: page.
 	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "offset",
+			Name:    "page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotOffsetVal int
+				var paramsDotPageVal int
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
@@ -1493,18 +671,18 @@ func decodeV1OrganizationsGetParams(args [0]string, argsEscaped bool, r *http.Re
 						return err
 					}
 
-					paramsDotOffsetVal = c
+					paramsDotPageVal = c
 					return nil
 				}(); err != nil {
 					return err
 				}
-				params.Offset.SetTo(paramsDotOffsetVal)
+				params.Page.SetTo(paramsDotPageVal)
 				return nil
 			}); err != nil {
 				return err
 			}
 			if err := func() error {
-				if value, ok := params.Offset.Get(); ok {
+				if value, ok := params.Page.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
@@ -1531,27 +709,27 @@ func decodeV1OrganizationsGetParams(args [0]string, argsEscaped bool, r *http.Re
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "offset",
+			Name: "page",
 			In:   "query",
 			Err:  err,
 		}
 	}
-	// Set default value for query: limit.
+	// Set default value for query: per_page.
 	{
 		val := int(100)
-		params.Limit.SetTo(val)
+		params.PerPage.SetTo(val)
 	}
-	// Decode query: limit.
+	// Decode query: per_page.
 	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "limit",
+			Name:    "per_page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotLimitVal int
+				var paramsDotPerPageVal int
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
@@ -1563,22 +741,22 @@ func decodeV1OrganizationsGetParams(args [0]string, argsEscaped bool, r *http.Re
 						return err
 					}
 
-					paramsDotLimitVal = c
+					paramsDotPerPageVal = c
 					return nil
 				}(); err != nil {
 					return err
 				}
-				params.Limit.SetTo(paramsDotLimitVal)
+				params.PerPage.SetTo(paramsDotPerPageVal)
 				return nil
 			}); err != nil {
 				return err
 			}
 			if err := func() error {
-				if value, ok := params.Limit.Get(); ok {
+				if value, ok := params.PerPage.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
-							Min:           0,
+							Min:           1,
 							MaxSet:        true,
 							Max:           100,
 							MinExclusive:  false,
@@ -1601,129 +779,7 @@ func decodeV1OrganizationsGetParams(args [0]string, argsEscaped bool, r *http.Re
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "limit",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: sort.
-	{
-		val := V1OrganizationsGetSort("id")
-		params.Sort.SetTo(val)
-	}
-	// Decode query: sort.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "sort",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotSortVal V1OrganizationsGetSort
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotSortVal = V1OrganizationsGetSort(c)
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Sort.SetTo(paramsDotSortVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Sort.Get(); ok {
-					if err := func() error {
-						if err := value.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "sort",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: direction.
-	{
-		val := V1OrganizationsGetDirection("ASC")
-		params.Direction.SetTo(val)
-	}
-	// Decode query: direction.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "direction",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotDirectionVal V1OrganizationsGetDirection
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDirectionVal = V1OrganizationsGetDirection(c)
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Direction.SetTo(paramsDotDirectionVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Direction.Get(); ok {
-					if err := func() error {
-						if err := value.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "direction",
+			Name: "per_page",
 			In:   "query",
 			Err:  err,
 		}
@@ -2897,18 +1953,10 @@ func decodeV1OrganizationsPortfolioPortfolioIDPutParams(args [1]string, argsEsca
 type V1OrganizationsVerificationsGetParams struct {
 	// Фильтрует результат по статусам.
 	Status []VerificationStatus
-	// Сдвиг начала каждой страницы на указанное количество
-	// единиц.
-	Offset OptInt
-	// Максимальное количество объектов, которое может
-	// вернуть запрос.
-	Limit OptInt
-	// Определяет атрибут, по которому сортируются элементы.
-	Sort OptV1OrganizationsVerificationsGetSort
-	// Направление сортировки результатов.
-	// Это может быть либо сортировка по возрастанию (ASC),
-	// либо сортировка по убыванию (DESC).
-	Direction OptV1OrganizationsVerificationsGetDirection
+	// Номер страницы.
+	Page OptInt
+	// Количество элементов на странице.
+	PerPage OptInt
 }
 
 func unpackV1OrganizationsVerificationsGetParams(packed middleware.Parameters) (params V1OrganizationsVerificationsGetParams) {
@@ -2923,38 +1971,20 @@ func unpackV1OrganizationsVerificationsGetParams(packed middleware.Parameters) (
 	}
 	{
 		key := middleware.ParameterKey{
-			Name: "offset",
+			Name: "page",
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.Offset = v.(OptInt)
+			params.Page = v.(OptInt)
 		}
 	}
 	{
 		key := middleware.ParameterKey{
-			Name: "limit",
+			Name: "per_page",
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.Limit = v.(OptInt)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "sort",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Sort = v.(OptV1OrganizationsVerificationsGetSort)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "direction",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Direction = v.(OptV1OrganizationsVerificationsGetDirection)
+			params.PerPage = v.(OptInt)
 		}
 	}
 	return params
@@ -3027,22 +2057,22 @@ func decodeV1OrganizationsVerificationsGetParams(args [0]string, argsEscaped boo
 			Err:  err,
 		}
 	}
-	// Set default value for query: offset.
+	// Set default value for query: page.
 	{
 		val := int(0)
-		params.Offset.SetTo(val)
+		params.Page.SetTo(val)
 	}
-	// Decode query: offset.
+	// Decode query: page.
 	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "offset",
+			Name:    "page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotOffsetVal int
+				var paramsDotPageVal int
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
@@ -3054,18 +2084,18 @@ func decodeV1OrganizationsVerificationsGetParams(args [0]string, argsEscaped boo
 						return err
 					}
 
-					paramsDotOffsetVal = c
+					paramsDotPageVal = c
 					return nil
 				}(); err != nil {
 					return err
 				}
-				params.Offset.SetTo(paramsDotOffsetVal)
+				params.Page.SetTo(paramsDotPageVal)
 				return nil
 			}); err != nil {
 				return err
 			}
 			if err := func() error {
-				if value, ok := params.Offset.Get(); ok {
+				if value, ok := params.Page.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
@@ -3092,27 +2122,27 @@ func decodeV1OrganizationsVerificationsGetParams(args [0]string, argsEscaped boo
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "offset",
+			Name: "page",
 			In:   "query",
 			Err:  err,
 		}
 	}
-	// Set default value for query: limit.
+	// Set default value for query: per_page.
 	{
 		val := int(100)
-		params.Limit.SetTo(val)
+		params.PerPage.SetTo(val)
 	}
-	// Decode query: limit.
+	// Decode query: per_page.
 	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "limit",
+			Name:    "per_page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotLimitVal int
+				var paramsDotPerPageVal int
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
@@ -3124,22 +2154,22 @@ func decodeV1OrganizationsVerificationsGetParams(args [0]string, argsEscaped boo
 						return err
 					}
 
-					paramsDotLimitVal = c
+					paramsDotPerPageVal = c
 					return nil
 				}(); err != nil {
 					return err
 				}
-				params.Limit.SetTo(paramsDotLimitVal)
+				params.PerPage.SetTo(paramsDotPerPageVal)
 				return nil
 			}); err != nil {
 				return err
 			}
 			if err := func() error {
-				if value, ok := params.Limit.Get(); ok {
+				if value, ok := params.PerPage.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
-							Min:           0,
+							Min:           1,
 							MaxSet:        true,
 							Max:           100,
 							MinExclusive:  false,
@@ -3162,129 +2192,7 @@ func decodeV1OrganizationsVerificationsGetParams(args [0]string, argsEscaped boo
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "limit",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: sort.
-	{
-		val := V1OrganizationsVerificationsGetSort("id")
-		params.Sort.SetTo(val)
-	}
-	// Decode query: sort.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "sort",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotSortVal V1OrganizationsVerificationsGetSort
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotSortVal = V1OrganizationsVerificationsGetSort(c)
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Sort.SetTo(paramsDotSortVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Sort.Get(); ok {
-					if err := func() error {
-						if err := value.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "sort",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: direction.
-	{
-		val := V1OrganizationsVerificationsGetDirection("ASC")
-		params.Direction.SetTo(val)
-	}
-	// Decode query: direction.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "direction",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotDirectionVal V1OrganizationsVerificationsGetDirection
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDirectionVal = V1OrganizationsVerificationsGetDirection(c)
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Direction.SetTo(paramsDotDirectionVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Direction.Get(); ok {
-					if err := func() error {
-						if err := value.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "direction",
+			Name: "per_page",
 			In:   "query",
 			Err:  err,
 		}
@@ -3775,9 +2683,6 @@ func decodeV1SuggestCompanyGetParams(args [0]string, argsEscaped bool, r *http.R
 
 // V1TendersGetParams is parameters of GET /v1/tenders operation.
 type V1TendersGetParams struct {
-	// Фильтрует результат и включает только
-	// верифицированные тендеры.
-	Verified OptBool
 	// Номер страницы.
 	Page OptInt
 	// Количество элементов на странице.
@@ -3785,15 +2690,6 @@ type V1TendersGetParams struct {
 }
 
 func unpackV1TendersGetParams(packed middleware.Parameters) (params V1TendersGetParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "verified",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Verified = v.(OptBool)
-		}
-	}
 	{
 		key := middleware.ParameterKey{
 			Name: "page",
@@ -3817,52 +2713,6 @@ func unpackV1TendersGetParams(packed middleware.Parameters) (params V1TendersGet
 
 func decodeV1TendersGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1TendersGetParams, _ error) {
 	q := uri.NewQueryDecoder(r.URL.Query())
-	// Set default value for query: verified.
-	{
-		val := bool(true)
-		params.Verified.SetTo(val)
-	}
-	// Decode query: verified.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "verified",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotVerifiedVal bool
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToBool(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotVerifiedVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Verified.SetTo(paramsDotVerifiedVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "verified",
-			In:   "query",
-			Err:  err,
-		}
-	}
 	// Set default value for query: page.
 	{
 		val := int(0)
@@ -4645,18 +3495,10 @@ func decodeV1TendersTenderIDRespondPostParams(args [1]string, argsEscaped bool, 
 type V1TendersVerificationsGetParams struct {
 	// Фильтрует результат по статусам.
 	Status []VerificationStatus
-	// Сдвиг начала каждой страницы на указанное количество
-	// единиц.
-	Offset OptInt
-	// Максимальное количество объектов, которое может
-	// вернуть запрос.
-	Limit OptInt
-	// Определяет атрибут, по которому сортируются элементы.
-	Sort OptV1TendersVerificationsGetSort
-	// Направление сортировки результатов.
-	// Это может быть либо сортировка по возрастанию (ASC),
-	// либо сортировка по убыванию (DESC).
-	Direction OptV1TendersVerificationsGetDirection
+	// Номер страницы.
+	Page OptInt
+	// Количество элементов на странице.
+	PerPage OptInt
 }
 
 func unpackV1TendersVerificationsGetParams(packed middleware.Parameters) (params V1TendersVerificationsGetParams) {
@@ -4671,38 +3513,20 @@ func unpackV1TendersVerificationsGetParams(packed middleware.Parameters) (params
 	}
 	{
 		key := middleware.ParameterKey{
-			Name: "offset",
+			Name: "page",
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.Offset = v.(OptInt)
+			params.Page = v.(OptInt)
 		}
 	}
 	{
 		key := middleware.ParameterKey{
-			Name: "limit",
+			Name: "per_page",
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.Limit = v.(OptInt)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "sort",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Sort = v.(OptV1TendersVerificationsGetSort)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "direction",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Direction = v.(OptV1TendersVerificationsGetDirection)
+			params.PerPage = v.(OptInt)
 		}
 	}
 	return params
@@ -4775,22 +3599,22 @@ func decodeV1TendersVerificationsGetParams(args [0]string, argsEscaped bool, r *
 			Err:  err,
 		}
 	}
-	// Set default value for query: offset.
+	// Set default value for query: page.
 	{
 		val := int(0)
-		params.Offset.SetTo(val)
+		params.Page.SetTo(val)
 	}
-	// Decode query: offset.
+	// Decode query: page.
 	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "offset",
+			Name:    "page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotOffsetVal int
+				var paramsDotPageVal int
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
@@ -4802,18 +3626,18 @@ func decodeV1TendersVerificationsGetParams(args [0]string, argsEscaped bool, r *
 						return err
 					}
 
-					paramsDotOffsetVal = c
+					paramsDotPageVal = c
 					return nil
 				}(); err != nil {
 					return err
 				}
-				params.Offset.SetTo(paramsDotOffsetVal)
+				params.Page.SetTo(paramsDotPageVal)
 				return nil
 			}); err != nil {
 				return err
 			}
 			if err := func() error {
-				if value, ok := params.Offset.Get(); ok {
+				if value, ok := params.Page.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
@@ -4840,27 +3664,27 @@ func decodeV1TendersVerificationsGetParams(args [0]string, argsEscaped bool, r *
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "offset",
+			Name: "page",
 			In:   "query",
 			Err:  err,
 		}
 	}
-	// Set default value for query: limit.
+	// Set default value for query: per_page.
 	{
 		val := int(100)
-		params.Limit.SetTo(val)
+		params.PerPage.SetTo(val)
 	}
-	// Decode query: limit.
+	// Decode query: per_page.
 	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "limit",
+			Name:    "per_page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotLimitVal int
+				var paramsDotPerPageVal int
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
@@ -4872,22 +3696,22 @@ func decodeV1TendersVerificationsGetParams(args [0]string, argsEscaped bool, r *
 						return err
 					}
 
-					paramsDotLimitVal = c
+					paramsDotPerPageVal = c
 					return nil
 				}(); err != nil {
 					return err
 				}
-				params.Limit.SetTo(paramsDotLimitVal)
+				params.PerPage.SetTo(paramsDotPerPageVal)
 				return nil
 			}); err != nil {
 				return err
 			}
 			if err := func() error {
-				if value, ok := params.Limit.Get(); ok {
+				if value, ok := params.PerPage.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
-							Min:           0,
+							Min:           1,
 							MaxSet:        true,
 							Max:           100,
 							MinExclusive:  false,
@@ -4910,129 +3734,7 @@ func decodeV1TendersVerificationsGetParams(args [0]string, argsEscaped bool, r *
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "limit",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: sort.
-	{
-		val := V1TendersVerificationsGetSort("id")
-		params.Sort.SetTo(val)
-	}
-	// Decode query: sort.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "sort",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotSortVal V1TendersVerificationsGetSort
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotSortVal = V1TendersVerificationsGetSort(c)
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Sort.SetTo(paramsDotSortVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Sort.Get(); ok {
-					if err := func() error {
-						if err := value.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "sort",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: direction.
-	{
-		val := V1TendersVerificationsGetDirection("ASC")
-		params.Direction.SetTo(val)
-	}
-	// Decode query: direction.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "direction",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotDirectionVal V1TendersVerificationsGetDirection
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDirectionVal = V1TendersVerificationsGetDirection(c)
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Direction.SetTo(paramsDotDirectionVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Direction.Get(); ok {
-					if err := func() error {
-						if err := value.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "direction",
+			Name: "per_page",
 			In:   "query",
 			Err:  err,
 		}
@@ -5044,18 +3746,10 @@ func decodeV1TendersVerificationsGetParams(args [0]string, argsEscaped bool, r *
 type V1UsersGetParams struct {
 	// Фильтрует результат по ролям пользователей.
 	Role []Role
-	// Сдвиг начала каждой страницы на указанное количество
-	// единиц.
-	Offset OptInt
-	// Максимальное количество объектов, которое может
-	// вернуть запрос.
-	Limit OptInt
-	// Определяет атрибут, по которому сортируются элементы.
-	Sort OptV1UsersGetSort
-	// Направление сортировки результатов.
-	// Это может быть либо сортировка по возрастанию (ASC),
-	// либо сортировка по убыванию (DESC).
-	Direction OptV1UsersGetDirection
+	// Номер страницы.
+	Page OptInt
+	// Количество элементов на странице.
+	PerPage OptInt
 }
 
 func unpackV1UsersGetParams(packed middleware.Parameters) (params V1UsersGetParams) {
@@ -5070,38 +3764,20 @@ func unpackV1UsersGetParams(packed middleware.Parameters) (params V1UsersGetPara
 	}
 	{
 		key := middleware.ParameterKey{
-			Name: "offset",
+			Name: "page",
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.Offset = v.(OptInt)
+			params.Page = v.(OptInt)
 		}
 	}
 	{
 		key := middleware.ParameterKey{
-			Name: "limit",
+			Name: "per_page",
 			In:   "query",
 		}
 		if v, ok := packed[key]; ok {
-			params.Limit = v.(OptInt)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "sort",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Sort = v.(OptV1UsersGetSort)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "direction",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Direction = v.(OptV1UsersGetDirection)
+			params.PerPage = v.(OptInt)
 		}
 	}
 	return params
@@ -5174,22 +3850,22 @@ func decodeV1UsersGetParams(args [0]string, argsEscaped bool, r *http.Request) (
 			Err:  err,
 		}
 	}
-	// Set default value for query: offset.
+	// Set default value for query: page.
 	{
 		val := int(0)
-		params.Offset.SetTo(val)
+		params.Page.SetTo(val)
 	}
-	// Decode query: offset.
+	// Decode query: page.
 	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "offset",
+			Name:    "page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotOffsetVal int
+				var paramsDotPageVal int
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
@@ -5201,18 +3877,18 @@ func decodeV1UsersGetParams(args [0]string, argsEscaped bool, r *http.Request) (
 						return err
 					}
 
-					paramsDotOffsetVal = c
+					paramsDotPageVal = c
 					return nil
 				}(); err != nil {
 					return err
 				}
-				params.Offset.SetTo(paramsDotOffsetVal)
+				params.Page.SetTo(paramsDotPageVal)
 				return nil
 			}); err != nil {
 				return err
 			}
 			if err := func() error {
-				if value, ok := params.Offset.Get(); ok {
+				if value, ok := params.Page.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
@@ -5239,27 +3915,27 @@ func decodeV1UsersGetParams(args [0]string, argsEscaped bool, r *http.Request) (
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "offset",
+			Name: "page",
 			In:   "query",
 			Err:  err,
 		}
 	}
-	// Set default value for query: limit.
+	// Set default value for query: per_page.
 	{
 		val := int(100)
-		params.Limit.SetTo(val)
+		params.PerPage.SetTo(val)
 	}
-	// Decode query: limit.
+	// Decode query: per_page.
 	if err := func() error {
 		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "limit",
+			Name:    "per_page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.HasParam(cfg); err == nil {
 			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotLimitVal int
+				var paramsDotPerPageVal int
 				if err := func() error {
 					val, err := d.DecodeValue()
 					if err != nil {
@@ -5271,22 +3947,22 @@ func decodeV1UsersGetParams(args [0]string, argsEscaped bool, r *http.Request) (
 						return err
 					}
 
-					paramsDotLimitVal = c
+					paramsDotPerPageVal = c
 					return nil
 				}(); err != nil {
 					return err
 				}
-				params.Limit.SetTo(paramsDotLimitVal)
+				params.PerPage.SetTo(paramsDotPerPageVal)
 				return nil
 			}); err != nil {
 				return err
 			}
 			if err := func() error {
-				if value, ok := params.Limit.Get(); ok {
+				if value, ok := params.PerPage.Get(); ok {
 					if err := func() error {
 						if err := (validate.Int{
 							MinSet:        true,
-							Min:           0,
+							Min:           1,
 							MaxSet:        true,
 							Max:           100,
 							MinExclusive:  false,
@@ -5309,129 +3985,7 @@ func decodeV1UsersGetParams(args [0]string, argsEscaped bool, r *http.Request) (
 		return nil
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
-			Name: "limit",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: sort.
-	{
-		val := V1UsersGetSort("id")
-		params.Sort.SetTo(val)
-	}
-	// Decode query: sort.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "sort",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotSortVal V1UsersGetSort
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotSortVal = V1UsersGetSort(c)
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Sort.SetTo(paramsDotSortVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Sort.Get(); ok {
-					if err := func() error {
-						if err := value.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "sort",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: direction.
-	{
-		val := V1UsersGetDirection("ASC")
-		params.Direction.SetTo(val)
-	}
-	// Decode query: direction.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "direction",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotDirectionVal V1UsersGetDirection
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToString(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotDirectionVal = V1UsersGetDirection(c)
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Direction.SetTo(paramsDotDirectionVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Direction.Get(); ok {
-					if err := func() error {
-						if err := value.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "direction",
+			Name: "per_page",
 			In:   "query",
 			Err:  err,
 		}

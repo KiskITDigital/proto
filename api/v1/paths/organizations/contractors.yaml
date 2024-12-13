@@ -3,21 +3,23 @@ get:
     - organizations
   summary: Get contractors
   description: |-
-    Получить всех исполнителей (verifed=true, banned=false)
+    Получить всех исполнителей статусом approve
   parameters:
-    - name: offset
+    - name: page
       in: query
-      description: Сдвиг начала каждой страницы на указанное количество единиц.
+      description: Номер страницы
+      required: false
       schema:
         type: integer
-        minimum: 0
         default: 0
-    - name: limit
+        minimum: 0
+    - name: per_page
       in: query
-      description: Максимальное количество объектов, которое может вернуть запрос.
+      description: Количество элементов на странице
+      required: false
       schema:
         type: integer
-        minimum: 0
+        minimum: 1
         maximum: 100
         default: 100
   responses:
@@ -29,10 +31,13 @@ get:
             type: object
             required:
               - data
+              - pagination
             properties:
               data:
                 type: array
                 items:
                   $ref: "../../schemas/Organization.yaml"
+              pagination:
+                $ref: "../../schemas/Pagination.yaml"
     default:
       $ref: "../../responses/Error.yaml"

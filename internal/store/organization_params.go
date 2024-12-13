@@ -5,8 +5,13 @@ import "gitlab.ubrato.ru/ubrato/core/internal/models"
 type OrganizationGetParams struct {
 	IsContractor    models.Optional[bool]
 	OrganizationIDs []int
-	Offset          uint64
-	Limit           uint64
+	Offset          models.Optional[uint64]
+	Limit           models.Optional[uint64]
+}
+
+type OrganizationGetCountParams struct {
+	IsContractor    models.Optional[bool]
+	OrganizationIDs []int
 }
 
 type OrganizationCreateParams struct {

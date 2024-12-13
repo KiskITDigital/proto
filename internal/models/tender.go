@@ -5,11 +5,12 @@ import (
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/pagination"
 )
 
-type TendersRes struct {
-	Tenders []Tender
-	Pagination Pagination
+type TendersPagination struct {
+	Tenders    []Tender
+	Pagination pagination.Pagination
 }
 
 type Tender struct {

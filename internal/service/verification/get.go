@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/pagination"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/service"
 
@@ -36,16 +38,23 @@ func (s *Service) GetByID(ctx context.Context, requestID int) (models.Verificati
 	return request, nil
 }
 
-func (s *Service) Get(ctx context.Context, params service.VerificationRequestsObjectGetParams) ([]models.VerificationRequest[models.VerificationObject], error) {
+func (s *Service) Get(ctx context.Context, params service.VerificationRequestsObjectGetParams) (models.VerificationRequestPagination[models.VerificationObject], error) {
 	requests, err := s.verificationStore.GetWithEmptyObject(ctx, s.psql.DB(), store.VerificationRequestsObjectGetParams{
 		ObjectType: models.NewOptional(params.ObjectType),
 		ObjectID:   params.ObjectID,
 		Status:     params.Status,
-		Offset:     params.Offset,
-		Limit:      params.Limit,
-	})
+		Limit:      models.NewOptional(params.PerPage),
+		Offset:     models.Optional[uint64]{Value: params.Page * params.PerPage, Set: (params.Page * params.PerPage) != 0}})
 	if err != nil {
-		return nil, fmt.Errorf("get object req: %w", err)
+		return models.VerificationRequestPagination[models.VerificationObject]{}, fmt.Errorf("get object req: %w", err)
+	}
+
+	count, err := s.verificationStore.Count(ctx, s.psql.DB(), store.VerificationRequestsObjectGetCountParams{
+		ObjectType: models.NewOptional(params.ObjectType),
+		ObjectID:   params.ObjectID,
+		Status:     params.Status})
+	if err != nil {
+		return models.VerificationRequestPagination[models.VerificationObject]{}, fmt.Errorf("get count tenders: %w", err)
 	}
 
 	var objectIDs []int
@@ -58,7 +67,7 @@ func (s *Service) Get(ctx context.Context, params service.VerificationRequestsOb
 		organizations, err := s.organizationStore.Get(ctx, s.psql.DB(), store.OrganizationGetParams{
 			OrganizationIDs: objectIDs})
 		if err != nil {
-			return nil, fmt.Errorf("get tenders: %w", err)
+			return models.VerificationRequestPagination[models.VerificationObject]{}, fmt.Errorf("get tenders: %w", err)
 		}
 
 		organizationMap := make(map[int]models.Organization)
@@ -76,7 +85,7 @@ func (s *Service) Get(ctx context.Context, params service.VerificationRequestsOb
 		tenders, err := s.tenderStore.List(ctx, s.psql.DB(), store.TenderListParams{
 			TenderIDs: models.Optional[[]int]{Value: objectIDs, Set: true}})
 		if err != nil {
-			return nil, fmt.Errorf("get tenders: %w", err)
+			return models.VerificationRequestPagination[models.VerificationObject]{}, fmt.Errorf("get tenders: %w", err)
 		}
 
 		tenderMap := make(map[int]models.Tender)
@@ -92,9 +101,13 @@ func (s *Service) Get(ctx context.Context, params service.VerificationRequestsOb
 
 	case models.ObjectTypeComment:
 		// return s.verificationStore.GetCommentRequests(ctx, s.psql.DB(), storeParams)
+		return models.VerificationRequestPagination[models.VerificationObject]{}, cerr.Wrap(fmt.Errorf("not impl"), cerr.CodeInternal, "func not impl", nil)
 	default:
-		return nil, fmt.Errorf("invalid object type: %v", params.ObjectType)
+		return models.VerificationRequestPagination[models.VerificationObject]{}, fmt.Errorf("invalid object type: %v", params.ObjectType)
 	}
 
-	return requests, nil
+	return models.VerificationRequestPagination[models.VerificationObject]{
+		VerificationRequests: requests,
+		Pagination:           pagination.New(params.Page, params.PerPage, uint64(count)),
+	}, nil
 }

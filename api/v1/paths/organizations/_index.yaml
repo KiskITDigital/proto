@@ -13,44 +13,27 @@ get:
   parameters:
     - name: verified
       in: query
-      description: Фильтрует результат и включает только верифицированные компании.
+      description: Фильтрует результат и включает только верифицированные компании(не работает)
       schema:
         type: boolean
         default: true
-    - name: offset
+    - name: page
       in: query
-      description: Сдвиг начала каждой страницы на указанное количество единиц.
+      description: Номер страницы
+      required: false
       schema:
         type: integer
-        minimum: 0
         default: 0
-    - name: limit
+        minimum: 0
+    - name: per_page
       in: query
-      description: Максимальное количество объектов, которое может вернуть запрос.
+      description: Количество элементов на странице
+      required: false
       schema:
         type: integer
-        minimum: 0
+        minimum: 1
         maximum: 100
         default: 100
-    - name: sort
-      in: query
-      description: Определяет атрибут, по которому сортируются элементы.
-      schema:
-        type: string
-        enum:
-          - id
-        default: id
-    - name: direction
-      in: query
-      description: |-
-        Направление сортировки результатов.
-        Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
-      schema:
-        type: string
-        enum:
-          - ASC
-          - DESC
-        default: ASC
   responses:
     '200':
       description: Success
@@ -60,15 +43,13 @@ get:
             type: object
             required:
               - data
+              - pagination
             properties:
               data:
-                type: object
-                required: 
-                  - organizations
-                properties:
-                  organizations:
-                    type: array
-                    items:
-                      $ref: "../../schemas/Organization.yaml"
+                type: array
+                items:
+                  $ref: "../../schemas/Organization.yaml"
+              pagination:
+                $ref: "../../schemas/Pagination.yaml"
     default:
       $ref: "../../responses/Error.yaml"

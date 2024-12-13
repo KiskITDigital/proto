@@ -8,7 +8,13 @@ import (
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/pagination"
 )
+
+type VerificationRequestPagination[T VerificationObject] struct {
+	VerificationRequests []VerificationRequest[T]
+	Pagination           pagination.Pagination
+}
 
 type Attachment struct {
 	Name Optional[string] `json:"name"`

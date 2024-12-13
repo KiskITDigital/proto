@@ -66,7 +66,7 @@ type Invoker interface {
 	// Lists all available objects.
 	//
 	// GET /v1/catalog/objects
-	V1CatalogObjectsGet(ctx context.Context, params V1CatalogObjectsGetParams) (V1CatalogObjectsGetRes, error)
+	V1CatalogObjectsGet(ctx context.Context) (V1CatalogObjectsGetRes, error)
 	// V1CatalogObjectsPost invokes POST /v1/catalog/objects operation.
 	//
 	// Creates catalog object
@@ -88,7 +88,7 @@ type Invoker interface {
 	// Lists all available services.
 	//
 	// GET /v1/catalog/services
-	V1CatalogServicesGet(ctx context.Context, params V1CatalogServicesGetParams) (V1CatalogServicesGetRes, error)
+	V1CatalogServicesGet(ctx context.Context) (V1CatalogServicesGetRes, error)
 	// V1CatalogServicesPost invokes POST /v1/catalog/services operation.
 	//
 	// Creates catalog service
@@ -113,7 +113,7 @@ type Invoker interface {
 	V1EmployeePost(ctx context.Context, request *V1EmployeePostReq) (V1EmployeePostRes, error)
 	// V1OrganizationsContractorsGet invokes GET /v1/organizations/contractors operation.
 	//
-	// Получить всех исполнителей (verifed=true, banned=false).
+	// Получить всех исполнителей статусом approve.
 	//
 	// GET /v1/organizations/contractors
 	V1OrganizationsContractorsGet(ctx context.Context, params V1OrganizationsContractorsGetParams) (V1OrganizationsContractorsGetRes, error)
@@ -1060,12 +1060,12 @@ func (c *Client) sendV1CatalogCitiesPost(ctx context.Context, request *V1Catalog
 // Lists all available objects.
 //
 // GET /v1/catalog/objects
-func (c *Client) V1CatalogObjectsGet(ctx context.Context, params V1CatalogObjectsGetParams) (V1CatalogObjectsGetRes, error) {
-	res, err := c.sendV1CatalogObjectsGet(ctx, params)
+func (c *Client) V1CatalogObjectsGet(ctx context.Context) (V1CatalogObjectsGetRes, error) {
+	res, err := c.sendV1CatalogObjectsGet(ctx)
 	return res, err
 }
 
-func (c *Client) sendV1CatalogObjectsGet(ctx context.Context, params V1CatalogObjectsGetParams) (res V1CatalogObjectsGetRes, err error) {
+func (c *Client) sendV1CatalogObjectsGet(ctx context.Context) (res V1CatalogObjectsGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/v1/catalog/objects"),
@@ -1103,78 +1103,6 @@ func (c *Client) sendV1CatalogObjectsGet(ctx context.Context, params V1CatalogOb
 	var pathParts [1]string
 	pathParts[0] = "/v1/catalog/objects"
 	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeQueryParams"
-	q := uri.NewQueryEncoder()
-	{
-		// Encode "offset" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "offset",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Offset.Get(); ok {
-				return e.EncodeValue(conv.IntToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "limit" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "limit",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Limit.Get(); ok {
-				return e.EncodeValue(conv.IntToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "sort" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "sort",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Sort.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "direction" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "direction",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Direction.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "GET", u)
@@ -1454,12 +1382,12 @@ func (c *Client) sendV1CatalogRegionsPost(ctx context.Context, request *V1Catalo
 // Lists all available services.
 //
 // GET /v1/catalog/services
-func (c *Client) V1CatalogServicesGet(ctx context.Context, params V1CatalogServicesGetParams) (V1CatalogServicesGetRes, error) {
-	res, err := c.sendV1CatalogServicesGet(ctx, params)
+func (c *Client) V1CatalogServicesGet(ctx context.Context) (V1CatalogServicesGetRes, error) {
+	res, err := c.sendV1CatalogServicesGet(ctx)
 	return res, err
 }
 
-func (c *Client) sendV1CatalogServicesGet(ctx context.Context, params V1CatalogServicesGetParams) (res V1CatalogServicesGetRes, err error) {
+func (c *Client) sendV1CatalogServicesGet(ctx context.Context) (res V1CatalogServicesGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/v1/catalog/services"),
@@ -1497,78 +1425,6 @@ func (c *Client) sendV1CatalogServicesGet(ctx context.Context, params V1CatalogS
 	var pathParts [1]string
 	pathParts[0] = "/v1/catalog/services"
 	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeQueryParams"
-	q := uri.NewQueryEncoder()
-	{
-		// Encode "offset" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "offset",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Offset.Get(); ok {
-				return e.EncodeValue(conv.IntToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "limit" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "limit",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Limit.Get(); ok {
-				return e.EncodeValue(conv.IntToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "sort" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "sort",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Sort.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "direction" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "direction",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Direction.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	u.RawQuery = q.Values().Encode()
 
 	stage = "EncodeRequest"
 	r, err := ht.NewRequest(ctx, "GET", u)
@@ -1814,15 +1670,15 @@ func (c *Client) sendV1CommentsVerificationsGet(ctx context.Context, params V1Co
 		}
 	}
 	{
-		// Encode "offset" parameter.
+		// Encode "page" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "offset",
+			Name:    "page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Offset.Get(); ok {
+			if val, ok := params.Page.Get(); ok {
 				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
@@ -1831,50 +1687,16 @@ func (c *Client) sendV1CommentsVerificationsGet(ctx context.Context, params V1Co
 		}
 	}
 	{
-		// Encode "limit" parameter.
+		// Encode "per_page" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "limit",
+			Name:    "per_page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Limit.Get(); ok {
+			if val, ok := params.PerPage.Get(); ok {
 				return e.EncodeValue(conv.IntToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "sort" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "sort",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Sort.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "direction" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "direction",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Direction.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
 			}
 			return nil
 		}); err != nil {
@@ -2014,7 +1836,7 @@ func (c *Client) sendV1EmployeePost(ctx context.Context, request *V1EmployeePost
 
 // V1OrganizationsContractorsGet invokes GET /v1/organizations/contractors operation.
 //
-// Получить всех исполнителей (verifed=true, banned=false).
+// Получить всех исполнителей статусом approve.
 //
 // GET /v1/organizations/contractors
 func (c *Client) V1OrganizationsContractorsGet(ctx context.Context, params V1OrganizationsContractorsGetParams) (V1OrganizationsContractorsGetRes, error) {
@@ -2064,15 +1886,15 @@ func (c *Client) sendV1OrganizationsContractorsGet(ctx context.Context, params V
 	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
 	{
-		// Encode "offset" parameter.
+		// Encode "page" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "offset",
+			Name:    "page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Offset.Get(); ok {
+			if val, ok := params.Page.Get(); ok {
 				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
@@ -2081,15 +1903,15 @@ func (c *Client) sendV1OrganizationsContractorsGet(ctx context.Context, params V
 		}
 	}
 	{
-		// Encode "limit" parameter.
+		// Encode "per_page" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "limit",
+			Name:    "per_page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Limit.Get(); ok {
+			if val, ok := params.PerPage.Get(); ok {
 				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
@@ -2194,15 +2016,15 @@ func (c *Client) sendV1OrganizationsGet(ctx context.Context, params V1Organizati
 		}
 	}
 	{
-		// Encode "offset" parameter.
+		// Encode "page" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "offset",
+			Name:    "page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Offset.Get(); ok {
+			if val, ok := params.Page.Get(); ok {
 				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
@@ -2211,50 +2033,16 @@ func (c *Client) sendV1OrganizationsGet(ctx context.Context, params V1Organizati
 		}
 	}
 	{
-		// Encode "limit" parameter.
+		// Encode "per_page" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "limit",
+			Name:    "per_page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Limit.Get(); ok {
+			if val, ok := params.PerPage.Get(); ok {
 				return e.EncodeValue(conv.IntToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "sort" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "sort",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Sort.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "direction" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "direction",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Direction.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
 			}
 			return nil
 		}); err != nil {
@@ -4077,15 +3865,15 @@ func (c *Client) sendV1OrganizationsVerificationsGet(ctx context.Context, params
 		}
 	}
 	{
-		// Encode "offset" parameter.
+		// Encode "page" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "offset",
+			Name:    "page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Offset.Get(); ok {
+			if val, ok := params.Page.Get(); ok {
 				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
@@ -4094,50 +3882,16 @@ func (c *Client) sendV1OrganizationsVerificationsGet(ctx context.Context, params
 		}
 	}
 	{
-		// Encode "limit" parameter.
+		// Encode "per_page" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "limit",
+			Name:    "per_page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Limit.Get(); ok {
+			if val, ok := params.PerPage.Get(); ok {
 				return e.EncodeValue(conv.IntToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "sort" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "sort",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Sort.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "direction" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "direction",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Direction.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
 			}
 			return nil
 		}); err != nil {
@@ -4939,23 +4693,6 @@ func (c *Client) sendV1TendersGet(ctx context.Context, params V1TendersGetParams
 
 	stage = "EncodeQueryParams"
 	q := uri.NewQueryEncoder()
-	{
-		// Encode "verified" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "verified",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Verified.Get(); ok {
-				return e.EncodeValue(conv.BoolToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
 	{
 		// Encode "page" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
@@ -6063,15 +5800,15 @@ func (c *Client) sendV1TendersVerificationsGet(ctx context.Context, params V1Ten
 		}
 	}
 	{
-		// Encode "offset" parameter.
+		// Encode "page" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "offset",
+			Name:    "page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Offset.Get(); ok {
+			if val, ok := params.Page.Get(); ok {
 				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
@@ -6080,50 +5817,16 @@ func (c *Client) sendV1TendersVerificationsGet(ctx context.Context, params V1Ten
 		}
 	}
 	{
-		// Encode "limit" parameter.
+		// Encode "per_page" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "limit",
+			Name:    "per_page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Limit.Get(); ok {
+			if val, ok := params.PerPage.Get(); ok {
 				return e.EncodeValue(conv.IntToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "sort" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "sort",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Sort.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "direction" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "direction",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Direction.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
 			}
 			return nil
 		}); err != nil {
@@ -6415,15 +6118,15 @@ func (c *Client) sendV1UsersGet(ctx context.Context, params V1UsersGetParams) (r
 		}
 	}
 	{
-		// Encode "offset" parameter.
+		// Encode "page" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "offset",
+			Name:    "page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Offset.Get(); ok {
+			if val, ok := params.Page.Get(); ok {
 				return e.EncodeValue(conv.IntToString(val))
 			}
 			return nil
@@ -6432,50 +6135,16 @@ func (c *Client) sendV1UsersGet(ctx context.Context, params V1UsersGetParams) (r
 		}
 	}
 	{
-		// Encode "limit" parameter.
+		// Encode "per_page" parameter.
 		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "limit",
+			Name:    "per_page",
 			Style:   uri.QueryStyleForm,
 			Explode: true,
 		}
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Limit.Get(); ok {
+			if val, ok := params.PerPage.Get(); ok {
 				return e.EncodeValue(conv.IntToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "sort" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "sort",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Sort.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "direction" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "direction",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Direction.Get(); ok {
-				return e.EncodeValue(conv.StringToString(string(val)))
 			}
 			return nil
 		}); err != nil {

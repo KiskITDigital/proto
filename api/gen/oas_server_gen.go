@@ -51,7 +51,7 @@ type Handler interface {
 	// Lists all available objects.
 	//
 	// GET /v1/catalog/objects
-	V1CatalogObjectsGet(ctx context.Context, params V1CatalogObjectsGetParams) (V1CatalogObjectsGetRes, error)
+	V1CatalogObjectsGet(ctx context.Context) (V1CatalogObjectsGetRes, error)
 	// V1CatalogObjectsPost implements POST /v1/catalog/objects operation.
 	//
 	// Creates catalog object
@@ -73,7 +73,7 @@ type Handler interface {
 	// Lists all available services.
 	//
 	// GET /v1/catalog/services
-	V1CatalogServicesGet(ctx context.Context, params V1CatalogServicesGetParams) (V1CatalogServicesGetRes, error)
+	V1CatalogServicesGet(ctx context.Context) (V1CatalogServicesGetRes, error)
 	// V1CatalogServicesPost implements POST /v1/catalog/services operation.
 	//
 	// Creates catalog service
@@ -98,7 +98,7 @@ type Handler interface {
 	V1EmployeePost(ctx context.Context, req *V1EmployeePostReq) (V1EmployeePostRes, error)
 	// V1OrganizationsContractorsGet implements GET /v1/organizations/contractors operation.
 	//
-	// Получить всех исполнителей (verifed=true, banned=false).
+	// Получить всех исполнителей статусом approve.
 	//
 	// GET /v1/organizations/contractors
 	V1OrganizationsContractorsGet(ctx context.Context, params V1OrganizationsContractorsGetParams) (V1OrganizationsContractorsGetRes, error)

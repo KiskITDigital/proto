@@ -8,6 +8,7 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/contextor"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/pagination"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/service"
 )
@@ -24,22 +25,17 @@ func (h *Handler) V1TendersTenderIDGet(ctx context.Context, params api.V1Tenders
 }
 
 func (h *Handler) V1TendersGet(ctx context.Context, params api.V1TendersGetParams) (api.V1TendersGetRes, error) {
-	if contextor.GetRole(ctx) < models.UserRoleEmployee {
-		// Только employee и выше может получать неверифицированные тендеры
-		params.Verified = api.NewOptBool(true)
-	}
-
 	tenders, err := h.tenderService.List(ctx, service.TenderListParams{
-		VerifiedOnly: params.Verified.Value,
-		Page:         uint64(params.Page.Or(models.Page)),
-		PerPage:      uint64(params.PerPage.Or(models.PerPage))})
+		VerifiedOnly: contextor.GetRole(ctx) < models.UserRoleEmployee,
+		Page:         uint64(params.Page.Or(pagination.Page)),
+		PerPage:      uint64(params.PerPage.Or(pagination.PerPage))})
 	if err != nil {
 		return nil, fmt.Errorf("get tenders: %w", err)
 	}
 
 	return &api.V1TendersGetOK{
 		Data:       convert.Slice[[]models.Tender, []api.Tender](tenders.Tenders, models.ConvertTenderModelToApi),
-		Pagination: models.ConvertPaginationToAPI(tenders.Pagination),
+		Pagination: pagination.ConvertPaginationToAPI(tenders.Pagination),
 	}, nil
 }
 
@@ -67,18 +63,17 @@ func (h *Handler) V1TendersVerificationsGet(ctx context.Context, params api.V1Te
 		return nil, cerr.ErrPermission
 	}
 
-	orgVerifications, err := h.verificationService.Get(ctx, service.VerificationRequestsObjectGetParams{
+	requests, err := h.verificationService.Get(ctx, service.VerificationRequestsObjectGetParams{
 		ObjectType: models.ObjectTypeTender,
 		Status:     convert.Slice[[]api.VerificationStatus, []models.VerificationStatus](params.Status, models.APIToVerificationStatus),
-		Offset:     uint64(params.Offset.Or(0)),
-		Limit:      uint64(params.Limit.Or(100)),
-	})
+		Page:       uint64(params.Page.Or(pagination.Page)),
+		PerPage:    uint64(params.PerPage.Or(pagination.PerPage))})
 	if err != nil {
 		return nil, fmt.Errorf("get organization verif req: %w", err)
 	}
 
 	return &api.V1TendersVerificationsGetOK{
-		Data: convert.Slice[[]models.VerificationRequest[models.VerificationObject], []api.VerificationRequest](
-			orgVerifications, models.VerificationRequestModelToApi),
+		Data:       convert.Slice[[]models.VerificationRequest[models.VerificationObject], []api.VerificationRequest](requests.VerificationRequests, models.VerificationRequestModelToApi),
+		Pagination: pagination.ConvertPaginationToAPI(requests.Pagination),
 	}, nil
 }

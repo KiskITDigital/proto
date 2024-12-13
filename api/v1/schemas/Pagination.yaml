@@ -1,9 +1,13 @@
 type: object
 required:
+  - found
   - page
   - pages
   - per_page
 properties:
+  found:
+    type: integer
+    example: 10
   page:
     type: integer
     example: 0

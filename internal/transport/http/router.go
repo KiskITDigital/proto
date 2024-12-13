@@ -49,7 +49,7 @@ type Tenders interface {
 	V1TendersTenderIDCommentsPost(ctx context.Context, req *api.V1TendersTenderIDCommentsPostReq, params api.V1TendersTenderIDCommentsPostParams) (api.V1TendersTenderIDCommentsPostRes, error)
 	V1TendersTenderIDRespondPost(ctx context.Context, req *api.V1TendersTenderIDRespondPostReq, params api.V1TendersTenderIDRespondPostParams) (api.V1TendersTenderIDRespondPostRes, error)
 	V1TendersVerificationsGet(ctx context.Context, params api.V1TendersVerificationsGetParams) (api.V1TendersVerificationsGetRes, error)
-	V1TendersTenderIDQuestionAnswerPost(ctx context.Context, req *api.V1TendersTenderIDQuestionAnswerPostReq, params api.V1TendersTenderIDQuestionAnswerPostParams) (api.V1TendersTenderIDQuestionAnswerPostRes, error) 
+	V1TendersTenderIDQuestionAnswerPost(ctx context.Context, req *api.V1TendersTenderIDQuestionAnswerPostReq, params api.V1TendersTenderIDQuestionAnswerPostParams) (api.V1TendersTenderIDQuestionAnswerPostRes, error)
 	V1TendersTenderIDQuestionAnswerGet(ctx context.Context, params api.V1TendersTenderIDQuestionAnswerGetParams) (api.V1TendersTenderIDQuestionAnswerGetRes, error)
 }
 
@@ -68,8 +68,8 @@ type Survey interface {
 }
 
 type Catalog interface {
-	V1CatalogObjectsGet(ctx context.Context, params api.V1CatalogObjectsGetParams) (api.V1CatalogObjectsGetRes, error)
-	V1CatalogServicesGet(ctx context.Context, params api.V1CatalogServicesGetParams) (api.V1CatalogServicesGetRes, error)
+	V1CatalogObjectsGet(ctx context.Context) (api.V1CatalogObjectsGetRes, error)
+	V1CatalogServicesGet(ctx context.Context) (api.V1CatalogServicesGetRes, error)
 	V1CatalogCitiesPost(ctx context.Context, req *api.V1CatalogCitiesPostReq) (api.V1CatalogCitiesPostRes, error)
 	V1CatalogRegionsPost(ctx context.Context, req *api.V1CatalogRegionsPostReq) (api.V1CatalogRegionsPostRes, error)
 	V1CatalogObjectsPost(ctx context.Context, req *api.V1CatalogObjectsPostReq) (api.V1CatalogObjectsPostRes, error)
@@ -89,7 +89,7 @@ type Organization interface {
 	V1OrganizationsOrganizationIDProfileContractorPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileContractorPutReq, params api.V1OrganizationsOrganizationIDProfileContractorPutParams) (api.V1OrganizationsOrganizationIDProfileContractorPutRes, error)
 	V1OrganizationsOrganizationIDProfileCustomerPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileCustomerPutReq, params api.V1OrganizationsOrganizationIDProfileCustomerPutParams) (api.V1OrganizationsOrganizationIDProfileCustomerPutRes, error)
 	V1OrganizationsOrganizationIDProfileContractorGet(ctx context.Context, params api.V1OrganizationsOrganizationIDProfileContractorGetParams) (api.V1OrganizationsOrganizationIDProfileContractorGetRes, error)
-	V1OrganizationsOrganizationIDProfileCustomerGet(ctx context.Context, params api.V1OrganizationsOrganizationIDProfileCustomerGetParams) (api.V1OrganizationsOrganizationIDProfileCustomerGetRes, error) 
+	V1OrganizationsOrganizationIDProfileCustomerGet(ctx context.Context, params api.V1OrganizationsOrganizationIDProfileCustomerGetParams) (api.V1OrganizationsOrganizationIDProfileCustomerGetRes, error)
 
 	V1OrganizationsPortfolioPortfolioIDDelete(ctx context.Context, params api.V1OrganizationsPortfolioPortfolioIDDeleteParams) (api.V1OrganizationsPortfolioPortfolioIDDeleteRes, error)
 	V1OrganizationsPortfolioPortfolioIDPut(ctx context.Context, req *api.V1OrganizationsPortfolioPortfolioIDPutReq, params api.V1OrganizationsPortfolioPortfolioIDPutParams) (api.V1OrganizationsPortfolioPortfolioIDPutRes, error)

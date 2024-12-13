@@ -209,13 +209,16 @@ func (s *OrganizationStore) Get(ctx context.Context, qe store.QueryExecutor, par
 		"o.is_contractor",
 		"o.is_banned",
 		"o.created_at",
-		"o.updated_at",
-	).From("organizations AS o").
-		Offset(params.Offset).
+		"o.updated_at").
+		From("organizations AS o").
 		PlaceholderFormat(sq.Dollar)
 
-	if params.Limit != 0 {
-		builder = builder.Limit(params.Limit)
+	if params.Limit.Set {
+		builder = builder.Limit(params.Limit.Value)
+	}
+
+	if params.Offset.Set {
+		builder = builder.Limit(params.Offset.Value)
 	}
 
 	if params.IsContractor.Set {

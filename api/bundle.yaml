@@ -222,12 +222,6 @@ paths:
         - bearerAuth: []
         - {}
       parameters:
-        - name: verified
-          in: query
-          description: Фильтрует результат и включает только верифицированные тендеры.
-          schema:
-            type: boolean
-            default: true
         - name: page
           in: query
           description: Номер страницы
@@ -373,40 +367,23 @@ paths:
             type: array
             items:
               $ref: '#/components/schemas/verification_status'
-        - name: offset
+        - name: page
           in: query
-          description: Сдвиг начала каждой страницы на указанное количество единиц.
+          description: Номер страницы
+          required: false
           schema:
             type: integer
-            minimum: 0
             default: 0
-        - name: limit
+            minimum: 0
+        - name: per_page
           in: query
-          description: Максимальное количество объектов, которое может вернуть запрос.
+          description: Количество элементов на странице
+          required: false
           schema:
             type: integer
-            minimum: 0
+            minimum: 1
             maximum: 100
             default: 100
-        - name: sort
-          in: query
-          description: Определяет атрибут, по которому сортируются элементы.
-          schema:
-            type: string
-            enum:
-              - id
-            default: id
-        - name: direction
-          in: query
-          description: |-
-            Направление сортировки результатов.
-            Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
-          schema:
-            type: string
-            enum:
-              - ASC
-              - DESC
-            default: ASC
       responses:
         '200':
           description: Success
@@ -416,11 +393,14 @@ paths:
                 type: object
                 required:
                   - data
+                  - pagination
                 properties:
                   data:
                     type: array
                     items:
                       $ref: '#/components/schemas/VerificationRequest'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
         default:
           $ref: '#/components/responses/Error'
   /v1/tenders/{tenderID}:
@@ -765,40 +745,23 @@ paths:
             type: array
             items:
               $ref: '#/components/schemas/role'
-        - name: offset
+        - name: page
           in: query
-          description: Сдвиг начала каждой страницы на указанное количество единиц.
+          description: Номер страницы
+          required: false
           schema:
             type: integer
-            minimum: 0
             default: 0
-        - name: limit
+            minimum: 0
+        - name: per_page
           in: query
-          description: Максимальное количество объектов, которое может вернуть запрос.
+          description: Количество элементов на странице
+          required: false
           schema:
             type: integer
-            minimum: 0
+            minimum: 1
             maximum: 100
             default: 100
-        - name: sort
-          in: query
-          description: Определяет атрибут, по которому сортируются элементы.
-          schema:
-            type: string
-            enum:
-              - id
-            default: id
-        - name: direction
-          in: query
-          description: |-
-            Направление сортировки результатов.
-            Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
-          schema:
-            type: string
-            enum:
-              - ASC
-              - DESC
-            default: ASC
       responses:
         '200':
           description: Success
@@ -815,6 +778,8 @@ paths:
                       oneOf:
                         - $ref: '#/components/schemas/RegularUser'
                         - $ref: '#/components/schemas/EmployeeUser'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
         default:
           $ref: '#/components/responses/Error'
   /v1/users/confirm/email:
@@ -1173,44 +1138,27 @@ paths:
       parameters:
         - name: verified
           in: query
-          description: Фильтрует результат и включает только верифицированные компании.
+          description: Фильтрует результат и включает только верифицированные компании(не работает)
           schema:
             type: boolean
             default: true
-        - name: offset
+        - name: page
           in: query
-          description: Сдвиг начала каждой страницы на указанное количество единиц.
+          description: Номер страницы
+          required: false
           schema:
             type: integer
-            minimum: 0
             default: 0
-        - name: limit
+            minimum: 0
+        - name: per_page
           in: query
-          description: Максимальное количество объектов, которое может вернуть запрос.
+          description: Количество элементов на странице
+          required: false
           schema:
             type: integer
-            minimum: 0
+            minimum: 1
             maximum: 100
             default: 100
-        - name: sort
-          in: query
-          description: Определяет атрибут, по которому сортируются элементы.
-          schema:
-            type: string
-            enum:
-              - id
-            default: id
-        - name: direction
-          in: query
-          description: |-
-            Направление сортировки результатов.
-            Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
-          schema:
-            type: string
-            enum:
-              - ASC
-              - DESC
-            default: ASC
       responses:
         '200':
           description: Success
@@ -1220,16 +1168,14 @@ paths:
                 type: object
                 required:
                   - data
+                  - pagination
                 properties:
                   data:
-                    type: object
-                    required:
-                      - organizations
-                    properties:
-                      organizations:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/Organization'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Organization'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
         default:
           $ref: '#/components/responses/Error'
   /v1/organizations/{organizationID}:
@@ -1268,21 +1214,23 @@ paths:
       tags:
         - organizations
       summary: Get contractors
-      description: Получить всех исполнителей (verifed=true, banned=false)
+      description: Получить всех исполнителей статусом approve
       parameters:
-        - name: offset
+        - name: page
           in: query
-          description: Сдвиг начала каждой страницы на указанное количество единиц.
+          description: Номер страницы
+          required: false
           schema:
             type: integer
-            minimum: 0
             default: 0
-        - name: limit
+            minimum: 0
+        - name: per_page
           in: query
-          description: Максимальное количество объектов, которое может вернуть запрос.
+          description: Количество элементов на странице
+          required: false
           schema:
             type: integer
-            minimum: 0
+            minimum: 1
             maximum: 100
             default: 100
       responses:
@@ -1294,11 +1242,14 @@ paths:
                 type: object
                 required:
                   - data
+                  - pagination
                 properties:
                   data:
                     type: array
                     items:
                       $ref: '#/components/schemas/Organization'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
         default:
           $ref: '#/components/responses/Error'
   /v1/organizations/{organizationID}/profile/brand:
@@ -1741,40 +1692,23 @@ paths:
             type: array
             items:
               $ref: '#/components/schemas/verification_status'
-        - name: offset
+        - name: page
           in: query
-          description: Сдвиг начала каждой страницы на указанное количество единиц.
+          description: Номер страницы
+          required: false
           schema:
             type: integer
-            minimum: 0
             default: 0
-        - name: limit
+            minimum: 0
+        - name: per_page
           in: query
-          description: Максимальное количество объектов, которое может вернуть запрос.
+          description: Количество элементов на странице
+          required: false
           schema:
             type: integer
-            minimum: 0
+            minimum: 1
             maximum: 100
             default: 100
-        - name: sort
-          in: query
-          description: Определяет атрибут, по которому сортируются элементы.
-          schema:
-            type: string
-            enum:
-              - id
-            default: id
-        - name: direction
-          in: query
-          description: |-
-            Направление сортировки результатов.
-            Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
-          schema:
-            type: string
-            enum:
-              - ASC
-              - DESC
-            default: ASC
       responses:
         '200':
           description: Success
@@ -1784,11 +1718,14 @@ paths:
                 type: object
                 required:
                   - data
+                  - pagination
                 properties:
                   data:
                     type: array
                     items:
                       $ref: '#/components/schemas/VerificationRequest'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
         default:
           $ref: '#/components/responses/Error'
   /v1/organizations/{organizationID}/verifications:
@@ -1995,41 +1932,6 @@ paths:
       description: Lists all available services
       security:
         - bearerAuth: []
-      parameters:
-        - name: offset
-          in: query
-          description: Сдвиг начала каждой страницы на указанное количество единиц.
-          schema:
-            type: integer
-            minimum: 0
-            default: 0
-        - name: limit
-          in: query
-          description: Максимальное количество объектов, которое может вернуть запрос.
-          schema:
-            type: integer
-            minimum: 0
-            maximum: 100
-            default: 100
-        - name: sort
-          in: query
-          description: Определяет атрибут, по которому сортируются элементы.
-          schema:
-            type: string
-            enum:
-              - id
-            default: id
-        - name: direction
-          in: query
-          description: |-
-            Направление сортировки результатов.
-            Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
-          schema:
-            type: string
-            enum:
-              - ASC
-              - DESC
-            default: ASC
       responses:
         '200':
           description: Success
@@ -2090,41 +1992,6 @@ paths:
       description: Lists all available objects
       security:
         - bearerAuth: []
-      parameters:
-        - name: offset
-          in: query
-          description: Сдвиг начала каждой страницы на указанное количество единиц.
-          schema:
-            type: integer
-            minimum: 0
-            default: 0
-        - name: limit
-          in: query
-          description: Максимальное количество объектов, которое может вернуть запрос.
-          schema:
-            type: integer
-            minimum: 0
-            maximum: 100
-            default: 100
-        - name: sort
-          in: query
-          description: Определяет атрибут, по которому сортируются элементы.
-          schema:
-            type: string
-            enum:
-              - id
-            default: id
-        - name: direction
-          in: query
-          description: |-
-            Направление сортировки результатов.
-            Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
-          schema:
-            type: string
-            enum:
-              - ASC
-              - DESC
-            default: ASC
       responses:
         '200':
           description: Success
@@ -2279,40 +2146,23 @@ paths:
             type: array
             items:
               $ref: '#/components/schemas/verification_status'
-        - name: offset
+        - name: page
           in: query
-          description: Сдвиг начала каждой страницы на указанное количество единиц.
+          description: Номер страницы
+          required: false
           schema:
             type: integer
-            minimum: 0
             default: 0
-        - name: limit
+            minimum: 0
+        - name: per_page
           in: query
-          description: Максимальное количество объектов, которое может вернуть запрос.
+          description: Количество элементов на странице
+          required: false
           schema:
             type: integer
-            minimum: 0
+            minimum: 1
             maximum: 100
             default: 100
-        - name: sort
-          in: query
-          description: Определяет атрибут, по которому сортируются элементы.
-          schema:
-            type: string
-            enum:
-              - id
-            default: id
-        - name: direction
-          in: query
-          description: |-
-            Направление сортировки результатов.
-            Это может быть либо сортировка по возрастанию (ASC), либо сортировка по убыванию (DESC).
-          schema:
-            type: string
-            enum:
-              - ASC
-              - DESC
-            default: ASC
       responses:
         '200':
           description: Success
@@ -2322,11 +2172,14 @@ paths:
                 type: object
                 required:
                   - data
+                  - pagination
                 properties:
                   data:
                     type: array
                     items:
                       $ref: '#/components/schemas/VerificationRequest'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
         default:
           $ref: '#/components/responses/Error'
   /v1/survey:
@@ -2778,10 +2631,14 @@ components:
     Pagination:
       type: object
       required:
+        - found
         - page
         - pages
         - per_page
       properties:
+        found:
+          type: integer
+          example: 10
         page:
           type: integer
           example: 0

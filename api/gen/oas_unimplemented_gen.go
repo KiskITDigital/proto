@@ -74,7 +74,7 @@ func (UnimplementedHandler) V1CatalogCitiesPost(ctx context.Context, req *V1Cata
 // Lists all available objects.
 //
 // GET /v1/catalog/objects
-func (UnimplementedHandler) V1CatalogObjectsGet(ctx context.Context, params V1CatalogObjectsGetParams) (r V1CatalogObjectsGetRes, _ error) {
+func (UnimplementedHandler) V1CatalogObjectsGet(ctx context.Context) (r V1CatalogObjectsGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -105,7 +105,7 @@ func (UnimplementedHandler) V1CatalogRegionsPost(ctx context.Context, req *V1Cat
 // Lists all available services.
 //
 // GET /v1/catalog/services
-func (UnimplementedHandler) V1CatalogServicesGet(ctx context.Context, params V1CatalogServicesGetParams) (r V1CatalogServicesGetRes, _ error) {
+func (UnimplementedHandler) V1CatalogServicesGet(ctx context.Context) (r V1CatalogServicesGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -142,7 +142,7 @@ func (UnimplementedHandler) V1EmployeePost(ctx context.Context, req *V1EmployeeP
 
 // V1OrganizationsContractorsGet implements GET /v1/organizations/contractors operation.
 //
-// Получить всех исполнителей (verifed=true, banned=false).
+// Получить всех исполнителей статусом approve.
 //
 // GET /v1/organizations/contractors
 func (UnimplementedHandler) V1OrganizationsContractorsGet(ctx context.Context, params V1OrganizationsContractorsGetParams) (r V1OrganizationsContractorsGetRes, _ error) {
