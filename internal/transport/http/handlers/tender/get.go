@@ -49,8 +49,8 @@ func (h *Handler) V1OrganizationsOrganizationIDTendersGet(
 		OrganizationID: models.Optional[int]{Value: params.OrganizationID, Set: true},
 		VerifiedOnly:   params.OrganizationID != organizationID,
 		WithDrafts:     organizationID == params.OrganizationID,
-		Page:           uint64(params.Page.Or(models.Page)),
-		PerPage:        uint64(params.PerPage.Or(models.PerPage)),
+		Page:           uint64(params.Page.Or(pagination.Page)),
+		PerPage:        uint64(params.PerPage.Or(pagination.PerPage)),
 	})
 	if err != nil {
 		return nil, fmt.Errorf("get tender: %w", err)
@@ -58,7 +58,7 @@ func (h *Handler) V1OrganizationsOrganizationIDTendersGet(
 
 	return &api.V1OrganizationsOrganizationIDTendersGetOK{
 		Data:       convert.Slice[[]models.Tender, []api.Tender](tenders.Tenders, models.ConvertTenderModelToApi),
-		Pagination: models.ConvertPaginationToAPI(tenders.Pagination),
+		Pagination: pagination.ConvertPaginationToAPI(tenders.Pagination),
 	}, nil
 }
 
