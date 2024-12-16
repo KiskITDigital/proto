@@ -6,6 +6,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/lib/pq"
+	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
@@ -49,7 +50,7 @@ func (s *TenderStore) Create(ctx context.Context, qe store.QueryExecutor, params
 			params.Specification,
 			pq.Array(params.Attachments),
 			params.Status,
-			params.VerificationStatus,
+			models.VerificationStatusInReview,
 			params.IsDraft,
 			params.ReceptionStart,
 			params.ReceptionEnd,
