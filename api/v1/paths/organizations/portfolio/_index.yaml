@@ -4,8 +4,6 @@ get:
   summary: Get all portfolios for contractor
   description: |-
     Получает список всех портфолио для исполнителя.
-  security:
-    - bearerAuth: []
   parameters:
     - name: organizationID
       in: path
@@ -56,12 +54,13 @@ post:
         schema:
           type: object
           required:
-            - name
+            - title
             - description
             - attachments
           properties:
-            name:
-              $ref: "../../../properties/name.yaml"
+            title:
+              type: string
+              example: Портфолио 1
             description:
               $ref: "../../../properties/description.yaml"
             attachments:

@@ -579,17 +579,6 @@ func (s *Portfolio) Validate() error {
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Name.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "name",
-			Error: err,
-		})
-	}
-	if err := func() error {
 		if s.Attachments == nil {
 			return errors.New("nil is invalid value")
 		}
@@ -1845,17 +1834,6 @@ func (s *V1OrganizationsOrganizationIDPortfolioPostReq) Validate() error {
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Name.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "name",
-			Error: err,
-		})
-	}
-	if err := func() error {
 		if s.Attachments == nil {
 			return errors.New("nil is invalid value")
 		}
@@ -2308,20 +2286,6 @@ func (s *V1OrganizationsPortfolioPortfolioIDPutReq) Validate() error {
 
 	var failures []validate.FieldError
 	if err := func() error {
-		if err := s.Name.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "name",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if s.Attachments == nil {
-			return errors.New("nil is invalid value")
-		}
 		if err := (validate.Array{
 			MinLength:    0,
 			MinLengthSet: false,

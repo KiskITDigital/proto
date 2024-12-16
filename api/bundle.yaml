@@ -1561,13 +1561,10 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - name
-                - description
-                - attachments
               properties:
-                name:
-                  $ref: '#/components/schemas/name'
+                title:
+                  type: string
+                  example: Портфолио 1
                 description:
                   $ref: '#/components/schemas/description'
                 attachments:
@@ -1595,8 +1592,6 @@ paths:
         - organizations
       summary: Get all portfolios for contractor
       description: Получает список всех портфолио для исполнителя.
-      security:
-        - bearerAuth: []
       parameters:
         - name: organizationID
           in: path
@@ -1645,12 +1640,13 @@ paths:
             schema:
               type: object
               required:
-                - name
+                - title
                 - description
                 - attachments
               properties:
-                name:
-                  $ref: '#/components/schemas/name'
+                title:
+                  type: string
+                  example: Портфолио 1
                 description:
                   $ref: '#/components/schemas/description'
                 attachments:
@@ -2866,7 +2862,6 @@ components:
             $ref: '#/components/schemas/City'
     ContractorInfo:
       type: object
-      required: null
       properties:
         description:
           $ref: '#/components/schemas/description'
@@ -2883,7 +2878,7 @@ components:
       type: object
       required:
         - id
-        - name
+        - title
         - description
         - attachments
         - created_at
@@ -2891,8 +2886,9 @@ components:
         id:
           type: integer
           example: 123
-        name:
-          $ref: '#/components/schemas/name'
+        title:
+          type: string
+          example: Портфолио
         description:
           $ref: '#/components/schemas/description'
         attachments:

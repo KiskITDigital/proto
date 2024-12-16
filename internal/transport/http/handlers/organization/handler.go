@@ -12,6 +12,7 @@ type Handler struct {
 	logger              *slog.Logger
 	organizationService OrganizationService
 	verificationService VerificationService
+	portfolioService    PortfolioService
 }
 
 type OrganizationService interface {
@@ -30,13 +31,22 @@ type VerificationService interface {
 	Get(ctx context.Context, params service.VerificationRequestsObjectGetParams) (models.VerificationRequestPagination[models.VerificationObject], error)
 }
 
+type PortfolioService interface {
+	Create(ctx context.Context, params service.PortfolioCreateParams) (models.Portfolio, error)
+	Delete(ctx context.Context, id int) error
+	Get(ctx context.Context, params service.PortfolioGetParams) ([]models.Portfolio, error)
+	Update(ctx context.Context, params service.PortfolioUpdateParams) (models.Portfolio, error)
+}
+
 func New(
 	logger *slog.Logger,
 	organizationService OrganizationService,
-	verificationService VerificationService) *Handler {
+	verificationService VerificationService,
+	portfolioService PortfolioService) *Handler {
 	return &Handler{
 		logger:              logger,
 		organizationService: organizationService,
 		verificationService: verificationService,
+		portfolioService:    portfolioService,
 	}
 }

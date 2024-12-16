@@ -44,13 +44,10 @@ put:
       application/json:
         schema:
           type: object
-          required:
-            - name
-            - description
-            - attachments
           properties:
-            name:
-              $ref: "../../../properties/name.yaml"
+            title:
+              type: string
+              example: Портфолио 1
             description:
               $ref: "../../../properties/description.yaml"
             attachments:
