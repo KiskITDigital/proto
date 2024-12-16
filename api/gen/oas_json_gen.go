@@ -2941,8 +2941,8 @@ func (s *Portfolio) encodeFields(e *jx.Encoder) {
 		e.Int(s.ID)
 	}
 	{
-		e.FieldStart("name")
-		s.Name.Encode(e)
+		e.FieldStart("title")
+		e.Str(s.Title)
 	}
 	{
 		e.FieldStart("description")
@@ -2970,7 +2970,7 @@ func (s *Portfolio) encodeFields(e *jx.Encoder) {
 
 var jsonFieldsNameOfPortfolio = [6]string{
 	0: "id",
-	1: "name",
+	1: "title",
 	2: "description",
 	3: "attachments",
 	4: "created_at",
@@ -2998,15 +2998,17 @@ func (s *Portfolio) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"id\"")
 			}
-		case "name":
+		case "title":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				if err := s.Name.Decode(d); err != nil {
+				v, err := d.Str()
+				s.Title = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"name\"")
+				return errors.Wrap(err, "decode field \"title\"")
 			}
 		case "description":
 			requiredBitSet[0] |= 1 << 2
@@ -8253,8 +8255,8 @@ func (s *V1OrganizationsOrganizationIDPortfolioPostReq) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *V1OrganizationsOrganizationIDPortfolioPostReq) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("name")
-		s.Name.Encode(e)
+		e.FieldStart("title")
+		e.Str(s.Title)
 	}
 	{
 		e.FieldStart("description")
@@ -8271,7 +8273,7 @@ func (s *V1OrganizationsOrganizationIDPortfolioPostReq) encodeFields(e *jx.Encod
 }
 
 var jsonFieldsNameOfV1OrganizationsOrganizationIDPortfolioPostReq = [3]string{
-	0: "name",
+	0: "title",
 	1: "description",
 	2: "attachments",
 }
@@ -8285,15 +8287,17 @@ func (s *V1OrganizationsOrganizationIDPortfolioPostReq) Decode(d *jx.Decoder) er
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "name":
+		case "title":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				if err := s.Name.Decode(d); err != nil {
+				v, err := d.Str()
+				s.Title = string(v)
+				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"name\"")
+				return errors.Wrap(err, "decode field \"title\"")
 			}
 		case "description":
 			requiredBitSet[0] |= 1 << 1
@@ -9978,25 +9982,31 @@ func (s *V1OrganizationsPortfolioPortfolioIDPutReq) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *V1OrganizationsPortfolioPortfolioIDPutReq) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("name")
-		s.Name.Encode(e)
-	}
-	{
-		e.FieldStart("description")
-		s.Description.Encode(e)
-	}
-	{
-		e.FieldStart("attachments")
-		e.ArrStart()
-		for _, elem := range s.Attachments {
-			elem.Encode(e)
+		if s.Title.Set {
+			e.FieldStart("title")
+			s.Title.Encode(e)
 		}
-		e.ArrEnd()
+	}
+	{
+		if s.Description.Set {
+			e.FieldStart("description")
+			s.Description.Encode(e)
+		}
+	}
+	{
+		if s.Attachments != nil {
+			e.FieldStart("attachments")
+			e.ArrStart()
+			for _, elem := range s.Attachments {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
 	}
 }
 
 var jsonFieldsNameOfV1OrganizationsPortfolioPortfolioIDPutReq = [3]string{
-	0: "name",
+	0: "title",
 	1: "description",
 	2: "attachments",
 }
@@ -10006,23 +10016,22 @@ func (s *V1OrganizationsPortfolioPortfolioIDPutReq) Decode(d *jx.Decoder) error 
 	if s == nil {
 		return errors.New("invalid: unable to decode V1OrganizationsPortfolioPortfolioIDPutReq to nil")
 	}
-	var requiredBitSet [1]uint8
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "name":
-			requiredBitSet[0] |= 1 << 0
+		case "title":
 			if err := func() error {
-				if err := s.Name.Decode(d); err != nil {
+				s.Title.Reset()
+				if err := s.Title.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"name\"")
+				return errors.Wrap(err, "decode field \"title\"")
 			}
 		case "description":
-			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
+				s.Description.Reset()
 				if err := s.Description.Decode(d); err != nil {
 					return err
 				}
@@ -10031,7 +10040,6 @@ func (s *V1OrganizationsPortfolioPortfolioIDPutReq) Decode(d *jx.Decoder) error 
 				return errors.Wrap(err, "decode field \"description\"")
 			}
 		case "attachments":
-			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
 				s.Attachments = make([]URL, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
@@ -10054,38 +10062,6 @@ func (s *V1OrganizationsPortfolioPortfolioIDPutReq) Decode(d *jx.Decoder) error 
 		return nil
 	}); err != nil {
 		return errors.Wrap(err, "decode V1OrganizationsPortfolioPortfolioIDPutReq")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000111,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfV1OrganizationsPortfolioPortfolioIDPutReq) {
-					name = jsonFieldsNameOfV1OrganizationsPortfolioPortfolioIDPutReq[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
 	}
 
 	return nil

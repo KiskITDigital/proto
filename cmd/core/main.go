@@ -14,18 +14,20 @@ import (
 	authService "gitlab.ubrato.ru/ubrato/core/internal/service/auth"
 	catalogService "gitlab.ubrato.ru/ubrato/core/internal/service/catalog"
 	organizationService "gitlab.ubrato.ru/ubrato/core/internal/service/organization"
+	portfolioService "gitlab.ubrato.ru/ubrato/core/internal/service/portfolio"
+	questionAnswerService "gitlab.ubrato.ru/ubrato/core/internal/service/question_answer"
 	questionnaireService "gitlab.ubrato.ru/ubrato/core/internal/service/questionnaire"
 	suggestService "gitlab.ubrato.ru/ubrato/core/internal/service/suggest"
 	surveyService "gitlab.ubrato.ru/ubrato/core/internal/service/survey"
 	tenderService "gitlab.ubrato.ru/ubrato/core/internal/service/tender"
 	userService "gitlab.ubrato.ru/ubrato/core/internal/service/user"
 	verificationService "gitlab.ubrato.ru/ubrato/core/internal/service/verification"
-	questionAnswerService "gitlab.ubrato.ru/ubrato/core/internal/service/question_answer"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 	"gitlab.ubrato.ru/ubrato/core/internal/store/postgres"
 	catalogStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/catalog"
 	commentStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/comment"
 	organizationStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/organization"
+	portfolioStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/portfolio"
 	questionAnswerStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/question_answer"
 	questionnaireStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/questionnaire"
 	sessionStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/session"
@@ -88,7 +90,8 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	verificationStore := verificationStore.NewVerificationRequestStore()
 	commentStore := commentStore.NewCommentStore()
 	questionnaireStore := questionnaireStore.NewQuestionnaireStore()
-	questionaAswerStore := questionAnswerStore.NewQuestionAnswerStore()
+	questionAnswerStore := questionAnswerStore.NewQuestionAnswerStore()
+	portfolioStore := portfolioStore.NewPortfolioStore()
 
 	dadataGateway := dadataGateway.NewClient(cfg.Gateway.Dadata.APIKey)
 
@@ -161,19 +164,24 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		organizationStore,
 	)
 
-	questionaAswerService := questionAnswerService.New(
+	questionAnswerService := questionAnswerService.New(
 		psql,
-		questionaAswerStore,
+		questionAnswerStore,
+	)
+
+	portfolioService := portfolioService.New(
+		psql,
+		portfolioStore,
 	)
 
 	router := http.NewRouter(http.RouterParams{
 		Error:         errorHandler.New(logger),
 		Auth:          authHandler.New(logger, authService, userService),
-		Tenders:       tenderHandler.New(logger, tenderService, verificationService, questionaAswerService),
+		Tenders:       tenderHandler.New(logger, tenderService, verificationService, questionAnswerService),
 		Catalog:       catalogHandler.New(logger, catalogService),
 		Users:         userHandler.New(logger, userService),
 		Survey:        surveyHandler.New(logger, surveyService),
-		Organization:  organizationHandler.New(logger, organizationService, verificationService),
+		Organization:  organizationHandler.New(logger, organizationService, verificationService, portfolioService),
 		Comments:      commentHandler.New(logger, nil, verificationService),
 		Suggest:       suggestHandler.New(logger, suggestService),
 		Verification:  verificationHandler.New(logger, verificationService),

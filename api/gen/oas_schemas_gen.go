@@ -1632,7 +1632,7 @@ type Phone string
 // Ref: #
 type Portfolio struct {
 	ID          int         `json:"id"`
-	Name        Name        `json:"name"`
+	Title       string      `json:"title"`
 	Description Description `json:"description"`
 	Attachments []URL       `json:"attachments"`
 	CreatedAt   time.Time   `json:"created_at"`
@@ -1644,9 +1644,9 @@ func (s *Portfolio) GetID() int {
 	return s.ID
 }
 
-// GetName returns the value of Name.
-func (s *Portfolio) GetName() Name {
-	return s.Name
+// GetTitle returns the value of Title.
+func (s *Portfolio) GetTitle() string {
+	return s.Title
 }
 
 // GetDescription returns the value of Description.
@@ -1674,9 +1674,9 @@ func (s *Portfolio) SetID(val int) {
 	s.ID = val
 }
 
-// SetName sets the value of Name.
-func (s *Portfolio) SetName(val Name) {
-	s.Name = val
+// SetTitle sets the value of Title.
+func (s *Portfolio) SetTitle(val string) {
+	s.Title = val
 }
 
 // SetDescription sets the value of Description.
@@ -3469,14 +3469,14 @@ func (*V1OrganizationsOrganizationIDPortfolioPostOK) v1OrganizationsOrganization
 }
 
 type V1OrganizationsOrganizationIDPortfolioPostReq struct {
-	Name        Name        `json:"name"`
+	Title       string      `json:"title"`
 	Description Description `json:"description"`
 	Attachments []URL       `json:"attachments"`
 }
 
-// GetName returns the value of Name.
-func (s *V1OrganizationsOrganizationIDPortfolioPostReq) GetName() Name {
-	return s.Name
+// GetTitle returns the value of Title.
+func (s *V1OrganizationsOrganizationIDPortfolioPostReq) GetTitle() string {
+	return s.Title
 }
 
 // GetDescription returns the value of Description.
@@ -3489,9 +3489,9 @@ func (s *V1OrganizationsOrganizationIDPortfolioPostReq) GetAttachments() []URL {
 	return s.Attachments
 }
 
-// SetName sets the value of Name.
-func (s *V1OrganizationsOrganizationIDPortfolioPostReq) SetName(val Name) {
-	s.Name = val
+// SetTitle sets the value of Title.
+func (s *V1OrganizationsOrganizationIDPortfolioPostReq) SetTitle(val string) {
+	s.Title = val
 }
 
 // SetDescription sets the value of Description.
@@ -3891,18 +3891,18 @@ func (s *V1OrganizationsPortfolioPortfolioIDPutOK) SetData(val Portfolio) {
 func (*V1OrganizationsPortfolioPortfolioIDPutOK) v1OrganizationsPortfolioPortfolioIDPutRes() {}
 
 type V1OrganizationsPortfolioPortfolioIDPutReq struct {
-	Name        Name        `json:"name"`
-	Description Description `json:"description"`
-	Attachments []URL       `json:"attachments"`
+	Title       OptString      `json:"title"`
+	Description OptDescription `json:"description"`
+	Attachments []URL          `json:"attachments"`
 }
 
-// GetName returns the value of Name.
-func (s *V1OrganizationsPortfolioPortfolioIDPutReq) GetName() Name {
-	return s.Name
+// GetTitle returns the value of Title.
+func (s *V1OrganizationsPortfolioPortfolioIDPutReq) GetTitle() OptString {
+	return s.Title
 }
 
 // GetDescription returns the value of Description.
-func (s *V1OrganizationsPortfolioPortfolioIDPutReq) GetDescription() Description {
+func (s *V1OrganizationsPortfolioPortfolioIDPutReq) GetDescription() OptDescription {
 	return s.Description
 }
 
@@ -3911,13 +3911,13 @@ func (s *V1OrganizationsPortfolioPortfolioIDPutReq) GetAttachments() []URL {
 	return s.Attachments
 }
 
-// SetName sets the value of Name.
-func (s *V1OrganizationsPortfolioPortfolioIDPutReq) SetName(val Name) {
-	s.Name = val
+// SetTitle sets the value of Title.
+func (s *V1OrganizationsPortfolioPortfolioIDPutReq) SetTitle(val OptString) {
+	s.Title = val
 }
 
 // SetDescription sets the value of Description.
-func (s *V1OrganizationsPortfolioPortfolioIDPutReq) SetDescription(val Description) {
+func (s *V1OrganizationsPortfolioPortfolioIDPutReq) SetDescription(val OptDescription) {
 	s.Description = val
 }
 

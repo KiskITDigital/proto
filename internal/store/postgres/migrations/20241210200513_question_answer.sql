@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TABLE question_answer (
+CREATE TABLE IF NOT EXISTS question_answer (
     id                     BIGSERIAL PRIMARY KEY,
     tender_id              BIGINT    NOT NULL REFERENCES tenders(id) ON DELETE CASCADE,
     author_organization_id BIGINT    NOT NULL REFERENCES organizations(id),

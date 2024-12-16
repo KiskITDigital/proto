@@ -23,11 +23,15 @@ var (
 )
 
 var (
-	ErrOrganizationNotFound = errors.New("organization not found")
+	ErrOrganizationNotFound       = errors.New("organization not found")
 	ErrOrganizationNotAContractor = errors.New("organization is not a contractor")
 )
 
 var (
 	ErrQuestionAnswerUniqueViolation = errors.New("answer to question already exists")
 	ErrQuestionAnswerFKViolation     = errors.New("foreign key violation on question_answer")
+)
+
+var (
+	ErrPortfolioNotFound = errors.New("portfolio not found")
 )
