@@ -22,9 +22,9 @@ type Pagination struct {
 func New(page, perPage, found uint64) Pagination {
 	return Pagination{
 		Found:   found,
-		Page:    Page,
+		Page:    page,
 		Pages:   CalculatePages(found, perPage),
-		PerPage: PerPage,
+		PerPage: perPage,
 	}
 }
 

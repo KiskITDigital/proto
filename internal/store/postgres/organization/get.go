@@ -218,7 +218,7 @@ func (s *OrganizationStore) Get(ctx context.Context, qe store.QueryExecutor, par
 	}
 
 	if params.Offset.Set {
-		builder = builder.Limit(params.Offset.Value)
+		builder = builder.Offset(params.Offset.Value)
 	}
 
 	if params.IsContractor.Set {
