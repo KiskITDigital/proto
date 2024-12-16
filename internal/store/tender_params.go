@@ -21,7 +21,6 @@ type TenderCreateParams struct {
 	Specification      string
 	Attachments        []string
 	Status             int
-	VerificationStatus models.VerificationStatus
 	ReceptionStart     time.Time
 	ReceptionEnd       time.Time
 	WorkStart          time.Time
