@@ -62,7 +62,7 @@ func (s *VerificationStore) GetWithEmptyObject(ctx context.Context, qe store.Que
 	}
 
 	if params.Offset.Set {
-		builder = builder.Limit(params.Offset.Value)
+		builder = builder.Offset(params.Offset.Value)
 	}
 
 	if params.ObjectType.Set {
@@ -232,7 +232,7 @@ func (s *VerificationStore) GetCommentRequests(ctx context.Context, qe store.Que
 	}
 
 	if params.Offset.Set {
-		builder = builder.Limit(params.Offset.Value)
+		builder = builder.Offset(params.Offset.Value)
 	}
 	
 	if params.VerificationID.Set {
