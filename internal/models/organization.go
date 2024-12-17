@@ -134,7 +134,16 @@ func ConvertCustomerInfoToApi(info CustomerInfo) api.CustomerInfo {
 	}
 }
 
+func (a CustomerInfo) isEmpty() bool {
+	return !a.Description.Set &&
+		len(a.CityIDs) == 0 &&
+		len(a.Cities) == 0
+}
+
 func (a CustomerInfo) Value() (driver.Value, error) {
+	if a.isEmpty() {
+		return "{}", nil
+	}
 	return json.Marshal(a)
 }
 
@@ -170,7 +179,19 @@ func ConvertContractorInfoToApi(info ContractorInfo) api.ContractorInfo {
 	}
 }
 
+func (a ContractorInfo) isEmpty() bool {
+	return !a.Description.Set &&
+		len(a.Services) == 0 &&
+		len(a.Cities) == 0 &&
+		len(a.Objects) == 0 &&
+		len(a.CityIDs) == 0 &&
+		len(a.ObjectIDs) == 0
+}
+
 func (a ContractorInfo) Value() (driver.Value, error) {
+	if a.isEmpty() {
+		return "{}", nil
+	}
 	return json.Marshal(a)
 }
 
