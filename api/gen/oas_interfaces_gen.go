@@ -181,6 +181,10 @@ type V1TendersTenderIDQuestionAnswerPostRes interface {
 	v1TendersTenderIDQuestionAnswerPostRes()
 }
 
+type V1TendersTenderIDRespondGetRes interface {
+	v1TendersTenderIDRespondGetRes()
+}
+
 type V1TendersTenderIDRespondPostRes interface {
 	v1TendersTenderIDRespondPostRes()
 }
