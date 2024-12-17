@@ -109,6 +109,20 @@ func encodeV1EmployeePostRequest(
 	return nil
 }
 
+func encodeV1OrganizationsOrganizationIDFavouritesPostRequest(
+	req *V1OrganizationsOrganizationIDFavouritesPostReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeV1OrganizationsOrganizationIDPortfolioPostRequest(
 	req *V1OrganizationsOrganizationIDPortfolioPostReq,
 	r *http.Request,

@@ -429,6 +429,34 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
+					case 'f': // Prefix: "favourites/"
+						origElem := elem
+						if l := len("favourites/"); len(elem) >= l && elem[0:l] == "favourites/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "favouriteID"
+						// Leaf parameter
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "DELETE":
+								s.handleV1OrganizationsFavouritesFavouriteIDDeleteRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "DELETE")
+							}
+
+							return
+						}
+
+						elem = origElem
 					case 'p': // Prefix: "portfolio/"
 						origElem := elem
 						if l := len("portfolio/"); len(elem) >= l && elem[0:l] == "portfolio/" {
@@ -517,6 +545,33 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							break
 						}
 						switch elem[0] {
+						case 'f': // Prefix: "favourites"
+							origElem := elem
+							if l := len("favourites"); len(elem) >= l && elem[0:l] == "favourites" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleV1OrganizationsOrganizationIDFavouritesGetRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								case "POST":
+									s.handleV1OrganizationsOrganizationIDFavouritesPostRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET,POST")
+								}
+
+								return
+							}
+
+							elem = origElem
 						case 'p': // Prefix: "p"
 							origElem := elem
 							if l := len("p"); len(elem) >= l && elem[0:l] == "p" {
@@ -1915,6 +1970,36 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						}
 
 						elem = origElem
+					case 'f': // Prefix: "favourites/"
+						origElem := elem
+						if l := len("favourites/"); len(elem) >= l && elem[0:l] == "favourites/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "favouriteID"
+						// Leaf parameter
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "DELETE":
+								r.name = "V1OrganizationsFavouritesFavouriteIDDelete"
+								r.summary = "Remove a object from the favourites"
+								r.operationID = ""
+								r.pathPattern = "/v1/organizations/favourites/{favouriteID}"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
 					case 'p': // Prefix: "portfolio/"
 						origElem := elem
 						if l := len("portfolio/"); len(elem) >= l && elem[0:l] == "portfolio/" {
@@ -2015,6 +2100,39 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							break
 						}
 						switch elem[0] {
+						case 'f': // Prefix: "favourites"
+							origElem := elem
+							if l := len("favourites"); len(elem) >= l && elem[0:l] == "favourites" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = "V1OrganizationsOrganizationIDFavouritesGet"
+									r.summary = "Get favourites"
+									r.operationID = ""
+									r.pathPattern = "/v1/organizations/{organizationID}/favourites"
+									r.args = args
+									r.count = 1
+									return r, true
+								case "POST":
+									r.name = "V1OrganizationsOrganizationIDFavouritesPost"
+									r.summary = "Add object in favourites"
+									r.operationID = ""
+									r.pathPattern = "/v1/organizations/{organizationID}/favourites"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
 						case 'p': // Prefix: "p"
 							origElem := elem
 							if l := len("p"); len(elem) >= l && elem[0:l] == "p" {

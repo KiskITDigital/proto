@@ -108,6 +108,12 @@ type Handler interface {
 	//
 	// GET /v1/organizations/contractors
 	V1OrganizationsContractorsGet(ctx context.Context, params V1OrganizationsContractorsGetParams) (V1OrganizationsContractorsGetRes, error)
+	// V1OrganizationsFavouritesFavouriteIDDelete implements DELETE /v1/organizations/favourites/{favouriteID} operation.
+	//
+	// Удаляет объект из избранного организации.
+	//
+	// DELETE /v1/organizations/favourites/{favouriteID}
+	V1OrganizationsFavouritesFavouriteIDDelete(ctx context.Context, params V1OrganizationsFavouritesFavouriteIDDeleteParams) (V1OrganizationsFavouritesFavouriteIDDeleteRes, error)
 	// V1OrganizationsGet implements GET /v1/organizations operation.
 	//
 	// List all organizations
@@ -118,6 +124,18 @@ type Handler interface {
 	//
 	// GET /v1/organizations
 	V1OrganizationsGet(ctx context.Context, params V1OrganizationsGetParams) (V1OrganizationsGetRes, error)
+	// V1OrganizationsOrganizationIDFavouritesGet implements GET /v1/organizations/{organizationID}/favourites operation.
+	//
+	// Получаем список избранного.
+	//
+	// GET /v1/organizations/{organizationID}/favourites
+	V1OrganizationsOrganizationIDFavouritesGet(ctx context.Context, params V1OrganizationsOrganizationIDFavouritesGetParams) (V1OrganizationsOrganizationIDFavouritesGetRes, error)
+	// V1OrganizationsOrganizationIDFavouritesPost implements POST /v1/organizations/{organizationID}/favourites operation.
+	//
+	// Добавление объекта в список избранного.
+	//
+	// POST /v1/organizations/{organizationID}/favourites
+	V1OrganizationsOrganizationIDFavouritesPost(ctx context.Context, req *V1OrganizationsOrganizationIDFavouritesPostReq, params V1OrganizationsOrganizationIDFavouritesPostParams) (V1OrganizationsOrganizationIDFavouritesPostRes, error)
 	// V1OrganizationsOrganizationIDGet implements GET /v1/organizations/{organizationID} operation.
 	//
 	// Returns organization by id.

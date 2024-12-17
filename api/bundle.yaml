@@ -1733,6 +1733,133 @@ paths:
                     $ref: '#/components/schemas/Portfolio'
         default:
           $ref: '#/components/responses/Error'
+  /v1/organizations/{organizationID}/favourites:
+    get:
+      tags:
+        - organizations
+      summary: Get favourites
+      description: Получаем список избранного.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID организации
+          schema:
+            type: integer
+            minimum: 1
+        - name: object_type
+          required: true
+          in: query
+          description: Фильтруем результат по типам избранных объектов
+          schema:
+            $ref: '#/components/schemas/favourite_type'
+        - name: page
+          in: query
+          description: Номер страницы
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: per_page
+          in: query
+          description: Количество элементов на странице
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                  - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Favourites'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        default:
+          $ref: '#/components/responses/Error'
+    post:
+      tags:
+        - organizations
+      summary: Add object in favourites
+      description: Добавление объекта в список избранного.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID организации
+          schema:
+            type: integer
+            minimum: 1
+        - name: object_type
+          required: true
+          in: query
+          description: Фильтруем результат по типам избарнных объектов
+          schema:
+            $ref: '#/components/schemas/favourite_type'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - object_id
+              properties:
+                object_id:
+                  type: integer
+                  example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Favourites'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/organizations/favourites/{favouriteID}:
+    delete:
+      tags:
+        - organizations
+      summary: Remove a object from the favourites
+      description: Удаляет объект из избранного организации.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: favouriteID
+          in: path
+          required: true
+          description: ID избранного объекта
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Успешное удаление
+        default:
+          $ref: '#/components/responses/Error'
   /v1/organizations/verifications:
     get:
       tags:
@@ -3043,6 +3170,27 @@ components:
         updated_at:
           type: string
           format: date-time
+    favourite_type:
+      type: string
+      enum:
+        - organization
+        - tender
+    Favourites:
+      type: object
+      required:
+        - id
+        - object_type
+        - object
+      properties:
+        id:
+          type: integer
+          example: 1
+        object_type:
+          $ref: '#/components/schemas/favourite_type'
+        object:
+          oneOf:
+            - $ref: '#/components/schemas/Organization'
+            - $ref: '#/components/schemas/Tender'
     survey:
       type: string
       enum:

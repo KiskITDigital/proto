@@ -158,6 +158,15 @@ func (UnimplementedHandler) V1OrganizationsContractorsGet(ctx context.Context, p
 	return r, ht.ErrNotImplemented
 }
 
+// V1OrganizationsFavouritesFavouriteIDDelete implements DELETE /v1/organizations/favourites/{favouriteID} operation.
+//
+// Удаляет объект из избранного организации.
+//
+// DELETE /v1/organizations/favourites/{favouriteID}
+func (UnimplementedHandler) V1OrganizationsFavouritesFavouriteIDDelete(ctx context.Context, params V1OrganizationsFavouritesFavouriteIDDeleteParams) (r V1OrganizationsFavouritesFavouriteIDDeleteRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1OrganizationsGet implements GET /v1/organizations operation.
 //
 // List all organizations
@@ -168,6 +177,24 @@ func (UnimplementedHandler) V1OrganizationsContractorsGet(ctx context.Context, p
 //
 // GET /v1/organizations
 func (UnimplementedHandler) V1OrganizationsGet(ctx context.Context, params V1OrganizationsGetParams) (r V1OrganizationsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1OrganizationsOrganizationIDFavouritesGet implements GET /v1/organizations/{organizationID}/favourites operation.
+//
+// Получаем список избранного.
+//
+// GET /v1/organizations/{organizationID}/favourites
+func (UnimplementedHandler) V1OrganizationsOrganizationIDFavouritesGet(ctx context.Context, params V1OrganizationsOrganizationIDFavouritesGetParams) (r V1OrganizationsOrganizationIDFavouritesGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1OrganizationsOrganizationIDFavouritesPost implements POST /v1/organizations/{organizationID}/favourites operation.
+//
+// Добавление объекта в список избранного.
+//
+// POST /v1/organizations/{organizationID}/favourites
+func (UnimplementedHandler) V1OrganizationsOrganizationIDFavouritesPost(ctx context.Context, req *V1OrganizationsOrganizationIDFavouritesPostReq, params V1OrganizationsOrganizationIDFavouritesPostParams) (r V1OrganizationsOrganizationIDFavouritesPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

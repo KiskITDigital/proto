@@ -123,6 +123,12 @@ type Invoker interface {
 	//
 	// GET /v1/organizations/contractors
 	V1OrganizationsContractorsGet(ctx context.Context, params V1OrganizationsContractorsGetParams) (V1OrganizationsContractorsGetRes, error)
+	// V1OrganizationsFavouritesFavouriteIDDelete invokes DELETE /v1/organizations/favourites/{favouriteID} operation.
+	//
+	// Удаляет объект из избранного организации.
+	//
+	// DELETE /v1/organizations/favourites/{favouriteID}
+	V1OrganizationsFavouritesFavouriteIDDelete(ctx context.Context, params V1OrganizationsFavouritesFavouriteIDDeleteParams) (V1OrganizationsFavouritesFavouriteIDDeleteRes, error)
 	// V1OrganizationsGet invokes GET /v1/organizations operation.
 	//
 	// List all organizations
@@ -133,6 +139,18 @@ type Invoker interface {
 	//
 	// GET /v1/organizations
 	V1OrganizationsGet(ctx context.Context, params V1OrganizationsGetParams) (V1OrganizationsGetRes, error)
+	// V1OrganizationsOrganizationIDFavouritesGet invokes GET /v1/organizations/{organizationID}/favourites operation.
+	//
+	// Получаем список избранного.
+	//
+	// GET /v1/organizations/{organizationID}/favourites
+	V1OrganizationsOrganizationIDFavouritesGet(ctx context.Context, params V1OrganizationsOrganizationIDFavouritesGetParams) (V1OrganizationsOrganizationIDFavouritesGetRes, error)
+	// V1OrganizationsOrganizationIDFavouritesPost invokes POST /v1/organizations/{organizationID}/favourites operation.
+	//
+	// Добавление объекта в список избранного.
+	//
+	// POST /v1/organizations/{organizationID}/favourites
+	V1OrganizationsOrganizationIDFavouritesPost(ctx context.Context, request *V1OrganizationsOrganizationIDFavouritesPostReq, params V1OrganizationsOrganizationIDFavouritesPostParams) (V1OrganizationsOrganizationIDFavouritesPostRes, error)
 	// V1OrganizationsOrganizationIDGet invokes GET /v1/organizations/{organizationID} operation.
 	//
 	// Returns organization by id.
@@ -2062,6 +2080,128 @@ func (c *Client) sendV1OrganizationsContractorsGet(ctx context.Context, params V
 	return result, nil
 }
 
+// V1OrganizationsFavouritesFavouriteIDDelete invokes DELETE /v1/organizations/favourites/{favouriteID} operation.
+//
+// Удаляет объект из избранного организации.
+//
+// DELETE /v1/organizations/favourites/{favouriteID}
+func (c *Client) V1OrganizationsFavouritesFavouriteIDDelete(ctx context.Context, params V1OrganizationsFavouritesFavouriteIDDeleteParams) (V1OrganizationsFavouritesFavouriteIDDeleteRes, error) {
+	res, err := c.sendV1OrganizationsFavouritesFavouriteIDDelete(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1OrganizationsFavouritesFavouriteIDDelete(ctx context.Context, params V1OrganizationsFavouritesFavouriteIDDeleteParams) (res V1OrganizationsFavouritesFavouriteIDDeleteRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/v1/organizations/favourites/{favouriteID}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsFavouritesFavouriteIDDelete",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/v1/organizations/favourites/"
+	{
+		// Encode "favouriteID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "favouriteID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.FavouriteID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "DELETE", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1OrganizationsFavouritesFavouriteIDDelete", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1OrganizationsFavouritesFavouriteIDDeleteResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // V1OrganizationsGet invokes GET /v1/organizations operation.
 //
 // List all organizations
@@ -2218,6 +2358,325 @@ func (c *Client) sendV1OrganizationsGet(ctx context.Context, params V1Organizati
 
 	stage = "DecodeResponse"
 	result, err := decodeV1OrganizationsGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1OrganizationsOrganizationIDFavouritesGet invokes GET /v1/organizations/{organizationID}/favourites operation.
+//
+// Получаем список избранного.
+//
+// GET /v1/organizations/{organizationID}/favourites
+func (c *Client) V1OrganizationsOrganizationIDFavouritesGet(ctx context.Context, params V1OrganizationsOrganizationIDFavouritesGetParams) (V1OrganizationsOrganizationIDFavouritesGetRes, error) {
+	res, err := c.sendV1OrganizationsOrganizationIDFavouritesGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1OrganizationsOrganizationIDFavouritesGet(ctx context.Context, params V1OrganizationsOrganizationIDFavouritesGetParams) (res V1OrganizationsOrganizationIDFavouritesGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationID}/favourites"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsOrganizationIDFavouritesGet",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/v1/organizations/"
+	{
+		// Encode "organizationID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.OrganizationID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/favourites"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "object_type" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "object_type",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			return e.EncodeValue(conv.StringToString(string(params.ObjectType)))
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "page" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Page.Get(); ok {
+				return e.EncodeValue(conv.IntToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "per_page" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "per_page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.PerPage.Get(); ok {
+				return e.EncodeValue(conv.IntToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1OrganizationsOrganizationIDFavouritesGet", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1OrganizationsOrganizationIDFavouritesGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1OrganizationsOrganizationIDFavouritesPost invokes POST /v1/organizations/{organizationID}/favourites operation.
+//
+// Добавление объекта в список избранного.
+//
+// POST /v1/organizations/{organizationID}/favourites
+func (c *Client) V1OrganizationsOrganizationIDFavouritesPost(ctx context.Context, request *V1OrganizationsOrganizationIDFavouritesPostReq, params V1OrganizationsOrganizationIDFavouritesPostParams) (V1OrganizationsOrganizationIDFavouritesPostRes, error) {
+	res, err := c.sendV1OrganizationsOrganizationIDFavouritesPost(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendV1OrganizationsOrganizationIDFavouritesPost(ctx context.Context, request *V1OrganizationsOrganizationIDFavouritesPostReq, params V1OrganizationsOrganizationIDFavouritesPostParams) (res V1OrganizationsOrganizationIDFavouritesPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationID}/favourites"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsOrganizationIDFavouritesPost",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/v1/organizations/"
+	{
+		// Encode "organizationID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.OrganizationID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/favourites"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "object_type" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "object_type",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			return e.EncodeValue(conv.StringToString(string(params.ObjectType)))
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1OrganizationsOrganizationIDFavouritesPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1OrganizationsOrganizationIDFavouritesPost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1OrganizationsOrganizationIDFavouritesPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
