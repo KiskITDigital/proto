@@ -61,8 +61,20 @@ type V1OrganizationsContractorsGetRes interface {
 	v1OrganizationsContractorsGetRes()
 }
 
+type V1OrganizationsFavouritesFavouriteIDDeleteRes interface {
+	v1OrganizationsFavouritesFavouriteIDDeleteRes()
+}
+
 type V1OrganizationsGetRes interface {
 	v1OrganizationsGetRes()
+}
+
+type V1OrganizationsOrganizationIDFavouritesGetRes interface {
+	v1OrganizationsOrganizationIDFavouritesGetRes()
+}
+
+type V1OrganizationsOrganizationIDFavouritesPostRes interface {
+	v1OrganizationsOrganizationIDFavouritesPostRes()
 }
 
 type V1OrganizationsOrganizationIDGetRes interface {

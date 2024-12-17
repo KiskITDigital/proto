@@ -527,7 +527,10 @@ func (*ErrorStatusCode) v1CatalogServicesPostRes()                             {
 func (*ErrorStatusCode) v1CommentsVerificationsGetRes()                        {}
 func (*ErrorStatusCode) v1EmployeePostRes()                                    {}
 func (*ErrorStatusCode) v1OrganizationsContractorsGetRes()                     {}
+func (*ErrorStatusCode) v1OrganizationsFavouritesFavouriteIDDeleteRes()        {}
 func (*ErrorStatusCode) v1OrganizationsGetRes()                                {}
+func (*ErrorStatusCode) v1OrganizationsOrganizationIDFavouritesGetRes()        {}
+func (*ErrorStatusCode) v1OrganizationsOrganizationIDFavouritesPostRes()       {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDGetRes()                  {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDPortfolioGetRes()         {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDPortfolioPostRes()        {}
@@ -570,6 +573,149 @@ func (*ErrorStatusCode) v1UsersUserIDPutRes()                                  {
 func (*ErrorStatusCode) v1VerificationsRequestIDAprovePostRes()                {}
 func (*ErrorStatusCode) v1VerificationsRequestIDDenyPostRes()                  {}
 func (*ErrorStatusCode) v1VerificationsRequestIDGetRes()                       {}
+
+// Ref: #
+type FavouriteType string
+
+const (
+	FavouriteTypeOrganization FavouriteType = "organization"
+	FavouriteTypeTender       FavouriteType = "tender"
+)
+
+// AllValues returns all FavouriteType values.
+func (FavouriteType) AllValues() []FavouriteType {
+	return []FavouriteType{
+		FavouriteTypeOrganization,
+		FavouriteTypeTender,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s FavouriteType) MarshalText() ([]byte, error) {
+	switch s {
+	case FavouriteTypeOrganization:
+		return []byte(s), nil
+	case FavouriteTypeTender:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *FavouriteType) UnmarshalText(data []byte) error {
+	switch FavouriteType(data) {
+	case FavouriteTypeOrganization:
+		*s = FavouriteTypeOrganization
+		return nil
+	case FavouriteTypeTender:
+		*s = FavouriteTypeTender
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Ref: #
+type Favourites struct {
+	ID         int              `json:"id"`
+	ObjectType FavouriteType    `json:"object_type"`
+	Object     FavouritesObject `json:"object"`
+}
+
+// GetID returns the value of ID.
+func (s *Favourites) GetID() int {
+	return s.ID
+}
+
+// GetObjectType returns the value of ObjectType.
+func (s *Favourites) GetObjectType() FavouriteType {
+	return s.ObjectType
+}
+
+// GetObject returns the value of Object.
+func (s *Favourites) GetObject() FavouritesObject {
+	return s.Object
+}
+
+// SetID sets the value of ID.
+func (s *Favourites) SetID(val int) {
+	s.ID = val
+}
+
+// SetObjectType sets the value of ObjectType.
+func (s *Favourites) SetObjectType(val FavouriteType) {
+	s.ObjectType = val
+}
+
+// SetObject sets the value of Object.
+func (s *Favourites) SetObject(val FavouritesObject) {
+	s.Object = val
+}
+
+// FavouritesObject represents sum type.
+type FavouritesObject struct {
+	Type         FavouritesObjectType // switch on this field
+	Organization Organization
+	Tender       Tender
+}
+
+// FavouritesObjectType is oneOf type of FavouritesObject.
+type FavouritesObjectType string
+
+// Possible values for FavouritesObjectType.
+const (
+	OrganizationFavouritesObject FavouritesObjectType = "Organization"
+	TenderFavouritesObject       FavouritesObjectType = "Tender"
+)
+
+// IsOrganization reports whether FavouritesObject is Organization.
+func (s FavouritesObject) IsOrganization() bool { return s.Type == OrganizationFavouritesObject }
+
+// IsTender reports whether FavouritesObject is Tender.
+func (s FavouritesObject) IsTender() bool { return s.Type == TenderFavouritesObject }
+
+// SetOrganization sets FavouritesObject to Organization.
+func (s *FavouritesObject) SetOrganization(v Organization) {
+	s.Type = OrganizationFavouritesObject
+	s.Organization = v
+}
+
+// GetOrganization returns Organization and true boolean if FavouritesObject is Organization.
+func (s FavouritesObject) GetOrganization() (v Organization, ok bool) {
+	if !s.IsOrganization() {
+		return v, false
+	}
+	return s.Organization, true
+}
+
+// NewOrganizationFavouritesObject returns new FavouritesObject from Organization.
+func NewOrganizationFavouritesObject(v Organization) FavouritesObject {
+	var s FavouritesObject
+	s.SetOrganization(v)
+	return s
+}
+
+// SetTender sets FavouritesObject to Tender.
+func (s *FavouritesObject) SetTender(v Tender) {
+	s.Type = TenderFavouritesObject
+	s.Tender = v
+}
+
+// GetTender returns Tender and true boolean if FavouritesObject is Tender.
+func (s FavouritesObject) GetTender() (v Tender, ok bool) {
+	if !s.IsTender() {
+		return v, false
+	}
+	return s.Tender, true
+}
+
+// NewTenderFavouritesObject returns new FavouritesObject from Tender.
+func NewTenderFavouritesObject(v Tender) FavouritesObject {
+	var s FavouritesObject
+	s.SetTender(v)
+	return s
+}
 
 type Inn string
 
@@ -3532,6 +3678,12 @@ func (s *V1OrganizationsContractorsGetOK) SetPagination(val Pagination) {
 
 func (*V1OrganizationsContractorsGetOK) v1OrganizationsContractorsGetRes() {}
 
+// V1OrganizationsFavouritesFavouriteIDDeleteOK is response for V1OrganizationsFavouritesFavouriteIDDelete operation.
+type V1OrganizationsFavouritesFavouriteIDDeleteOK struct{}
+
+func (*V1OrganizationsFavouritesFavouriteIDDeleteOK) v1OrganizationsFavouritesFavouriteIDDeleteRes() {
+}
+
 type V1OrganizationsGetOK struct {
 	Data       []Organization `json:"data"`
 	Pagination Pagination     `json:"pagination"`
@@ -3558,6 +3710,65 @@ func (s *V1OrganizationsGetOK) SetPagination(val Pagination) {
 }
 
 func (*V1OrganizationsGetOK) v1OrganizationsGetRes() {}
+
+type V1OrganizationsOrganizationIDFavouritesGetOK struct {
+	Data       []Favourites `json:"data"`
+	Pagination Pagination   `json:"pagination"`
+}
+
+// GetData returns the value of Data.
+func (s *V1OrganizationsOrganizationIDFavouritesGetOK) GetData() []Favourites {
+	return s.Data
+}
+
+// GetPagination returns the value of Pagination.
+func (s *V1OrganizationsOrganizationIDFavouritesGetOK) GetPagination() Pagination {
+	return s.Pagination
+}
+
+// SetData sets the value of Data.
+func (s *V1OrganizationsOrganizationIDFavouritesGetOK) SetData(val []Favourites) {
+	s.Data = val
+}
+
+// SetPagination sets the value of Pagination.
+func (s *V1OrganizationsOrganizationIDFavouritesGetOK) SetPagination(val Pagination) {
+	s.Pagination = val
+}
+
+func (*V1OrganizationsOrganizationIDFavouritesGetOK) v1OrganizationsOrganizationIDFavouritesGetRes() {
+}
+
+type V1OrganizationsOrganizationIDFavouritesPostOK struct {
+	Data Favourites `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1OrganizationsOrganizationIDFavouritesPostOK) GetData() Favourites {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1OrganizationsOrganizationIDFavouritesPostOK) SetData(val Favourites) {
+	s.Data = val
+}
+
+func (*V1OrganizationsOrganizationIDFavouritesPostOK) v1OrganizationsOrganizationIDFavouritesPostRes() {
+}
+
+type V1OrganizationsOrganizationIDFavouritesPostReq struct {
+	ObjectID int `json:"object_id"`
+}
+
+// GetObjectID returns the value of ObjectID.
+func (s *V1OrganizationsOrganizationIDFavouritesPostReq) GetObjectID() int {
+	return s.ObjectID
+}
+
+// SetObjectID sets the value of ObjectID.
+func (s *V1OrganizationsOrganizationIDFavouritesPostReq) SetObjectID(val int) {
+	s.ObjectID = val
+}
 
 type V1OrganizationsOrganizationIDGetOK struct {
 	Data Organization `json:"data"`

@@ -1,0 +1,15 @@
+type: object
+required:
+  - id
+  - object_type
+  - object
+properties:
+  id:
+    type: integer
+    example: 1
+  object_type:
+   $ref: "../properties/favourite_type.yaml"
+  object:
+    oneOf:
+      - $ref: "./Organization.yaml"
+      - $ref: "./Tender.yaml"

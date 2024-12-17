@@ -554,6 +554,89 @@ func decodeV1OrganizationsContractorsGetParams(args [0]string, argsEscaped bool,
 	return params, nil
 }
 
+// V1OrganizationsFavouritesFavouriteIDDeleteParams is parameters of DELETE /v1/organizations/favourites/{favouriteID} operation.
+type V1OrganizationsFavouritesFavouriteIDDeleteParams struct {
+	// ID избранного объекта.
+	FavouriteID int
+}
+
+func unpackV1OrganizationsFavouritesFavouriteIDDeleteParams(packed middleware.Parameters) (params V1OrganizationsFavouritesFavouriteIDDeleteParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "favouriteID",
+			In:   "path",
+		}
+		params.FavouriteID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1OrganizationsFavouritesFavouriteIDDeleteParams(args [1]string, argsEscaped bool, r *http.Request) (params V1OrganizationsFavouritesFavouriteIDDeleteParams, _ error) {
+	// Decode path: favouriteID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "favouriteID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.FavouriteID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.FavouriteID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "favouriteID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // V1OrganizationsGetParams is parameters of GET /v1/organizations operation.
 type V1OrganizationsGetParams struct {
 	// Фильтрует результат и включает только
@@ -780,6 +863,442 @@ func decodeV1OrganizationsGetParams(args [0]string, argsEscaped bool, r *http.Re
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
 			Name: "per_page",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1OrganizationsOrganizationIDFavouritesGetParams is parameters of GET /v1/organizations/{organizationID}/favourites operation.
+type V1OrganizationsOrganizationIDFavouritesGetParams struct {
+	// ID организации.
+	OrganizationID int
+	// Фильтруем результат по типам избранных объектов.
+	ObjectType FavouriteType
+	// Номер страницы.
+	Page OptInt
+	// Количество элементов на странице.
+	PerPage OptInt
+}
+
+func unpackV1OrganizationsOrganizationIDFavouritesGetParams(packed middleware.Parameters) (params V1OrganizationsOrganizationIDFavouritesGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "organizationID",
+			In:   "path",
+		}
+		params.OrganizationID = packed[key].(int)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "object_type",
+			In:   "query",
+		}
+		params.ObjectType = packed[key].(FavouriteType)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Page = v.(OptInt)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "per_page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.PerPage = v.(OptInt)
+		}
+	}
+	return params
+}
+
+func decodeV1OrganizationsOrganizationIDFavouritesGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1OrganizationsOrganizationIDFavouritesGetParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode path: organizationID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "organizationID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.OrganizationID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.OrganizationID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "organizationID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode query: object_type.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "object_type",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.ObjectType = FavouriteType(c)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.ObjectType.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "object_type",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Set default value for query: page.
+	{
+		val := int(0)
+		params.Page.SetTo(val)
+	}
+	// Decode query: page.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotPageVal int
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToInt(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotPageVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Page.SetTo(paramsDotPageVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if value, ok := params.Page.Get(); ok {
+					if err := func() error {
+						if err := (validate.Int{
+							MinSet:        true,
+							Min:           0,
+							MaxSet:        false,
+							Max:           0,
+							MinExclusive:  false,
+							MaxExclusive:  false,
+							MultipleOfSet: false,
+							MultipleOf:    0,
+						}).Validate(int64(value)); err != nil {
+							return errors.Wrap(err, "int")
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "page",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Set default value for query: per_page.
+	{
+		val := int(100)
+		params.PerPage.SetTo(val)
+	}
+	// Decode query: per_page.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "per_page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotPerPageVal int
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToInt(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotPerPageVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.PerPage.SetTo(paramsDotPerPageVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if value, ok := params.PerPage.Get(); ok {
+					if err := func() error {
+						if err := (validate.Int{
+							MinSet:        true,
+							Min:           1,
+							MaxSet:        true,
+							Max:           100,
+							MinExclusive:  false,
+							MaxExclusive:  false,
+							MultipleOfSet: false,
+							MultipleOf:    0,
+						}).Validate(int64(value)); err != nil {
+							return errors.Wrap(err, "int")
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "per_page",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1OrganizationsOrganizationIDFavouritesPostParams is parameters of POST /v1/organizations/{organizationID}/favourites operation.
+type V1OrganizationsOrganizationIDFavouritesPostParams struct {
+	// ID организации.
+	OrganizationID int
+	// Фильтруем результат по типам избарнных объектов.
+	ObjectType FavouriteType
+}
+
+func unpackV1OrganizationsOrganizationIDFavouritesPostParams(packed middleware.Parameters) (params V1OrganizationsOrganizationIDFavouritesPostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "organizationID",
+			In:   "path",
+		}
+		params.OrganizationID = packed[key].(int)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "object_type",
+			In:   "query",
+		}
+		params.ObjectType = packed[key].(FavouriteType)
+	}
+	return params
+}
+
+func decodeV1OrganizationsOrganizationIDFavouritesPostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1OrganizationsOrganizationIDFavouritesPostParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode path: organizationID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "organizationID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.OrganizationID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.OrganizationID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "organizationID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode query: object_type.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "object_type",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.ObjectType = FavouriteType(c)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := params.ObjectType.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "object_type",
 			In:   "query",
 			Err:  err,
 		}

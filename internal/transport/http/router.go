@@ -75,7 +75,7 @@ type Catalog interface {
 	V1CatalogRegionsPost(ctx context.Context, req *api.V1CatalogRegionsPostReq) (api.V1CatalogRegionsPostRes, error)
 	V1CatalogObjectsPost(ctx context.Context, req *api.V1CatalogObjectsPostReq) (api.V1CatalogObjectsPostRes, error)
 	V1CatalogServicesPost(ctx context.Context, req *api.V1CatalogServicesPostReq) (api.V1CatalogServicesPostRes, error)
-	V1CatalogMeasurementsGet(ctx context.Context) (api.V1CatalogMeasurementsGetRes, error) 
+	V1CatalogMeasurementsGet(ctx context.Context) (api.V1CatalogMeasurementsGetRes, error)
 }
 
 type Organization interface {
@@ -97,6 +97,10 @@ type Organization interface {
 	V1OrganizationsPortfolioPortfolioIDPut(ctx context.Context, req *api.V1OrganizationsPortfolioPortfolioIDPutReq, params api.V1OrganizationsPortfolioPortfolioIDPutParams) (api.V1OrganizationsPortfolioPortfolioIDPutRes, error)
 	V1OrganizationsOrganizationIDPortfolioPost(ctx context.Context, req *api.V1OrganizationsOrganizationIDPortfolioPostReq, params api.V1OrganizationsOrganizationIDPortfolioPostParams) (api.V1OrganizationsOrganizationIDPortfolioPostRes, error)
 	V1OrganizationsOrganizationIDPortfolioGet(ctx context.Context, params api.V1OrganizationsOrganizationIDPortfolioGetParams) (api.V1OrganizationsOrganizationIDPortfolioGetRes, error)
+
+	V1OrganizationsFavouritesFavouriteIDDelete(ctx context.Context, params api.V1OrganizationsFavouritesFavouriteIDDeleteParams) (api.V1OrganizationsFavouritesFavouriteIDDeleteRes, error)
+	V1OrganizationsOrganizationIDFavouritesGet(ctx context.Context, params api.V1OrganizationsOrganizationIDFavouritesGetParams) (api.V1OrganizationsOrganizationIDFavouritesGetRes, error)
+	V1OrganizationsOrganizationIDFavouritesPost(ctx context.Context, req *api.V1OrganizationsOrganizationIDFavouritesPostReq, params api.V1OrganizationsOrganizationIDFavouritesPostParams) (api.V1OrganizationsOrganizationIDFavouritesPostRes, error)
 }
 
 type Comments interface {
