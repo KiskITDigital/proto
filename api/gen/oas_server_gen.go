@@ -312,9 +312,15 @@ type Handler interface {
 	//
 	// POST /v1/tenders/{tenderID}/question-answer
 	V1TendersTenderIDQuestionAnswerPost(ctx context.Context, req *V1TendersTenderIDQuestionAnswerPostReq, params V1TendersTenderIDQuestionAnswerPostParams) (V1TendersTenderIDQuestionAnswerPostRes, error)
+	// V1TendersTenderIDRespondGet implements GET /v1/tenders/{tenderID}/respond operation.
+	//
+	// Получить все отклики на тендер.
+	//
+	// GET /v1/tenders/{tenderID}/respond
+	V1TendersTenderIDRespondGet(ctx context.Context, params V1TendersTenderIDRespondGetParams) (V1TendersTenderIDRespondGetRes, error)
 	// V1TendersTenderIDRespondPost implements POST /v1/tenders/{tenderID}/respond operation.
 	//
-	// Responds to a tender.
+	// Отправить отклик на тендер.
 	//
 	// POST /v1/tenders/{tenderID}/respond
 	V1TendersTenderIDRespondPost(ctx context.Context, req *V1TendersTenderIDRespondPostReq, params V1TendersTenderIDRespondPostParams) (V1TendersTenderIDRespondPostRes, error)

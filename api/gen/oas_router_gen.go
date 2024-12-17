@@ -1092,12 +1092,16 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							if len(elem) == 0 {
 								// Leaf node.
 								switch r.Method {
+								case "GET":
+									s.handleV1TendersTenderIDRespondGetRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
 								case "POST":
 									s.handleV1TendersTenderIDRespondPostRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
 								default:
-									s.notAllowed(w, r, "POST")
+									s.notAllowed(w, r, "GET,POST")
 								}
 
 								return
@@ -2668,9 +2672,17 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							if len(elem) == 0 {
 								// Leaf node.
 								switch method {
+								case "GET":
+									r.name = "V1TendersTenderIDRespondGet"
+									r.summary = "Get responds to a tender"
+									r.operationID = ""
+									r.pathPattern = "/v1/tenders/{tenderID}/respond"
+									r.args = args
+									r.count = 1
+									return r, true
 								case "POST":
 									r.name = "V1TendersTenderIDRespondPost"
-									r.summary = "Respond to a tender"
+									r.summary = "Create responds to a tender"
 									r.operationID = ""
 									r.pathPattern = "/v1/tenders/{tenderID}/respond"
 									r.args = args

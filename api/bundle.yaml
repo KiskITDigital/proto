@@ -598,8 +598,8 @@ paths:
     post:
       tags:
         - tenders
-      summary: Respond to a tender
-      description: Responds to a tender
+      summary: Create responds to a tender
+      description: Отправить отклик на тендер
       security:
         - bearerAuth: []
       parameters:
@@ -628,6 +628,58 @@ paths:
       responses:
         '200':
           description: Success
+        default:
+          $ref: '#/components/responses/Error'
+    get:
+      tags:
+        - tenders
+      summary: Get responds to a tender
+      description: Получить все отклики на тендер
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: tenderID
+          required: true
+          in: path
+          description: ID of tender
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+        - name: page
+          in: query
+          description: Номер страницы
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: per_page
+          in: query
+          description: Количество элементов на странице
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                  - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Respond'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
         default:
           $ref: '#/components/responses/Error'
   /v1/tenders/{tenderID}/question-answer:
@@ -2805,6 +2857,30 @@ components:
           type: string
           format: date-time
         reviewed_at:
+          type: string
+          format: date-time
+    Respond:
+      type: object
+      required:
+        - tender_id
+        - organization_id
+        - price
+        - is_nds_price
+        - created_at
+      properties:
+        tender_id:
+          type: integer
+          example: 1
+        organization_id:
+          type: integer
+          example: 2
+        price:
+          type: integer
+          example: 1000
+        is_nds_price:
+          type: boolean
+          example: true
+        created_at:
           type: string
           format: date-time
     question_answer_type:

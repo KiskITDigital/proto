@@ -17,6 +17,7 @@ import (
 	portfolioService "gitlab.ubrato.ru/ubrato/core/internal/service/portfolio"
 	questionAnswerService "gitlab.ubrato.ru/ubrato/core/internal/service/question_answer"
 	questionnaireService "gitlab.ubrato.ru/ubrato/core/internal/service/questionnaire"
+	respondService "gitlab.ubrato.ru/ubrato/core/internal/service/respond"
 	suggestService "gitlab.ubrato.ru/ubrato/core/internal/service/suggest"
 	surveyService "gitlab.ubrato.ru/ubrato/core/internal/service/survey"
 	tenderService "gitlab.ubrato.ru/ubrato/core/internal/service/tender"
@@ -30,6 +31,7 @@ import (
 	portfolioStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/portfolio"
 	questionAnswerStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/question_answer"
 	questionnaireStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/questionnaire"
+	respondStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/respond"
 	sessionStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/session"
 	tenderStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/tender"
 	userStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/user"
@@ -92,6 +94,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	questionnaireStore := questionnaireStore.NewQuestionnaireStore()
 	questionAnswerStore := questionAnswerStore.NewQuestionAnswerStore()
 	portfolioStore := portfolioStore.NewPortfolioStore()
+	respondStore := respondStore.NewPesponsStore()
 
 	dadataGateway := dadataGateway.NewClient(cfg.Gateway.Dadata.APIKey)
 
@@ -113,6 +116,12 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		dadataGateway,
 		tokenAuthorizer,
 		jetStream,
+	)
+
+	respondService := respondService.New(
+		psql,
+		respondStore,
+		tenderStore,
 	)
 
 	tenderService := tenderService.New(
@@ -177,7 +186,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	router := http.NewRouter(http.RouterParams{
 		Error:         errorHandler.New(logger),
 		Auth:          authHandler.New(logger, authService, userService),
-		Tenders:       tenderHandler.New(logger, tenderService, verificationService, questionAnswerService),
+		Tenders:       tenderHandler.New(logger, tenderService, verificationService, questionAnswerService, respondService),
 		Catalog:       catalogHandler.New(logger, catalogService),
 		Users:         userHandler.New(logger, userService),
 		Survey:        surveyHandler.New(logger, surveyService),

@@ -1,4 +1,4 @@
-package tender
+package respond
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
-func (s *TenderStore) CreateResponse(ctx context.Context, qe store.QueryExecutor, params store.TenderCreateResponseParams) error {
+func (s *RespondStore) Create(ctx context.Context, qe store.QueryExecutor, params store.RespondCreateParams) error {
 	builder := squirrel.
 		Insert("tender_responses").
 		Columns(

@@ -7,25 +7,25 @@ import (
 )
 
 type TenderCreateParams struct {
-	Name               string
-	ServiceIDs         []int
-	ObjectIDs          []int
-	Price              int
-	IsContractPrice    bool
-	IsNDSPrice         bool
-	IsDraft            bool
-	CityID             int
-	FloorSpace         int
-	Description        string
-	Wishes             string
-	Specification      string
-	Attachments        []string
-	Status             int
-	ReceptionStart     time.Time
-	ReceptionEnd       time.Time
-	WorkStart          time.Time
-	WorkEnd            time.Time
-	OrganizationID     int
+	Name            string
+	ServiceIDs      []int
+	ObjectIDs       []int
+	Price           int
+	IsContractPrice bool
+	IsNDSPrice      bool
+	IsDraft         bool
+	CityID          int
+	FloorSpace      int
+	Description     string
+	Wishes          string
+	Specification   string
+	Attachments     []string
+	Status          int
+	ReceptionStart  time.Time
+	ReceptionEnd    time.Time
+	WorkStart       time.Time
+	WorkEnd         time.Time
+	OrganizationID  int
 }
 
 type TenderListParams struct {
@@ -76,13 +76,6 @@ type TenderObjectsDeleteParams struct {
 type TenderServicesDeleteParams struct {
 	TenderID    int
 	ServicesIDs []int
-}
-
-type TenderCreateResponseParams struct {
-	TenderID       int
-	OrganizationID int
-	Price          int
-	IsNds          bool
 }
 
 type TenderUpdateVerifStatusParams struct {

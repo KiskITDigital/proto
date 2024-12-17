@@ -557,6 +557,7 @@ func (*ErrorStatusCode) v1TendersTenderIDGetRes()                              {
 func (*ErrorStatusCode) v1TendersTenderIDPutRes()                              {}
 func (*ErrorStatusCode) v1TendersTenderIDQuestionAnswerGetRes()                {}
 func (*ErrorStatusCode) v1TendersTenderIDQuestionAnswerPostRes()               {}
+func (*ErrorStatusCode) v1TendersTenderIDRespondGetRes()                       {}
 func (*ErrorStatusCode) v1TendersTenderIDRespondPostRes()                      {}
 func (*ErrorStatusCode) v1TendersVerificationsGetRes()                         {}
 func (*ErrorStatusCode) v1UsersConfirmEmailPostRes()                           {}
@@ -2153,6 +2154,65 @@ func (s *RegularUser) SetUpdatedAt(val time.Time) {
 // SetOrganization sets the value of Organization.
 func (s *RegularUser) SetOrganization(val Organization) {
 	s.Organization = val
+}
+
+// Ref: #
+type Respond struct {
+	TenderID       int       `json:"tender_id"`
+	OrganizationID int       `json:"organization_id"`
+	Price          int       `json:"price"`
+	IsNdsPrice     bool      `json:"is_nds_price"`
+	CreatedAt      time.Time `json:"created_at"`
+}
+
+// GetTenderID returns the value of TenderID.
+func (s *Respond) GetTenderID() int {
+	return s.TenderID
+}
+
+// GetOrganizationID returns the value of OrganizationID.
+func (s *Respond) GetOrganizationID() int {
+	return s.OrganizationID
+}
+
+// GetPrice returns the value of Price.
+func (s *Respond) GetPrice() int {
+	return s.Price
+}
+
+// GetIsNdsPrice returns the value of IsNdsPrice.
+func (s *Respond) GetIsNdsPrice() bool {
+	return s.IsNdsPrice
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Respond) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetTenderID sets the value of TenderID.
+func (s *Respond) SetTenderID(val int) {
+	s.TenderID = val
+}
+
+// SetOrganizationID sets the value of OrganizationID.
+func (s *Respond) SetOrganizationID(val int) {
+	s.OrganizationID = val
+}
+
+// SetPrice sets the value of Price.
+func (s *Respond) SetPrice(val int) {
+	s.Price = val
+}
+
+// SetIsNdsPrice sets the value of IsNdsPrice.
+func (s *Respond) SetIsNdsPrice(val bool) {
+	s.IsNdsPrice = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Respond) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
 }
 
 // Ref: #
@@ -4845,6 +4905,33 @@ func (s *V1TendersTenderIDQuestionAnswerPostReq) SetParentID(val OptInt) {
 func (s *V1TendersTenderIDQuestionAnswerPostReq) SetContent(val string) {
 	s.Content = val
 }
+
+type V1TendersTenderIDRespondGetOK struct {
+	Data       []Respond  `json:"data"`
+	Pagination Pagination `json:"pagination"`
+}
+
+// GetData returns the value of Data.
+func (s *V1TendersTenderIDRespondGetOK) GetData() []Respond {
+	return s.Data
+}
+
+// GetPagination returns the value of Pagination.
+func (s *V1TendersTenderIDRespondGetOK) GetPagination() Pagination {
+	return s.Pagination
+}
+
+// SetData sets the value of Data.
+func (s *V1TendersTenderIDRespondGetOK) SetData(val []Respond) {
+	s.Data = val
+}
+
+// SetPagination sets the value of Pagination.
+func (s *V1TendersTenderIDRespondGetOK) SetPagination(val Pagination) {
+	s.Pagination = val
+}
+
+func (*V1TendersTenderIDRespondGetOK) v1TendersTenderIDRespondGetRes() {}
 
 // V1TendersTenderIDRespondPostOK is response for V1TendersTenderIDRespondPost operation.
 type V1TendersTenderIDRespondPostOK struct{}

@@ -11,7 +11,7 @@ type Service struct {
 	psql              DBTX
 	verificationStore VerificationStore
 	tenderStore       TenderStore
-	commentStore CommentStore
+	commentStore      CommentStore
 	organizationStore OrganizationStore
 }
 
@@ -26,7 +26,7 @@ type VerificationStore interface {
 	GetCommentRequests(ctx context.Context, qe store.QueryExecutor, params store.VerificationRequestsObjectGetParams) ([]models.VerificationRequest[models.VerificationObject], error)
 	GetWithEmptyObject(ctx context.Context, qe store.QueryExecutor, params store.VerificationRequestsObjectGetParams) ([]models.VerificationRequest[models.VerificationObject], error)
 	GetByIDWithEmptyObject(ctx context.Context, qe store.QueryExecutor, requestID int) (models.VerificationRequest[models.VerificationObject], error)
-	Count(ctx context.Context, qe store.QueryExecutor, params store.VerificationRequestsObjectGetCountParams) (int, error) 
+	Count(ctx context.Context, qe store.QueryExecutor, params store.VerificationRequestsObjectGetCountParams) (int, error)
 }
 
 type TenderStore interface {
