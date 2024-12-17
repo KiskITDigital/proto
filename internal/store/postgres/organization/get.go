@@ -78,12 +78,7 @@ func (s *OrganizationStore) GetCustomer(ctx context.Context, qe store.QueryExecu
 
 		return models.Organization{}, fmt.Errorf("get cities by ids: %w", err)
 	}
-
-	for _, cityID := range organization.CustomerInfo.CityIDs {
-		if city, ok := cities[cityID]; ok {
-			organization.CustomerInfo.Cities = append(organization.CustomerInfo.Cities, city)
-		}
-	}
+	organization.CustomerInfo.Cities = cities
 
 	return organization, nil
 }
@@ -153,37 +148,49 @@ func (s *OrganizationStore) GetContractor(ctx context.Context, qe store.QueryExe
 		return models.Organization{}, errstore.ErrOrganizationNotAContractor
 	}
 
+	var (
+		measureIDs []int
+		serviceIDs []int
+	)
+
+	for _, service := range organization.ContractorInfo.Services {
+		measureIDs = append(measureIDs, service.MeasureID)
+		serviceIDs = append(serviceIDs, service.ServiceID)
+	}
+
+	services, err := s.catalogStore.GetServicesByIDs(ctx, qe, deduplicate.Deduplicate(serviceIDs))
+	if err != nil {
+		return models.Organization{}, fmt.Errorf("get services by ids: %w", err)
+	}
+
+	measurements, err := s.catalogStore.GetMeasurementsByIDs(ctx, qe, deduplicate.Deduplicate(measureIDs))
+	if err != nil {
+		return models.Organization{}, fmt.Errorf("get measurements by ids: %w", err)
+	}
+
+	for i, serviceWithPrice := range organization.ContractorInfo.Services {
+		if service, ok := services[serviceWithPrice.ServiceID]; ok {
+			organization.ContractorInfo.Services[i].Service = service
+		}
+
+		if measure, ok := measurements[serviceWithPrice.MeasureID]; ok {
+			organization.ContractorInfo.Services[i].Measure = measure
+		}
+	}
+
 	cities, err := s.catalogStore.GetCitiesByIDs(ctx, qe, deduplicate.Deduplicate(organization.ContractorInfo.CityIDs))
 	if err != nil {
 		return models.Organization{}, fmt.Errorf("get cities by ids: %w", err)
 	}
+	organization.ContractorInfo.Cities = cities
 
 	objects, err := s.catalogStore.GetObjectsByIDs(ctx, qe, deduplicate.Deduplicate(organization.ContractorInfo.ObjectIDs))
 	if err != nil {
 		return models.Organization{}, fmt.Errorf("get objects by ids: %w", err)
 	}
 
-	services, err := s.catalogStore.GetServicesByIDs(ctx, qe, deduplicate.Deduplicate(organization.ContractorInfo.ServiceIDs))
-	if err != nil {
-		return models.Organization{}, fmt.Errorf("get services by ids: %w", err)
-	}
-
-	for _, cityID := range organization.ContractorInfo.CityIDs {
-		if city, ok := cities[cityID]; ok {
-			organization.ContractorInfo.Cities = append(organization.ContractorInfo.Cities, city)
-		}
-	}
-
-	for _, serviceID := range organization.ContractorInfo.ServiceIDs {
-		if service, ok := services[serviceID]; ok {
-			organization.ContractorInfo.Services = append(organization.ContractorInfo.Services, service)
-		}
-	}
-
-	for _, objectID := range organization.ContractorInfo.ObjectIDs {
-		if object, ok := objects[objectID]; ok {
-			organization.ContractorInfo.Objects = append(organization.ContractorInfo.Objects, object)
-		}
+	for _, object := range objects {
+		organization.ContractorInfo.Objects = append(organization.ContractorInfo.Objects, object)
 	}
 
 	return organization, nil

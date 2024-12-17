@@ -46,6 +46,12 @@ type Handler interface {
 	//
 	// POST /v1/catalog/cities
 	V1CatalogCitiesPost(ctx context.Context, req *V1CatalogCitiesPostReq) (V1CatalogCitiesPostRes, error)
+	// V1CatalogMeasurementsGet implements GET /v1/catalog/measurements operation.
+	//
+	// Возвращает список измерений.
+	//
+	// GET /v1/catalog/measurements
+	V1CatalogMeasurementsGet(ctx context.Context) (V1CatalogMeasurementsGetRes, error)
 	// V1CatalogObjectsGet implements GET /v1/catalog/objects operation.
 	//
 	// Lists all available objects.
@@ -174,7 +180,7 @@ type Handler interface {
 	//
 	// **Без JWT или с ролью "User"**:
 	// Возвращает тендеры только со статусом "Approved".
-	// **Если "User" состоит в организации:** возразщает все
+	// **Если "User" состоит в организации:** возвращает все
 	// тендеры (с черновиками).
 	//
 	// GET /v1/organizations/{organizationID}/tenders

@@ -14,12 +14,13 @@ type Handler struct {
 }
 
 type Service interface {
-	GetObjects(ctx context.Context) (models.CatalogObjects, error)
-	GetServices(ctx context.Context) (models.CatalogServices, error)
+	GetObjects(ctx context.Context) (models.Objects, error)
+	GetServices(ctx context.Context) (models.Services, error)
 	CreateCity(ctx context.Context, params catalogService.CreateCityParams) (models.City, error)
 	CreateRegion(ctx context.Context, params catalogService.CreateRegionParams) (models.Region, error)
-	CreateObject(ctx context.Context, params catalogService.CreateObjectParams) (models.CatalogObject, error)
-	CreateService(ctx context.Context, params catalogService.CreateServiceParams) (models.CatalogService, error)
+	CreateObject(ctx context.Context, params catalogService.CreateObjectParams) (models.Object, error)
+	CreateService(ctx context.Context, params catalogService.CreateServiceParams) (models.Service, error)
+	GetMeasurements(ctx context.Context) ([]models.Measure, error)
 }
 
 func New(logger *slog.Logger, svc Service) *Handler {

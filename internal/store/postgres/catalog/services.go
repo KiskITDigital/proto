@@ -11,7 +11,7 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
-func (s *CatalogStore) CreateService(ctx context.Context, qe store.QueryExecutor, params store.CatalogCreateServiceParams) (models.CatalogService, error) {
+func (s *CatalogStore) CreateService(ctx context.Context, qe store.QueryExecutor, params store.CatalogCreateServiceParams) (models.Service, error) {
 	builder := squirrel.
 		Insert("services").
 		Columns(
@@ -31,7 +31,7 @@ func (s *CatalogStore) CreateService(ctx context.Context, qe store.QueryExecutor
 		PlaceholderFormat(squirrel.Dollar)
 
 	var (
-		service  models.CatalogService
+		service  models.Service
 		parentID sql.NullInt64
 	)
 
@@ -41,7 +41,7 @@ func (s *CatalogStore) CreateService(ctx context.Context, qe store.QueryExecutor
 		&parentID,
 	)
 	if err != nil {
-		return models.CatalogService{}, fmt.Errorf("query row: %w", err)
+		return models.Service{}, fmt.Errorf("query row: %w", err)
 	}
 
 	service.ParentID = int(parentID.Int64)
@@ -49,7 +49,7 @@ func (s *CatalogStore) CreateService(ctx context.Context, qe store.QueryExecutor
 	return service, nil
 }
 
-func (s *CatalogStore) GetServices(ctx context.Context, qe store.QueryExecutor) (models.CatalogServices, error) {
+func (s *CatalogStore) GetServices(ctx context.Context, qe store.QueryExecutor) (models.Services, error) {
 	builder := squirrel.
 		Select(
 			"s.id",
@@ -66,11 +66,11 @@ func (s *CatalogStore) GetServices(ctx context.Context, qe store.QueryExecutor) 
 	}
 	defer rows.Close()
 
-	var services models.CatalogServices
+	var services models.Services
 
 	for rows.Next() {
 		var (
-			service  models.CatalogService
+			service  models.Service
 			parentID sql.NullInt64
 		)
 

@@ -241,6 +241,27 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
+					case 'm': // Prefix: "measurements"
+						origElem := elem
+						if l := len("measurements"); len(elem) >= l && elem[0:l] == "measurements" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleV1CatalogMeasurementsGetRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET")
+							}
+
+							return
+						}
+
+						elem = origElem
 					case 'o': // Prefix: "objects"
 						origElem := elem
 						if l := len("objects"); len(elem) >= l && elem[0:l] == "objects" {
@@ -1649,6 +1670,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								r.summary = "Add city to catalog"
 								r.operationID = ""
 								r.pathPattern = "/v1/catalog/cities"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					case 'm': // Prefix: "measurements"
+						origElem := elem
+						if l := len("measurements"); len(elem) >= l && elem[0:l] == "measurements" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = "V1CatalogMeasurementsGet"
+								r.summary = "Retrieve all measurements"
+								r.operationID = ""
+								r.pathPattern = "/v1/catalog/measurements"
 								r.args = args
 								r.count = 0
 								return r, true

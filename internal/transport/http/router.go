@@ -74,6 +74,7 @@ type Catalog interface {
 	V1CatalogRegionsPost(ctx context.Context, req *api.V1CatalogRegionsPostReq) (api.V1CatalogRegionsPostRes, error)
 	V1CatalogObjectsPost(ctx context.Context, req *api.V1CatalogObjectsPostReq) (api.V1CatalogObjectsPostRes, error)
 	V1CatalogServicesPost(ctx context.Context, req *api.V1CatalogServicesPostReq) (api.V1CatalogServicesPostRes, error)
+	V1CatalogMeasurementsGet(ctx context.Context) (api.V1CatalogMeasurementsGetRes, error) 
 }
 
 type Organization interface {

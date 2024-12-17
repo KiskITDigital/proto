@@ -8,6 +8,8 @@ properties:
     items:
       $ref: "./City.yaml"
   services:
-    $ref: "catalog/Services.yaml"
+    type: array
+    items:
+      $ref: "catalog/ServiceWithPrice.yaml"
   objects:
     $ref: "catalog/Objects.yaml"

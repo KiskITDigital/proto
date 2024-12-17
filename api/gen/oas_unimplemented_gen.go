@@ -69,6 +69,15 @@ func (UnimplementedHandler) V1CatalogCitiesPost(ctx context.Context, req *V1Cata
 	return r, ht.ErrNotImplemented
 }
 
+// V1CatalogMeasurementsGet implements GET /v1/catalog/measurements operation.
+//
+// Возвращает список измерений.
+//
+// GET /v1/catalog/measurements
+func (UnimplementedHandler) V1CatalogMeasurementsGet(ctx context.Context) (r V1CatalogMeasurementsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1CatalogObjectsGet implements GET /v1/catalog/objects operation.
 //
 // Lists all available objects.
@@ -251,7 +260,7 @@ func (UnimplementedHandler) V1OrganizationsOrganizationIDProfileCustomerPut(ctx 
 //
 // **Без JWT или с ролью "User"**:
 // Возвращает тендеры только со статусом "Approved".
-// **Если "User" состоит в организации:** возразщает все
+// **Если "User" состоит в организации:** возвращает все
 // тендеры (с черновиками).
 //
 // GET /v1/organizations/{organizationID}/tenders

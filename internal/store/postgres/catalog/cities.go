@@ -112,7 +112,7 @@ func (s *CatalogStore) ListCities(ctx context.Context, qe store.QueryExecutor, n
 	return cities, nil
 }
 
-func (s *CatalogStore) GetCitiesByIDs(ctx context.Context, qe store.QueryExecutor, cityIDs []int) (map[int]models.City, error) {
+func (s *CatalogStore) GetCitiesByIDs(ctx context.Context, qe store.QueryExecutor, cityIDs []int) ([]models.City, error) {
 	builder := squirrel.Select(
 		"c.id",
 		"c.name",
@@ -129,7 +129,7 @@ func (s *CatalogStore) GetCitiesByIDs(ctx context.Context, qe store.QueryExecuto
 	}
 	defer rows.Close()
 
-	cities := make(map[int]models.City)
+	var cities []models.City
 	for rows.Next() {
 		var city models.City
 		if err := rows.Scan(
@@ -141,7 +141,7 @@ func (s *CatalogStore) GetCitiesByIDs(ctx context.Context, qe store.QueryExecuto
 			return nil, fmt.Errorf("scan city row: %w", err)
 		}
 
-		cities[city.ID] = city
+		cities = append(cities, city)
 	}
 
 	return cities, nil

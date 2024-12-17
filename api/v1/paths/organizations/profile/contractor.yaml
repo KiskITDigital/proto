@@ -28,11 +28,26 @@ put:
               items:
                 type: integer
               example: [1, 2]
-            service_ids:
+            services:
               type: array
               items:
-                type: integer
-              example: [1, 2]
+                type: object
+                required:
+                  - service_id
+                  - measure_id
+                  - price
+                properties:
+                  service_id:
+                    type: integer
+                  measure_id:
+                    type: integer
+                  price:
+                    type: number
+                    format: float
+                example:
+                  service_id: 1
+                  measure_id: 1
+                  price: 500.00
             objects_ids:
               type: array
               items:

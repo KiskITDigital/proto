@@ -152,14 +152,13 @@ func (a *CustomerInfo) Scan(value interface{}) error {
 }
 
 type ContractorInfo struct {
-	Description Optional[string] `json:"description"`
-	Cities      []City           `json:"-"`
-	Objects     []Object         `json:"-"`
-	Services    []Service        `json:"-"`
+	Description Optional[string]   `json:"description"`
+	Services    []ServiceWithPrice `json:"services"`
+	Cities      []City             `json:"-"`
+	Objects     []Object           `json:"-"`
 
-	CityIDs    []int `json:"city_ids"`
-	ServiceIDs []int `json:"service_ids"`
-	ObjectIDs  []int `json:"object_ids"`
+	CityIDs   []int `json:"city_ids"`
+	ObjectIDs []int `json:"object_ids"`
 }
 
 func ConvertContractorInfoToApi(info ContractorInfo) api.ContractorInfo {
@@ -167,7 +166,7 @@ func ConvertContractorInfoToApi(info ContractorInfo) api.ContractorInfo {
 		Description: api.OptDescription{Value: api.Description(info.Description.Value), Set: info.Description.Set},
 		Cities:      convert.Slice[[]City, []api.City](info.Cities, ConvertCityModelToApi),
 		Objects:     convert.Slice[[]Object, []api.Object](info.Objects, ConvertObjectModelToApi),
-		Services:    convert.Slice[[]Service, []api.Service](info.Services, ConvertServiceModelToApi),
+		Services:    convert.Slice[[]ServiceWithPrice, []api.ServiceWithPrice](info.Services, ConvertServiceWithPriceToAPI),
 	}
 }
 

@@ -49,7 +49,7 @@ func (s *Service) UpdateContractor(ctx context.Context, params service.Organizat
 
 	if !organization.IsContractor {
 		return models.Organization{}, errstore.ErrOrganizationNotAContractor
-	} 
+	}
 
 	if err := s.organizationStore.Update(ctx, s.psql.DB(), store.OrganizationUpdateParams{
 		OrganizationID: params.OrganizationID,
@@ -57,7 +57,7 @@ func (s *Service) UpdateContractor(ctx context.Context, params service.Organizat
 			Description: params.Description,
 			CityIDs:     params.CityIDs,
 			ObjectIDs:   params.ObjectIDs,
-			ServiceIDs:  params.ServiceIDs,
+			Services:    params.Services,
 		}),
 	}); err != nil {
 		return models.Organization{}, fmt.Errorf("update organization: %w", err)

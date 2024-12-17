@@ -8,6 +8,7 @@ import (
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/contextor"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/service"
 	"gitlab.ubrato.ru/ubrato/core/internal/store/errstore"
@@ -91,9 +92,16 @@ func (h *Handler) V1OrganizationsOrganizationIDProfileContractorPut(ctx context.
 		OrganizationID: params.OrganizationID,
 		Description:    models.Optional[string]{Value: string(req.GetDescription().Value), Set: req.GetDescription().Set},
 		CityIDs:        req.GetCityIds(),
-		ServiceIDs:     req.GetServiceIds(),
-		ObjectIDs:      req.GetObjectsIds(),
-	})
+		Services: convert.Slice[[]api.V1OrganizationsOrganizationIDProfileContractorPutReqServicesItem, []models.ServiceWithPrice](
+			req.GetServices(), func(i api.V1OrganizationsOrganizationIDProfileContractorPutReqServicesItem) models.ServiceWithPrice {
+				return models.ServiceWithPrice{
+					ServiceID: i.ServiceID,
+					MeasureID: i.MeasureID,
+					Price:     i.Price,
+				}
+			}),
+		ObjectIDs: req.GetObjectsIds()})
+
 	switch {
 	case errors.Is(err, errstore.ErrOrganizationNotFound):
 		return nil, cerr.Wrap(err, cerr.CodeNotFound, "Организация не найдена", map[string]interface{}{
