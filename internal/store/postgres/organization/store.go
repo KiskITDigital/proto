@@ -13,9 +13,10 @@ type (
 	}
 
 	CatalogStore interface {
-		GetCitiesByIDs(ctx context.Context, qe store.QueryExecutor, cityIDs []int) (map[int]models.City, error)
+		GetCitiesByIDs(ctx context.Context, qe store.QueryExecutor, cityIDs []int) ([]models.City, error)
 		GetObjectsByIDs(ctx context.Context, qe store.QueryExecutor, objectIDs []int) (map[int]models.Object, error)
 		GetServicesByIDs(ctx context.Context, qe store.QueryExecutor, serviceIDs []int) (map[int]models.Service, error)
+		GetMeasurementsByIDs(ctx context.Context, qe store.QueryExecutor, measureIDs []int) (map[int]models.Measure, error)
 	}
 )
 

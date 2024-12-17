@@ -11,7 +11,7 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
-func (s *CatalogStore) CreateObject(ctx context.Context, qe store.QueryExecutor, params store.CatalogCreateObjectParams) (models.CatalogObject, error) {
+func (s *CatalogStore) CreateObject(ctx context.Context, qe store.QueryExecutor, params store.CatalogCreateObjectParams) (models.Object, error) {
 	builder := squirrel.
 		Insert("objects").
 		Columns(
@@ -31,7 +31,7 @@ func (s *CatalogStore) CreateObject(ctx context.Context, qe store.QueryExecutor,
 		PlaceholderFormat(squirrel.Dollar)
 
 	var (
-		object   models.CatalogObject
+		object   models.Object
 		parentID sql.NullInt64
 	)
 
@@ -41,7 +41,7 @@ func (s *CatalogStore) CreateObject(ctx context.Context, qe store.QueryExecutor,
 		&parentID,
 	)
 	if err != nil {
-		return models.CatalogObject{}, fmt.Errorf("query row: %w", err)
+		return models.Object{}, fmt.Errorf("query row: %w", err)
 	}
 
 	object.ParentID = int(parentID.Int64)
@@ -49,7 +49,7 @@ func (s *CatalogStore) CreateObject(ctx context.Context, qe store.QueryExecutor,
 	return object, nil
 }
 
-func (s *CatalogStore) GetObjects(ctx context.Context, qe store.QueryExecutor) (models.CatalogObjects, error) {
+func (s *CatalogStore) GetObjects(ctx context.Context, qe store.QueryExecutor) (models.Objects, error) {
 	builder := squirrel.
 		Select(
 			"o.id",
@@ -66,11 +66,11 @@ func (s *CatalogStore) GetObjects(ctx context.Context, qe store.QueryExecutor) (
 	}
 	defer rows.Close()
 
-	var objects models.CatalogObjects
+	var objects models.Objects
 
 	for rows.Next() {
 		var (
-			object   models.CatalogObject
+			object   models.Object
 			parentID sql.NullInt64
 		)
 

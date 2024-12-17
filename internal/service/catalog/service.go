@@ -19,14 +19,15 @@ type DBTX interface {
 }
 
 type CatalogStore interface {
-	GetServices(ctx context.Context, qe store.QueryExecutor) (models.CatalogServices, error)
-	GetObjects(ctx context.Context, qe store.QueryExecutor) (models.CatalogObjects, error)
+	GetServices(ctx context.Context, qe store.QueryExecutor) (models.Services, error)
+	GetObjects(ctx context.Context, qe store.QueryExecutor) (models.Objects, error)
 	CreateRegion(ctx context.Context, qe store.QueryExecutor, params store.CatalogCreateRegionParams) (models.Region, error)
 	CreateCity(ctx context.Context, qe store.QueryExecutor, params store.CatalogCreateCityParams) (models.City, error)
 	GetRegionByID(ctx context.Context, qe store.QueryExecutor, regionID int) (models.Region, error)
 	GetCityByID(ctx context.Context, qe store.QueryExecutor, cityID int) (models.City, error)
-	CreateObject(ctx context.Context, qe store.QueryExecutor, params store.CatalogCreateObjectParams) (models.CatalogObject, error)
-	CreateService(ctx context.Context, qe store.QueryExecutor, params store.CatalogCreateServiceParams) (models.CatalogService, error)
+	CreateObject(ctx context.Context, qe store.QueryExecutor, params store.CatalogCreateObjectParams) (models.Object, error)
+	CreateService(ctx context.Context, qe store.QueryExecutor, params store.CatalogCreateServiceParams) (models.Service, error)
+	GetMeasurements(ctx context.Context, qe store.QueryExecutor) ([]models.Measure, error)
 }
 
 func New(

@@ -25,6 +25,10 @@ type V1CatalogCitiesPostRes interface {
 	v1CatalogCitiesPostRes()
 }
 
+type V1CatalogMeasurementsGetRes interface {
+	v1CatalogMeasurementsGetRes()
+}
+
 type V1CatalogObjectsGetRes interface {
 	v1CatalogObjectsGetRes()
 }

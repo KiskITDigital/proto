@@ -97,6 +97,8 @@ paths:
     $ref: "v1/paths/catalog/cities.yaml"
   /v1/catalog/regions:
     $ref: "v1/paths/catalog/regions.yaml"
+  /v1/catalog/measurements:
+    $ref: "v1/paths/catalog/measure.yaml"
 
   /v1/comments/verifications:
     $ref: "v1/paths/comments/verifications.yaml"

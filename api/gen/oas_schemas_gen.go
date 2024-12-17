@@ -198,9 +198,9 @@ func (s *ContactInfo) SetInfo(val string) {
 type ContractorInfo struct {
 	Description OptDescription `json:"description"`
 	// Локации заказчика.
-	Cities   []City   `json:"cities"`
-	Services Services `json:"services"`
-	Objects  Objects  `json:"objects"`
+	Cities   []City             `json:"cities"`
+	Services []ServiceWithPrice `json:"services"`
+	Objects  Objects            `json:"objects"`
 }
 
 // GetDescription returns the value of Description.
@@ -214,7 +214,7 @@ func (s *ContractorInfo) GetCities() []City {
 }
 
 // GetServices returns the value of Services.
-func (s *ContractorInfo) GetServices() Services {
+func (s *ContractorInfo) GetServices() []ServiceWithPrice {
 	return s.Services
 }
 
@@ -234,7 +234,7 @@ func (s *ContractorInfo) SetCities(val []City) {
 }
 
 // SetServices sets the value of Services.
-func (s *ContractorInfo) SetServices(val Services) {
+func (s *ContractorInfo) SetServices(val []ServiceWithPrice) {
 	s.Services = val
 }
 
@@ -518,6 +518,7 @@ func (*ErrorStatusCode) v1AuthSigninPostRes()                                  {
 func (*ErrorStatusCode) v1AuthSignupPostRes()                                  {}
 func (*ErrorStatusCode) v1AuthUserGetRes()                                     {}
 func (*ErrorStatusCode) v1CatalogCitiesPostRes()                               {}
+func (*ErrorStatusCode) v1CatalogMeasurementsGetRes()                          {}
 func (*ErrorStatusCode) v1CatalogObjectsGetRes()                               {}
 func (*ErrorStatusCode) v1CatalogObjectsPostRes()                              {}
 func (*ErrorStatusCode) v1CatalogRegionsPostRes()                              {}
@@ -572,6 +573,32 @@ func (*ErrorStatusCode) v1VerificationsRequestIDGetRes()                       {
 type Inn string
 
 type Kpp string
+
+// Ref: #
+type Measure struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+// GetID returns the value of ID.
+func (s *Measure) GetID() int {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *Measure) GetName() string {
+	return s.Name
+}
+
+// SetID sets the value of ID.
+func (s *Measure) SetID(val int) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *Measure) SetName(val string) {
+	s.Name = val
+}
 
 type Name string
 
@@ -2221,6 +2248,43 @@ func (s *Service) SetName(val string) {
 	s.Name = val
 }
 
+// Ref: #
+type ServiceWithPrice struct {
+	Service Service `json:"service"`
+	Measure Measure `json:"measure"`
+	Price   float32 `json:"price"`
+}
+
+// GetService returns the value of Service.
+func (s *ServiceWithPrice) GetService() Service {
+	return s.Service
+}
+
+// GetMeasure returns the value of Measure.
+func (s *ServiceWithPrice) GetMeasure() Measure {
+	return s.Measure
+}
+
+// GetPrice returns the value of Price.
+func (s *ServiceWithPrice) GetPrice() float32 {
+	return s.Price
+}
+
+// SetService sets the value of Service.
+func (s *ServiceWithPrice) SetService(val Service) {
+	s.Service = val
+}
+
+// SetMeasure sets the value of Measure.
+func (s *ServiceWithPrice) SetMeasure(val Measure) {
+	s.Measure = val
+}
+
+// SetPrice sets the value of Price.
+func (s *ServiceWithPrice) SetPrice(val float32) {
+	s.Price = val
+}
+
 type Services []Service
 
 // Ref: #
@@ -3087,6 +3151,22 @@ func (s *V1CatalogCitiesPostReq) SetRegionID(val int) {
 	s.RegionID = val
 }
 
+type V1CatalogMeasurementsGetOK struct {
+	Data []Measure `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1CatalogMeasurementsGetOK) GetData() []Measure {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1CatalogMeasurementsGetOK) SetData(val []Measure) {
+	s.Data = val
+}
+
+func (*V1CatalogMeasurementsGetOK) v1CatalogMeasurementsGetRes() {}
+
 type V1CatalogObjectsGetOK struct {
 	Data Objects `json:"data"`
 }
@@ -3663,10 +3743,10 @@ func (s *V1OrganizationsOrganizationIDProfileContractorPutOKData) SetProfile(val
 }
 
 type V1OrganizationsOrganizationIDProfileContractorPutReq struct {
-	Description OptDescription `json:"description"`
-	CityIds     []int          `json:"city_ids"`
-	ServiceIds  []int          `json:"service_ids"`
-	ObjectsIds  []int          `json:"objects_ids"`
+	Description OptDescription                                                     `json:"description"`
+	CityIds     []int                                                              `json:"city_ids"`
+	Services    []V1OrganizationsOrganizationIDProfileContractorPutReqServicesItem `json:"services"`
+	ObjectsIds  []int                                                              `json:"objects_ids"`
 }
 
 // GetDescription returns the value of Description.
@@ -3679,9 +3759,9 @@ func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) GetCityIds() []in
 	return s.CityIds
 }
 
-// GetServiceIds returns the value of ServiceIds.
-func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) GetServiceIds() []int {
-	return s.ServiceIds
+// GetServices returns the value of Services.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) GetServices() []V1OrganizationsOrganizationIDProfileContractorPutReqServicesItem {
+	return s.Services
 }
 
 // GetObjectsIds returns the value of ObjectsIds.
@@ -3699,14 +3779,50 @@ func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) SetCityIds(val []
 	s.CityIds = val
 }
 
-// SetServiceIds sets the value of ServiceIds.
-func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) SetServiceIds(val []int) {
-	s.ServiceIds = val
+// SetServices sets the value of Services.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) SetServices(val []V1OrganizationsOrganizationIDProfileContractorPutReqServicesItem) {
+	s.Services = val
 }
 
 // SetObjectsIds sets the value of ObjectsIds.
 func (s *V1OrganizationsOrganizationIDProfileContractorPutReq) SetObjectsIds(val []int) {
 	s.ObjectsIds = val
+}
+
+type V1OrganizationsOrganizationIDProfileContractorPutReqServicesItem struct {
+	ServiceID int     `json:"service_id"`
+	MeasureID int     `json:"measure_id"`
+	Price     float32 `json:"price"`
+}
+
+// GetServiceID returns the value of ServiceID.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutReqServicesItem) GetServiceID() int {
+	return s.ServiceID
+}
+
+// GetMeasureID returns the value of MeasureID.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutReqServicesItem) GetMeasureID() int {
+	return s.MeasureID
+}
+
+// GetPrice returns the value of Price.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutReqServicesItem) GetPrice() float32 {
+	return s.Price
+}
+
+// SetServiceID sets the value of ServiceID.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutReqServicesItem) SetServiceID(val int) {
+	s.ServiceID = val
+}
+
+// SetMeasureID sets the value of MeasureID.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutReqServicesItem) SetMeasureID(val int) {
+	s.MeasureID = val
+}
+
+// SetPrice sets the value of Price.
+func (s *V1OrganizationsOrganizationIDProfileContractorPutReqServicesItem) SetPrice(val float32) {
+	s.Price = val
 }
 
 type V1OrganizationsOrganizationIDProfileCustomerGetOK struct {

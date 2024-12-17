@@ -49,18 +49,6 @@ func (t Tender) ToVerificationObject() api.VerificationRequestObject {
 	}
 }
 
-type Object struct {
-	ID       int
-	ParentID int
-	Name     string
-}
-
-type Service struct {
-	ID       int
-	ParentID int
-	Name     string
-}
-
 func ConvertTenderModelToApi(tender Tender) api.Tender {
 	tenderApi := api.Tender{
 		ID:              tender.ID,

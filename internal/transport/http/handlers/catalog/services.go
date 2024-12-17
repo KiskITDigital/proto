@@ -17,7 +17,7 @@ func (h *Handler) V1CatalogServicesGet(ctx context.Context) (api.V1CatalogServic
 	}
 
 	return &api.V1CatalogServicesGetOK{
-		Data: convert.Slice[models.CatalogServices, api.Services](services, models.ConvertModelCatalogServiceToApi),
+		Data: convert.Slice[models.Services, api.Services](services, models.ConvertModelServiceToApi),
 	}, nil
 }
 
@@ -31,6 +31,6 @@ func (h *Handler) V1CatalogServicesPost(ctx context.Context, req *api.V1CatalogS
 	}
 
 	return &api.V1CatalogServicesPostCreated{
-		Data: models.ConvertModelCatalogServiceToApi(service),
+		Data: models.ConvertModelServiceToApi(service),
 	}, nil
 }

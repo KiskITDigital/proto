@@ -4,8 +4,8 @@ import "gitlab.ubrato.ru/ubrato/core/internal/models"
 
 type OrganizationGetParams struct {
 	IsContractor models.Optional[bool]
-	Page           uint64
-	PerPage        uint64
+	Page         uint64
+	PerPage      uint64
 }
 
 type OrganizationUpdateBrandParams struct {
@@ -29,8 +29,8 @@ type OrganizationCreateVerificationRequestParams struct {
 type OrganizationUpdateContractorParams struct {
 	OrganizationID int
 	Description    models.Optional[string]
+	Services       []models.ServiceWithPrice
 	CityIDs        []int
-	ServiceIDs     []int
 	ObjectIDs      []int
 }
 
