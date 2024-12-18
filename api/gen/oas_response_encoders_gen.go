@@ -624,51 +624,6 @@ func encodeV1CatalogServicesPostResponse(response V1CatalogServicesPostRes, w ht
 	}
 }
 
-func encodeV1CommentsVerificationsGetResponse(response V1CommentsVerificationsGetRes, w http.ResponseWriter, span trace.Span) error {
-	switch response := response.(type) {
-	case *V1CommentsVerificationsGetOK:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(200)
-		span.SetStatus(codes.Ok, http.StatusText(200))
-
-		e := new(jx.Encoder)
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-
-	case *ErrorStatusCode:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		code := response.StatusCode
-		if code == 0 {
-			// Set default status code.
-			code = http.StatusOK
-		}
-		w.WriteHeader(code)
-		if st := http.StatusText(code); code >= http.StatusBadRequest {
-			span.SetStatus(codes.Error, st)
-		} else {
-			span.SetStatus(codes.Ok, st)
-		}
-
-		e := new(jx.Encoder)
-		response.Response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		if code >= http.StatusInternalServerError {
-			return errors.Wrapf(ht.ErrInternalServerErrorResponse, "code: %d, message: %s", code, http.StatusText(code))
-		}
-		return nil
-
-	default:
-		return errors.Errorf("unexpected response type: %T", response)
-	}
-}
-
 func encodeV1EmployeePostResponse(response V1EmployeePostRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *V1EmployeePostCreated:
@@ -1368,89 +1323,6 @@ func encodeV1OrganizationsOrganizationIDTendersGetResponse(response V1Organizati
 	}
 }
 
-func encodeV1OrganizationsOrganizationIDVerificationsGetResponse(response V1OrganizationsOrganizationIDVerificationsGetRes, w http.ResponseWriter, span trace.Span) error {
-	switch response := response.(type) {
-	case *V1OrganizationsOrganizationIDVerificationsGetOK:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(200)
-		span.SetStatus(codes.Ok, http.StatusText(200))
-
-		e := new(jx.Encoder)
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-
-	case *ErrorStatusCode:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		code := response.StatusCode
-		if code == 0 {
-			// Set default status code.
-			code = http.StatusOK
-		}
-		w.WriteHeader(code)
-		if st := http.StatusText(code); code >= http.StatusBadRequest {
-			span.SetStatus(codes.Error, st)
-		} else {
-			span.SetStatus(codes.Ok, st)
-		}
-
-		e := new(jx.Encoder)
-		response.Response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		if code >= http.StatusInternalServerError {
-			return errors.Wrapf(ht.ErrInternalServerErrorResponse, "code: %d, message: %s", code, http.StatusText(code))
-		}
-		return nil
-
-	default:
-		return errors.Errorf("unexpected response type: %T", response)
-	}
-}
-
-func encodeV1OrganizationsOrganizationIDVerificationsPostResponse(response V1OrganizationsOrganizationIDVerificationsPostRes, w http.ResponseWriter, span trace.Span) error {
-	switch response := response.(type) {
-	case *V1OrganizationsOrganizationIDVerificationsPostOK:
-		w.WriteHeader(200)
-		span.SetStatus(codes.Ok, http.StatusText(200))
-
-		return nil
-
-	case *ErrorStatusCode:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		code := response.StatusCode
-		if code == 0 {
-			// Set default status code.
-			code = http.StatusOK
-		}
-		w.WriteHeader(code)
-		if st := http.StatusText(code); code >= http.StatusBadRequest {
-			span.SetStatus(codes.Error, st)
-		} else {
-			span.SetStatus(codes.Ok, st)
-		}
-
-		e := new(jx.Encoder)
-		response.Response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		if code >= http.StatusInternalServerError {
-			return errors.Wrapf(ht.ErrInternalServerErrorResponse, "code: %d, message: %s", code, http.StatusText(code))
-		}
-		return nil
-
-	default:
-		return errors.Errorf("unexpected response type: %T", response)
-	}
-}
-
 func encodeV1OrganizationsPortfolioPortfolioIDDeleteResponse(response V1OrganizationsPortfolioPortfolioIDDeleteRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *V1OrganizationsPortfolioPortfolioIDDeleteOK:
@@ -1492,51 +1364,6 @@ func encodeV1OrganizationsPortfolioPortfolioIDDeleteResponse(response V1Organiza
 func encodeV1OrganizationsPortfolioPortfolioIDPutResponse(response V1OrganizationsPortfolioPortfolioIDPutRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *V1OrganizationsPortfolioPortfolioIDPutOK:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(200)
-		span.SetStatus(codes.Ok, http.StatusText(200))
-
-		e := new(jx.Encoder)
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		return nil
-
-	case *ErrorStatusCode:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		code := response.StatusCode
-		if code == 0 {
-			// Set default status code.
-			code = http.StatusOK
-		}
-		w.WriteHeader(code)
-		if st := http.StatusText(code); code >= http.StatusBadRequest {
-			span.SetStatus(codes.Error, st)
-		} else {
-			span.SetStatus(codes.Ok, st)
-		}
-
-		e := new(jx.Encoder)
-		response.Response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		if code >= http.StatusInternalServerError {
-			return errors.Wrapf(ht.ErrInternalServerErrorResponse, "code: %d, message: %s", code, http.StatusText(code))
-		}
-		return nil
-
-	default:
-		return errors.Errorf("unexpected response type: %T", response)
-	}
-}
-
-func encodeV1OrganizationsVerificationsGetResponse(response V1OrganizationsVerificationsGetRes, w http.ResponseWriter, span trace.Span) error {
-	switch response := response.(type) {
-	case *V1OrganizationsVerificationsGetOK:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
@@ -1925,9 +1752,9 @@ func encodeV1TendersPostResponse(response V1TendersPostRes, w http.ResponseWrite
 	}
 }
 
-func encodeV1TendersTenderIDCommentsGetResponse(response V1TendersTenderIDCommentsGetRes, w http.ResponseWriter, span trace.Span) error {
+func encodeV1TendersTenderIDAdditionsGetResponse(response V1TendersTenderIDAdditionsGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *V1TendersTenderIDCommentsGetOK:
+	case *V1TendersTenderIDAdditionsGetOK:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
@@ -1970,9 +1797,9 @@ func encodeV1TendersTenderIDCommentsGetResponse(response V1TendersTenderIDCommen
 	}
 }
 
-func encodeV1TendersTenderIDCommentsPostResponse(response V1TendersTenderIDCommentsPostRes, w http.ResponseWriter, span trace.Span) error {
+func encodeV1TendersTenderIDAdditionsPostResponse(response V1TendersTenderIDAdditionsPostRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *V1TendersTenderIDCommentsPostOK:
+	case *V1TendersTenderIDAdditionsPostOK:
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
 
@@ -2238,51 +2065,6 @@ func encodeV1TendersTenderIDRespondPostResponse(response V1TendersTenderIDRespon
 	case *V1TendersTenderIDRespondPostOK:
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-
-		return nil
-
-	case *ErrorStatusCode:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		code := response.StatusCode
-		if code == 0 {
-			// Set default status code.
-			code = http.StatusOK
-		}
-		w.WriteHeader(code)
-		if st := http.StatusText(code); code >= http.StatusBadRequest {
-			span.SetStatus(codes.Error, st)
-		} else {
-			span.SetStatus(codes.Ok, st)
-		}
-
-		e := new(jx.Encoder)
-		response.Response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
-
-		if code >= http.StatusInternalServerError {
-			return errors.Wrapf(ht.ErrInternalServerErrorResponse, "code: %d, message: %s", code, http.StatusText(code))
-		}
-		return nil
-
-	default:
-		return errors.Errorf("unexpected response type: %T", response)
-	}
-}
-
-func encodeV1TendersVerificationsGetResponse(response V1TendersVerificationsGetRes, w http.ResponseWriter, span trace.Span) error {
-	switch response := response.(type) {
-	case *V1TendersVerificationsGetOK:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.WriteHeader(200)
-		span.SetStatus(codes.Ok, http.StatusText(200))
-
-		e := new(jx.Encoder)
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
 
 		return nil
 
@@ -2596,6 +2378,224 @@ func encodeV1UsersUserIDPutResponse(response V1UsersUserIDPutRes, w http.Respons
 	}
 }
 
+func encodeV1VerificationsAdditionsGetResponse(response V1VerificationsAdditionsGetRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *V1VerificationsAdditionsGetOK:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *ErrorStatusCode:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		code := response.StatusCode
+		if code == 0 {
+			// Set default status code.
+			code = http.StatusOK
+		}
+		w.WriteHeader(code)
+		if st := http.StatusText(code); code >= http.StatusBadRequest {
+			span.SetStatus(codes.Error, st)
+		} else {
+			span.SetStatus(codes.Ok, st)
+		}
+
+		e := new(jx.Encoder)
+		response.Response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		if code >= http.StatusInternalServerError {
+			return errors.Wrapf(ht.ErrInternalServerErrorResponse, "code: %d, message: %s", code, http.StatusText(code))
+		}
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
+func encodeV1VerificationsOrganizationsGetResponse(response V1VerificationsOrganizationsGetRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *V1VerificationsOrganizationsGetOK:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *ErrorStatusCode:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		code := response.StatusCode
+		if code == 0 {
+			// Set default status code.
+			code = http.StatusOK
+		}
+		w.WriteHeader(code)
+		if st := http.StatusText(code); code >= http.StatusBadRequest {
+			span.SetStatus(codes.Error, st)
+		} else {
+			span.SetStatus(codes.Ok, st)
+		}
+
+		e := new(jx.Encoder)
+		response.Response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		if code >= http.StatusInternalServerError {
+			return errors.Wrapf(ht.ErrInternalServerErrorResponse, "code: %d, message: %s", code, http.StatusText(code))
+		}
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
+func encodeV1VerificationsOrganizationsOrganizationIDGetResponse(response V1VerificationsOrganizationsOrganizationIDGetRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *V1VerificationsOrganizationsOrganizationIDGetOK:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *ErrorStatusCode:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		code := response.StatusCode
+		if code == 0 {
+			// Set default status code.
+			code = http.StatusOK
+		}
+		w.WriteHeader(code)
+		if st := http.StatusText(code); code >= http.StatusBadRequest {
+			span.SetStatus(codes.Error, st)
+		} else {
+			span.SetStatus(codes.Ok, st)
+		}
+
+		e := new(jx.Encoder)
+		response.Response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		if code >= http.StatusInternalServerError {
+			return errors.Wrapf(ht.ErrInternalServerErrorResponse, "code: %d, message: %s", code, http.StatusText(code))
+		}
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
+func encodeV1VerificationsOrganizationsOrganizationIDPostResponse(response V1VerificationsOrganizationsOrganizationIDPostRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *V1VerificationsOrganizationsOrganizationIDPostOK:
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		return nil
+
+	case *ErrorStatusCode:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		code := response.StatusCode
+		if code == 0 {
+			// Set default status code.
+			code = http.StatusOK
+		}
+		w.WriteHeader(code)
+		if st := http.StatusText(code); code >= http.StatusBadRequest {
+			span.SetStatus(codes.Error, st)
+		} else {
+			span.SetStatus(codes.Ok, st)
+		}
+
+		e := new(jx.Encoder)
+		response.Response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		if code >= http.StatusInternalServerError {
+			return errors.Wrapf(ht.ErrInternalServerErrorResponse, "code: %d, message: %s", code, http.StatusText(code))
+		}
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
+func encodeV1VerificationsQuestionAnswerGetResponse(response V1VerificationsQuestionAnswerGetRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *V1VerificationsQuestionAnswerGetOK:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *ErrorStatusCode:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		code := response.StatusCode
+		if code == 0 {
+			// Set default status code.
+			code = http.StatusOK
+		}
+		w.WriteHeader(code)
+		if st := http.StatusText(code); code >= http.StatusBadRequest {
+			span.SetStatus(codes.Error, st)
+		} else {
+			span.SetStatus(codes.Ok, st)
+		}
+
+		e := new(jx.Encoder)
+		response.Response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		if code >= http.StatusInternalServerError {
+			return errors.Wrapf(ht.ErrInternalServerErrorResponse, "code: %d, message: %s", code, http.StatusText(code))
+		}
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
 func encodeV1VerificationsRequestIDAprovePostResponse(response V1VerificationsRequestIDAprovePostRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *V1VerificationsRequestIDAprovePostOK:
@@ -2675,6 +2675,51 @@ func encodeV1VerificationsRequestIDDenyPostResponse(response V1VerificationsRequ
 func encodeV1VerificationsRequestIDGetResponse(response V1VerificationsRequestIDGetRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *V1VerificationsRequestIDGetOK:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(200)
+		span.SetStatus(codes.Ok, http.StatusText(200))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *ErrorStatusCode:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		code := response.StatusCode
+		if code == 0 {
+			// Set default status code.
+			code = http.StatusOK
+		}
+		w.WriteHeader(code)
+		if st := http.StatusText(code); code >= http.StatusBadRequest {
+			span.SetStatus(codes.Error, st)
+		} else {
+			span.SetStatus(codes.Ok, st)
+		}
+
+		e := new(jx.Encoder)
+		response.Response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		if code >= http.StatusInternalServerError {
+			return errors.Wrapf(ht.ErrInternalServerErrorResponse, "code: %d, message: %s", code, http.StatusText(code))
+		}
+		return nil
+
+	default:
+		return errors.Errorf("unexpected response type: %T", response)
+	}
+}
+
+func encodeV1VerificationsTendersGetResponse(response V1VerificationsTendersGetRes, w http.ResponseWriter, span trace.Span) error {
+	switch response := response.(type) {
+	case *V1VerificationsTendersGetOK:
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))

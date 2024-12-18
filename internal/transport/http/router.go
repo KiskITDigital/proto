@@ -17,7 +17,6 @@ type Router struct {
 	Users
 	Survey
 	Organization
-	Comments
 	Suggest
 	Verification
 	Employee
@@ -45,11 +44,13 @@ type Tenders interface {
 	V1TendersTenderIDGet(ctx context.Context, params api.V1TendersTenderIDGetParams) (api.V1TendersTenderIDGetRes, error)
 	V1TendersGet(ctx context.Context, params api.V1TendersGetParams) (api.V1TendersGetRes, error)
 	V1OrganizationsOrganizationIDTendersGet(ctx context.Context, params api.V1OrganizationsOrganizationIDTendersGetParams) (api.V1OrganizationsOrganizationIDTendersGetRes, error)
-	V1TendersTenderIDCommentsGet(ctx context.Context, params api.V1TendersTenderIDCommentsGetParams) (api.V1TendersTenderIDCommentsGetRes, error)
-	V1TendersTenderIDCommentsPost(ctx context.Context, req *api.V1TendersTenderIDCommentsPostReq, params api.V1TendersTenderIDCommentsPostParams) (api.V1TendersTenderIDCommentsPostRes, error)
+
+	V1TendersTenderIDAdditionsPost(ctx context.Context, req *api.V1TendersTenderIDAdditionsPostReq, params api.V1TendersTenderIDAdditionsPostParams) (api.V1TendersTenderIDAdditionsPostRes, error)
+	V1TendersTenderIDAdditionsGet(ctx context.Context, params api.V1TendersTenderIDAdditionsGetParams) (api.V1TendersTenderIDAdditionsGetRes, error)
+
 	V1TendersTenderIDRespondPost(ctx context.Context, req *api.V1TendersTenderIDRespondPostReq, params api.V1TendersTenderIDRespondPostParams) (api.V1TendersTenderIDRespondPostRes, error)
 	V1TendersTenderIDRespondGet(ctx context.Context, params api.V1TendersTenderIDRespondGetParams) (api.V1TendersTenderIDRespondGetRes, error)
-	V1TendersVerificationsGet(ctx context.Context, params api.V1TendersVerificationsGetParams) (api.V1TendersVerificationsGetRes, error)
+
 	V1TendersTenderIDQuestionAnswerPost(ctx context.Context, req *api.V1TendersTenderIDQuestionAnswerPostReq, params api.V1TendersTenderIDQuestionAnswerPostParams) (api.V1TendersTenderIDQuestionAnswerPostRes, error)
 	V1TendersTenderIDQuestionAnswerGet(ctx context.Context, params api.V1TendersTenderIDQuestionAnswerGetParams) (api.V1TendersTenderIDQuestionAnswerGetRes, error)
 }
@@ -81,9 +82,6 @@ type Catalog interface {
 type Organization interface {
 	V1OrganizationsOrganizationIDGet(ctx context.Context, params api.V1OrganizationsOrganizationIDGetParams) (api.V1OrganizationsOrganizationIDGetRes, error)
 	V1OrganizationsGet(ctx context.Context, params api.V1OrganizationsGetParams) (api.V1OrganizationsGetRes, error)
-	V1OrganizationsOrganizationIDVerificationsGet(ctx context.Context, params api.V1OrganizationsOrganizationIDVerificationsGetParams) (api.V1OrganizationsOrganizationIDVerificationsGetRes, error)
-	V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, req []api.Attachment, params api.V1OrganizationsOrganizationIDVerificationsPostParams) (api.V1OrganizationsOrganizationIDVerificationsPostRes, error)
-	V1OrganizationsVerificationsGet(ctx context.Context, params api.V1OrganizationsVerificationsGetParams) (api.V1OrganizationsVerificationsGetRes, error)
 	V1OrganizationsContractorsGet(ctx context.Context, params api.V1OrganizationsContractorsGetParams) (api.V1OrganizationsContractorsGetRes, error)
 
 	V1OrganizationsOrganizationIDProfileBrandPut(ctx context.Context, req *api.V1OrganizationsOrganizationIDProfileBrandPutReq, params api.V1OrganizationsOrganizationIDProfileBrandPutParams) (api.V1OrganizationsOrganizationIDProfileBrandPutRes, error)
@@ -103,10 +101,6 @@ type Organization interface {
 	V1OrganizationsOrganizationIDFavouritesPost(ctx context.Context, req *api.V1OrganizationsOrganizationIDFavouritesPostReq, params api.V1OrganizationsOrganizationIDFavouritesPostParams) (api.V1OrganizationsOrganizationIDFavouritesPostRes, error)
 }
 
-type Comments interface {
-	V1CommentsVerificationsGet(ctx context.Context, params api.V1CommentsVerificationsGetParams) (api.V1CommentsVerificationsGetRes, error)
-}
-
 type Suggest interface {
 	V1SuggestCompanyGet(ctx context.Context, params api.V1SuggestCompanyGetParams) (api.V1SuggestCompanyGetRes, error)
 	V1SuggestCityGet(ctx context.Context, params api.V1SuggestCityGetParams) (api.V1SuggestCityGetRes, error)
@@ -116,6 +110,16 @@ type Verification interface {
 	V1VerificationsRequestIDAprovePost(ctx context.Context, params api.V1VerificationsRequestIDAprovePostParams) (api.V1VerificationsRequestIDAprovePostRes, error)
 	V1VerificationsRequestIDDenyPost(ctx context.Context, req *api.V1VerificationsRequestIDDenyPostReq, params api.V1VerificationsRequestIDDenyPostParams) (api.V1VerificationsRequestIDDenyPostRes, error)
 	V1VerificationsRequestIDGet(ctx context.Context, params api.V1VerificationsRequestIDGetParams) (api.V1VerificationsRequestIDGetRes, error)
+
+	V1VerificationsTendersGet(ctx context.Context, params api.V1VerificationsTendersGetParams) (api.V1VerificationsTendersGetRes, error)
+
+	V1VerificationsAdditionsGet(ctx context.Context, params api.V1VerificationsAdditionsGetParams) (api.V1VerificationsAdditionsGetRes, error)
+
+	V1VerificationsOrganizationsOrganizationIDPost(ctx context.Context, req []api.Attachment, params api.V1VerificationsOrganizationsOrganizationIDPostParams) (api.V1VerificationsOrganizationsOrganizationIDPostRes, error)
+	V1VerificationsOrganizationsOrganizationIDGet(ctx context.Context, params api.V1VerificationsOrganizationsOrganizationIDGetParams) (api.V1VerificationsOrganizationsOrganizationIDGetRes, error)
+	V1VerificationsOrganizationsGet(ctx context.Context, params api.V1VerificationsOrganizationsGetParams) (api.V1VerificationsOrganizationsGetRes, error)
+
+	V1VerificationsQuestionAnswerGet(ctx context.Context, params api.V1VerificationsQuestionAnswerGetParams) (api.V1VerificationsQuestionAnswerGetRes, error)
 }
 
 type Employee interface {
@@ -136,7 +140,6 @@ type RouterParams struct {
 	Users         Users
 	Survey        Survey
 	Organization  Organization
-	Comments      Comments
 	Suggest       Suggest
 	Verification  Verification
 	Employee      Employee
@@ -152,7 +155,6 @@ func NewRouter(params RouterParams) *Router {
 		Users:         params.Users,
 		Survey:        params.Survey,
 		Organization:  params.Organization,
-		Comments:      params.Comments,
 		Suggest:       params.Suggest,
 		Verification:  params.Verification,
 		Employee:      params.Employee,

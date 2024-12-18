@@ -1,9 +1,9 @@
 post:
   tags:
-    - organizations
+    - verifications
   summary: Send verification request
   description: |-
-    Ask verify organization
+    Отправляет документы организации на верификацию
   security:
     - bearerAuth: []
   parameters:
@@ -32,10 +32,10 @@ post:
       $ref: "../../../responses/Error.yaml"
 get:
   tags:
-    - organizations
+    - verifications
   summary: Get verification requests
   description: |-
-    Get organization verification history
+    Получает историю верификации организации
   security:
     - bearerAuth: []
   parameters:

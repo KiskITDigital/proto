@@ -21,11 +21,6 @@ type OrganizationUpdateContactsParams struct {
 	Messengers     models.Optional[models.ContactInfos]
 }
 
-type OrganizationCreateVerificationRequestParams struct {
-	OrganizationID int
-	Attachments    models.Attachments
-}
-
 type OrganizationUpdateContractorParams struct {
 	OrganizationID int
 	Description    models.Optional[string]

@@ -347,62 +347,6 @@ paths:
                     $ref: '#/components/schemas/Tender'
         default:
           $ref: '#/components/responses/Error'
-  /v1/tenders/verifications:
-    get:
-      tags:
-        - tenders
-      summary: Get verification requests
-      description: |-
-        Get verifications
-
-        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-        'Employee' or higher.
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: status
-          in: query
-          description: Фильтрует результат по статусам.
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/verification_status'
-        - name: page
-          in: query
-          description: Номер страницы
-          required: false
-          schema:
-            type: integer
-            default: 0
-            minimum: 0
-        - name: per_page
-          in: query
-          description: Количество элементов на странице
-          required: false
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 100
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - data
-                  - pagination
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/VerificationRequest'
-                  pagination:
-                    $ref: '#/components/schemas/Pagination'
-        default:
-          $ref: '#/components/responses/Error'
   /v1/tenders/{tenderID}:
     get:
       tags:
@@ -523,12 +467,12 @@ paths:
                     $ref: '#/components/schemas/Tender'
         default:
           $ref: '#/components/responses/Error'
-  /v1/tenders/{tenderID}/comments:
+  /v1/tenders/{tenderID}/additions:
     post:
       tags:
         - tenders
-      summary: Send comment for tender
-      description: Leaves comment under tender
+      summary: Send addition for tender
+      description: Добавление дополнительной информации к тендеру
       security:
         - bearerAuth: []
       parameters:
@@ -567,8 +511,8 @@ paths:
     get:
       tags:
         - tenders
-      summary: Get comments
-      description: Get comments under tender
+      summary: Get additions for tender
+      description: Получение дополнительной информации для тендера
       parameters:
         - name: tenderID
           required: true
@@ -591,7 +535,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Comment'
+                      $ref: '#/components/schemas/Addition'
         default:
           $ref: '#/components/responses/Error'
   /v1/tenders/{tenderID}/respond:
@@ -1738,7 +1682,7 @@ paths:
       tags:
         - organizations
       summary: Get favourites
-      description: Получаем список избранного.
+      description: Получение списка избранного.
       security:
         - bearerAuth: []
       parameters:
@@ -1752,7 +1696,7 @@ paths:
         - name: object_type
           required: true
           in: query
-          description: Фильтруем результат по типам избранных объектов
+          description: Фильтрация результата по типам избранных объектов
           schema:
             $ref: '#/components/schemas/favourite_type'
         - name: page
@@ -1809,7 +1753,7 @@ paths:
         - name: object_type
           required: true
           in: query
-          description: Фильтруем результат по типам избарнных объектов
+          description: Фильтрация результата по типам избарнных объектов
           schema:
             $ref: '#/components/schemas/favourite_type'
       requestBody:
@@ -1843,7 +1787,7 @@ paths:
       tags:
         - organizations
       summary: Remove a object from the favourites
-      description: Удаляет объект из избранного организации.
+      description: Удаление объекта из избранного.
       security:
         - bearerAuth: []
       parameters:
@@ -1858,126 +1802,6 @@ paths:
       responses:
         '200':
           description: Успешное удаление
-        default:
-          $ref: '#/components/responses/Error'
-  /v1/organizations/verifications:
-    get:
-      tags:
-        - organizations
-      summary: Get verification requests
-      description: |-
-        Get verifications
-
-        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-        'Employee' or higher.
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: status
-          in: query
-          description: Фильтрует результат по статусам.
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/verification_status'
-        - name: page
-          in: query
-          description: Номер страницы
-          required: false
-          schema:
-            type: integer
-            default: 0
-            minimum: 0
-        - name: per_page
-          in: query
-          description: Количество элементов на странице
-          required: false
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 100
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - data
-                  - pagination
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/VerificationRequest'
-                  pagination:
-                    $ref: '#/components/schemas/Pagination'
-        default:
-          $ref: '#/components/responses/Error'
-  /v1/organizations/{organizationID}/verifications:
-    post:
-      tags:
-        - organizations
-      summary: Send verification request
-      description: Ask verify organization
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: organizationID
-          required: true
-          in: path
-          description: ID of organization
-          schema:
-            type: integer
-            minimum: 1
-          example: 1
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              minItems: 4
-              maxItems: 4
-              items:
-                $ref: '#/components/schemas/Attachment'
-      responses:
-        '200':
-          description: Success
-        default:
-          $ref: '#/components/responses/Error'
-    get:
-      tags:
-        - organizations
-      summary: Get verification requests
-      description: Get organization verification history
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: organizationID
-          required: true
-          in: path
-          description: ID of organization
-          schema:
-            type: integer
-            minimum: 1
-          example: 1
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - data
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/VerificationRequest'
         default:
           $ref: '#/components/responses/Error'
   /v1/organizations/{organizationID}/tenders:
@@ -2135,6 +1959,294 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/VerificationRequest'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/verifications/organizations:
+    get:
+      tags:
+        - verifications
+      summary: Get organization verification requests
+      description: |-
+        Получение всех запросов на верификацию для организаций
+
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+        'Employee' or higher.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          description: Фильтрует результат по статусам.
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/verification_status'
+        - name: page
+          in: query
+          description: Номер страницы
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: per_page
+          in: query
+          description: Количество элементов на странице
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                  - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VerificationRequest'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/verifications/organizations/{organizationID}:
+    post:
+      tags:
+        - verifications
+      summary: Send verification request
+      description: Отправляет документы организации на верификацию
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              minItems: 4
+              maxItems: 4
+              items:
+                $ref: '#/components/schemas/Attachment'
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
+    get:
+      tags:
+        - verifications
+      summary: Get verification requests
+      description: Получает историю верификации организации
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: organizationID
+          required: true
+          in: path
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VerificationRequest'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/verifications/tenders:
+    get:
+      tags:
+        - verifications
+      summary: Get tenders verification requests
+      description: |-
+        Получение запросов на верификацию для тендеров
+
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+        'Employee' or higher.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          description: Фильтрует результат по статусам.
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/verification_status'
+        - name: page
+          in: query
+          description: Номер страницы
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: per_page
+          in: query
+          description: Количество элементов на странице
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                  - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VerificationRequest'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/verifications/additions:
+    get:
+      tags:
+        - verifications
+      summary: Get comments verification requests
+      description: |-
+        Получение запросов на верификацию для дополнительной информации о тендерах
+
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+        'Employee' or higher.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          description: Фильтрует результат по статусам.
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/verification_status'
+        - name: page
+          in: query
+          description: Номер страницы
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: per_page
+          in: query
+          description: Количество элементов на странице
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                  - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VerificationRequest'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/verifications/question-answer:
+    get:
+      tags:
+        - verifications
+      summary: Get question-answer verification requests (UNIMPL)
+      description: |-
+        Получение запросов на верификацию для дополнительной информации о вопросов-ответов
+
+        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+        'Employee' or higher.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          description: Фильтрует результат по статусам.
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/verification_status'
+        - name: page
+          in: query
+          description: Номер страницы
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: per_page
+          in: query
+          description: Количество элементов на странице
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                  - pagination
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VerificationRequest'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
         default:
           $ref: '#/components/responses/Error'
   /v1/catalog/services:
@@ -2361,62 +2473,6 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Measure'
-        default:
-          $ref: '#/components/responses/Error'
-  /v1/comments/verifications:
-    get:
-      tags:
-        - comments
-      summary: Get verification requests
-      description: |-
-        Get all verifications requests
-
-        **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-        'Employee' or higher.
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: status
-          in: query
-          description: Фильтрует результат по статусам.
-          schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/verification_status'
-        - name: page
-          in: query
-          description: Номер страницы
-          required: false
-          schema:
-            type: integer
-            default: 0
-            minimum: 0
-        - name: per_page
-          in: query
-          description: Количество элементов на странице
-          required: false
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 100
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - data
-                  - pagination
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/VerificationRequest'
-                  pagination:
-                    $ref: '#/components/schemas/Pagination'
         default:
           $ref: '#/components/responses/Error'
   /v1/survey:
@@ -2885,36 +2941,11 @@ components:
         per_page:
           type: integer
           example: 100
-    role:
-      type: string
-      enum:
-        - user
-        - employee
-        - admin
-        - super_admin
-    EmployeeUser:
-      allOf:
-        - $ref: '#/components/schemas/User'
-        - type: object
-          required:
-            - position
-          properties:
-            position:
-              type: string
-            role:
-              $ref: '#/components/schemas/role'
-    object_type:
-      type: string
-      enum:
-        - invalid
-        - organization
-        - comment
-        - tender
-    Comment:
+    Addition:
       type: object
       required:
         - id
-        - organization
+        - tender_id
         - title
         - content
         - verification_status
@@ -2922,8 +2953,9 @@ components:
       properties:
         id:
           type: integer
-        organization:
-          $ref: '#/components/schemas/Organization'
+        tender_id:
+          type: integer
+          example: 1
         title:
           type: string
         content:
@@ -2935,55 +2967,6 @@ components:
         verification_status:
           type: string
         created_at:
-          type: string
-          format: date-time
-    Attachment:
-      type: object
-      required:
-        - url
-      properties:
-        name:
-          type: string
-          description: Название элемента
-          example: example
-        url:
-          $ref: '#/components/schemas/url'
-    VerificationRequest:
-      type: object
-      required:
-        - id
-        - object_type
-        - object
-        - content
-        - attachments
-        - status
-        - created_at
-      properties:
-        id:
-          type: integer
-        reviewer:
-          $ref: '#/components/schemas/EmployeeUser'
-        object_type:
-          $ref: '#/components/schemas/object_type'
-        object:
-          oneOf:
-            - $ref: '#/components/schemas/Comment'
-            - $ref: '#/components/schemas/Tender'
-            - $ref: '#/components/schemas/Organization'
-        content:
-          type: string
-        attachments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Attachment'
-        status:
-          $ref: '#/components/schemas/verification_status'
-        review_comment:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        reviewed_at:
           type: string
           format: date-time
     Respond:
@@ -3037,6 +3020,24 @@ components:
           type: string
           description: Текст вопроса или ответа
           example: Какова минимальная цена?
+    role:
+      type: string
+      enum:
+        - user
+        - employee
+        - admin
+        - super_admin
+    EmployeeUser:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          required:
+            - position
+          properties:
+            position:
+              type: string
+            role:
+              $ref: '#/components/schemas/role'
     QuestionnaireAnswer:
       type: object
       required:
@@ -3191,6 +3192,63 @@ components:
           oneOf:
             - $ref: '#/components/schemas/Organization'
             - $ref: '#/components/schemas/Tender'
+    object_type:
+      type: string
+      enum:
+        - invalid
+        - organization
+        - addition
+        - tender
+    Attachment:
+      type: object
+      required:
+        - url
+      properties:
+        name:
+          type: string
+          description: Название элемента
+          example: example
+        url:
+          $ref: '#/components/schemas/url'
+    VerificationRequest:
+      type: object
+      required:
+        - id
+        - object_type
+        - object
+        - content
+        - attachments
+        - status
+        - created_at
+      properties:
+        id:
+          type: integer
+        reviewer:
+          $ref: '#/components/schemas/EmployeeUser'
+        object_type:
+          $ref: '#/components/schemas/object_type'
+        object:
+          oneOf:
+            - $ref: '#/components/schemas/Tender'
+            - $ref: '#/components/schemas/Addition'
+            - $ref: '#/components/schemas/Organization'
+            - $ref: '#/components/schemas/QuestionAnswer'
+        content:
+          type: string
+        attachments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+        status:
+          $ref: '#/components/schemas/verification_status'
+        review_comment:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        reviewed_at:
+          type: string
+          format: date-time
     survey:
       type: string
       enum:

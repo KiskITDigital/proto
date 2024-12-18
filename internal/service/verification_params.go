@@ -2,6 +2,12 @@ package service
 
 import "gitlab.ubrato.ru/ubrato/core/internal/models"
 
+type VerificationRequestCreateParams struct {
+	ObjectID    int
+	ObjectType  models.ObjectType
+	Attachments models.Attachments
+}
+
 type VerificationRequestUpdateStatusParams struct {
 	UserID        int
 	RequesID      int

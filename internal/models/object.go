@@ -8,14 +8,14 @@ const (
 	ObjectTypeInvalid ObjectType = iota
 	ObjectTypeOrganization
 	ObjectTypeTender
-	ObjectTypeComment
+	ObjectTypeAddition
 )
 
 var mapVerificationObjectType = map[ObjectType]api.ObjectType{
 	ObjectTypeInvalid:      api.ObjectTypeInvalid,
 	ObjectTypeOrganization: api.ObjectTypeOrganization,
 	ObjectTypeTender:       api.ObjectTypeTender,
-	ObjectTypeComment:      api.ObjectTypeComment,
+	ObjectTypeAddition:     api.ObjectTypeAddition,
 }
 
 func (v ObjectType) ToAPI() api.ObjectType {

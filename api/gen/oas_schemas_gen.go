@@ -10,6 +10,87 @@ import (
 )
 
 // Ref: #
+type Addition struct {
+	ID                 int       `json:"id"`
+	TenderID           int       `json:"tender_id"`
+	Title              string    `json:"title"`
+	Content            string    `json:"content"`
+	Attachments        []string  `json:"attachments"`
+	VerificationStatus string    `json:"verification_status"`
+	CreatedAt          time.Time `json:"created_at"`
+}
+
+// GetID returns the value of ID.
+func (s *Addition) GetID() int {
+	return s.ID
+}
+
+// GetTenderID returns the value of TenderID.
+func (s *Addition) GetTenderID() int {
+	return s.TenderID
+}
+
+// GetTitle returns the value of Title.
+func (s *Addition) GetTitle() string {
+	return s.Title
+}
+
+// GetContent returns the value of Content.
+func (s *Addition) GetContent() string {
+	return s.Content
+}
+
+// GetAttachments returns the value of Attachments.
+func (s *Addition) GetAttachments() []string {
+	return s.Attachments
+}
+
+// GetVerificationStatus returns the value of VerificationStatus.
+func (s *Addition) GetVerificationStatus() string {
+	return s.VerificationStatus
+}
+
+// GetCreatedAt returns the value of CreatedAt.
+func (s *Addition) GetCreatedAt() time.Time {
+	return s.CreatedAt
+}
+
+// SetID sets the value of ID.
+func (s *Addition) SetID(val int) {
+	s.ID = val
+}
+
+// SetTenderID sets the value of TenderID.
+func (s *Addition) SetTenderID(val int) {
+	s.TenderID = val
+}
+
+// SetTitle sets the value of Title.
+func (s *Addition) SetTitle(val string) {
+	s.Title = val
+}
+
+// SetContent sets the value of Content.
+func (s *Addition) SetContent(val string) {
+	s.Content = val
+}
+
+// SetAttachments sets the value of Attachments.
+func (s *Addition) SetAttachments(val []string) {
+	s.Attachments = val
+}
+
+// SetVerificationStatus sets the value of VerificationStatus.
+func (s *Addition) SetVerificationStatus(val string) {
+	s.VerificationStatus = val
+}
+
+// SetCreatedAt sets the value of CreatedAt.
+func (s *Addition) SetCreatedAt(val time.Time) {
+	s.CreatedAt = val
+}
+
+// Ref: #
 type Attachment struct {
 	// Название элемента.
 	Name OptString `json:"name"`
@@ -85,87 +166,6 @@ func (s *City) SetName(val string) {
 // SetRegion sets the value of Region.
 func (s *City) SetRegion(val OptRegion) {
 	s.Region = val
-}
-
-// Ref: #
-type Comment struct {
-	ID                 int          `json:"id"`
-	Organization       Organization `json:"organization"`
-	Title              string       `json:"title"`
-	Content            string       `json:"content"`
-	Attachments        []string     `json:"attachments"`
-	VerificationStatus string       `json:"verification_status"`
-	CreatedAt          time.Time    `json:"created_at"`
-}
-
-// GetID returns the value of ID.
-func (s *Comment) GetID() int {
-	return s.ID
-}
-
-// GetOrganization returns the value of Organization.
-func (s *Comment) GetOrganization() Organization {
-	return s.Organization
-}
-
-// GetTitle returns the value of Title.
-func (s *Comment) GetTitle() string {
-	return s.Title
-}
-
-// GetContent returns the value of Content.
-func (s *Comment) GetContent() string {
-	return s.Content
-}
-
-// GetAttachments returns the value of Attachments.
-func (s *Comment) GetAttachments() []string {
-	return s.Attachments
-}
-
-// GetVerificationStatus returns the value of VerificationStatus.
-func (s *Comment) GetVerificationStatus() string {
-	return s.VerificationStatus
-}
-
-// GetCreatedAt returns the value of CreatedAt.
-func (s *Comment) GetCreatedAt() time.Time {
-	return s.CreatedAt
-}
-
-// SetID sets the value of ID.
-func (s *Comment) SetID(val int) {
-	s.ID = val
-}
-
-// SetOrganization sets the value of Organization.
-func (s *Comment) SetOrganization(val Organization) {
-	s.Organization = val
-}
-
-// SetTitle sets the value of Title.
-func (s *Comment) SetTitle(val string) {
-	s.Title = val
-}
-
-// SetContent sets the value of Content.
-func (s *Comment) SetContent(val string) {
-	s.Content = val
-}
-
-// SetAttachments sets the value of Attachments.
-func (s *Comment) SetAttachments(val []string) {
-	s.Attachments = val
-}
-
-// SetVerificationStatus sets the value of VerificationStatus.
-func (s *Comment) SetVerificationStatus(val string) {
-	s.VerificationStatus = val
-}
-
-// SetCreatedAt sets the value of CreatedAt.
-func (s *Comment) SetCreatedAt(val time.Time) {
-	s.CreatedAt = val
 }
 
 // Ref: #
@@ -524,7 +524,6 @@ func (*ErrorStatusCode) v1CatalogObjectsPostRes()                              {
 func (*ErrorStatusCode) v1CatalogRegionsPostRes()                              {}
 func (*ErrorStatusCode) v1CatalogServicesGetRes()                              {}
 func (*ErrorStatusCode) v1CatalogServicesPostRes()                             {}
-func (*ErrorStatusCode) v1CommentsVerificationsGetRes()                        {}
 func (*ErrorStatusCode) v1EmployeePostRes()                                    {}
 func (*ErrorStatusCode) v1OrganizationsContractorsGetRes()                     {}
 func (*ErrorStatusCode) v1OrganizationsFavouritesFavouriteIDDeleteRes()        {}
@@ -541,11 +540,8 @@ func (*ErrorStatusCode) v1OrganizationsOrganizationIDProfileContractorPutRes() {
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDProfileCustomerGetRes()   {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDProfileCustomerPutRes()   {}
 func (*ErrorStatusCode) v1OrganizationsOrganizationIDTendersGetRes()           {}
-func (*ErrorStatusCode) v1OrganizationsOrganizationIDVerificationsGetRes()     {}
-func (*ErrorStatusCode) v1OrganizationsOrganizationIDVerificationsPostRes()    {}
 func (*ErrorStatusCode) v1OrganizationsPortfolioPortfolioIDDeleteRes()         {}
 func (*ErrorStatusCode) v1OrganizationsPortfolioPortfolioIDPutRes()            {}
-func (*ErrorStatusCode) v1OrganizationsVerificationsGetRes()                   {}
 func (*ErrorStatusCode) v1QuestionnaireGetRes()                                {}
 func (*ErrorStatusCode) v1QuestionnaireOrganizationIDPostRes()                 {}
 func (*ErrorStatusCode) v1QuestionnaireOrganizationIDStatusGetRes()            {}
@@ -554,15 +550,14 @@ func (*ErrorStatusCode) v1SuggestCompanyGetRes()                               {
 func (*ErrorStatusCode) v1SurveyPostRes()                                      {}
 func (*ErrorStatusCode) v1TendersGetRes()                                      {}
 func (*ErrorStatusCode) v1TendersPostRes()                                     {}
-func (*ErrorStatusCode) v1TendersTenderIDCommentsGetRes()                      {}
-func (*ErrorStatusCode) v1TendersTenderIDCommentsPostRes()                     {}
+func (*ErrorStatusCode) v1TendersTenderIDAdditionsGetRes()                     {}
+func (*ErrorStatusCode) v1TendersTenderIDAdditionsPostRes()                    {}
 func (*ErrorStatusCode) v1TendersTenderIDGetRes()                              {}
 func (*ErrorStatusCode) v1TendersTenderIDPutRes()                              {}
 func (*ErrorStatusCode) v1TendersTenderIDQuestionAnswerGetRes()                {}
 func (*ErrorStatusCode) v1TendersTenderIDQuestionAnswerPostRes()               {}
 func (*ErrorStatusCode) v1TendersTenderIDRespondGetRes()                       {}
 func (*ErrorStatusCode) v1TendersTenderIDRespondPostRes()                      {}
-func (*ErrorStatusCode) v1TendersVerificationsGetRes()                         {}
 func (*ErrorStatusCode) v1UsersConfirmEmailPostRes()                           {}
 func (*ErrorStatusCode) v1UsersConfirmPasswordPostRes()                        {}
 func (*ErrorStatusCode) v1UsersGetRes()                                        {}
@@ -570,9 +565,15 @@ func (*ErrorStatusCode) v1UsersRequestEmailVerificationPostRes()               {
 func (*ErrorStatusCode) v1UsersRequestResetPasswordPostRes()                   {}
 func (*ErrorStatusCode) v1UsersUserIDGetRes()                                  {}
 func (*ErrorStatusCode) v1UsersUserIDPutRes()                                  {}
+func (*ErrorStatusCode) v1VerificationsAdditionsGetRes()                       {}
+func (*ErrorStatusCode) v1VerificationsOrganizationsGetRes()                   {}
+func (*ErrorStatusCode) v1VerificationsOrganizationsOrganizationIDGetRes()     {}
+func (*ErrorStatusCode) v1VerificationsOrganizationsOrganizationIDPostRes()    {}
+func (*ErrorStatusCode) v1VerificationsQuestionAnswerGetRes()                  {}
 func (*ErrorStatusCode) v1VerificationsRequestIDAprovePostRes()                {}
 func (*ErrorStatusCode) v1VerificationsRequestIDDenyPostRes()                  {}
 func (*ErrorStatusCode) v1VerificationsRequestIDGetRes()                       {}
+func (*ErrorStatusCode) v1VerificationsTendersGetRes()                         {}
 
 // Ref: #
 type FavouriteType string
@@ -792,7 +793,7 @@ type ObjectType string
 const (
 	ObjectTypeInvalid      ObjectType = "invalid"
 	ObjectTypeOrganization ObjectType = "organization"
-	ObjectTypeComment      ObjectType = "comment"
+	ObjectTypeAddition     ObjectType = "addition"
 	ObjectTypeTender       ObjectType = "tender"
 )
 
@@ -801,7 +802,7 @@ func (ObjectType) AllValues() []ObjectType {
 	return []ObjectType{
 		ObjectTypeInvalid,
 		ObjectTypeOrganization,
-		ObjectTypeComment,
+		ObjectTypeAddition,
 		ObjectTypeTender,
 	}
 }
@@ -813,7 +814,7 @@ func (s ObjectType) MarshalText() ([]byte, error) {
 		return []byte(s), nil
 	case ObjectTypeOrganization:
 		return []byte(s), nil
-	case ObjectTypeComment:
+	case ObjectTypeAddition:
 		return []byte(s), nil
 	case ObjectTypeTender:
 		return []byte(s), nil
@@ -831,8 +832,8 @@ func (s *ObjectType) UnmarshalText(data []byte) error {
 	case ObjectTypeOrganization:
 		*s = ObjectTypeOrganization
 		return nil
-	case ObjectTypeComment:
-		*s = ObjectTypeComment
+	case ObjectTypeAddition:
+		*s = ObjectTypeAddition
 		return nil
 	case ObjectTypeTender:
 		*s = ObjectTypeTender
@@ -3517,33 +3518,6 @@ func (s *V1CatalogServicesPostReq) SetParentID(val OptInt) {
 	s.ParentID = val
 }
 
-type V1CommentsVerificationsGetOK struct {
-	Data       []VerificationRequest `json:"data"`
-	Pagination Pagination            `json:"pagination"`
-}
-
-// GetData returns the value of Data.
-func (s *V1CommentsVerificationsGetOK) GetData() []VerificationRequest {
-	return s.Data
-}
-
-// GetPagination returns the value of Pagination.
-func (s *V1CommentsVerificationsGetOK) GetPagination() Pagination {
-	return s.Pagination
-}
-
-// SetData sets the value of Data.
-func (s *V1CommentsVerificationsGetOK) SetData(val []VerificationRequest) {
-	s.Data = val
-}
-
-// SetPagination sets the value of Pagination.
-func (s *V1CommentsVerificationsGetOK) SetPagination(val Pagination) {
-	s.Pagination = val
-}
-
-func (*V1CommentsVerificationsGetOK) v1CommentsVerificationsGetRes() {}
-
 type V1EmployeePostCreated struct {
 	Data EmployeeUser `json:"data"`
 }
@@ -4233,29 +4207,6 @@ func (s *V1OrganizationsOrganizationIDTendersGetOK) SetPagination(val Pagination
 
 func (*V1OrganizationsOrganizationIDTendersGetOK) v1OrganizationsOrganizationIDTendersGetRes() {}
 
-type V1OrganizationsOrganizationIDVerificationsGetOK struct {
-	Data []VerificationRequest `json:"data"`
-}
-
-// GetData returns the value of Data.
-func (s *V1OrganizationsOrganizationIDVerificationsGetOK) GetData() []VerificationRequest {
-	return s.Data
-}
-
-// SetData sets the value of Data.
-func (s *V1OrganizationsOrganizationIDVerificationsGetOK) SetData(val []VerificationRequest) {
-	s.Data = val
-}
-
-func (*V1OrganizationsOrganizationIDVerificationsGetOK) v1OrganizationsOrganizationIDVerificationsGetRes() {
-}
-
-// V1OrganizationsOrganizationIDVerificationsPostOK is response for V1OrganizationsOrganizationIDVerificationsPost operation.
-type V1OrganizationsOrganizationIDVerificationsPostOK struct{}
-
-func (*V1OrganizationsOrganizationIDVerificationsPostOK) v1OrganizationsOrganizationIDVerificationsPostRes() {
-}
-
 // V1OrganizationsPortfolioPortfolioIDDeleteOK is response for V1OrganizationsPortfolioPortfolioIDDelete operation.
 type V1OrganizationsPortfolioPortfolioIDDeleteOK struct{}
 
@@ -4312,33 +4263,6 @@ func (s *V1OrganizationsPortfolioPortfolioIDPutReq) SetDescription(val OptDescri
 func (s *V1OrganizationsPortfolioPortfolioIDPutReq) SetAttachments(val []URL) {
 	s.Attachments = val
 }
-
-type V1OrganizationsVerificationsGetOK struct {
-	Data       []VerificationRequest `json:"data"`
-	Pagination Pagination            `json:"pagination"`
-}
-
-// GetData returns the value of Data.
-func (s *V1OrganizationsVerificationsGetOK) GetData() []VerificationRequest {
-	return s.Data
-}
-
-// GetPagination returns the value of Pagination.
-func (s *V1OrganizationsVerificationsGetOK) GetPagination() Pagination {
-	return s.Pagination
-}
-
-// SetData sets the value of Data.
-func (s *V1OrganizationsVerificationsGetOK) SetData(val []VerificationRequest) {
-	s.Data = val
-}
-
-// SetPagination sets the value of Pagination.
-func (s *V1OrganizationsVerificationsGetOK) SetPagination(val Pagination) {
-	s.Pagination = val
-}
-
-func (*V1OrganizationsVerificationsGetOK) v1OrganizationsVerificationsGetRes() {}
 
 type V1QuestionnaireGetOK struct {
 	Data []Questionnaire `json:"data"`
@@ -4751,60 +4675,60 @@ func (s *V1TendersPostReq) SetWorkEnd(val time.Time) {
 	s.WorkEnd = val
 }
 
-type V1TendersTenderIDCommentsGetOK struct {
-	Data []Comment `json:"data"`
+type V1TendersTenderIDAdditionsGetOK struct {
+	Data []Addition `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1TendersTenderIDCommentsGetOK) GetData() []Comment {
+func (s *V1TendersTenderIDAdditionsGetOK) GetData() []Addition {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1TendersTenderIDCommentsGetOK) SetData(val []Comment) {
+func (s *V1TendersTenderIDAdditionsGetOK) SetData(val []Addition) {
 	s.Data = val
 }
 
-func (*V1TendersTenderIDCommentsGetOK) v1TendersTenderIDCommentsGetRes() {}
+func (*V1TendersTenderIDAdditionsGetOK) v1TendersTenderIDAdditionsGetRes() {}
 
-// V1TendersTenderIDCommentsPostOK is response for V1TendersTenderIDCommentsPost operation.
-type V1TendersTenderIDCommentsPostOK struct{}
+// V1TendersTenderIDAdditionsPostOK is response for V1TendersTenderIDAdditionsPost operation.
+type V1TendersTenderIDAdditionsPostOK struct{}
 
-func (*V1TendersTenderIDCommentsPostOK) v1TendersTenderIDCommentsPostRes() {}
+func (*V1TendersTenderIDAdditionsPostOK) v1TendersTenderIDAdditionsPostRes() {}
 
-type V1TendersTenderIDCommentsPostReq struct {
+type V1TendersTenderIDAdditionsPostReq struct {
 	Title       string   `json:"title"`
 	Content     string   `json:"content"`
 	Attachments []string `json:"attachments"`
 }
 
 // GetTitle returns the value of Title.
-func (s *V1TendersTenderIDCommentsPostReq) GetTitle() string {
+func (s *V1TendersTenderIDAdditionsPostReq) GetTitle() string {
 	return s.Title
 }
 
 // GetContent returns the value of Content.
-func (s *V1TendersTenderIDCommentsPostReq) GetContent() string {
+func (s *V1TendersTenderIDAdditionsPostReq) GetContent() string {
 	return s.Content
 }
 
 // GetAttachments returns the value of Attachments.
-func (s *V1TendersTenderIDCommentsPostReq) GetAttachments() []string {
+func (s *V1TendersTenderIDAdditionsPostReq) GetAttachments() []string {
 	return s.Attachments
 }
 
 // SetTitle sets the value of Title.
-func (s *V1TendersTenderIDCommentsPostReq) SetTitle(val string) {
+func (s *V1TendersTenderIDAdditionsPostReq) SetTitle(val string) {
 	s.Title = val
 }
 
 // SetContent sets the value of Content.
-func (s *V1TendersTenderIDCommentsPostReq) SetContent(val string) {
+func (s *V1TendersTenderIDAdditionsPostReq) SetContent(val string) {
 	s.Content = val
 }
 
 // SetAttachments sets the value of Attachments.
-func (s *V1TendersTenderIDCommentsPostReq) SetAttachments(val []string) {
+func (s *V1TendersTenderIDAdditionsPostReq) SetAttachments(val []string) {
 	s.Attachments = val
 }
 
@@ -5174,33 +5098,6 @@ func (s *V1TendersTenderIDRespondPostReq) SetIsNds(val bool) {
 	s.IsNds = val
 }
 
-type V1TendersVerificationsGetOK struct {
-	Data       []VerificationRequest `json:"data"`
-	Pagination Pagination            `json:"pagination"`
-}
-
-// GetData returns the value of Data.
-func (s *V1TendersVerificationsGetOK) GetData() []VerificationRequest {
-	return s.Data
-}
-
-// GetPagination returns the value of Pagination.
-func (s *V1TendersVerificationsGetOK) GetPagination() Pagination {
-	return s.Pagination
-}
-
-// SetData sets the value of Data.
-func (s *V1TendersVerificationsGetOK) SetData(val []VerificationRequest) {
-	s.Data = val
-}
-
-// SetPagination sets the value of Pagination.
-func (s *V1TendersVerificationsGetOK) SetPagination(val Pagination) {
-	s.Pagination = val
-}
-
-func (*V1TendersVerificationsGetOK) v1TendersVerificationsGetRes() {}
-
 // V1UsersConfirmEmailPostOK is response for V1UsersConfirmEmailPost operation.
 type V1UsersConfirmEmailPostOK struct{}
 
@@ -5482,6 +5379,110 @@ func (s *V1UsersUserIDPutReq) SetAvatarURL(val OptURL) {
 	s.AvatarURL = val
 }
 
+type V1VerificationsAdditionsGetOK struct {
+	Data       []VerificationRequest `json:"data"`
+	Pagination Pagination            `json:"pagination"`
+}
+
+// GetData returns the value of Data.
+func (s *V1VerificationsAdditionsGetOK) GetData() []VerificationRequest {
+	return s.Data
+}
+
+// GetPagination returns the value of Pagination.
+func (s *V1VerificationsAdditionsGetOK) GetPagination() Pagination {
+	return s.Pagination
+}
+
+// SetData sets the value of Data.
+func (s *V1VerificationsAdditionsGetOK) SetData(val []VerificationRequest) {
+	s.Data = val
+}
+
+// SetPagination sets the value of Pagination.
+func (s *V1VerificationsAdditionsGetOK) SetPagination(val Pagination) {
+	s.Pagination = val
+}
+
+func (*V1VerificationsAdditionsGetOK) v1VerificationsAdditionsGetRes() {}
+
+type V1VerificationsOrganizationsGetOK struct {
+	Data       []VerificationRequest `json:"data"`
+	Pagination Pagination            `json:"pagination"`
+}
+
+// GetData returns the value of Data.
+func (s *V1VerificationsOrganizationsGetOK) GetData() []VerificationRequest {
+	return s.Data
+}
+
+// GetPagination returns the value of Pagination.
+func (s *V1VerificationsOrganizationsGetOK) GetPagination() Pagination {
+	return s.Pagination
+}
+
+// SetData sets the value of Data.
+func (s *V1VerificationsOrganizationsGetOK) SetData(val []VerificationRequest) {
+	s.Data = val
+}
+
+// SetPagination sets the value of Pagination.
+func (s *V1VerificationsOrganizationsGetOK) SetPagination(val Pagination) {
+	s.Pagination = val
+}
+
+func (*V1VerificationsOrganizationsGetOK) v1VerificationsOrganizationsGetRes() {}
+
+type V1VerificationsOrganizationsOrganizationIDGetOK struct {
+	Data []VerificationRequest `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1VerificationsOrganizationsOrganizationIDGetOK) GetData() []VerificationRequest {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1VerificationsOrganizationsOrganizationIDGetOK) SetData(val []VerificationRequest) {
+	s.Data = val
+}
+
+func (*V1VerificationsOrganizationsOrganizationIDGetOK) v1VerificationsOrganizationsOrganizationIDGetRes() {
+}
+
+// V1VerificationsOrganizationsOrganizationIDPostOK is response for V1VerificationsOrganizationsOrganizationIDPost operation.
+type V1VerificationsOrganizationsOrganizationIDPostOK struct{}
+
+func (*V1VerificationsOrganizationsOrganizationIDPostOK) v1VerificationsOrganizationsOrganizationIDPostRes() {
+}
+
+type V1VerificationsQuestionAnswerGetOK struct {
+	Data       []VerificationRequest `json:"data"`
+	Pagination Pagination            `json:"pagination"`
+}
+
+// GetData returns the value of Data.
+func (s *V1VerificationsQuestionAnswerGetOK) GetData() []VerificationRequest {
+	return s.Data
+}
+
+// GetPagination returns the value of Pagination.
+func (s *V1VerificationsQuestionAnswerGetOK) GetPagination() Pagination {
+	return s.Pagination
+}
+
+// SetData sets the value of Data.
+func (s *V1VerificationsQuestionAnswerGetOK) SetData(val []VerificationRequest) {
+	s.Data = val
+}
+
+// SetPagination sets the value of Pagination.
+func (s *V1VerificationsQuestionAnswerGetOK) SetPagination(val Pagination) {
+	s.Pagination = val
+}
+
+func (*V1VerificationsQuestionAnswerGetOK) v1VerificationsQuestionAnswerGetRes() {}
+
 // V1VerificationsRequestIDAprovePostOK is response for V1VerificationsRequestIDAprovePost operation.
 type V1VerificationsRequestIDAprovePostOK struct{}
 
@@ -5521,6 +5522,33 @@ func (s *V1VerificationsRequestIDGetOK) SetData(val VerificationRequest) {
 }
 
 func (*V1VerificationsRequestIDGetOK) v1VerificationsRequestIDGetRes() {}
+
+type V1VerificationsTendersGetOK struct {
+	Data       []VerificationRequest `json:"data"`
+	Pagination Pagination            `json:"pagination"`
+}
+
+// GetData returns the value of Data.
+func (s *V1VerificationsTendersGetOK) GetData() []VerificationRequest {
+	return s.Data
+}
+
+// GetPagination returns the value of Pagination.
+func (s *V1VerificationsTendersGetOK) GetPagination() Pagination {
+	return s.Pagination
+}
+
+// SetData sets the value of Data.
+func (s *V1VerificationsTendersGetOK) SetData(val []VerificationRequest) {
+	s.Data = val
+}
+
+// SetPagination sets the value of Pagination.
+func (s *V1VerificationsTendersGetOK) SetPagination(val Pagination) {
+	s.Pagination = val
+}
+
+func (*V1VerificationsTendersGetOK) v1VerificationsTendersGetRes() {}
 
 // Ref: #
 type VerificationRequest struct {
@@ -5638,10 +5666,11 @@ func (s *VerificationRequest) SetReviewedAt(val OptDateTime) {
 
 // VerificationRequestObject represents sum type.
 type VerificationRequestObject struct {
-	Type         VerificationRequestObjectType // switch on this field
-	Comment      Comment
-	Tender       Tender
-	Organization Organization
+	Type           VerificationRequestObjectType // switch on this field
+	Tender         Tender
+	Addition       Addition
+	Organization   Organization
+	QuestionAnswer QuestionAnswer
 }
 
 // VerificationRequestObjectType is oneOf type of VerificationRequestObject.
@@ -5649,43 +5678,28 @@ type VerificationRequestObjectType string
 
 // Possible values for VerificationRequestObjectType.
 const (
-	CommentVerificationRequestObject      VerificationRequestObjectType = "Comment"
-	TenderVerificationRequestObject       VerificationRequestObjectType = "Tender"
-	OrganizationVerificationRequestObject VerificationRequestObjectType = "Organization"
+	TenderVerificationRequestObject         VerificationRequestObjectType = "Tender"
+	AdditionVerificationRequestObject       VerificationRequestObjectType = "Addition"
+	OrganizationVerificationRequestObject   VerificationRequestObjectType = "Organization"
+	QuestionAnswerVerificationRequestObject VerificationRequestObjectType = "QuestionAnswer"
 )
-
-// IsComment reports whether VerificationRequestObject is Comment.
-func (s VerificationRequestObject) IsComment() bool {
-	return s.Type == CommentVerificationRequestObject
-}
 
 // IsTender reports whether VerificationRequestObject is Tender.
 func (s VerificationRequestObject) IsTender() bool { return s.Type == TenderVerificationRequestObject }
+
+// IsAddition reports whether VerificationRequestObject is Addition.
+func (s VerificationRequestObject) IsAddition() bool {
+	return s.Type == AdditionVerificationRequestObject
+}
 
 // IsOrganization reports whether VerificationRequestObject is Organization.
 func (s VerificationRequestObject) IsOrganization() bool {
 	return s.Type == OrganizationVerificationRequestObject
 }
 
-// SetComment sets VerificationRequestObject to Comment.
-func (s *VerificationRequestObject) SetComment(v Comment) {
-	s.Type = CommentVerificationRequestObject
-	s.Comment = v
-}
-
-// GetComment returns Comment and true boolean if VerificationRequestObject is Comment.
-func (s VerificationRequestObject) GetComment() (v Comment, ok bool) {
-	if !s.IsComment() {
-		return v, false
-	}
-	return s.Comment, true
-}
-
-// NewCommentVerificationRequestObject returns new VerificationRequestObject from Comment.
-func NewCommentVerificationRequestObject(v Comment) VerificationRequestObject {
-	var s VerificationRequestObject
-	s.SetComment(v)
-	return s
+// IsQuestionAnswer reports whether VerificationRequestObject is QuestionAnswer.
+func (s VerificationRequestObject) IsQuestionAnswer() bool {
+	return s.Type == QuestionAnswerVerificationRequestObject
 }
 
 // SetTender sets VerificationRequestObject to Tender.
@@ -5709,6 +5723,27 @@ func NewTenderVerificationRequestObject(v Tender) VerificationRequestObject {
 	return s
 }
 
+// SetAddition sets VerificationRequestObject to Addition.
+func (s *VerificationRequestObject) SetAddition(v Addition) {
+	s.Type = AdditionVerificationRequestObject
+	s.Addition = v
+}
+
+// GetAddition returns Addition and true boolean if VerificationRequestObject is Addition.
+func (s VerificationRequestObject) GetAddition() (v Addition, ok bool) {
+	if !s.IsAddition() {
+		return v, false
+	}
+	return s.Addition, true
+}
+
+// NewAdditionVerificationRequestObject returns new VerificationRequestObject from Addition.
+func NewAdditionVerificationRequestObject(v Addition) VerificationRequestObject {
+	var s VerificationRequestObject
+	s.SetAddition(v)
+	return s
+}
+
 // SetOrganization sets VerificationRequestObject to Organization.
 func (s *VerificationRequestObject) SetOrganization(v Organization) {
 	s.Type = OrganizationVerificationRequestObject
@@ -5727,6 +5762,27 @@ func (s VerificationRequestObject) GetOrganization() (v Organization, ok bool) {
 func NewOrganizationVerificationRequestObject(v Organization) VerificationRequestObject {
 	var s VerificationRequestObject
 	s.SetOrganization(v)
+	return s
+}
+
+// SetQuestionAnswer sets VerificationRequestObject to QuestionAnswer.
+func (s *VerificationRequestObject) SetQuestionAnswer(v QuestionAnswer) {
+	s.Type = QuestionAnswerVerificationRequestObject
+	s.QuestionAnswer = v
+}
+
+// GetQuestionAnswer returns QuestionAnswer and true boolean if VerificationRequestObject is QuestionAnswer.
+func (s VerificationRequestObject) GetQuestionAnswer() (v QuestionAnswer, ok bool) {
+	if !s.IsQuestionAnswer() {
+		return v, false
+	}
+	return s.QuestionAnswer, true
+}
+
+// NewQuestionAnswerVerificationRequestObject returns new VerificationRequestObject from QuestionAnswer.
+func NewQuestionAnswerVerificationRequestObject(v QuestionAnswer) VerificationRequestObject {
+	var s VerificationRequestObject
+	s.SetQuestionAnswer(v)
 	return s
 }
 

@@ -16,9 +16,10 @@ properties:
     $ref: "../properties/object_type.yaml"
   object:
     oneOf:
-      - $ref: "./Comment.yaml"
       - $ref: "./Tender.yaml"
+      - $ref: "./Addition.yaml"
       - $ref: "./Organization.yaml"
+      - $ref: "./QuestionAnswer.yaml"
   content:
     type: string
   attachments:

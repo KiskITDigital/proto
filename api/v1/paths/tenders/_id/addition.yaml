@@ -1,9 +1,9 @@
 post:
   tags:
     - tenders
-  summary: Send comment for tender
+  summary: Send addition for tender
   description: |-
-    Leaves comment under tender
+    Добавление дополнительной информации к тендеру
   security:
     - bearerAuth: []
   parameters:
@@ -39,12 +39,13 @@ post:
       description: Success
     default:
       $ref: "../../../responses/Error.yaml"
+
 get:
   tags:
     - tenders
-  summary: Get comments
+  summary: Get additions for tender
   description: |-
-    Get comments under tender
+    Получение дополнительной информации для тендера
   parameters:
     - name: tenderID
       required: true
@@ -67,6 +68,6 @@ get:
               data:
                 type: array
                 items:
-                  $ref: "../../../schemas/Comment.yaml"
+                  $ref: "../../../schemas/Addition.yaml"
     default:
       $ref: "../../../responses/Error.yaml"

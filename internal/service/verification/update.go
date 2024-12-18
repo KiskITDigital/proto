@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	// "gitlab.ubrato.ru/ubrato/core/internal/service"
-
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/service"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
@@ -36,9 +34,11 @@ func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationR
 				VerificationStatus: params.Status,
 			})
 
-		case models.ObjectTypeComment:
-			// TODO: add update comment status
-			return fmt.Errorf("update comment type not impl")
+		case models.ObjectTypeAddition:
+			err = s.additionStore.UpdateVerificationStatus(ctx, qe, store.AdditionUpdateVerifStatusParams{
+				AdditionID:         result.ObjectID,
+				VerificationStatus: params.Status,
+			})
 
 		default:
 			return fmt.Errorf("invalid object type: %v", result.ObjectType)

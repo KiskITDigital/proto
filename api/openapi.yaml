@@ -22,12 +22,10 @@ paths:
 
   /v1/tenders:
     $ref: "v1/paths/tenders/_index.yaml"
-  /v1/tenders/verifications:
-    $ref: "v1/paths/tenders/verifications.yaml"
   /v1/tenders/{tenderID}:
     $ref: "v1/paths/tenders/_id/_index.yaml"
-  /v1/tenders/{tenderID}/comments:
-    $ref: "v1/paths/tenders/_id/comments.yaml"
+  /v1/tenders/{tenderID}/additions:
+    $ref: "v1/paths/tenders/_id/addition.yaml"
   /v1/tenders/{tenderID}/respond:
     $ref: "v1/paths/tenders/_id/respond.yaml"
   /v1/tenders/{tenderID}/question-answer:
@@ -74,16 +72,10 @@ paths:
     $ref: "v1/paths/organizations/portfolio/_id.yaml"
   /v1/organizations/{organizationID}/portfolio:
     $ref: "v1/paths/organizations/portfolio/_index.yaml"
-
   /v1/organizations/{organizationID}/favourites:
     $ref: "v1/paths/organizations/favourites/_index.yaml"
   /v1/organizations/favourites/{favouriteID}:
     $ref: "v1/paths/organizations/favourites/_id.yaml"
-  
-  /v1/organizations/verifications:
-    $ref: "v1/paths/organizations/verifications.yaml"
-  /v1/organizations/{organizationID}/verifications:
-    $ref: "v1/paths/organizations/_id/verifications.yaml"
   /v1/organizations/{organizationID}/tenders:
     $ref: "v1/paths/organizations/_id/tenders.yaml"
 
@@ -93,6 +85,16 @@ paths:
     $ref: "v1/paths/verifications/_id/deny.yaml"
   /v1/verifications/{requestID}:
     $ref: "v1/paths/verifications/_id/_index.yaml"
+  /v1/verifications/organizations:
+    $ref: "v1/paths/verifications/organization/_index.yaml"
+  /v1/verifications/organizations/{organizationID}:
+    $ref: "v1/paths/verifications/organization/_id.yaml"
+  /v1/verifications/tenders:
+    $ref: "v1/paths/verifications/tenders.yaml"
+  /v1/verifications/additions:
+    $ref: "v1/paths/verifications/additions.yaml"
+  /v1/verifications/question-answer:
+    $ref: "v1/paths/verifications/question_answer.yaml"
 
   /v1/catalog/services:
     $ref: "v1/paths/catalog/services.yaml"
@@ -104,9 +106,6 @@ paths:
     $ref: "v1/paths/catalog/regions.yaml"
   /v1/catalog/measurements:
     $ref: "v1/paths/catalog/measure.yaml"
-
-  /v1/comments/verifications:
-    $ref: "v1/paths/comments/verifications.yaml"
 
   /v1/survey:
     $ref: "v1/paths/survey/_index.yaml"

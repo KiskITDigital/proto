@@ -25,8 +25,8 @@ import (
 	verificationService "gitlab.ubrato.ru/ubrato/core/internal/service/verification"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 	"gitlab.ubrato.ru/ubrato/core/internal/store/postgres"
+	additionStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/addition"
 	catalogStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/catalog"
-	commentStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/comment"
 	organizationStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/organization"
 	portfolioStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/portfolio"
 	questionAnswerStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/question_answer"
@@ -39,7 +39,6 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/transport/http"
 	authHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/auth"
 	catalogHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/catalog"
-	commentHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/comment"
 	employeeHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/employee"
 	errorHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/error"
 	organizationHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/organization"
@@ -90,7 +89,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	organizationStore := organizationStore.NewOrganizationStore(catalogStore)
 	tenderStore := tenderStore.NewTenderStore(catalogStore)
 	verificationStore := verificationStore.NewVerificationRequestStore()
-	commentStore := commentStore.NewCommentStore()
+	additionStore := additionStore.NewAdditionStore()
 	questionnaireStore := questionnaireStore.NewQuestionnaireStore()
 	questionAnswerStore := questionAnswerStore.NewQuestionAnswerStore()
 	portfolioStore := portfolioStore.NewPortfolioStore()
@@ -127,7 +126,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	tenderService := tenderService.New(
 		psql,
 		tenderStore,
-		commentStore,
+		additionStore,
 		verificationStore,
 	)
 
@@ -150,7 +149,6 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	organizationService := organizationService.New(
 		psql,
 		organizationStore,
-		verificationStore,
 	)
 
 	suggestService := suggestService.New(
@@ -163,7 +161,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		psql,
 		verificationStore,
 		tenderStore,
-		commentStore,
+		additionStore,
 		organizationStore,
 	)
 
@@ -186,12 +184,11 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	router := http.NewRouter(http.RouterParams{
 		Error:         errorHandler.New(logger),
 		Auth:          authHandler.New(logger, authService, userService),
-		Tenders:       tenderHandler.New(logger, tenderService, verificationService, questionAnswerService, respondService),
+		Tenders:       tenderHandler.New(logger, tenderService, questionAnswerService, respondService),
 		Catalog:       catalogHandler.New(logger, catalogService),
 		Users:         userHandler.New(logger, userService),
 		Survey:        surveyHandler.New(logger, surveyService),
-		Organization:  organizationHandler.New(logger, organizationService, verificationService, portfolioService),
-		Comments:      commentHandler.New(logger, nil, verificationService),
+		Organization:  organizationHandler.New(logger, organizationService, portfolioService),
 		Suggest:       suggestHandler.New(logger, suggestService),
 		Verification:  verificationHandler.New(logger, verificationService),
 		Employee:      employeeHandler.New(logger, userService),

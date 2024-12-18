@@ -10,7 +10,7 @@ import (
 type Service struct {
 	psql              DBTX
 	tenderStore       TenderStore
-	commentStore      CommentStore
+	additionStore     AdditionStore
 	verificationStore VerificationStore
 }
 
@@ -28,9 +28,9 @@ type TenderStore interface {
 	Count(ctx context.Context, qe store.QueryExecutor, params store.TenderGetCountParams) (int, error)
 }
 
-type CommentStore interface {
-	CreateComment(ctx context.Context, qe store.QueryExecutor, params store.CommentCreateParams) error
-	GetComments(ctx context.Context, qe store.QueryExecutor, params store.CommentGetParams) ([]models.Comment, error)
+type AdditionStore interface {
+	CreateAddition(ctx context.Context, qe store.QueryExecutor, params store.AdditionCreateParams) (int, error)
+	Get(ctx context.Context, qe store.QueryExecutor, params store.AdditionGetParams) ([]models.Addition, error)
 }
 
 type VerificationStore interface {
@@ -40,13 +40,13 @@ type VerificationStore interface {
 func New(
 	psql DBTX,
 	tenderStore TenderStore,
-	commentStore CommentStore,
+	additionStore AdditionStore,
 	verificationStore VerificationStore,
 ) *Service {
 	return &Service{
 		psql:              psql,
 		tenderStore:       tenderStore,
-		commentStore:      commentStore,
+		additionStore:     additionStore,
 		verificationStore: verificationStore,
 	}
 }

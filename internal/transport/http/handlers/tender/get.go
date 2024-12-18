@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
-	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/contextor"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/pagination"
@@ -59,25 +58,5 @@ func (h *Handler) V1OrganizationsOrganizationIDTendersGet(
 	return &api.V1OrganizationsOrganizationIDTendersGetOK{
 		Data:       convert.Slice[[]models.Tender, []api.Tender](tenders.Tenders, models.ConvertTenderModelToApi),
 		Pagination: pagination.ConvertPaginationToAPI(tenders.Pagination),
-	}, nil
-}
-
-func (h *Handler) V1TendersVerificationsGet(ctx context.Context, params api.V1TendersVerificationsGetParams) (api.V1TendersVerificationsGetRes, error) {
-	if contextor.GetRole(ctx) < models.UserRoleEmployee {
-		return nil, cerr.ErrPermission
-	}
-
-	requests, err := h.verificationService.Get(ctx, service.VerificationRequestsObjectGetParams{
-		ObjectType: models.ObjectTypeTender,
-		Status:     convert.Slice[[]api.VerificationStatus, []models.VerificationStatus](params.Status, models.APIToVerificationStatus),
-		Page:       uint64(params.Page.Or(pagination.Page)),
-		PerPage:    uint64(params.PerPage.Or(pagination.PerPage))})
-	if err != nil {
-		return nil, fmt.Errorf("get organization verif req: %w", err)
-	}
-
-	return &api.V1TendersVerificationsGetOK{
-		Data:       convert.Slice[[]models.VerificationRequest[models.VerificationObject], []api.VerificationRequest](requests.VerificationRequests, models.VerificationRequestModelToApi),
-		Pagination: pagination.ConvertPaginationToAPI(requests.Pagination),
 	}, nil
 }

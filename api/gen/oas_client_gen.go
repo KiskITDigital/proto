@@ -103,14 +103,6 @@ type Invoker interface {
 	//
 	// POST /v1/catalog/services
 	V1CatalogServicesPost(ctx context.Context, request *V1CatalogServicesPostReq) (V1CatalogServicesPostRes, error)
-	// V1CommentsVerificationsGet invokes GET /v1/comments/verifications operation.
-	//
-	// Get all verifications requests
-	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-	// 'Employee' or higher.
-	//
-	// GET /v1/comments/verifications
-	V1CommentsVerificationsGet(ctx context.Context, params V1CommentsVerificationsGetParams) (V1CommentsVerificationsGetRes, error)
 	// V1EmployeePost invokes POST /v1/employee operation.
 	//
 	// Create employee user.
@@ -125,7 +117,7 @@ type Invoker interface {
 	V1OrganizationsContractorsGet(ctx context.Context, params V1OrganizationsContractorsGetParams) (V1OrganizationsContractorsGetRes, error)
 	// V1OrganizationsFavouritesFavouriteIDDelete invokes DELETE /v1/organizations/favourites/{favouriteID} operation.
 	//
-	// Удаляет объект из избранного организации.
+	// Удаление объекта из избранного.
 	//
 	// DELETE /v1/organizations/favourites/{favouriteID}
 	V1OrganizationsFavouritesFavouriteIDDelete(ctx context.Context, params V1OrganizationsFavouritesFavouriteIDDeleteParams) (V1OrganizationsFavouritesFavouriteIDDeleteRes, error)
@@ -141,7 +133,7 @@ type Invoker interface {
 	V1OrganizationsGet(ctx context.Context, params V1OrganizationsGetParams) (V1OrganizationsGetRes, error)
 	// V1OrganizationsOrganizationIDFavouritesGet invokes GET /v1/organizations/{organizationID}/favourites operation.
 	//
-	// Получаем список избранного.
+	// Получение списка избранного.
 	//
 	// GET /v1/organizations/{organizationID}/favourites
 	V1OrganizationsOrganizationIDFavouritesGet(ctx context.Context, params V1OrganizationsOrganizationIDFavouritesGetParams) (V1OrganizationsOrganizationIDFavouritesGetRes, error)
@@ -218,18 +210,6 @@ type Invoker interface {
 	//
 	// GET /v1/organizations/{organizationID}/tenders
 	V1OrganizationsOrganizationIDTendersGet(ctx context.Context, params V1OrganizationsOrganizationIDTendersGetParams) (V1OrganizationsOrganizationIDTendersGetRes, error)
-	// V1OrganizationsOrganizationIDVerificationsGet invokes GET /v1/organizations/{organizationID}/verifications operation.
-	//
-	// Get organization verification history.
-	//
-	// GET /v1/organizations/{organizationID}/verifications
-	V1OrganizationsOrganizationIDVerificationsGet(ctx context.Context, params V1OrganizationsOrganizationIDVerificationsGetParams) (V1OrganizationsOrganizationIDVerificationsGetRes, error)
-	// V1OrganizationsOrganizationIDVerificationsPost invokes POST /v1/organizations/{organizationID}/verifications operation.
-	//
-	// Ask verify organization.
-	//
-	// POST /v1/organizations/{organizationID}/verifications
-	V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, request []Attachment, params V1OrganizationsOrganizationIDVerificationsPostParams) (V1OrganizationsOrganizationIDVerificationsPostRes, error)
 	// V1OrganizationsPortfolioPortfolioIDDelete invokes DELETE /v1/organizations/portfolio/{portfolioID} operation.
 	//
 	// Удаляет портфолио из профиля исполнителя.
@@ -243,14 +223,6 @@ type Invoker interface {
 	//
 	// PUT /v1/organizations/portfolio/{portfolioID}
 	V1OrganizationsPortfolioPortfolioIDPut(ctx context.Context, request *V1OrganizationsPortfolioPortfolioIDPutReq, params V1OrganizationsPortfolioPortfolioIDPutParams) (V1OrganizationsPortfolioPortfolioIDPutRes, error)
-	// V1OrganizationsVerificationsGet invokes GET /v1/organizations/verifications operation.
-	//
-	// Get verifications
-	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-	// 'Employee' or higher.
-	//
-	// GET /v1/organizations/verifications
-	V1OrganizationsVerificationsGet(ctx context.Context, params V1OrganizationsVerificationsGetParams) (V1OrganizationsVerificationsGetRes, error)
 	// V1QuestionnaireGet invokes GET /v1/questionnaire operation.
 	//
 	// Get all contractor's questionnaire answers with pagination
@@ -304,18 +276,18 @@ type Invoker interface {
 	//
 	// POST /v1/tenders
 	V1TendersPost(ctx context.Context, request *V1TendersPostReq) (V1TendersPostRes, error)
-	// V1TendersTenderIDCommentsGet invokes GET /v1/tenders/{tenderID}/comments operation.
+	// V1TendersTenderIDAdditionsGet invokes GET /v1/tenders/{tenderID}/additions operation.
 	//
-	// Get comments under tender.
+	// Получение дополнительной информации для тендера.
 	//
-	// GET /v1/tenders/{tenderID}/comments
-	V1TendersTenderIDCommentsGet(ctx context.Context, params V1TendersTenderIDCommentsGetParams) (V1TendersTenderIDCommentsGetRes, error)
-	// V1TendersTenderIDCommentsPost invokes POST /v1/tenders/{tenderID}/comments operation.
+	// GET /v1/tenders/{tenderID}/additions
+	V1TendersTenderIDAdditionsGet(ctx context.Context, params V1TendersTenderIDAdditionsGetParams) (V1TendersTenderIDAdditionsGetRes, error)
+	// V1TendersTenderIDAdditionsPost invokes POST /v1/tenders/{tenderID}/additions operation.
 	//
-	// Leaves comment under tender.
+	// Добавление дополнительной информации к тендеру.
 	//
-	// POST /v1/tenders/{tenderID}/comments
-	V1TendersTenderIDCommentsPost(ctx context.Context, request *V1TendersTenderIDCommentsPostReq, params V1TendersTenderIDCommentsPostParams) (V1TendersTenderIDCommentsPostRes, error)
+	// POST /v1/tenders/{tenderID}/additions
+	V1TendersTenderIDAdditionsPost(ctx context.Context, request *V1TendersTenderIDAdditionsPostReq, params V1TendersTenderIDAdditionsPostParams) (V1TendersTenderIDAdditionsPostRes, error)
 	// V1TendersTenderIDGet invokes GET /v1/tenders/{tenderID} operation.
 	//
 	// Returns tender by id
@@ -357,14 +329,6 @@ type Invoker interface {
 	//
 	// POST /v1/tenders/{tenderID}/respond
 	V1TendersTenderIDRespondPost(ctx context.Context, request *V1TendersTenderIDRespondPostReq, params V1TendersTenderIDRespondPostParams) (V1TendersTenderIDRespondPostRes, error)
-	// V1TendersVerificationsGet invokes GET /v1/tenders/verifications operation.
-	//
-	// Get verifications
-	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-	// 'Employee' or higher.
-	//
-	// GET /v1/tenders/verifications
-	V1TendersVerificationsGet(ctx context.Context, params V1TendersVerificationsGetParams) (V1TendersVerificationsGetRes, error)
 	// V1UsersConfirmEmailPost invokes POST /v1/users/confirm/email operation.
 	//
 	// Confirm email use a code from mail.
@@ -411,6 +375,45 @@ type Invoker interface {
 	//
 	// PUT /v1/users/{userID}
 	V1UsersUserIDPut(ctx context.Context, request *V1UsersUserIDPutReq, params V1UsersUserIDPutParams) (V1UsersUserIDPutRes, error)
+	// V1VerificationsAdditionsGet invokes GET /v1/verifications/additions operation.
+	//
+	// Получение запросов на верификацию для
+	// дополнительной информации о тендерах
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+	// 'Employee' or higher.
+	//
+	// GET /v1/verifications/additions
+	V1VerificationsAdditionsGet(ctx context.Context, params V1VerificationsAdditionsGetParams) (V1VerificationsAdditionsGetRes, error)
+	// V1VerificationsOrganizationsGet invokes GET /v1/verifications/organizations operation.
+	//
+	// Получение всех запросов на верификацию для
+	// организаций
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+	// 'Employee' or higher.
+	//
+	// GET /v1/verifications/organizations
+	V1VerificationsOrganizationsGet(ctx context.Context, params V1VerificationsOrganizationsGetParams) (V1VerificationsOrganizationsGetRes, error)
+	// V1VerificationsOrganizationsOrganizationIDGet invokes GET /v1/verifications/organizations/{organizationID} operation.
+	//
+	// Получает историю верификации организации.
+	//
+	// GET /v1/verifications/organizations/{organizationID}
+	V1VerificationsOrganizationsOrganizationIDGet(ctx context.Context, params V1VerificationsOrganizationsOrganizationIDGetParams) (V1VerificationsOrganizationsOrganizationIDGetRes, error)
+	// V1VerificationsOrganizationsOrganizationIDPost invokes POST /v1/verifications/organizations/{organizationID} operation.
+	//
+	// Отправляет документы организации на верификацию.
+	//
+	// POST /v1/verifications/organizations/{organizationID}
+	V1VerificationsOrganizationsOrganizationIDPost(ctx context.Context, request []Attachment, params V1VerificationsOrganizationsOrganizationIDPostParams) (V1VerificationsOrganizationsOrganizationIDPostRes, error)
+	// V1VerificationsQuestionAnswerGet invokes GET /v1/verifications/question-answer operation.
+	//
+	// Получение запросов на верификацию для
+	// дополнительной информации о вопросов-ответов
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+	// 'Employee' or higher.
+	//
+	// GET /v1/verifications/question-answer
+	V1VerificationsQuestionAnswerGet(ctx context.Context, params V1VerificationsQuestionAnswerGetParams) (V1VerificationsQuestionAnswerGetRes, error)
 	// V1VerificationsRequestIDAprovePost invokes POST /v1/verifications/{requestID}/aprove operation.
 	//
 	// Aproving verification
@@ -435,6 +438,14 @@ type Invoker interface {
 	//
 	// GET /v1/verifications/{requestID}
 	V1VerificationsRequestIDGet(ctx context.Context, params V1VerificationsRequestIDGetParams) (V1VerificationsRequestIDGetRes, error)
+	// V1VerificationsTendersGet invokes GET /v1/verifications/tenders operation.
+	//
+	// Получение запросов на верификацию для тендеров
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+	// 'Employee' or higher.
+	//
+	// GET /v1/verifications/tenders
+	V1VerificationsTendersGet(ctx context.Context, params V1VerificationsTendersGetParams) (V1VerificationsTendersGetRes, error)
 }
 
 // Client implements OAS client.
@@ -1727,176 +1738,6 @@ func (c *Client) sendV1CatalogServicesPost(ctx context.Context, request *V1Catal
 	return result, nil
 }
 
-// V1CommentsVerificationsGet invokes GET /v1/comments/verifications operation.
-//
-// Get all verifications requests
-// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-// 'Employee' or higher.
-//
-// GET /v1/comments/verifications
-func (c *Client) V1CommentsVerificationsGet(ctx context.Context, params V1CommentsVerificationsGetParams) (V1CommentsVerificationsGetRes, error) {
-	res, err := c.sendV1CommentsVerificationsGet(ctx, params)
-	return res, err
-}
-
-func (c *Client) sendV1CommentsVerificationsGet(ctx context.Context, params V1CommentsVerificationsGetParams) (res V1CommentsVerificationsGetRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/comments/verifications"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "V1CommentsVerificationsGet",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/v1/comments/verifications"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeQueryParams"
-	q := uri.NewQueryEncoder()
-	{
-		// Encode "status" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "status",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if params.Status != nil {
-				return e.EncodeArray(func(e uri.Encoder) error {
-					for i, item := range params.Status {
-						if err := func() error {
-							return e.EncodeValue(conv.StringToString(string(item)))
-						}(); err != nil {
-							return errors.Wrapf(err, "[%d]", i)
-						}
-					}
-					return nil
-				})
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "page" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "page",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.IntToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "per_page" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "per_page",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.PerPage.Get(); ok {
-				return e.EncodeValue(conv.IntToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	u.RawQuery = q.Values().Encode()
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "V1CommentsVerificationsGet", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"BearerAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeV1CommentsVerificationsGetResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
 // V1EmployeePost invokes POST /v1/employee operation.
 //
 // Create employee user.
@@ -2082,7 +1923,7 @@ func (c *Client) sendV1OrganizationsContractorsGet(ctx context.Context, params V
 
 // V1OrganizationsFavouritesFavouriteIDDelete invokes DELETE /v1/organizations/favourites/{favouriteID} operation.
 //
-// Удаляет объект из избранного организации.
+// Удаление объекта из избранного.
 //
 // DELETE /v1/organizations/favourites/{favouriteID}
 func (c *Client) V1OrganizationsFavouritesFavouriteIDDelete(ctx context.Context, params V1OrganizationsFavouritesFavouriteIDDeleteParams) (V1OrganizationsFavouritesFavouriteIDDeleteRes, error) {
@@ -2367,7 +2208,7 @@ func (c *Client) sendV1OrganizationsGet(ctx context.Context, params V1Organizati
 
 // V1OrganizationsOrganizationIDFavouritesGet invokes GET /v1/organizations/{organizationID}/favourites operation.
 //
-// Получаем список избранного.
+// Получение списка избранного.
 //
 // GET /v1/organizations/{organizationID}/favourites
 func (c *Client) V1OrganizationsOrganizationIDFavouritesGet(ctx context.Context, params V1OrganizationsOrganizationIDFavouritesGetParams) (V1OrganizationsOrganizationIDFavouritesGetRes, error) {
@@ -3875,255 +3716,6 @@ func (c *Client) sendV1OrganizationsOrganizationIDTendersGet(ctx context.Context
 	return result, nil
 }
 
-// V1OrganizationsOrganizationIDVerificationsGet invokes GET /v1/organizations/{organizationID}/verifications operation.
-//
-// Get organization verification history.
-//
-// GET /v1/organizations/{organizationID}/verifications
-func (c *Client) V1OrganizationsOrganizationIDVerificationsGet(ctx context.Context, params V1OrganizationsOrganizationIDVerificationsGetParams) (V1OrganizationsOrganizationIDVerificationsGetRes, error) {
-	res, err := c.sendV1OrganizationsOrganizationIDVerificationsGet(ctx, params)
-	return res, err
-}
-
-func (c *Client) sendV1OrganizationsOrganizationIDVerificationsGet(ctx context.Context, params V1OrganizationsOrganizationIDVerificationsGetParams) (res V1OrganizationsOrganizationIDVerificationsGetRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationID}/verifications"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsOrganizationIDVerificationsGet",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [3]string
-	pathParts[0] = "/v1/organizations/"
-	{
-		// Encode "organizationID" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationID",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.IntToString(params.OrganizationID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[1] = encoded
-	}
-	pathParts[2] = "/verifications"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "V1OrganizationsOrganizationIDVerificationsGet", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"BearerAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeV1OrganizationsOrganizationIDVerificationsGetResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// V1OrganizationsOrganizationIDVerificationsPost invokes POST /v1/organizations/{organizationID}/verifications operation.
-//
-// Ask verify organization.
-//
-// POST /v1/organizations/{organizationID}/verifications
-func (c *Client) V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, request []Attachment, params V1OrganizationsOrganizationIDVerificationsPostParams) (V1OrganizationsOrganizationIDVerificationsPostRes, error) {
-	res, err := c.sendV1OrganizationsOrganizationIDVerificationsPost(ctx, request, params)
-	return res, err
-}
-
-func (c *Client) sendV1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, request []Attachment, params V1OrganizationsOrganizationIDVerificationsPostParams) (res V1OrganizationsOrganizationIDVerificationsPostRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationID}/verifications"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsOrganizationIDVerificationsPost",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [3]string
-	pathParts[0] = "/v1/organizations/"
-	{
-		// Encode "organizationID" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationID",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.IntToString(params.OrganizationID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[1] = encoded
-	}
-	pathParts[2] = "/verifications"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeV1OrganizationsOrganizationIDVerificationsPostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "V1OrganizationsOrganizationIDVerificationsPost", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"BearerAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeV1OrganizationsOrganizationIDVerificationsPostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
 // V1OrganizationsPortfolioPortfolioIDDelete invokes DELETE /v1/organizations/portfolio/{portfolioID} operation.
 //
 // Удаляет портфолио из профиля исполнителя.
@@ -4365,176 +3957,6 @@ func (c *Client) sendV1OrganizationsPortfolioPortfolioIDPut(ctx context.Context,
 
 	stage = "DecodeResponse"
 	result, err := decodeV1OrganizationsPortfolioPortfolioIDPutResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// V1OrganizationsVerificationsGet invokes GET /v1/organizations/verifications operation.
-//
-// Get verifications
-// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-// 'Employee' or higher.
-//
-// GET /v1/organizations/verifications
-func (c *Client) V1OrganizationsVerificationsGet(ctx context.Context, params V1OrganizationsVerificationsGetParams) (V1OrganizationsVerificationsGetRes, error) {
-	res, err := c.sendV1OrganizationsVerificationsGet(ctx, params)
-	return res, err
-}
-
-func (c *Client) sendV1OrganizationsVerificationsGet(ctx context.Context, params V1OrganizationsVerificationsGetParams) (res V1OrganizationsVerificationsGetRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/verifications"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "V1OrganizationsVerificationsGet",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/v1/organizations/verifications"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeQueryParams"
-	q := uri.NewQueryEncoder()
-	{
-		// Encode "status" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "status",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if params.Status != nil {
-				return e.EncodeArray(func(e uri.Encoder) error {
-					for i, item := range params.Status {
-						if err := func() error {
-							return e.EncodeValue(conv.StringToString(string(item)))
-						}(); err != nil {
-							return errors.Wrapf(err, "[%d]", i)
-						}
-					}
-					return nil
-				})
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "page" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "page",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.IntToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "per_page" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "per_page",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.PerPage.Get(); ok {
-				return e.EncodeValue(conv.IntToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	u.RawQuery = q.Values().Encode()
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "V1OrganizationsVerificationsGet", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"BearerAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeV1OrganizationsVerificationsGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -5479,20 +4901,20 @@ func (c *Client) sendV1TendersPost(ctx context.Context, request *V1TendersPostRe
 	return result, nil
 }
 
-// V1TendersTenderIDCommentsGet invokes GET /v1/tenders/{tenderID}/comments operation.
+// V1TendersTenderIDAdditionsGet invokes GET /v1/tenders/{tenderID}/additions operation.
 //
-// Get comments under tender.
+// Получение дополнительной информации для тендера.
 //
-// GET /v1/tenders/{tenderID}/comments
-func (c *Client) V1TendersTenderIDCommentsGet(ctx context.Context, params V1TendersTenderIDCommentsGetParams) (V1TendersTenderIDCommentsGetRes, error) {
-	res, err := c.sendV1TendersTenderIDCommentsGet(ctx, params)
+// GET /v1/tenders/{tenderID}/additions
+func (c *Client) V1TendersTenderIDAdditionsGet(ctx context.Context, params V1TendersTenderIDAdditionsGetParams) (V1TendersTenderIDAdditionsGetRes, error) {
+	res, err := c.sendV1TendersTenderIDAdditionsGet(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendV1TendersTenderIDCommentsGet(ctx context.Context, params V1TendersTenderIDCommentsGetParams) (res V1TendersTenderIDCommentsGetRes, err error) {
+func (c *Client) sendV1TendersTenderIDAdditionsGet(ctx context.Context, params V1TendersTenderIDAdditionsGetParams) (res V1TendersTenderIDAdditionsGetRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/tenders/{tenderID}/comments"),
+		semconv.HTTPRouteKey.String("/v1/tenders/{tenderID}/additions"),
 	}
 
 	// Run stopwatch.
@@ -5507,7 +4929,7 @@ func (c *Client) sendV1TendersTenderIDCommentsGet(ctx context.Context, params V1
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "V1TendersTenderIDCommentsGet",
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1TendersTenderIDAdditionsGet",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -5544,7 +4966,7 @@ func (c *Client) sendV1TendersTenderIDCommentsGet(ctx context.Context, params V1
 		}
 		pathParts[1] = encoded
 	}
-	pathParts[2] = "/comments"
+	pathParts[2] = "/additions"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
@@ -5561,7 +4983,7 @@ func (c *Client) sendV1TendersTenderIDCommentsGet(ctx context.Context, params V1
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeV1TendersTenderIDCommentsGetResponse(resp)
+	result, err := decodeV1TendersTenderIDAdditionsGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -5569,20 +4991,20 @@ func (c *Client) sendV1TendersTenderIDCommentsGet(ctx context.Context, params V1
 	return result, nil
 }
 
-// V1TendersTenderIDCommentsPost invokes POST /v1/tenders/{tenderID}/comments operation.
+// V1TendersTenderIDAdditionsPost invokes POST /v1/tenders/{tenderID}/additions operation.
 //
-// Leaves comment under tender.
+// Добавление дополнительной информации к тендеру.
 //
-// POST /v1/tenders/{tenderID}/comments
-func (c *Client) V1TendersTenderIDCommentsPost(ctx context.Context, request *V1TendersTenderIDCommentsPostReq, params V1TendersTenderIDCommentsPostParams) (V1TendersTenderIDCommentsPostRes, error) {
-	res, err := c.sendV1TendersTenderIDCommentsPost(ctx, request, params)
+// POST /v1/tenders/{tenderID}/additions
+func (c *Client) V1TendersTenderIDAdditionsPost(ctx context.Context, request *V1TendersTenderIDAdditionsPostReq, params V1TendersTenderIDAdditionsPostParams) (V1TendersTenderIDAdditionsPostRes, error) {
+	res, err := c.sendV1TendersTenderIDAdditionsPost(ctx, request, params)
 	return res, err
 }
 
-func (c *Client) sendV1TendersTenderIDCommentsPost(ctx context.Context, request *V1TendersTenderIDCommentsPostReq, params V1TendersTenderIDCommentsPostParams) (res V1TendersTenderIDCommentsPostRes, err error) {
+func (c *Client) sendV1TendersTenderIDAdditionsPost(ctx context.Context, request *V1TendersTenderIDAdditionsPostReq, params V1TendersTenderIDAdditionsPostParams) (res V1TendersTenderIDAdditionsPostRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/tenders/{tenderID}/comments"),
+		semconv.HTTPRouteKey.String("/v1/tenders/{tenderID}/additions"),
 	}
 
 	// Run stopwatch.
@@ -5597,7 +5019,7 @@ func (c *Client) sendV1TendersTenderIDCommentsPost(ctx context.Context, request 
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "V1TendersTenderIDCommentsPost",
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1TendersTenderIDAdditionsPost",
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -5634,7 +5056,7 @@ func (c *Client) sendV1TendersTenderIDCommentsPost(ctx context.Context, request 
 		}
 		pathParts[1] = encoded
 	}
-	pathParts[2] = "/comments"
+	pathParts[2] = "/additions"
 	uri.AddPathParts(u, pathParts[:]...)
 
 	stage = "EncodeRequest"
@@ -5642,7 +5064,7 @@ func (c *Client) sendV1TendersTenderIDCommentsPost(ctx context.Context, request 
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
 	}
-	if err := encodeV1TendersTenderIDCommentsPostRequest(request, r); err != nil {
+	if err := encodeV1TendersTenderIDAdditionsPostRequest(request, r); err != nil {
 		return res, errors.Wrap(err, "encode request")
 	}
 
@@ -5651,7 +5073,7 @@ func (c *Client) sendV1TendersTenderIDCommentsPost(ctx context.Context, request 
 		var satisfied bitset
 		{
 			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "V1TendersTenderIDCommentsPost", r); {
+			switch err := c.securityBearerAuth(ctx, "V1TendersTenderIDAdditionsPost", r); {
 			case err == nil: // if NO error
 				satisfied[0] |= 1 << 0
 			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
@@ -5687,7 +5109,7 @@ func (c *Client) sendV1TendersTenderIDCommentsPost(ctx context.Context, request 
 	defer resp.Body.Close()
 
 	stage = "DecodeResponse"
-	result, err := decodeV1TendersTenderIDCommentsPostResponse(resp)
+	result, err := decodeV1TendersTenderIDAdditionsPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -6468,176 +5890,6 @@ func (c *Client) sendV1TendersTenderIDRespondPost(ctx context.Context, request *
 	return result, nil
 }
 
-// V1TendersVerificationsGet invokes GET /v1/tenders/verifications operation.
-//
-// Get verifications
-// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-// 'Employee' or higher.
-//
-// GET /v1/tenders/verifications
-func (c *Client) V1TendersVerificationsGet(ctx context.Context, params V1TendersVerificationsGetParams) (V1TendersVerificationsGetRes, error) {
-	res, err := c.sendV1TendersVerificationsGet(ctx, params)
-	return res, err
-}
-
-func (c *Client) sendV1TendersVerificationsGet(ctx context.Context, params V1TendersVerificationsGetParams) (res V1TendersVerificationsGetRes, err error) {
-	otelAttrs := []attribute.KeyValue{
-		semconv.HTTPRequestMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/tenders/verifications"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "V1TendersVerificationsGet",
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [1]string
-	pathParts[0] = "/v1/tenders/verifications"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeQueryParams"
-	q := uri.NewQueryEncoder()
-	{
-		// Encode "status" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "status",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if params.Status != nil {
-				return e.EncodeArray(func(e uri.Encoder) error {
-					for i, item := range params.Status {
-						if err := func() error {
-							return e.EncodeValue(conv.StringToString(string(item)))
-						}(); err != nil {
-							return errors.Wrapf(err, "[%d]", i)
-						}
-					}
-					return nil
-				})
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "page" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "page",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.Page.Get(); ok {
-				return e.EncodeValue(conv.IntToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	{
-		// Encode "per_page" parameter.
-		cfg := uri.QueryParameterEncodingConfig{
-			Name:    "per_page",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
-			if val, ok := params.PerPage.Get(); ok {
-				return e.EncodeValue(conv.IntToString(val))
-			}
-			return nil
-		}); err != nil {
-			return res, errors.Wrap(err, "encode query")
-		}
-	}
-	u.RawQuery = q.Values().Encode()
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "GET", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-			stage = "Security:BearerAuth"
-			switch err := c.securityBearerAuth(ctx, "V1TendersVerificationsGet", r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"BearerAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeV1TendersVerificationsGetResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
 // V1UsersConfirmEmailPost invokes POST /v1/users/confirm/email operation.
 //
 // Confirm email use a code from mail.
@@ -7353,6 +6605,766 @@ func (c *Client) sendV1UsersUserIDPut(ctx context.Context, request *V1UsersUserI
 	return result, nil
 }
 
+// V1VerificationsAdditionsGet invokes GET /v1/verifications/additions operation.
+//
+// Получение запросов на верификацию для
+// дополнительной информации о тендерах
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+// 'Employee' or higher.
+//
+// GET /v1/verifications/additions
+func (c *Client) V1VerificationsAdditionsGet(ctx context.Context, params V1VerificationsAdditionsGetParams) (V1VerificationsAdditionsGetRes, error) {
+	res, err := c.sendV1VerificationsAdditionsGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1VerificationsAdditionsGet(ctx context.Context, params V1VerificationsAdditionsGetParams) (res V1VerificationsAdditionsGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/verifications/additions"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1VerificationsAdditionsGet",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/verifications/additions"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "status" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "status",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if params.Status != nil {
+				return e.EncodeArray(func(e uri.Encoder) error {
+					for i, item := range params.Status {
+						if err := func() error {
+							return e.EncodeValue(conv.StringToString(string(item)))
+						}(); err != nil {
+							return errors.Wrapf(err, "[%d]", i)
+						}
+					}
+					return nil
+				})
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "page" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Page.Get(); ok {
+				return e.EncodeValue(conv.IntToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "per_page" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "per_page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.PerPage.Get(); ok {
+				return e.EncodeValue(conv.IntToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1VerificationsAdditionsGet", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1VerificationsAdditionsGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1VerificationsOrganizationsGet invokes GET /v1/verifications/organizations operation.
+//
+// Получение всех запросов на верификацию для
+// организаций
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+// 'Employee' or higher.
+//
+// GET /v1/verifications/organizations
+func (c *Client) V1VerificationsOrganizationsGet(ctx context.Context, params V1VerificationsOrganizationsGetParams) (V1VerificationsOrganizationsGetRes, error) {
+	res, err := c.sendV1VerificationsOrganizationsGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1VerificationsOrganizationsGet(ctx context.Context, params V1VerificationsOrganizationsGetParams) (res V1VerificationsOrganizationsGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/verifications/organizations"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1VerificationsOrganizationsGet",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/verifications/organizations"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "status" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "status",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if params.Status != nil {
+				return e.EncodeArray(func(e uri.Encoder) error {
+					for i, item := range params.Status {
+						if err := func() error {
+							return e.EncodeValue(conv.StringToString(string(item)))
+						}(); err != nil {
+							return errors.Wrapf(err, "[%d]", i)
+						}
+					}
+					return nil
+				})
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "page" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Page.Get(); ok {
+				return e.EncodeValue(conv.IntToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "per_page" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "per_page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.PerPage.Get(); ok {
+				return e.EncodeValue(conv.IntToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1VerificationsOrganizationsGet", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1VerificationsOrganizationsGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1VerificationsOrganizationsOrganizationIDGet invokes GET /v1/verifications/organizations/{organizationID} operation.
+//
+// Получает историю верификации организации.
+//
+// GET /v1/verifications/organizations/{organizationID}
+func (c *Client) V1VerificationsOrganizationsOrganizationIDGet(ctx context.Context, params V1VerificationsOrganizationsOrganizationIDGetParams) (V1VerificationsOrganizationsOrganizationIDGetRes, error) {
+	res, err := c.sendV1VerificationsOrganizationsOrganizationIDGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1VerificationsOrganizationsOrganizationIDGet(ctx context.Context, params V1VerificationsOrganizationsOrganizationIDGetParams) (res V1VerificationsOrganizationsOrganizationIDGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/verifications/organizations/{organizationID}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1VerificationsOrganizationsOrganizationIDGet",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/v1/verifications/organizations/"
+	{
+		// Encode "organizationID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.OrganizationID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1VerificationsOrganizationsOrganizationIDGet", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1VerificationsOrganizationsOrganizationIDGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1VerificationsOrganizationsOrganizationIDPost invokes POST /v1/verifications/organizations/{organizationID} operation.
+//
+// Отправляет документы организации на верификацию.
+//
+// POST /v1/verifications/organizations/{organizationID}
+func (c *Client) V1VerificationsOrganizationsOrganizationIDPost(ctx context.Context, request []Attachment, params V1VerificationsOrganizationsOrganizationIDPostParams) (V1VerificationsOrganizationsOrganizationIDPostRes, error) {
+	res, err := c.sendV1VerificationsOrganizationsOrganizationIDPost(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendV1VerificationsOrganizationsOrganizationIDPost(ctx context.Context, request []Attachment, params V1VerificationsOrganizationsOrganizationIDPostParams) (res V1VerificationsOrganizationsOrganizationIDPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/verifications/organizations/{organizationID}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1VerificationsOrganizationsOrganizationIDPost",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/v1/verifications/organizations/"
+	{
+		// Encode "organizationID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.OrganizationID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1VerificationsOrganizationsOrganizationIDPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1VerificationsOrganizationsOrganizationIDPost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1VerificationsOrganizationsOrganizationIDPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1VerificationsQuestionAnswerGet invokes GET /v1/verifications/question-answer operation.
+//
+// Получение запросов на верификацию для
+// дополнительной информации о вопросов-ответов
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+// 'Employee' or higher.
+//
+// GET /v1/verifications/question-answer
+func (c *Client) V1VerificationsQuestionAnswerGet(ctx context.Context, params V1VerificationsQuestionAnswerGetParams) (V1VerificationsQuestionAnswerGetRes, error) {
+	res, err := c.sendV1VerificationsQuestionAnswerGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1VerificationsQuestionAnswerGet(ctx context.Context, params V1VerificationsQuestionAnswerGetParams) (res V1VerificationsQuestionAnswerGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/verifications/question-answer"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1VerificationsQuestionAnswerGet",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/verifications/question-answer"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "status" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "status",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if params.Status != nil {
+				return e.EncodeArray(func(e uri.Encoder) error {
+					for i, item := range params.Status {
+						if err := func() error {
+							return e.EncodeValue(conv.StringToString(string(item)))
+						}(); err != nil {
+							return errors.Wrapf(err, "[%d]", i)
+						}
+					}
+					return nil
+				})
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "page" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Page.Get(); ok {
+				return e.EncodeValue(conv.IntToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "per_page" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "per_page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.PerPage.Get(); ok {
+				return e.EncodeValue(conv.IntToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1VerificationsQuestionAnswerGet", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1VerificationsQuestionAnswerGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // V1VerificationsRequestIDAprovePost invokes POST /v1/verifications/{requestID}/aprove operation.
 //
 // Aproving verification
@@ -7723,6 +7735,176 @@ func (c *Client) sendV1VerificationsRequestIDGet(ctx context.Context, params V1V
 
 	stage = "DecodeResponse"
 	result, err := decodeV1VerificationsRequestIDGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1VerificationsTendersGet invokes GET /v1/verifications/tenders operation.
+//
+// Получение запросов на верификацию для тендеров
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+// 'Employee' or higher.
+//
+// GET /v1/verifications/tenders
+func (c *Client) V1VerificationsTendersGet(ctx context.Context, params V1VerificationsTendersGetParams) (V1VerificationsTendersGetRes, error) {
+	res, err := c.sendV1VerificationsTendersGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1VerificationsTendersGet(ctx context.Context, params V1VerificationsTendersGetParams) (res V1VerificationsTendersGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/verifications/tenders"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1VerificationsTendersGet",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/verifications/tenders"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "status" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "status",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if params.Status != nil {
+				return e.EncodeArray(func(e uri.Encoder) error {
+					for i, item := range params.Status {
+						if err := func() error {
+							return e.EncodeValue(conv.StringToString(string(item)))
+						}(); err != nil {
+							return errors.Wrapf(err, "[%d]", i)
+						}
+					}
+					return nil
+				})
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "page" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Page.Get(); ok {
+				return e.EncodeValue(conv.IntToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "per_page" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "per_page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.PerPage.Get(); ok {
+				return e.EncodeValue(conv.IntToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1VerificationsTendersGet", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1VerificationsTendersGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

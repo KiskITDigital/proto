@@ -129,17 +129,6 @@ func (UnimplementedHandler) V1CatalogServicesPost(ctx context.Context, req *V1Ca
 	return r, ht.ErrNotImplemented
 }
 
-// V1CommentsVerificationsGet implements GET /v1/comments/verifications operation.
-//
-// Get all verifications requests
-// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-// 'Employee' or higher.
-//
-// GET /v1/comments/verifications
-func (UnimplementedHandler) V1CommentsVerificationsGet(ctx context.Context, params V1CommentsVerificationsGetParams) (r V1CommentsVerificationsGetRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // V1EmployeePost implements POST /v1/employee operation.
 //
 // Create employee user.
@@ -160,7 +149,7 @@ func (UnimplementedHandler) V1OrganizationsContractorsGet(ctx context.Context, p
 
 // V1OrganizationsFavouritesFavouriteIDDelete implements DELETE /v1/organizations/favourites/{favouriteID} operation.
 //
-// Удаляет объект из избранного организации.
+// Удаление объекта из избранного.
 //
 // DELETE /v1/organizations/favourites/{favouriteID}
 func (UnimplementedHandler) V1OrganizationsFavouritesFavouriteIDDelete(ctx context.Context, params V1OrganizationsFavouritesFavouriteIDDeleteParams) (r V1OrganizationsFavouritesFavouriteIDDeleteRes, _ error) {
@@ -182,7 +171,7 @@ func (UnimplementedHandler) V1OrganizationsGet(ctx context.Context, params V1Org
 
 // V1OrganizationsOrganizationIDFavouritesGet implements GET /v1/organizations/{organizationID}/favourites operation.
 //
-// Получаем список избранного.
+// Получение списка избранного.
 //
 // GET /v1/organizations/{organizationID}/favourites
 func (UnimplementedHandler) V1OrganizationsOrganizationIDFavouritesGet(ctx context.Context, params V1OrganizationsOrganizationIDFavouritesGetParams) (r V1OrganizationsOrganizationIDFavouritesGetRes, _ error) {
@@ -295,24 +284,6 @@ func (UnimplementedHandler) V1OrganizationsOrganizationIDTendersGet(ctx context.
 	return r, ht.ErrNotImplemented
 }
 
-// V1OrganizationsOrganizationIDVerificationsGet implements GET /v1/organizations/{organizationID}/verifications operation.
-//
-// Get organization verification history.
-//
-// GET /v1/organizations/{organizationID}/verifications
-func (UnimplementedHandler) V1OrganizationsOrganizationIDVerificationsGet(ctx context.Context, params V1OrganizationsOrganizationIDVerificationsGetParams) (r V1OrganizationsOrganizationIDVerificationsGetRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationIDVerificationsPost implements POST /v1/organizations/{organizationID}/verifications operation.
-//
-// Ask verify organization.
-//
-// POST /v1/organizations/{organizationID}/verifications
-func (UnimplementedHandler) V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, req []Attachment, params V1OrganizationsOrganizationIDVerificationsPostParams) (r V1OrganizationsOrganizationIDVerificationsPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
 // V1OrganizationsPortfolioPortfolioIDDelete implements DELETE /v1/organizations/portfolio/{portfolioID} operation.
 //
 // Удаляет портфолио из профиля исполнителя.
@@ -329,17 +300,6 @@ func (UnimplementedHandler) V1OrganizationsPortfolioPortfolioIDDelete(ctx contex
 //
 // PUT /v1/organizations/portfolio/{portfolioID}
 func (UnimplementedHandler) V1OrganizationsPortfolioPortfolioIDPut(ctx context.Context, req *V1OrganizationsPortfolioPortfolioIDPutReq, params V1OrganizationsPortfolioPortfolioIDPutParams) (r V1OrganizationsPortfolioPortfolioIDPutRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsVerificationsGet implements GET /v1/organizations/verifications operation.
-//
-// Get verifications
-// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-// 'Employee' or higher.
-//
-// GET /v1/organizations/verifications
-func (UnimplementedHandler) V1OrganizationsVerificationsGet(ctx context.Context, params V1OrganizationsVerificationsGetParams) (r V1OrganizationsVerificationsGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -420,21 +380,21 @@ func (UnimplementedHandler) V1TendersPost(ctx context.Context, req *V1TendersPos
 	return r, ht.ErrNotImplemented
 }
 
-// V1TendersTenderIDCommentsGet implements GET /v1/tenders/{tenderID}/comments operation.
+// V1TendersTenderIDAdditionsGet implements GET /v1/tenders/{tenderID}/additions operation.
 //
-// Get comments under tender.
+// Получение дополнительной информации для тендера.
 //
-// GET /v1/tenders/{tenderID}/comments
-func (UnimplementedHandler) V1TendersTenderIDCommentsGet(ctx context.Context, params V1TendersTenderIDCommentsGetParams) (r V1TendersTenderIDCommentsGetRes, _ error) {
+// GET /v1/tenders/{tenderID}/additions
+func (UnimplementedHandler) V1TendersTenderIDAdditionsGet(ctx context.Context, params V1TendersTenderIDAdditionsGetParams) (r V1TendersTenderIDAdditionsGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// V1TendersTenderIDCommentsPost implements POST /v1/tenders/{tenderID}/comments operation.
+// V1TendersTenderIDAdditionsPost implements POST /v1/tenders/{tenderID}/additions operation.
 //
-// Leaves comment under tender.
+// Добавление дополнительной информации к тендеру.
 //
-// POST /v1/tenders/{tenderID}/comments
-func (UnimplementedHandler) V1TendersTenderIDCommentsPost(ctx context.Context, req *V1TendersTenderIDCommentsPostReq, params V1TendersTenderIDCommentsPostParams) (r V1TendersTenderIDCommentsPostRes, _ error) {
+// POST /v1/tenders/{tenderID}/additions
+func (UnimplementedHandler) V1TendersTenderIDAdditionsPost(ctx context.Context, req *V1TendersTenderIDAdditionsPostReq, params V1TendersTenderIDAdditionsPostParams) (r V1TendersTenderIDAdditionsPostRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -494,17 +454,6 @@ func (UnimplementedHandler) V1TendersTenderIDRespondGet(ctx context.Context, par
 //
 // POST /v1/tenders/{tenderID}/respond
 func (UnimplementedHandler) V1TendersTenderIDRespondPost(ctx context.Context, req *V1TendersTenderIDRespondPostReq, params V1TendersTenderIDRespondPostParams) (r V1TendersTenderIDRespondPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1TendersVerificationsGet implements GET /v1/tenders/verifications operation.
-//
-// Get verifications
-// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-// 'Employee' or higher.
-//
-// GET /v1/tenders/verifications
-func (UnimplementedHandler) V1TendersVerificationsGet(ctx context.Context, params V1TendersVerificationsGetParams) (r V1TendersVerificationsGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -575,6 +524,60 @@ func (UnimplementedHandler) V1UsersUserIDPut(ctx context.Context, req *V1UsersUs
 	return r, ht.ErrNotImplemented
 }
 
+// V1VerificationsAdditionsGet implements GET /v1/verifications/additions operation.
+//
+// Получение запросов на верификацию для
+// дополнительной информации о тендерах
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+// 'Employee' or higher.
+//
+// GET /v1/verifications/additions
+func (UnimplementedHandler) V1VerificationsAdditionsGet(ctx context.Context, params V1VerificationsAdditionsGetParams) (r V1VerificationsAdditionsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1VerificationsOrganizationsGet implements GET /v1/verifications/organizations operation.
+//
+// Получение всех запросов на верификацию для
+// организаций
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+// 'Employee' or higher.
+//
+// GET /v1/verifications/organizations
+func (UnimplementedHandler) V1VerificationsOrganizationsGet(ctx context.Context, params V1VerificationsOrganizationsGetParams) (r V1VerificationsOrganizationsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1VerificationsOrganizationsOrganizationIDGet implements GET /v1/verifications/organizations/{organizationID} operation.
+//
+// Получает историю верификации организации.
+//
+// GET /v1/verifications/organizations/{organizationID}
+func (UnimplementedHandler) V1VerificationsOrganizationsOrganizationIDGet(ctx context.Context, params V1VerificationsOrganizationsOrganizationIDGetParams) (r V1VerificationsOrganizationsOrganizationIDGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1VerificationsOrganizationsOrganizationIDPost implements POST /v1/verifications/organizations/{organizationID} operation.
+//
+// Отправляет документы организации на верификацию.
+//
+// POST /v1/verifications/organizations/{organizationID}
+func (UnimplementedHandler) V1VerificationsOrganizationsOrganizationIDPost(ctx context.Context, req []Attachment, params V1VerificationsOrganizationsOrganizationIDPostParams) (r V1VerificationsOrganizationsOrganizationIDPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1VerificationsQuestionAnswerGet implements GET /v1/verifications/question-answer operation.
+//
+// Получение запросов на верификацию для
+// дополнительной информации о вопросов-ответов
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+// 'Employee' or higher.
+//
+// GET /v1/verifications/question-answer
+func (UnimplementedHandler) V1VerificationsQuestionAnswerGet(ctx context.Context, params V1VerificationsQuestionAnswerGetParams) (r V1VerificationsQuestionAnswerGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1VerificationsRequestIDAprovePost implements POST /v1/verifications/{requestID}/aprove operation.
 //
 // Aproving verification
@@ -605,5 +608,16 @@ func (UnimplementedHandler) V1VerificationsRequestIDDenyPost(ctx context.Context
 //
 // GET /v1/verifications/{requestID}
 func (UnimplementedHandler) V1VerificationsRequestIDGet(ctx context.Context, params V1VerificationsRequestIDGetParams) (r V1VerificationsRequestIDGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1VerificationsTendersGet implements GET /v1/verifications/tenders operation.
+//
+// Получение запросов на верификацию для тендеров
+// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+// 'Employee' or higher.
+//
+// GET /v1/verifications/tenders
+func (UnimplementedHandler) V1VerificationsTendersGet(ctx context.Context, params V1VerificationsTendersGetParams) (r V1VerificationsTendersGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
