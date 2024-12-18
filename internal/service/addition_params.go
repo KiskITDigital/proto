@@ -1,12 +1,12 @@
 package service
 
-type CommentCreateParams struct {
+type AdditionCreateParams struct {
 	TenderID    int
 	Title       string
 	Content     string
 	Attachments []string
 }
 
-type GetCommentParams struct {
+type GetAdditionParams struct {
 	TenderID int
 }

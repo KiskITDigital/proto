@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/deduplicate"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/pagination"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/service"
@@ -26,8 +26,8 @@ func (s *Service) GetByID(ctx context.Context, requestID int) (models.Verificati
 	case models.ObjectTypeTender:
 		object, err = s.tenderStore.GetByID(ctx, s.psql.DB(), request.ObjectID)
 
-	case models.ObjectTypeComment:
-		object, err = s.commentStore.GetByID(ctx, s.psql.DB(), request.ObjectID)
+	case models.ObjectTypeAddition:
+		object, err = s.additionStore.GetByID(ctx, s.psql.DB(), request.ObjectID)
 	}
 	if err != nil {
 		return models.VerificationRequest[models.VerificationObject]{}, fmt.Errorf("get object type=%v by id=%v: %w", request.ObjectType, request.ObjectID, err)
@@ -43,7 +43,7 @@ func (s *Service) Get(ctx context.Context, params service.VerificationRequestsOb
 		ObjectType: models.NewOptional(params.ObjectType),
 		ObjectID:   params.ObjectID,
 		Status:     params.Status,
-		Limit:      models.NewOptional(params.PerPage),
+		Limit:      models.Optional[uint64]{Value: params.PerPage, Set: params.PerPage != 0},
 		Offset:     models.Optional[uint64]{Value: params.Page * params.PerPage, Set: (params.Page * params.PerPage) != 0}})
 	if err != nil {
 		return models.VerificationRequestPagination[models.VerificationObject]{}, fmt.Errorf("get object req: %w", err)
@@ -54,31 +54,26 @@ func (s *Service) Get(ctx context.Context, params service.VerificationRequestsOb
 		ObjectID:   params.ObjectID,
 		Status:     params.Status})
 	if err != nil {
-		return models.VerificationRequestPagination[models.VerificationObject]{}, fmt.Errorf("get count tenders: %w", err)
+		return models.VerificationRequestPagination[models.VerificationObject]{}, fmt.Errorf("get count objects: %w", err)
 	}
 
 	var objectIDs []int
 	for _, req := range requests {
 		objectIDs = append(objectIDs, req.ObjectID)
 	}
+	objectIDs = deduplicate.Deduplicate(objectIDs)
 
+	objectMap := map[int]models.VerificationObject{}
 	switch params.ObjectType {
 	case models.ObjectTypeOrganization:
 		organizations, err := s.organizationStore.Get(ctx, s.psql.DB(), store.OrganizationGetParams{
 			OrganizationIDs: objectIDs})
 		if err != nil {
-			return models.VerificationRequestPagination[models.VerificationObject]{}, fmt.Errorf("get tenders: %w", err)
+			return models.VerificationRequestPagination[models.VerificationObject]{}, fmt.Errorf("get organizations: %w", err)
 		}
 
-		organizationMap := make(map[int]models.Organization)
 		for _, organization := range organizations {
-			organizationMap[organization.ID] = organization
-		}
-
-		for i := range requests {
-			if organization, ok := organizationMap[requests[i].ObjectID]; ok {
-				requests[i].Object = organization
-			}
+			objectMap[organization.ID] = organization
 		}
 
 	case models.ObjectTypeTender:
@@ -88,22 +83,29 @@ func (s *Service) Get(ctx context.Context, params service.VerificationRequestsOb
 			return models.VerificationRequestPagination[models.VerificationObject]{}, fmt.Errorf("get tenders: %w", err)
 		}
 
-		tenderMap := make(map[int]models.Tender)
 		for _, tender := range tenders {
-			tenderMap[tender.ID] = tender
+			objectMap[tender.ID] = tender
 		}
 
-		for i := range requests {
-			if tender, ok := tenderMap[requests[i].ObjectID]; ok {
-				requests[i].Object = tender
-			}
+	case models.ObjectTypeAddition:
+		additions, err := s.additionStore.Get(ctx, s.psql.DB(), store.AdditionGetParams{
+			AdditionIDs: models.Optional[[]int]{Value: objectIDs, Set: true}})
+		if err != nil {
+			return models.VerificationRequestPagination[models.VerificationObject]{}, fmt.Errorf("get additions: %w", err)
 		}
 
-	case models.ObjectTypeComment:
-		// return s.verificationStore.GetCommentRequests(ctx, s.psql.DB(), storeParams)
-		return models.VerificationRequestPagination[models.VerificationObject]{}, cerr.Wrap(fmt.Errorf("not impl"), cerr.CodeInternal, "func not impl", nil)
+		for _, addition := range additions {
+			objectMap[addition.ID] = addition
+		}
+
 	default:
 		return models.VerificationRequestPagination[models.VerificationObject]{}, fmt.Errorf("invalid object type: %v", params.ObjectType)
+	}
+
+	for i := range requests {
+		if object, ok := objectMap[requests[i].ObjectID]; ok {
+			requests[i].Object = object
+		}
 	}
 
 	return models.VerificationRequestPagination[models.VerificationObject]{

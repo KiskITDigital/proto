@@ -11,7 +11,7 @@ type Service struct {
 	psql              DBTX
 	verificationStore VerificationStore
 	tenderStore       TenderStore
-	commentStore      CommentStore
+	additionStore     AdditionStore
 	organizationStore OrganizationStore
 }
 
@@ -22,8 +22,8 @@ type DBTX interface {
 }
 
 type VerificationStore interface {
+	Create(ctx context.Context, qe store.QueryExecutor, params store.VerificationRequestCreateParams) error
 	UpdateStatus(ctx context.Context, qe store.QueryExecutor, params store.VerificationRequestUpdateStatusParams) (store.VerificationObjectUpdateStatusResult, error)
-	GetCommentRequests(ctx context.Context, qe store.QueryExecutor, params store.VerificationRequestsObjectGetParams) ([]models.VerificationRequest[models.VerificationObject], error)
 	GetWithEmptyObject(ctx context.Context, qe store.QueryExecutor, params store.VerificationRequestsObjectGetParams) ([]models.VerificationRequest[models.VerificationObject], error)
 	GetByIDWithEmptyObject(ctx context.Context, qe store.QueryExecutor, requestID int) (models.VerificationRequest[models.VerificationObject], error)
 	Count(ctx context.Context, qe store.QueryExecutor, params store.VerificationRequestsObjectGetCountParams) (int, error)
@@ -35,8 +35,10 @@ type TenderStore interface {
 	UpdateVerificationStatus(ctx context.Context, qe store.QueryExecutor, params store.TenderUpdateVerifStatusParams) error
 }
 
-type CommentStore interface {
-	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Comment, error)
+type AdditionStore interface {
+	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Addition, error)
+	Get(ctx context.Context, qe store.QueryExecutor, params store.AdditionGetParams) ([]models.Addition, error)
+	UpdateVerificationStatus(ctx context.Context, qe store.QueryExecutor, params store.AdditionUpdateVerifStatusParams) error
 }
 
 type OrganizationStore interface {
@@ -49,14 +51,14 @@ func New(
 	psql DBTX,
 	verificationStore VerificationStore,
 	tenderStore TenderStore,
-	commentStore CommentStore,
+	additionStore AdditionStore,
 	organiOrganizationStore OrganizationStore,
 ) *Service {
 	return &Service{
 		psql:              psql,
 		verificationStore: verificationStore,
 		tenderStore:       tenderStore,
-		commentStore:      commentStore,
+		additionStore:     additionStore,
 		organizationStore: organiOrganizationStore,
 	}
 }

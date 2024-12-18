@@ -1,7 +1,7 @@
 type: object
 required:
   - id
-  - organization
+  - tender_id
   - title
   - content
   - verification_status
@@ -9,8 +9,9 @@ required:
 properties:
   id:
     type: integer
-  organization:
-    $ref: "Organization.yaml"
+  tender_id:
+   type: integer
+   example: 1
   title:
     type: string
   content:

@@ -9,18 +9,20 @@ import (
 )
 
 type Handler struct {
-	logger *slog.Logger
-	svc    Service
+	logger              *slog.Logger
+	verificationService VerificationService
 }
 
-type Service interface {
+type VerificationService interface {
+	Create(ctx context.Context, params service.VerificationRequestCreateParams) error
 	UpdateStatus(ctx context.Context, params service.VerificationRequestUpdateStatusParams) error
 	GetByID(ctx context.Context, requestID int) (models.VerificationRequest[models.VerificationObject], error)
+	Get(ctx context.Context, params service.VerificationRequestsObjectGetParams) (models.VerificationRequestPagination[models.VerificationObject], error)
 }
 
-func New(logger *slog.Logger, svc Service) *Handler {
+func New(logger *slog.Logger, verificationService VerificationService) *Handler {
 	return &Handler{
-		logger: logger,
-		svc:    svc,
+		logger:              logger,
+		verificationService: verificationService,
 	}
 }

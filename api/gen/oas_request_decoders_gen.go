@@ -891,110 +891,6 @@ func (s *Server) decodeV1OrganizationsOrganizationIDProfileCustomerPutRequest(r 
 	}
 }
 
-func (s *Server) decodeV1OrganizationsOrganizationIDVerificationsPostRequest(r *http.Request) (
-	req []Attachment,
-	close func() error,
-	rerr error,
-) {
-	var closers []func() error
-	close = func() error {
-		var merr error
-		// Close in reverse order, to match defer behavior.
-		for i := len(closers) - 1; i >= 0; i-- {
-			c := closers[i]
-			merr = multierr.Append(merr, c())
-		}
-		return merr
-	}
-	defer func() {
-		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
-		}
-	}()
-	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
-	if err != nil {
-		return req, close, errors.Wrap(err, "parse media type")
-	}
-	switch {
-	case ct == "application/json":
-		if r.ContentLength == 0 {
-			return req, close, validate.ErrBodyRequired
-		}
-		buf, err := io.ReadAll(r.Body)
-		if err != nil {
-			return req, close, err
-		}
-
-		if len(buf) == 0 {
-			return req, close, validate.ErrBodyRequired
-		}
-
-		d := jx.DecodeBytes(buf)
-
-		var request []Attachment
-		if err := func() error {
-			request = make([]Attachment, 0)
-			if err := d.Arr(func(d *jx.Decoder) error {
-				var elem Attachment
-				if err := elem.Decode(d); err != nil {
-					return err
-				}
-				request = append(request, elem)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := d.Skip(); err != io.EOF {
-				return errors.New("unexpected trailing data")
-			}
-			return nil
-		}(); err != nil {
-			err = &ogenerrors.DecodeBodyError{
-				ContentType: ct,
-				Body:        buf,
-				Err:         err,
-			}
-			return req, close, err
-		}
-		if err := func() error {
-			if request == nil {
-				return errors.New("nil is invalid value")
-			}
-			if err := (validate.Array{
-				MinLength:    4,
-				MinLengthSet: true,
-				MaxLength:    4,
-				MaxLengthSet: true,
-			}).ValidateLength(len(request)); err != nil {
-				return errors.Wrap(err, "array")
-			}
-			var failures []validate.FieldError
-			for i, elem := range request {
-				if err := func() error {
-					if err := elem.Validate(); err != nil {
-						return err
-					}
-					return nil
-				}(); err != nil {
-					failures = append(failures, validate.FieldError{
-						Name:  fmt.Sprintf("[%d]", i),
-						Error: err,
-					})
-				}
-			}
-			if len(failures) > 0 {
-				return &validate.Error{Fields: failures}
-			}
-			return nil
-		}(); err != nil {
-			return req, close, errors.Wrap(err, "validate")
-		}
-		return request, close, nil
-	default:
-		return req, close, validate.InvalidContentType(ct)
-	}
-}
-
 func (s *Server) decodeV1OrganizationsPortfolioPortfolioIDPutRequest(r *http.Request) (
 	req *V1OrganizationsPortfolioPortfolioIDPutReq,
 	close func() error,
@@ -1279,8 +1175,8 @@ func (s *Server) decodeV1TendersPostRequest(r *http.Request) (
 	}
 }
 
-func (s *Server) decodeV1TendersTenderIDCommentsPostRequest(r *http.Request) (
-	req *V1TendersTenderIDCommentsPostReq,
+func (s *Server) decodeV1TendersTenderIDAdditionsPostRequest(r *http.Request) (
+	req *V1TendersTenderIDAdditionsPostReq,
 	close func() error,
 	rerr error,
 ) {
@@ -1319,7 +1215,7 @@ func (s *Server) decodeV1TendersTenderIDCommentsPostRequest(r *http.Request) (
 
 		d := jx.DecodeBytes(buf)
 
-		var request V1TendersTenderIDCommentsPostReq
+		var request V1TendersTenderIDAdditionsPostReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -1881,6 +1777,110 @@ func (s *Server) decodeV1UsersUserIDPutRequest(r *http.Request) (
 			return req, close, errors.Wrap(err, "validate")
 		}
 		return &request, close, nil
+	default:
+		return req, close, validate.InvalidContentType(ct)
+	}
+}
+
+func (s *Server) decodeV1VerificationsOrganizationsOrganizationIDPostRequest(r *http.Request) (
+	req []Attachment,
+	close func() error,
+	rerr error,
+) {
+	var closers []func() error
+	close = func() error {
+		var merr error
+		// Close in reverse order, to match defer behavior.
+		for i := len(closers) - 1; i >= 0; i-- {
+			c := closers[i]
+			merr = multierr.Append(merr, c())
+		}
+		return merr
+	}
+	defer func() {
+		if rerr != nil {
+			rerr = multierr.Append(rerr, close())
+		}
+	}()
+	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
+	if err != nil {
+		return req, close, errors.Wrap(err, "parse media type")
+	}
+	switch {
+	case ct == "application/json":
+		if r.ContentLength == 0 {
+			return req, close, validate.ErrBodyRequired
+		}
+		buf, err := io.ReadAll(r.Body)
+		if err != nil {
+			return req, close, err
+		}
+
+		if len(buf) == 0 {
+			return req, close, validate.ErrBodyRequired
+		}
+
+		d := jx.DecodeBytes(buf)
+
+		var request []Attachment
+		if err := func() error {
+			request = make([]Attachment, 0)
+			if err := d.Arr(func(d *jx.Decoder) error {
+				var elem Attachment
+				if err := elem.Decode(d); err != nil {
+					return err
+				}
+				request = append(request, elem)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := d.Skip(); err != io.EOF {
+				return errors.New("unexpected trailing data")
+			}
+			return nil
+		}(); err != nil {
+			err = &ogenerrors.DecodeBodyError{
+				ContentType: ct,
+				Body:        buf,
+				Err:         err,
+			}
+			return req, close, err
+		}
+		if err := func() error {
+			if request == nil {
+				return errors.New("nil is invalid value")
+			}
+			if err := (validate.Array{
+				MinLength:    4,
+				MinLengthSet: true,
+				MaxLength:    4,
+				MaxLengthSet: true,
+			}).ValidateLength(len(request)); err != nil {
+				return errors.Wrap(err, "array")
+			}
+			var failures []validate.FieldError
+			for i, elem := range request {
+				if err := func() error {
+					if err := elem.Validate(); err != nil {
+						return err
+					}
+					return nil
+				}(); err != nil {
+					failures = append(failures, validate.FieldError{
+						Name:  fmt.Sprintf("[%d]", i),
+						Error: err,
+					})
+				}
+			}
+			if len(failures) > 0 {
+				return &validate.Error{Fields: failures}
+			}
+			return nil
+		}(); err != nil {
+			return req, close, errors.Wrap(err, "validate")
+		}
+		return request, close, nil
 	default:
 		return req, close, validate.InvalidContentType(ct)
 	}

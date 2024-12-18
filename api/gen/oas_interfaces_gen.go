@@ -49,10 +49,6 @@ type V1CatalogServicesPostRes interface {
 	v1CatalogServicesPostRes()
 }
 
-type V1CommentsVerificationsGetRes interface {
-	v1CommentsVerificationsGetRes()
-}
-
 type V1EmployeePostRes interface {
 	v1EmployeePostRes()
 }
@@ -117,24 +113,12 @@ type V1OrganizationsOrganizationIDTendersGetRes interface {
 	v1OrganizationsOrganizationIDTendersGetRes()
 }
 
-type V1OrganizationsOrganizationIDVerificationsGetRes interface {
-	v1OrganizationsOrganizationIDVerificationsGetRes()
-}
-
-type V1OrganizationsOrganizationIDVerificationsPostRes interface {
-	v1OrganizationsOrganizationIDVerificationsPostRes()
-}
-
 type V1OrganizationsPortfolioPortfolioIDDeleteRes interface {
 	v1OrganizationsPortfolioPortfolioIDDeleteRes()
 }
 
 type V1OrganizationsPortfolioPortfolioIDPutRes interface {
 	v1OrganizationsPortfolioPortfolioIDPutRes()
-}
-
-type V1OrganizationsVerificationsGetRes interface {
-	v1OrganizationsVerificationsGetRes()
 }
 
 type V1QuestionnaireGetRes interface {
@@ -169,12 +153,12 @@ type V1TendersPostRes interface {
 	v1TendersPostRes()
 }
 
-type V1TendersTenderIDCommentsGetRes interface {
-	v1TendersTenderIDCommentsGetRes()
+type V1TendersTenderIDAdditionsGetRes interface {
+	v1TendersTenderIDAdditionsGetRes()
 }
 
-type V1TendersTenderIDCommentsPostRes interface {
-	v1TendersTenderIDCommentsPostRes()
+type V1TendersTenderIDAdditionsPostRes interface {
+	v1TendersTenderIDAdditionsPostRes()
 }
 
 type V1TendersTenderIDGetRes interface {
@@ -199,10 +183,6 @@ type V1TendersTenderIDRespondGetRes interface {
 
 type V1TendersTenderIDRespondPostRes interface {
 	v1TendersTenderIDRespondPostRes()
-}
-
-type V1TendersVerificationsGetRes interface {
-	v1TendersVerificationsGetRes()
 }
 
 type V1UsersConfirmEmailPostRes interface {
@@ -233,6 +213,26 @@ type V1UsersUserIDPutRes interface {
 	v1UsersUserIDPutRes()
 }
 
+type V1VerificationsAdditionsGetRes interface {
+	v1VerificationsAdditionsGetRes()
+}
+
+type V1VerificationsOrganizationsGetRes interface {
+	v1VerificationsOrganizationsGetRes()
+}
+
+type V1VerificationsOrganizationsOrganizationIDGetRes interface {
+	v1VerificationsOrganizationsOrganizationIDGetRes()
+}
+
+type V1VerificationsOrganizationsOrganizationIDPostRes interface {
+	v1VerificationsOrganizationsOrganizationIDPostRes()
+}
+
+type V1VerificationsQuestionAnswerGetRes interface {
+	v1VerificationsQuestionAnswerGetRes()
+}
+
 type V1VerificationsRequestIDAprovePostRes interface {
 	v1VerificationsRequestIDAprovePostRes()
 }
@@ -243,4 +243,8 @@ type V1VerificationsRequestIDDenyPostRes interface {
 
 type V1VerificationsRequestIDGetRes interface {
 	v1VerificationsRequestIDGetRes()
+}
+
+type V1VerificationsTendersGetRes interface {
+	v1VerificationsTendersGetRes()
 }

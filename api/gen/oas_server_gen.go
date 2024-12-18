@@ -88,14 +88,6 @@ type Handler interface {
 	//
 	// POST /v1/catalog/services
 	V1CatalogServicesPost(ctx context.Context, req *V1CatalogServicesPostReq) (V1CatalogServicesPostRes, error)
-	// V1CommentsVerificationsGet implements GET /v1/comments/verifications operation.
-	//
-	// Get all verifications requests
-	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-	// 'Employee' or higher.
-	//
-	// GET /v1/comments/verifications
-	V1CommentsVerificationsGet(ctx context.Context, params V1CommentsVerificationsGetParams) (V1CommentsVerificationsGetRes, error)
 	// V1EmployeePost implements POST /v1/employee operation.
 	//
 	// Create employee user.
@@ -110,7 +102,7 @@ type Handler interface {
 	V1OrganizationsContractorsGet(ctx context.Context, params V1OrganizationsContractorsGetParams) (V1OrganizationsContractorsGetRes, error)
 	// V1OrganizationsFavouritesFavouriteIDDelete implements DELETE /v1/organizations/favourites/{favouriteID} operation.
 	//
-	// Удаляет объект из избранного организации.
+	// Удаление объекта из избранного.
 	//
 	// DELETE /v1/organizations/favourites/{favouriteID}
 	V1OrganizationsFavouritesFavouriteIDDelete(ctx context.Context, params V1OrganizationsFavouritesFavouriteIDDeleteParams) (V1OrganizationsFavouritesFavouriteIDDeleteRes, error)
@@ -126,7 +118,7 @@ type Handler interface {
 	V1OrganizationsGet(ctx context.Context, params V1OrganizationsGetParams) (V1OrganizationsGetRes, error)
 	// V1OrganizationsOrganizationIDFavouritesGet implements GET /v1/organizations/{organizationID}/favourites operation.
 	//
-	// Получаем список избранного.
+	// Получение списка избранного.
 	//
 	// GET /v1/organizations/{organizationID}/favourites
 	V1OrganizationsOrganizationIDFavouritesGet(ctx context.Context, params V1OrganizationsOrganizationIDFavouritesGetParams) (V1OrganizationsOrganizationIDFavouritesGetRes, error)
@@ -203,18 +195,6 @@ type Handler interface {
 	//
 	// GET /v1/organizations/{organizationID}/tenders
 	V1OrganizationsOrganizationIDTendersGet(ctx context.Context, params V1OrganizationsOrganizationIDTendersGetParams) (V1OrganizationsOrganizationIDTendersGetRes, error)
-	// V1OrganizationsOrganizationIDVerificationsGet implements GET /v1/organizations/{organizationID}/verifications operation.
-	//
-	// Get organization verification history.
-	//
-	// GET /v1/organizations/{organizationID}/verifications
-	V1OrganizationsOrganizationIDVerificationsGet(ctx context.Context, params V1OrganizationsOrganizationIDVerificationsGetParams) (V1OrganizationsOrganizationIDVerificationsGetRes, error)
-	// V1OrganizationsOrganizationIDVerificationsPost implements POST /v1/organizations/{organizationID}/verifications operation.
-	//
-	// Ask verify organization.
-	//
-	// POST /v1/organizations/{organizationID}/verifications
-	V1OrganizationsOrganizationIDVerificationsPost(ctx context.Context, req []Attachment, params V1OrganizationsOrganizationIDVerificationsPostParams) (V1OrganizationsOrganizationIDVerificationsPostRes, error)
 	// V1OrganizationsPortfolioPortfolioIDDelete implements DELETE /v1/organizations/portfolio/{portfolioID} operation.
 	//
 	// Удаляет портфолио из профиля исполнителя.
@@ -228,14 +208,6 @@ type Handler interface {
 	//
 	// PUT /v1/organizations/portfolio/{portfolioID}
 	V1OrganizationsPortfolioPortfolioIDPut(ctx context.Context, req *V1OrganizationsPortfolioPortfolioIDPutReq, params V1OrganizationsPortfolioPortfolioIDPutParams) (V1OrganizationsPortfolioPortfolioIDPutRes, error)
-	// V1OrganizationsVerificationsGet implements GET /v1/organizations/verifications operation.
-	//
-	// Get verifications
-	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-	// 'Employee' or higher.
-	//
-	// GET /v1/organizations/verifications
-	V1OrganizationsVerificationsGet(ctx context.Context, params V1OrganizationsVerificationsGetParams) (V1OrganizationsVerificationsGetRes, error)
 	// V1QuestionnaireGet implements GET /v1/questionnaire operation.
 	//
 	// Get all contractor's questionnaire answers with pagination
@@ -289,18 +261,18 @@ type Handler interface {
 	//
 	// POST /v1/tenders
 	V1TendersPost(ctx context.Context, req *V1TendersPostReq) (V1TendersPostRes, error)
-	// V1TendersTenderIDCommentsGet implements GET /v1/tenders/{tenderID}/comments operation.
+	// V1TendersTenderIDAdditionsGet implements GET /v1/tenders/{tenderID}/additions operation.
 	//
-	// Get comments under tender.
+	// Получение дополнительной информации для тендера.
 	//
-	// GET /v1/tenders/{tenderID}/comments
-	V1TendersTenderIDCommentsGet(ctx context.Context, params V1TendersTenderIDCommentsGetParams) (V1TendersTenderIDCommentsGetRes, error)
-	// V1TendersTenderIDCommentsPost implements POST /v1/tenders/{tenderID}/comments operation.
+	// GET /v1/tenders/{tenderID}/additions
+	V1TendersTenderIDAdditionsGet(ctx context.Context, params V1TendersTenderIDAdditionsGetParams) (V1TendersTenderIDAdditionsGetRes, error)
+	// V1TendersTenderIDAdditionsPost implements POST /v1/tenders/{tenderID}/additions operation.
 	//
-	// Leaves comment under tender.
+	// Добавление дополнительной информации к тендеру.
 	//
-	// POST /v1/tenders/{tenderID}/comments
-	V1TendersTenderIDCommentsPost(ctx context.Context, req *V1TendersTenderIDCommentsPostReq, params V1TendersTenderIDCommentsPostParams) (V1TendersTenderIDCommentsPostRes, error)
+	// POST /v1/tenders/{tenderID}/additions
+	V1TendersTenderIDAdditionsPost(ctx context.Context, req *V1TendersTenderIDAdditionsPostReq, params V1TendersTenderIDAdditionsPostParams) (V1TendersTenderIDAdditionsPostRes, error)
 	// V1TendersTenderIDGet implements GET /v1/tenders/{tenderID} operation.
 	//
 	// Returns tender by id
@@ -342,14 +314,6 @@ type Handler interface {
 	//
 	// POST /v1/tenders/{tenderID}/respond
 	V1TendersTenderIDRespondPost(ctx context.Context, req *V1TendersTenderIDRespondPostReq, params V1TendersTenderIDRespondPostParams) (V1TendersTenderIDRespondPostRes, error)
-	// V1TendersVerificationsGet implements GET /v1/tenders/verifications operation.
-	//
-	// Get verifications
-	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
-	// 'Employee' or higher.
-	//
-	// GET /v1/tenders/verifications
-	V1TendersVerificationsGet(ctx context.Context, params V1TendersVerificationsGetParams) (V1TendersVerificationsGetRes, error)
 	// V1UsersConfirmEmailPost implements POST /v1/users/confirm/email operation.
 	//
 	// Confirm email use a code from mail.
@@ -396,6 +360,45 @@ type Handler interface {
 	//
 	// PUT /v1/users/{userID}
 	V1UsersUserIDPut(ctx context.Context, req *V1UsersUserIDPutReq, params V1UsersUserIDPutParams) (V1UsersUserIDPutRes, error)
+	// V1VerificationsAdditionsGet implements GET /v1/verifications/additions operation.
+	//
+	// Получение запросов на верификацию для
+	// дополнительной информации о тендерах
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+	// 'Employee' or higher.
+	//
+	// GET /v1/verifications/additions
+	V1VerificationsAdditionsGet(ctx context.Context, params V1VerificationsAdditionsGetParams) (V1VerificationsAdditionsGetRes, error)
+	// V1VerificationsOrganizationsGet implements GET /v1/verifications/organizations operation.
+	//
+	// Получение всех запросов на верификацию для
+	// организаций
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+	// 'Employee' or higher.
+	//
+	// GET /v1/verifications/organizations
+	V1VerificationsOrganizationsGet(ctx context.Context, params V1VerificationsOrganizationsGetParams) (V1VerificationsOrganizationsGetRes, error)
+	// V1VerificationsOrganizationsOrganizationIDGet implements GET /v1/verifications/organizations/{organizationID} operation.
+	//
+	// Получает историю верификации организации.
+	//
+	// GET /v1/verifications/organizations/{organizationID}
+	V1VerificationsOrganizationsOrganizationIDGet(ctx context.Context, params V1VerificationsOrganizationsOrganizationIDGetParams) (V1VerificationsOrganizationsOrganizationIDGetRes, error)
+	// V1VerificationsOrganizationsOrganizationIDPost implements POST /v1/verifications/organizations/{organizationID} operation.
+	//
+	// Отправляет документы организации на верификацию.
+	//
+	// POST /v1/verifications/organizations/{organizationID}
+	V1VerificationsOrganizationsOrganizationIDPost(ctx context.Context, req []Attachment, params V1VerificationsOrganizationsOrganizationIDPostParams) (V1VerificationsOrganizationsOrganizationIDPostRes, error)
+	// V1VerificationsQuestionAnswerGet implements GET /v1/verifications/question-answer operation.
+	//
+	// Получение запросов на верификацию для
+	// дополнительной информации о вопросов-ответов
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+	// 'Employee' or higher.
+	//
+	// GET /v1/verifications/question-answer
+	V1VerificationsQuestionAnswerGet(ctx context.Context, params V1VerificationsQuestionAnswerGetParams) (V1VerificationsQuestionAnswerGetRes, error)
 	// V1VerificationsRequestIDAprovePost implements POST /v1/verifications/{requestID}/aprove operation.
 	//
 	// Aproving verification
@@ -420,6 +423,14 @@ type Handler interface {
 	//
 	// GET /v1/verifications/{requestID}
 	V1VerificationsRequestIDGet(ctx context.Context, params V1VerificationsRequestIDGetParams) (V1VerificationsRequestIDGetRes, error)
+	// V1VerificationsTendersGet implements GET /v1/verifications/tenders operation.
+	//
+	// Получение запросов на верификацию для тендеров
+	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
+	// 'Employee' or higher.
+	//
+	// GET /v1/verifications/tenders
+	V1VerificationsTendersGet(ctx context.Context, params V1VerificationsTendersGetParams) (V1VerificationsTendersGetRes, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

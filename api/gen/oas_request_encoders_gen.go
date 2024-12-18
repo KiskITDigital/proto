@@ -193,24 +193,6 @@ func encodeV1OrganizationsOrganizationIDProfileCustomerPutRequest(
 	return nil
 }
 
-func encodeV1OrganizationsOrganizationIDVerificationsPostRequest(
-	req []Attachment,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		e.ArrStart()
-		for _, elem := range req {
-			elem.Encode(e)
-		}
-		e.ArrEnd()
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
 func encodeV1OrganizationsPortfolioPortfolioIDPutRequest(
 	req *V1OrganizationsPortfolioPortfolioIDPutReq,
 	r *http.Request,
@@ -267,8 +249,8 @@ func encodeV1TendersPostRequest(
 	return nil
 }
 
-func encodeV1TendersTenderIDCommentsPostRequest(
-	req *V1TendersTenderIDCommentsPostReq,
+func encodeV1TendersTenderIDAdditionsPostRequest(
+	req *V1TendersTenderIDAdditionsPostReq,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"
@@ -387,6 +369,24 @@ func encodeV1UsersUserIDPutRequest(
 	e := new(jx.Encoder)
 	{
 		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeV1VerificationsOrganizationsOrganizationIDPostRequest(
+	req []Attachment,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		e.ArrStart()
+		for _, elem := range req {
+			elem.Encode(e)
+		}
+		e.ArrEnd()
 	}
 	encoded := e.Bytes()
 	ht.SetBody(r, bytes.NewReader(encoded), contentType)

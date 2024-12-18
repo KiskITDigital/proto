@@ -128,257 +128,6 @@ func decodeV1AuthRefreshPostParams(args [0]string, argsEscaped bool, r *http.Req
 	return params, nil
 }
 
-// V1CommentsVerificationsGetParams is parameters of GET /v1/comments/verifications operation.
-type V1CommentsVerificationsGetParams struct {
-	// Фильтрует результат по статусам.
-	Status []VerificationStatus
-	// Номер страницы.
-	Page OptInt
-	// Количество элементов на странице.
-	PerPage OptInt
-}
-
-func unpackV1CommentsVerificationsGetParams(packed middleware.Parameters) (params V1CommentsVerificationsGetParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "status",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Status = v.([]VerificationStatus)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "page",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Page = v.(OptInt)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "per_page",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.PerPage = v.(OptInt)
-		}
-	}
-	return params
-}
-
-func decodeV1CommentsVerificationsGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1CommentsVerificationsGetParams, _ error) {
-	q := uri.NewQueryDecoder(r.URL.Query())
-	// Decode query: status.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "status",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				return d.DecodeArray(func(d uri.Decoder) error {
-					var paramsDotStatusVal VerificationStatus
-					if err := func() error {
-						val, err := d.DecodeValue()
-						if err != nil {
-							return err
-						}
-
-						c, err := conv.ToString(val)
-						if err != nil {
-							return err
-						}
-
-						paramsDotStatusVal = VerificationStatus(c)
-						return nil
-					}(); err != nil {
-						return err
-					}
-					params.Status = append(params.Status, paramsDotStatusVal)
-					return nil
-				})
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				var failures []validate.FieldError
-				for i, elem := range params.Status {
-					if err := func() error {
-						if err := elem.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						failures = append(failures, validate.FieldError{
-							Name:  fmt.Sprintf("[%d]", i),
-							Error: err,
-						})
-					}
-				}
-				if len(failures) > 0 {
-					return &validate.Error{Fields: failures}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "status",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: page.
-	{
-		val := int(0)
-		params.Page.SetTo(val)
-	}
-	// Decode query: page.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "page",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotPageVal int
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotPageVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Page.SetTo(paramsDotPageVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Page.Get(); ok {
-					if err := func() error {
-						if err := (validate.Int{
-							MinSet:        true,
-							Min:           0,
-							MaxSet:        false,
-							Max:           0,
-							MinExclusive:  false,
-							MaxExclusive:  false,
-							MultipleOfSet: false,
-							MultipleOf:    0,
-						}).Validate(int64(value)); err != nil {
-							return errors.Wrap(err, "int")
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "page",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: per_page.
-	{
-		val := int(100)
-		params.PerPage.SetTo(val)
-	}
-	// Decode query: per_page.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "per_page",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotPerPageVal int
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotPerPageVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.PerPage.SetTo(paramsDotPerPageVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.PerPage.Get(); ok {
-					if err := func() error {
-						if err := (validate.Int{
-							MinSet:        true,
-							Min:           1,
-							MaxSet:        true,
-							Max:           100,
-							MinExclusive:  false,
-							MaxExclusive:  false,
-							MultipleOfSet: false,
-							MultipleOf:    0,
-						}).Validate(int64(value)); err != nil {
-							return errors.Wrap(err, "int")
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "per_page",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
 // V1OrganizationsContractorsGetParams is parameters of GET /v1/organizations/contractors operation.
 type V1OrganizationsContractorsGetParams struct {
 	// Номер страницы.
@@ -874,7 +623,7 @@ func decodeV1OrganizationsGetParams(args [0]string, argsEscaped bool, r *http.Re
 type V1OrganizationsOrganizationIDFavouritesGetParams struct {
 	// ID организации.
 	OrganizationID int
-	// Фильтруем результат по типам избранных объектов.
+	// Фильтрация результата по типам избранных объектов.
 	ObjectType FavouriteType
 	// Номер страницы.
 	Page OptInt
@@ -1173,7 +922,7 @@ func decodeV1OrganizationsOrganizationIDFavouritesGetParams(args [1]string, args
 type V1OrganizationsOrganizationIDFavouritesPostParams struct {
 	// ID организации.
 	OrganizationID int
-	// Фильтруем результат по типам избарнных объектов.
+	// Фильтрация результата по типам избарнных объектов.
 	ObjectType FavouriteType
 }
 
@@ -2299,172 +2048,6 @@ func decodeV1OrganizationsOrganizationIDTendersGetParams(args [1]string, argsEsc
 	return params, nil
 }
 
-// V1OrganizationsOrganizationIDVerificationsGetParams is parameters of GET /v1/organizations/{organizationID}/verifications operation.
-type V1OrganizationsOrganizationIDVerificationsGetParams struct {
-	// ID of organization.
-	OrganizationID int
-}
-
-func unpackV1OrganizationsOrganizationIDVerificationsGetParams(packed middleware.Parameters) (params V1OrganizationsOrganizationIDVerificationsGetParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "organizationID",
-			In:   "path",
-		}
-		params.OrganizationID = packed[key].(int)
-	}
-	return params
-}
-
-func decodeV1OrganizationsOrganizationIDVerificationsGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1OrganizationsOrganizationIDVerificationsGetParams, _ error) {
-	// Decode path: organizationID.
-	if err := func() error {
-		param := args[0]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "organizationID",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToInt(val)
-				if err != nil {
-					return err
-				}
-
-				params.OrganizationID = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := (validate.Int{
-					MinSet:        true,
-					Min:           1,
-					MaxSet:        false,
-					Max:           0,
-					MinExclusive:  false,
-					MaxExclusive:  false,
-					MultipleOfSet: false,
-					MultipleOf:    0,
-				}).Validate(int64(params.OrganizationID)); err != nil {
-					return errors.Wrap(err, "int")
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "organizationID",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// V1OrganizationsOrganizationIDVerificationsPostParams is parameters of POST /v1/organizations/{organizationID}/verifications operation.
-type V1OrganizationsOrganizationIDVerificationsPostParams struct {
-	// ID of organization.
-	OrganizationID int
-}
-
-func unpackV1OrganizationsOrganizationIDVerificationsPostParams(packed middleware.Parameters) (params V1OrganizationsOrganizationIDVerificationsPostParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "organizationID",
-			In:   "path",
-		}
-		params.OrganizationID = packed[key].(int)
-	}
-	return params
-}
-
-func decodeV1OrganizationsOrganizationIDVerificationsPostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1OrganizationsOrganizationIDVerificationsPostParams, _ error) {
-	// Decode path: organizationID.
-	if err := func() error {
-		param := args[0]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "organizationID",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToInt(val)
-				if err != nil {
-					return err
-				}
-
-				params.OrganizationID = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-			if err := func() error {
-				if err := (validate.Int{
-					MinSet:        true,
-					Min:           1,
-					MaxSet:        false,
-					Max:           0,
-					MinExclusive:  false,
-					MaxExclusive:  false,
-					MultipleOfSet: false,
-					MultipleOf:    0,
-				}).Validate(int64(params.OrganizationID)); err != nil {
-					return errors.Wrap(err, "int")
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "organizationID",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
 // V1OrganizationsPortfolioPortfolioIDDeleteParams is parameters of DELETE /v1/organizations/portfolio/{portfolioID} operation.
 type V1OrganizationsPortfolioPortfolioIDDeleteParams struct {
 	// Уникальный идентификатор портфолио.
@@ -2625,257 +2208,6 @@ func decodeV1OrganizationsPortfolioPortfolioIDPutParams(args [1]string, argsEsca
 		return params, &ogenerrors.DecodeParamError{
 			Name: "portfolioID",
 			In:   "path",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// V1OrganizationsVerificationsGetParams is parameters of GET /v1/organizations/verifications operation.
-type V1OrganizationsVerificationsGetParams struct {
-	// Фильтрует результат по статусам.
-	Status []VerificationStatus
-	// Номер страницы.
-	Page OptInt
-	// Количество элементов на странице.
-	PerPage OptInt
-}
-
-func unpackV1OrganizationsVerificationsGetParams(packed middleware.Parameters) (params V1OrganizationsVerificationsGetParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "status",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Status = v.([]VerificationStatus)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "page",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Page = v.(OptInt)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "per_page",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.PerPage = v.(OptInt)
-		}
-	}
-	return params
-}
-
-func decodeV1OrganizationsVerificationsGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1OrganizationsVerificationsGetParams, _ error) {
-	q := uri.NewQueryDecoder(r.URL.Query())
-	// Decode query: status.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "status",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				return d.DecodeArray(func(d uri.Decoder) error {
-					var paramsDotStatusVal VerificationStatus
-					if err := func() error {
-						val, err := d.DecodeValue()
-						if err != nil {
-							return err
-						}
-
-						c, err := conv.ToString(val)
-						if err != nil {
-							return err
-						}
-
-						paramsDotStatusVal = VerificationStatus(c)
-						return nil
-					}(); err != nil {
-						return err
-					}
-					params.Status = append(params.Status, paramsDotStatusVal)
-					return nil
-				})
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				var failures []validate.FieldError
-				for i, elem := range params.Status {
-					if err := func() error {
-						if err := elem.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						failures = append(failures, validate.FieldError{
-							Name:  fmt.Sprintf("[%d]", i),
-							Error: err,
-						})
-					}
-				}
-				if len(failures) > 0 {
-					return &validate.Error{Fields: failures}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "status",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: page.
-	{
-		val := int(0)
-		params.Page.SetTo(val)
-	}
-	// Decode query: page.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "page",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotPageVal int
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotPageVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Page.SetTo(paramsDotPageVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Page.Get(); ok {
-					if err := func() error {
-						if err := (validate.Int{
-							MinSet:        true,
-							Min:           0,
-							MaxSet:        false,
-							Max:           0,
-							MinExclusive:  false,
-							MaxExclusive:  false,
-							MultipleOfSet: false,
-							MultipleOf:    0,
-						}).Validate(int64(value)); err != nil {
-							return errors.Wrap(err, "int")
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "page",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: per_page.
-	{
-		val := int(100)
-		params.PerPage.SetTo(val)
-	}
-	// Decode query: per_page.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "per_page",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotPerPageVal int
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotPerPageVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.PerPage.SetTo(paramsDotPerPageVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.PerPage.Get(); ok {
-					if err := func() error {
-						if err := (validate.Int{
-							MinSet:        true,
-							Min:           1,
-							MaxSet:        true,
-							Max:           100,
-							MinExclusive:  false,
-							MaxExclusive:  false,
-							MultipleOfSet: false,
-							MultipleOf:    0,
-						}).Validate(int64(value)); err != nil {
-							return errors.Wrap(err, "int")
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "per_page",
-			In:   "query",
 			Err:  err,
 		}
 	}
@@ -3538,13 +2870,13 @@ func decodeV1TendersGetParams(args [0]string, argsEscaped bool, r *http.Request)
 	return params, nil
 }
 
-// V1TendersTenderIDCommentsGetParams is parameters of GET /v1/tenders/{tenderID}/comments operation.
-type V1TendersTenderIDCommentsGetParams struct {
+// V1TendersTenderIDAdditionsGetParams is parameters of GET /v1/tenders/{tenderID}/additions operation.
+type V1TendersTenderIDAdditionsGetParams struct {
 	// ID of tender.
 	TenderID int
 }
 
-func unpackV1TendersTenderIDCommentsGetParams(packed middleware.Parameters) (params V1TendersTenderIDCommentsGetParams) {
+func unpackV1TendersTenderIDAdditionsGetParams(packed middleware.Parameters) (params V1TendersTenderIDAdditionsGetParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "tenderID",
@@ -3555,7 +2887,7 @@ func unpackV1TendersTenderIDCommentsGetParams(packed middleware.Parameters) (par
 	return params
 }
 
-func decodeV1TendersTenderIDCommentsGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1TendersTenderIDCommentsGetParams, _ error) {
+func decodeV1TendersTenderIDAdditionsGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1TendersTenderIDAdditionsGetParams, _ error) {
 	// Decode path: tenderID.
 	if err := func() error {
 		param := args[0]
@@ -3621,13 +2953,13 @@ func decodeV1TendersTenderIDCommentsGetParams(args [1]string, argsEscaped bool, 
 	return params, nil
 }
 
-// V1TendersTenderIDCommentsPostParams is parameters of POST /v1/tenders/{tenderID}/comments operation.
-type V1TendersTenderIDCommentsPostParams struct {
+// V1TendersTenderIDAdditionsPostParams is parameters of POST /v1/tenders/{tenderID}/additions operation.
+type V1TendersTenderIDAdditionsPostParams struct {
 	// ID of tender.
 	TenderID int
 }
 
-func unpackV1TendersTenderIDCommentsPostParams(packed middleware.Parameters) (params V1TendersTenderIDCommentsPostParams) {
+func unpackV1TendersTenderIDAdditionsPostParams(packed middleware.Parameters) (params V1TendersTenderIDAdditionsPostParams) {
 	{
 		key := middleware.ParameterKey{
 			Name: "tenderID",
@@ -3638,7 +2970,7 @@ func unpackV1TendersTenderIDCommentsPostParams(packed middleware.Parameters) (pa
 	return params
 }
 
-func decodeV1TendersTenderIDCommentsPostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1TendersTenderIDCommentsPostParams, _ error) {
+func decodeV1TendersTenderIDAdditionsPostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1TendersTenderIDAdditionsPostParams, _ error) {
 	// Decode path: tenderID.
 	if err := func() error {
 		param := args[0]
@@ -4419,257 +3751,6 @@ func decodeV1TendersTenderIDRespondPostParams(args [1]string, argsEscaped bool, 
 	return params, nil
 }
 
-// V1TendersVerificationsGetParams is parameters of GET /v1/tenders/verifications operation.
-type V1TendersVerificationsGetParams struct {
-	// Фильтрует результат по статусам.
-	Status []VerificationStatus
-	// Номер страницы.
-	Page OptInt
-	// Количество элементов на странице.
-	PerPage OptInt
-}
-
-func unpackV1TendersVerificationsGetParams(packed middleware.Parameters) (params V1TendersVerificationsGetParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "status",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Status = v.([]VerificationStatus)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "page",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.Page = v.(OptInt)
-		}
-	}
-	{
-		key := middleware.ParameterKey{
-			Name: "per_page",
-			In:   "query",
-		}
-		if v, ok := packed[key]; ok {
-			params.PerPage = v.(OptInt)
-		}
-	}
-	return params
-}
-
-func decodeV1TendersVerificationsGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1TendersVerificationsGetParams, _ error) {
-	q := uri.NewQueryDecoder(r.URL.Query())
-	// Decode query: status.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "status",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				return d.DecodeArray(func(d uri.Decoder) error {
-					var paramsDotStatusVal VerificationStatus
-					if err := func() error {
-						val, err := d.DecodeValue()
-						if err != nil {
-							return err
-						}
-
-						c, err := conv.ToString(val)
-						if err != nil {
-							return err
-						}
-
-						paramsDotStatusVal = VerificationStatus(c)
-						return nil
-					}(); err != nil {
-						return err
-					}
-					params.Status = append(params.Status, paramsDotStatusVal)
-					return nil
-				})
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				var failures []validate.FieldError
-				for i, elem := range params.Status {
-					if err := func() error {
-						if err := elem.Validate(); err != nil {
-							return err
-						}
-						return nil
-					}(); err != nil {
-						failures = append(failures, validate.FieldError{
-							Name:  fmt.Sprintf("[%d]", i),
-							Error: err,
-						})
-					}
-				}
-				if len(failures) > 0 {
-					return &validate.Error{Fields: failures}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "status",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: page.
-	{
-		val := int(0)
-		params.Page.SetTo(val)
-	}
-	// Decode query: page.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "page",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotPageVal int
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotPageVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.Page.SetTo(paramsDotPageVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.Page.Get(); ok {
-					if err := func() error {
-						if err := (validate.Int{
-							MinSet:        true,
-							Min:           0,
-							MaxSet:        false,
-							Max:           0,
-							MinExclusive:  false,
-							MaxExclusive:  false,
-							MultipleOfSet: false,
-							MultipleOf:    0,
-						}).Validate(int64(value)); err != nil {
-							return errors.Wrap(err, "int")
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "page",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	// Set default value for query: per_page.
-	{
-		val := int(100)
-		params.PerPage.SetTo(val)
-	}
-	// Decode query: per_page.
-	if err := func() error {
-		cfg := uri.QueryParameterDecodingConfig{
-			Name:    "per_page",
-			Style:   uri.QueryStyleForm,
-			Explode: true,
-		}
-
-		if err := q.HasParam(cfg); err == nil {
-			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
-				var paramsDotPerPageVal int
-				if err := func() error {
-					val, err := d.DecodeValue()
-					if err != nil {
-						return err
-					}
-
-					c, err := conv.ToInt(val)
-					if err != nil {
-						return err
-					}
-
-					paramsDotPerPageVal = c
-					return nil
-				}(); err != nil {
-					return err
-				}
-				params.PerPage.SetTo(paramsDotPerPageVal)
-				return nil
-			}); err != nil {
-				return err
-			}
-			if err := func() error {
-				if value, ok := params.PerPage.Get(); ok {
-					if err := func() error {
-						if err := (validate.Int{
-							MinSet:        true,
-							Min:           1,
-							MaxSet:        true,
-							Max:           100,
-							MinExclusive:  false,
-							MaxExclusive:  false,
-							MultipleOfSet: false,
-							MultipleOf:    0,
-						}).Validate(int64(value)); err != nil {
-							return errors.Wrap(err, "int")
-						}
-						return nil
-					}(); err != nil {
-						return err
-					}
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "per_page",
-			In:   "query",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
 // V1UsersGetParams is parameters of GET /v1/users operation.
 type V1UsersGetParams struct {
 	// Фильтрует результат по ролям пользователей.
@@ -5087,6 +4168,925 @@ func decodeV1UsersUserIDPutParams(args [1]string, argsEscaped bool, r *http.Requ
 	return params, nil
 }
 
+// V1VerificationsAdditionsGetParams is parameters of GET /v1/verifications/additions operation.
+type V1VerificationsAdditionsGetParams struct {
+	// Фильтрует результат по статусам.
+	Status []VerificationStatus
+	// Номер страницы.
+	Page OptInt
+	// Количество элементов на странице.
+	PerPage OptInt
+}
+
+func unpackV1VerificationsAdditionsGetParams(packed middleware.Parameters) (params V1VerificationsAdditionsGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "status",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Status = v.([]VerificationStatus)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Page = v.(OptInt)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "per_page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.PerPage = v.(OptInt)
+		}
+	}
+	return params
+}
+
+func decodeV1VerificationsAdditionsGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1VerificationsAdditionsGetParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: status.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "status",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				return d.DecodeArray(func(d uri.Decoder) error {
+					var paramsDotStatusVal VerificationStatus
+					if err := func() error {
+						val, err := d.DecodeValue()
+						if err != nil {
+							return err
+						}
+
+						c, err := conv.ToString(val)
+						if err != nil {
+							return err
+						}
+
+						paramsDotStatusVal = VerificationStatus(c)
+						return nil
+					}(); err != nil {
+						return err
+					}
+					params.Status = append(params.Status, paramsDotStatusVal)
+					return nil
+				})
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				var failures []validate.FieldError
+				for i, elem := range params.Status {
+					if err := func() error {
+						if err := elem.Validate(); err != nil {
+							return err
+						}
+						return nil
+					}(); err != nil {
+						failures = append(failures, validate.FieldError{
+							Name:  fmt.Sprintf("[%d]", i),
+							Error: err,
+						})
+					}
+				}
+				if len(failures) > 0 {
+					return &validate.Error{Fields: failures}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "status",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Set default value for query: page.
+	{
+		val := int(0)
+		params.Page.SetTo(val)
+	}
+	// Decode query: page.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotPageVal int
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToInt(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotPageVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Page.SetTo(paramsDotPageVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if value, ok := params.Page.Get(); ok {
+					if err := func() error {
+						if err := (validate.Int{
+							MinSet:        true,
+							Min:           0,
+							MaxSet:        false,
+							Max:           0,
+							MinExclusive:  false,
+							MaxExclusive:  false,
+							MultipleOfSet: false,
+							MultipleOf:    0,
+						}).Validate(int64(value)); err != nil {
+							return errors.Wrap(err, "int")
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "page",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Set default value for query: per_page.
+	{
+		val := int(100)
+		params.PerPage.SetTo(val)
+	}
+	// Decode query: per_page.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "per_page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotPerPageVal int
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToInt(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotPerPageVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.PerPage.SetTo(paramsDotPerPageVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if value, ok := params.PerPage.Get(); ok {
+					if err := func() error {
+						if err := (validate.Int{
+							MinSet:        true,
+							Min:           1,
+							MaxSet:        true,
+							Max:           100,
+							MinExclusive:  false,
+							MaxExclusive:  false,
+							MultipleOfSet: false,
+							MultipleOf:    0,
+						}).Validate(int64(value)); err != nil {
+							return errors.Wrap(err, "int")
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "per_page",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1VerificationsOrganizationsGetParams is parameters of GET /v1/verifications/organizations operation.
+type V1VerificationsOrganizationsGetParams struct {
+	// Фильтрует результат по статусам.
+	Status []VerificationStatus
+	// Номер страницы.
+	Page OptInt
+	// Количество элементов на странице.
+	PerPage OptInt
+}
+
+func unpackV1VerificationsOrganizationsGetParams(packed middleware.Parameters) (params V1VerificationsOrganizationsGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "status",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Status = v.([]VerificationStatus)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Page = v.(OptInt)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "per_page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.PerPage = v.(OptInt)
+		}
+	}
+	return params
+}
+
+func decodeV1VerificationsOrganizationsGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1VerificationsOrganizationsGetParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: status.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "status",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				return d.DecodeArray(func(d uri.Decoder) error {
+					var paramsDotStatusVal VerificationStatus
+					if err := func() error {
+						val, err := d.DecodeValue()
+						if err != nil {
+							return err
+						}
+
+						c, err := conv.ToString(val)
+						if err != nil {
+							return err
+						}
+
+						paramsDotStatusVal = VerificationStatus(c)
+						return nil
+					}(); err != nil {
+						return err
+					}
+					params.Status = append(params.Status, paramsDotStatusVal)
+					return nil
+				})
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				var failures []validate.FieldError
+				for i, elem := range params.Status {
+					if err := func() error {
+						if err := elem.Validate(); err != nil {
+							return err
+						}
+						return nil
+					}(); err != nil {
+						failures = append(failures, validate.FieldError{
+							Name:  fmt.Sprintf("[%d]", i),
+							Error: err,
+						})
+					}
+				}
+				if len(failures) > 0 {
+					return &validate.Error{Fields: failures}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "status",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Set default value for query: page.
+	{
+		val := int(0)
+		params.Page.SetTo(val)
+	}
+	// Decode query: page.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotPageVal int
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToInt(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotPageVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Page.SetTo(paramsDotPageVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if value, ok := params.Page.Get(); ok {
+					if err := func() error {
+						if err := (validate.Int{
+							MinSet:        true,
+							Min:           0,
+							MaxSet:        false,
+							Max:           0,
+							MinExclusive:  false,
+							MaxExclusive:  false,
+							MultipleOfSet: false,
+							MultipleOf:    0,
+						}).Validate(int64(value)); err != nil {
+							return errors.Wrap(err, "int")
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "page",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Set default value for query: per_page.
+	{
+		val := int(100)
+		params.PerPage.SetTo(val)
+	}
+	// Decode query: per_page.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "per_page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotPerPageVal int
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToInt(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotPerPageVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.PerPage.SetTo(paramsDotPerPageVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if value, ok := params.PerPage.Get(); ok {
+					if err := func() error {
+						if err := (validate.Int{
+							MinSet:        true,
+							Min:           1,
+							MaxSet:        true,
+							Max:           100,
+							MinExclusive:  false,
+							MaxExclusive:  false,
+							MultipleOfSet: false,
+							MultipleOf:    0,
+						}).Validate(int64(value)); err != nil {
+							return errors.Wrap(err, "int")
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "per_page",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1VerificationsOrganizationsOrganizationIDGetParams is parameters of GET /v1/verifications/organizations/{organizationID} operation.
+type V1VerificationsOrganizationsOrganizationIDGetParams struct {
+	// ID of organization.
+	OrganizationID int
+}
+
+func unpackV1VerificationsOrganizationsOrganizationIDGetParams(packed middleware.Parameters) (params V1VerificationsOrganizationsOrganizationIDGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "organizationID",
+			In:   "path",
+		}
+		params.OrganizationID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1VerificationsOrganizationsOrganizationIDGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1VerificationsOrganizationsOrganizationIDGetParams, _ error) {
+	// Decode path: organizationID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "organizationID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.OrganizationID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.OrganizationID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "organizationID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1VerificationsOrganizationsOrganizationIDPostParams is parameters of POST /v1/verifications/organizations/{organizationID} operation.
+type V1VerificationsOrganizationsOrganizationIDPostParams struct {
+	// ID of organization.
+	OrganizationID int
+}
+
+func unpackV1VerificationsOrganizationsOrganizationIDPostParams(packed middleware.Parameters) (params V1VerificationsOrganizationsOrganizationIDPostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "organizationID",
+			In:   "path",
+		}
+		params.OrganizationID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1VerificationsOrganizationsOrganizationIDPostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1VerificationsOrganizationsOrganizationIDPostParams, _ error) {
+	// Decode path: organizationID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "organizationID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.OrganizationID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.OrganizationID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "organizationID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1VerificationsQuestionAnswerGetParams is parameters of GET /v1/verifications/question-answer operation.
+type V1VerificationsQuestionAnswerGetParams struct {
+	// Фильтрует результат по статусам.
+	Status []VerificationStatus
+	// Номер страницы.
+	Page OptInt
+	// Количество элементов на странице.
+	PerPage OptInt
+}
+
+func unpackV1VerificationsQuestionAnswerGetParams(packed middleware.Parameters) (params V1VerificationsQuestionAnswerGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "status",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Status = v.([]VerificationStatus)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Page = v.(OptInt)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "per_page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.PerPage = v.(OptInt)
+		}
+	}
+	return params
+}
+
+func decodeV1VerificationsQuestionAnswerGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1VerificationsQuestionAnswerGetParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: status.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "status",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				return d.DecodeArray(func(d uri.Decoder) error {
+					var paramsDotStatusVal VerificationStatus
+					if err := func() error {
+						val, err := d.DecodeValue()
+						if err != nil {
+							return err
+						}
+
+						c, err := conv.ToString(val)
+						if err != nil {
+							return err
+						}
+
+						paramsDotStatusVal = VerificationStatus(c)
+						return nil
+					}(); err != nil {
+						return err
+					}
+					params.Status = append(params.Status, paramsDotStatusVal)
+					return nil
+				})
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				var failures []validate.FieldError
+				for i, elem := range params.Status {
+					if err := func() error {
+						if err := elem.Validate(); err != nil {
+							return err
+						}
+						return nil
+					}(); err != nil {
+						failures = append(failures, validate.FieldError{
+							Name:  fmt.Sprintf("[%d]", i),
+							Error: err,
+						})
+					}
+				}
+				if len(failures) > 0 {
+					return &validate.Error{Fields: failures}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "status",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Set default value for query: page.
+	{
+		val := int(0)
+		params.Page.SetTo(val)
+	}
+	// Decode query: page.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotPageVal int
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToInt(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotPageVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Page.SetTo(paramsDotPageVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if value, ok := params.Page.Get(); ok {
+					if err := func() error {
+						if err := (validate.Int{
+							MinSet:        true,
+							Min:           0,
+							MaxSet:        false,
+							Max:           0,
+							MinExclusive:  false,
+							MaxExclusive:  false,
+							MultipleOfSet: false,
+							MultipleOf:    0,
+						}).Validate(int64(value)); err != nil {
+							return errors.Wrap(err, "int")
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "page",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Set default value for query: per_page.
+	{
+		val := int(100)
+		params.PerPage.SetTo(val)
+	}
+	// Decode query: per_page.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "per_page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotPerPageVal int
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToInt(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotPerPageVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.PerPage.SetTo(paramsDotPerPageVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if value, ok := params.PerPage.Get(); ok {
+					if err := func() error {
+						if err := (validate.Int{
+							MinSet:        true,
+							Min:           1,
+							MaxSet:        true,
+							Max:           100,
+							MinExclusive:  false,
+							MaxExclusive:  false,
+							MultipleOfSet: false,
+							MultipleOf:    0,
+						}).Validate(int64(value)); err != nil {
+							return errors.Wrap(err, "int")
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "per_page",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // V1VerificationsRequestIDAprovePostParams is parameters of POST /v1/verifications/{requestID}/aprove operation.
 type V1VerificationsRequestIDAprovePostParams struct {
 	// ID of request.
@@ -5330,6 +5330,257 @@ func decodeV1VerificationsRequestIDGetParams(args [1]string, argsEscaped bool, r
 		return params, &ogenerrors.DecodeParamError{
 			Name: "requestID",
 			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1VerificationsTendersGetParams is parameters of GET /v1/verifications/tenders operation.
+type V1VerificationsTendersGetParams struct {
+	// Фильтрует результат по статусам.
+	Status []VerificationStatus
+	// Номер страницы.
+	Page OptInt
+	// Количество элементов на странице.
+	PerPage OptInt
+}
+
+func unpackV1VerificationsTendersGetParams(packed middleware.Parameters) (params V1VerificationsTendersGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "status",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Status = v.([]VerificationStatus)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Page = v.(OptInt)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "per_page",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.PerPage = v.(OptInt)
+		}
+	}
+	return params
+}
+
+func decodeV1VerificationsTendersGetParams(args [0]string, argsEscaped bool, r *http.Request) (params V1VerificationsTendersGetParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: status.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "status",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				return d.DecodeArray(func(d uri.Decoder) error {
+					var paramsDotStatusVal VerificationStatus
+					if err := func() error {
+						val, err := d.DecodeValue()
+						if err != nil {
+							return err
+						}
+
+						c, err := conv.ToString(val)
+						if err != nil {
+							return err
+						}
+
+						paramsDotStatusVal = VerificationStatus(c)
+						return nil
+					}(); err != nil {
+						return err
+					}
+					params.Status = append(params.Status, paramsDotStatusVal)
+					return nil
+				})
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				var failures []validate.FieldError
+				for i, elem := range params.Status {
+					if err := func() error {
+						if err := elem.Validate(); err != nil {
+							return err
+						}
+						return nil
+					}(); err != nil {
+						failures = append(failures, validate.FieldError{
+							Name:  fmt.Sprintf("[%d]", i),
+							Error: err,
+						})
+					}
+				}
+				if len(failures) > 0 {
+					return &validate.Error{Fields: failures}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "status",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Set default value for query: page.
+	{
+		val := int(0)
+		params.Page.SetTo(val)
+	}
+	// Decode query: page.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotPageVal int
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToInt(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotPageVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Page.SetTo(paramsDotPageVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if value, ok := params.Page.Get(); ok {
+					if err := func() error {
+						if err := (validate.Int{
+							MinSet:        true,
+							Min:           0,
+							MaxSet:        false,
+							Max:           0,
+							MinExclusive:  false,
+							MaxExclusive:  false,
+							MultipleOfSet: false,
+							MultipleOf:    0,
+						}).Validate(int64(value)); err != nil {
+							return errors.Wrap(err, "int")
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "page",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Set default value for query: per_page.
+	{
+		val := int(100)
+		params.PerPage.SetTo(val)
+	}
+	// Decode query: per_page.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "per_page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotPerPageVal int
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToInt(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotPerPageVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.PerPage.SetTo(paramsDotPerPageVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if value, ok := params.PerPage.Get(); ok {
+					if err := func() error {
+						if err := (validate.Int{
+							MinSet:        true,
+							Min:           1,
+							MaxSet:        true,
+							Max:           100,
+							MinExclusive:  false,
+							MaxExclusive:  false,
+							MultipleOfSet: false,
+							MultipleOf:    0,
+						}).Validate(int64(value)); err != nil {
+							return errors.Wrap(err, "int")
+						}
+						return nil
+					}(); err != nil {
+						return err
+					}
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "per_page",
+			In:   "query",
 			Err:  err,
 		}
 	}

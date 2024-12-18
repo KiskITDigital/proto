@@ -196,9 +196,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				}
 
 				elem = origElem
-			case 'c': // Prefix: "c"
+			case 'c': // Prefix: "catalog/"
 				origElem := elem
-				if l := len("c"); len(elem) >= l && elem[0:l] == "c" {
+				if l := len("catalog/"); len(elem) >= l && elem[0:l] == "catalog/" {
 					elem = elem[l:]
 				} else {
 					break
@@ -208,133 +208,30 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
-				case 'a': // Prefix: "atalog/"
+				case 'c': // Prefix: "cities"
 					origElem := elem
-					if l := len("atalog/"); len(elem) >= l && elem[0:l] == "atalog/" {
+					if l := len("cities"); len(elem) >= l && elem[0:l] == "cities" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'c': // Prefix: "cities"
-						origElem := elem
-						if l := len("cities"); len(elem) >= l && elem[0:l] == "cities" {
-							elem = elem[l:]
-						} else {
-							break
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleV1CatalogCitiesPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
 						}
 
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleV1CatalogCitiesPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
-							}
-
-							return
-						}
-
-						elem = origElem
-					case 'm': // Prefix: "measurements"
-						origElem := elem
-						if l := len("measurements"); len(elem) >= l && elem[0:l] == "measurements" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "GET":
-								s.handleV1CatalogMeasurementsGetRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "GET")
-							}
-
-							return
-						}
-
-						elem = origElem
-					case 'o': // Prefix: "objects"
-						origElem := elem
-						if l := len("objects"); len(elem) >= l && elem[0:l] == "objects" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "GET":
-								s.handleV1CatalogObjectsGetRequest([0]string{}, elemIsEscaped, w, r)
-							case "POST":
-								s.handleV1CatalogObjectsPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "GET,POST")
-							}
-
-							return
-						}
-
-						elem = origElem
-					case 'r': // Prefix: "regions"
-						origElem := elem
-						if l := len("regions"); len(elem) >= l && elem[0:l] == "regions" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "POST":
-								s.handleV1CatalogRegionsPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "POST")
-							}
-
-							return
-						}
-
-						elem = origElem
-					case 's': // Prefix: "services"
-						origElem := elem
-						if l := len("services"); len(elem) >= l && elem[0:l] == "services" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "GET":
-								s.handleV1CatalogServicesGetRequest([0]string{}, elemIsEscaped, w, r)
-							case "POST":
-								s.handleV1CatalogServicesPostRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "GET,POST")
-							}
-
-							return
-						}
-
-						elem = origElem
+						return
 					}
 
 					elem = origElem
-				case 'o': // Prefix: "omments/verifications"
+				case 'm': // Prefix: "measurements"
 					origElem := elem
-					if l := len("omments/verifications"); len(elem) >= l && elem[0:l] == "omments/verifications" {
+					if l := len("measurements"); len(elem) >= l && elem[0:l] == "measurements" {
 						elem = elem[l:]
 					} else {
 						break
@@ -344,9 +241,76 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						// Leaf node.
 						switch r.Method {
 						case "GET":
-							s.handleV1CommentsVerificationsGetRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleV1CatalogMeasurementsGetRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'o': // Prefix: "objects"
+					origElem := elem
+					if l := len("objects"); len(elem) >= l && elem[0:l] == "objects" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleV1CatalogObjectsGetRequest([0]string{}, elemIsEscaped, w, r)
+						case "POST":
+							s.handleV1CatalogObjectsPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET,POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'r': // Prefix: "regions"
+					origElem := elem
+					if l := len("regions"); len(elem) >= l && elem[0:l] == "regions" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "POST":
+							s.handleV1CatalogRegionsPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "POST")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 's': // Prefix: "services"
+					origElem := elem
+					if l := len("services"); len(elem) >= l && elem[0:l] == "services" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleV1CatalogServicesGetRequest([0]string{}, elemIsEscaped, w, r)
+						case "POST":
+							s.handleV1CatalogServicesPostRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET,POST")
 						}
 
 						return
@@ -483,27 +447,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								}, elemIsEscaped, w, r)
 							default:
 								s.notAllowed(w, r, "DELETE,PUT")
-							}
-
-							return
-						}
-
-						elem = origElem
-					case 'v': // Prefix: "verifications"
-						origElem := elem
-						if l := len("verifications"); len(elem) >= l && elem[0:l] == "verifications" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "GET":
-								s.handleV1OrganizationsVerificationsGetRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "GET")
 							}
 
 							return
@@ -782,33 +725,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							elem = origElem
-						case 'v': // Prefix: "verifications"
-							origElem := elem
-							if l := len("verifications"); len(elem) >= l && elem[0:l] == "verifications" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "GET":
-									s.handleV1OrganizationsOrganizationIDVerificationsGetRequest([1]string{
-										args[0],
-									}, elemIsEscaped, w, r)
-								case "POST":
-									s.handleV1OrganizationsOrganizationIDVerificationsPostRequest([1]string{
-										args[0],
-									}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "GET,POST")
-								}
-
-								return
-							}
-
-							elem = origElem
 						}
 
 						elem = origElem
@@ -1018,32 +934,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 
-					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'v': // Prefix: "verifications"
-						origElem := elem
-						if l := len("verifications"); len(elem) >= l && elem[0:l] == "verifications" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch r.Method {
-							case "GET":
-								s.handleV1TendersVerificationsGetRequest([0]string{}, elemIsEscaped, w, r)
-							default:
-								s.notAllowed(w, r, "GET")
-							}
-
-							return
-						}
-
-						elem = origElem
-					}
 					// Param: "tenderID"
 					// Match until "/"
 					idx := strings.IndexByte(elem, '/')
@@ -1082,9 +972,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							break
 						}
 						switch elem[0] {
-						case 'c': // Prefix: "comments"
+						case 'a': // Prefix: "additions"
 							origElem := elem
-							if l := len("comments"); len(elem) >= l && elem[0:l] == "comments" {
+							if l := len("additions"); len(elem) >= l && elem[0:l] == "additions" {
 								elem = elem[l:]
 							} else {
 								break
@@ -1094,11 +984,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								// Leaf node.
 								switch r.Method {
 								case "GET":
-									s.handleV1TendersTenderIDCommentsGetRequest([1]string{
+									s.handleV1TendersTenderIDAdditionsGetRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
 								case "POST":
-									s.handleV1TendersTenderIDCommentsPostRequest([1]string{
+									s.handleV1TendersTenderIDAdditionsPostRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
 								default:
@@ -1353,6 +1243,128 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'a': // Prefix: "additions"
+					origElem := elem
+					if l := len("additions"); len(elem) >= l && elem[0:l] == "additions" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleV1VerificationsAdditionsGetRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 'o': // Prefix: "organizations"
+					origElem := elem
+					if l := len("organizations"); len(elem) >= l && elem[0:l] == "organizations" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch r.Method {
+						case "GET":
+							s.handleV1VerificationsOrganizationsGetRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+						origElem := elem
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "organizationID"
+						// Leaf parameter
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch r.Method {
+							case "GET":
+								s.handleV1VerificationsOrganizationsOrganizationIDGetRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							case "POST":
+								s.handleV1VerificationsOrganizationsOrganizationIDPostRequest([1]string{
+									args[0],
+								}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET,POST")
+							}
+
+							return
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
+				case 'q': // Prefix: "question-answer"
+					origElem := elem
+					if l := len("question-answer"); len(elem) >= l && elem[0:l] == "question-answer" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleV1VerificationsQuestionAnswerGetRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+					elem = origElem
+				case 't': // Prefix: "tenders"
+					origElem := elem
+					if l := len("tenders"); len(elem) >= l && elem[0:l] == "tenders" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch r.Method {
+						case "GET":
+							s.handleV1VerificationsTendersGetRequest([0]string{}, elemIsEscaped, w, r)
+						default:
+							s.notAllowed(w, r, "GET")
+						}
+
+						return
+					}
+
+					elem = origElem
+				}
 				// Param: "requestID"
 				// Match until "/"
 				idx := strings.IndexByte(elem, '/')
@@ -1689,9 +1701,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				elem = origElem
-			case 'c': // Prefix: "c"
+			case 'c': // Prefix: "catalog/"
 				origElem := elem
-				if l := len("c"); len(elem) >= l && elem[0:l] == "c" {
+				if l := len("catalog/"); len(elem) >= l && elem[0:l] == "catalog/" {
 					elem = elem[l:]
 				} else {
 					break
@@ -1701,165 +1713,34 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
-				case 'a': // Prefix: "atalog/"
+				case 'c': // Prefix: "cities"
 					origElem := elem
-					if l := len("atalog/"); len(elem) >= l && elem[0:l] == "atalog/" {
+					if l := len("cities"); len(elem) >= l && elem[0:l] == "cities" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'c': // Prefix: "cities"
-						origElem := elem
-						if l := len("cities"); len(elem) >= l && elem[0:l] == "cities" {
-							elem = elem[l:]
-						} else {
-							break
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "V1CatalogCitiesPost"
+							r.summary = "Add city to catalog"
+							r.operationID = ""
+							r.pathPattern = "/v1/catalog/cities"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
 						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = "V1CatalogCitiesPost"
-								r.summary = "Add city to catalog"
-								r.operationID = ""
-								r.pathPattern = "/v1/catalog/cities"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-						elem = origElem
-					case 'm': // Prefix: "measurements"
-						origElem := elem
-						if l := len("measurements"); len(elem) >= l && elem[0:l] == "measurements" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "GET":
-								r.name = "V1CatalogMeasurementsGet"
-								r.summary = "Retrieve all measurements"
-								r.operationID = ""
-								r.pathPattern = "/v1/catalog/measurements"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-						elem = origElem
-					case 'o': // Prefix: "objects"
-						origElem := elem
-						if l := len("objects"); len(elem) >= l && elem[0:l] == "objects" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "GET":
-								r.name = "V1CatalogObjectsGet"
-								r.summary = "Get a list of all available objects"
-								r.operationID = ""
-								r.pathPattern = "/v1/catalog/objects"
-								r.args = args
-								r.count = 0
-								return r, true
-							case "POST":
-								r.name = "V1CatalogObjectsPost"
-								r.summary = "Create catalog object"
-								r.operationID = ""
-								r.pathPattern = "/v1/catalog/objects"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-						elem = origElem
-					case 'r': // Prefix: "regions"
-						origElem := elem
-						if l := len("regions"); len(elem) >= l && elem[0:l] == "regions" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "POST":
-								r.name = "V1CatalogRegionsPost"
-								r.summary = "Add region to catalog"
-								r.operationID = ""
-								r.pathPattern = "/v1/catalog/regions"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-						elem = origElem
-					case 's': // Prefix: "services"
-						origElem := elem
-						if l := len("services"); len(elem) >= l && elem[0:l] == "services" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "GET":
-								r.name = "V1CatalogServicesGet"
-								r.summary = "Get a list of all available services"
-								r.operationID = ""
-								r.pathPattern = "/v1/catalog/services"
-								r.args = args
-								r.count = 0
-								return r, true
-							case "POST":
-								r.name = "V1CatalogServicesPost"
-								r.summary = "Create catalog service"
-								r.operationID = ""
-								r.pathPattern = "/v1/catalog/services"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-						elem = origElem
 					}
 
 					elem = origElem
-				case 'o': // Prefix: "omments/verifications"
+				case 'm': // Prefix: "measurements"
 					origElem := elem
-					if l := len("omments/verifications"); len(elem) >= l && elem[0:l] == "omments/verifications" {
+					if l := len("measurements"); len(elem) >= l && elem[0:l] == "measurements" {
 						elem = elem[l:]
 					} else {
 						break
@@ -1869,10 +1750,101 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "GET":
-							r.name = "V1CommentsVerificationsGet"
-							r.summary = "Get verification requests"
+							r.name = "V1CatalogMeasurementsGet"
+							r.summary = "Retrieve all measurements"
 							r.operationID = ""
-							r.pathPattern = "/v1/comments/verifications"
+							r.pathPattern = "/v1/catalog/measurements"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'o': // Prefix: "objects"
+					origElem := elem
+					if l := len("objects"); len(elem) >= l && elem[0:l] == "objects" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = "V1CatalogObjectsGet"
+							r.summary = "Get a list of all available objects"
+							r.operationID = ""
+							r.pathPattern = "/v1/catalog/objects"
+							r.args = args
+							r.count = 0
+							return r, true
+						case "POST":
+							r.name = "V1CatalogObjectsPost"
+							r.summary = "Create catalog object"
+							r.operationID = ""
+							r.pathPattern = "/v1/catalog/objects"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'r': // Prefix: "regions"
+					origElem := elem
+					if l := len("regions"); len(elem) >= l && elem[0:l] == "regions" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "POST":
+							r.name = "V1CatalogRegionsPost"
+							r.summary = "Add region to catalog"
+							r.operationID = ""
+							r.pathPattern = "/v1/catalog/regions"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 's': // Prefix: "services"
+					origElem := elem
+					if l := len("services"); len(elem) >= l && elem[0:l] == "services" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = "V1CatalogServicesGet"
+							r.summary = "Get a list of all available services"
+							r.operationID = ""
+							r.pathPattern = "/v1/catalog/services"
+							r.args = args
+							r.count = 0
+							return r, true
+						case "POST":
+							r.name = "V1CatalogServicesPost"
+							r.summary = "Create catalog service"
+							r.operationID = ""
+							r.pathPattern = "/v1/catalog/services"
 							r.args = args
 							r.count = 0
 							return r, true
@@ -2031,31 +2003,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								r.pathPattern = "/v1/organizations/portfolio/{portfolioID}"
 								r.args = args
 								r.count = 1
-								return r, true
-							default:
-								return
-							}
-						}
-
-						elem = origElem
-					case 'v': // Prefix: "verifications"
-						origElem := elem
-						if l := len("verifications"); len(elem) >= l && elem[0:l] == "verifications" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "GET":
-								r.name = "V1OrganizationsVerificationsGet"
-								r.summary = "Get verification requests"
-								r.operationID = ""
-								r.pathPattern = "/v1/organizations/verifications"
-								r.args = args
-								r.count = 0
 								return r, true
 							default:
 								return
@@ -2367,39 +2314,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							}
 
 							elem = origElem
-						case 'v': // Prefix: "verifications"
-							origElem := elem
-							if l := len("verifications"); len(elem) >= l && elem[0:l] == "verifications" {
-								elem = elem[l:]
-							} else {
-								break
-							}
-
-							if len(elem) == 0 {
-								// Leaf node.
-								switch method {
-								case "GET":
-									r.name = "V1OrganizationsOrganizationIDVerificationsGet"
-									r.summary = "Get verification requests"
-									r.operationID = ""
-									r.pathPattern = "/v1/organizations/{organizationID}/verifications"
-									r.args = args
-									r.count = 1
-									return r, true
-								case "POST":
-									r.name = "V1OrganizationsOrganizationIDVerificationsPost"
-									r.summary = "Send verification request"
-									r.operationID = ""
-									r.pathPattern = "/v1/organizations/{organizationID}/verifications"
-									r.args = args
-									r.count = 1
-									return r, true
-								default:
-									return
-								}
-							}
-
-							elem = origElem
 						}
 
 						elem = origElem
@@ -2639,36 +2553,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 
-					if len(elem) == 0 {
-						break
-					}
-					switch elem[0] {
-					case 'v': // Prefix: "verifications"
-						origElem := elem
-						if l := len("verifications"); len(elem) >= l && elem[0:l] == "verifications" {
-							elem = elem[l:]
-						} else {
-							break
-						}
-
-						if len(elem) == 0 {
-							// Leaf node.
-							switch method {
-							case "GET":
-								r.name = "V1TendersVerificationsGet"
-								r.summary = "Get verification requests"
-								r.operationID = ""
-								r.pathPattern = "/v1/tenders/verifications"
-								r.args = args
-								r.count = 0
-								return r, true
-							default:
-								return
-							}
-						}
-
-						elem = origElem
-					}
 					// Param: "tenderID"
 					// Match until "/"
 					idx := strings.IndexByte(elem, '/')
@@ -2713,9 +2597,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							break
 						}
 						switch elem[0] {
-						case 'c': // Prefix: "comments"
+						case 'a': // Prefix: "additions"
 							origElem := elem
-							if l := len("comments"); len(elem) >= l && elem[0:l] == "comments" {
+							if l := len("additions"); len(elem) >= l && elem[0:l] == "additions" {
 								elem = elem[l:]
 							} else {
 								break
@@ -2725,18 +2609,18 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "GET":
-									r.name = "V1TendersTenderIDCommentsGet"
-									r.summary = "Get comments"
+									r.name = "V1TendersTenderIDAdditionsGet"
+									r.summary = "Get additions for tender"
 									r.operationID = ""
-									r.pathPattern = "/v1/tenders/{tenderID}/comments"
+									r.pathPattern = "/v1/tenders/{tenderID}/additions"
 									r.args = args
 									r.count = 1
 									return r, true
 								case "POST":
-									r.name = "V1TendersTenderIDCommentsPost"
-									r.summary = "Send comment for tender"
+									r.name = "V1TendersTenderIDAdditionsPost"
+									r.summary = "Send addition for tender"
 									r.operationID = ""
-									r.pathPattern = "/v1/tenders/{tenderID}/comments"
+									r.pathPattern = "/v1/tenders/{tenderID}/additions"
 									r.args = args
 									r.count = 1
 									return r, true
@@ -3028,6 +2912,150 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 
+				if len(elem) == 0 {
+					break
+				}
+				switch elem[0] {
+				case 'a': // Prefix: "additions"
+					origElem := elem
+					if l := len("additions"); len(elem) >= l && elem[0:l] == "additions" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = "V1VerificationsAdditionsGet"
+							r.summary = "Get comments verification requests"
+							r.operationID = ""
+							r.pathPattern = "/v1/verifications/additions"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 'o': // Prefix: "organizations"
+					origElem := elem
+					if l := len("organizations"); len(elem) >= l && elem[0:l] == "organizations" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						switch method {
+						case "GET":
+							r.name = "V1VerificationsOrganizationsGet"
+							r.summary = "Get organization verification requests"
+							r.operationID = ""
+							r.pathPattern = "/v1/verifications/organizations"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+					switch elem[0] {
+					case '/': // Prefix: "/"
+						origElem := elem
+						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "organizationID"
+						// Leaf parameter
+						args[0] = elem
+						elem = ""
+
+						if len(elem) == 0 {
+							// Leaf node.
+							switch method {
+							case "GET":
+								r.name = "V1VerificationsOrganizationsOrganizationIDGet"
+								r.summary = "Get verification requests"
+								r.operationID = ""
+								r.pathPattern = "/v1/verifications/organizations/{organizationID}"
+								r.args = args
+								r.count = 1
+								return r, true
+							case "POST":
+								r.name = "V1VerificationsOrganizationsOrganizationIDPost"
+								r.summary = "Send verification request"
+								r.operationID = ""
+								r.pathPattern = "/v1/verifications/organizations/{organizationID}"
+								r.args = args
+								r.count = 1
+								return r, true
+							default:
+								return
+							}
+						}
+
+						elem = origElem
+					}
+
+					elem = origElem
+				case 'q': // Prefix: "question-answer"
+					origElem := elem
+					if l := len("question-answer"); len(elem) >= l && elem[0:l] == "question-answer" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = "V1VerificationsQuestionAnswerGet"
+							r.summary = "Get question-answer verification requests (UNIMPL)"
+							r.operationID = ""
+							r.pathPattern = "/v1/verifications/question-answer"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				case 't': // Prefix: "tenders"
+					origElem := elem
+					if l := len("tenders"); len(elem) >= l && elem[0:l] == "tenders" {
+						elem = elem[l:]
+					} else {
+						break
+					}
+
+					if len(elem) == 0 {
+						// Leaf node.
+						switch method {
+						case "GET":
+							r.name = "V1VerificationsTendersGet"
+							r.summary = "Get tenders verification requests"
+							r.operationID = ""
+							r.pathPattern = "/v1/verifications/tenders"
+							r.args = args
+							r.count = 0
+							return r, true
+						default:
+							return
+						}
+					}
+
+					elem = origElem
+				}
 				// Param: "requestID"
 				// Match until "/"
 				idx := strings.IndexByte(elem, '/')
