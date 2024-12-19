@@ -36,9 +36,8 @@ func (h *Handler) V1QuestionnaireOrganizationIDStatusGet(ctx context.Context, pa
 	status, err := h.questionnaireService.GetStatus(ctx, params.OrganizationID)
 	if err != nil {
 		if errors.Is(err, errstore.ErrQuestionnaireNotFound) {
-			return nil, cerr.Wrap(err, cerr.CodeNotFound, "Анкета не найдена", map[string]interface{}{
-				"organization_id": params.OrganizationID,
-			})
+			return &api.V1QuestionnaireOrganizationIDStatusGetOK{
+				Data: api.V1QuestionnaireOrganizationIDStatusGetOKData{IsCompleted: false}}, nil
 		}
 		return nil, fmt.Errorf("get questionnaire status: %w", err)
 	}
