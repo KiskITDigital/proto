@@ -46,6 +46,7 @@ func (a *ContactInfos) Scan(value interface{}) error {
 
 type Organization struct {
 	VerificationObject
+	FavouriteObject
 
 	ID                 int
 	BrandName          string
@@ -73,6 +74,13 @@ type Organization struct {
 func (o Organization) ToVerificationObject() api.VerificationRequestObject {
 	return api.VerificationRequestObject{
 		Type:         api.OrganizationVerificationRequestObject,
+		Organization: ConvertOrganizationModelToApi(o),
+	}
+}
+
+func (o Organization) ToFavouriteObject() api.FavouritesObject {
+	return api.FavouritesObject{
+		Type:         api.OrganizationFavouritesObject,
 		Organization: ConvertOrganizationModelToApi(o),
 	}
 }

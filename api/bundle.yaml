@@ -1771,15 +1771,6 @@ paths:
       responses:
         '200':
           description: Success
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - data
-                properties:
-                  data:
-                    $ref: '#/components/schemas/Favourites'
         default:
           $ref: '#/components/responses/Error'
   /v1/organizations/favourites/{favouriteID}:
@@ -1800,7 +1791,7 @@ paths:
             minimum: 1
           example: 1
       responses:
-        '200':
+        '204':
           description: Успешное удаление
         default:
           $ref: '#/components/responses/Error'
@@ -3180,10 +3171,14 @@ components:
       type: object
       required:
         - id
+        - organization_id
         - object_type
         - object
       properties:
         id:
+          type: integer
+          example: 1
+        organization_id:
           type: integer
           example: 1
         object_type:

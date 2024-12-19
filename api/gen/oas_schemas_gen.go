@@ -619,14 +619,20 @@ func (s *FavouriteType) UnmarshalText(data []byte) error {
 
 // Ref: #
 type Favourites struct {
-	ID         int              `json:"id"`
-	ObjectType FavouriteType    `json:"object_type"`
-	Object     FavouritesObject `json:"object"`
+	ID             int              `json:"id"`
+	OrganizationID int              `json:"organization_id"`
+	ObjectType     FavouriteType    `json:"object_type"`
+	Object         FavouritesObject `json:"object"`
 }
 
 // GetID returns the value of ID.
 func (s *Favourites) GetID() int {
 	return s.ID
+}
+
+// GetOrganizationID returns the value of OrganizationID.
+func (s *Favourites) GetOrganizationID() int {
+	return s.OrganizationID
 }
 
 // GetObjectType returns the value of ObjectType.
@@ -642,6 +648,11 @@ func (s *Favourites) GetObject() FavouritesObject {
 // SetID sets the value of ID.
 func (s *Favourites) SetID(val int) {
 	s.ID = val
+}
+
+// SetOrganizationID sets the value of OrganizationID.
+func (s *Favourites) SetOrganizationID(val int) {
+	s.OrganizationID = val
 }
 
 // SetObjectType sets the value of ObjectType.
@@ -3652,10 +3663,10 @@ func (s *V1OrganizationsContractorsGetOK) SetPagination(val Pagination) {
 
 func (*V1OrganizationsContractorsGetOK) v1OrganizationsContractorsGetRes() {}
 
-// V1OrganizationsFavouritesFavouriteIDDeleteOK is response for V1OrganizationsFavouritesFavouriteIDDelete operation.
-type V1OrganizationsFavouritesFavouriteIDDeleteOK struct{}
+// V1OrganizationsFavouritesFavouriteIDDeleteNoContent is response for V1OrganizationsFavouritesFavouriteIDDelete operation.
+type V1OrganizationsFavouritesFavouriteIDDeleteNoContent struct{}
 
-func (*V1OrganizationsFavouritesFavouriteIDDeleteOK) v1OrganizationsFavouritesFavouriteIDDeleteRes() {
+func (*V1OrganizationsFavouritesFavouriteIDDeleteNoContent) v1OrganizationsFavouritesFavouriteIDDeleteRes() {
 }
 
 type V1OrganizationsGetOK struct {
@@ -3713,19 +3724,8 @@ func (s *V1OrganizationsOrganizationIDFavouritesGetOK) SetPagination(val Paginat
 func (*V1OrganizationsOrganizationIDFavouritesGetOK) v1OrganizationsOrganizationIDFavouritesGetRes() {
 }
 
-type V1OrganizationsOrganizationIDFavouritesPostOK struct {
-	Data Favourites `json:"data"`
-}
-
-// GetData returns the value of Data.
-func (s *V1OrganizationsOrganizationIDFavouritesPostOK) GetData() Favourites {
-	return s.Data
-}
-
-// SetData sets the value of Data.
-func (s *V1OrganizationsOrganizationIDFavouritesPostOK) SetData(val Favourites) {
-	s.Data = val
-}
+// V1OrganizationsOrganizationIDFavouritesPostOK is response for V1OrganizationsOrganizationIDFavouritesPost operation.
+type V1OrganizationsOrganizationIDFavouritesPostOK struct{}
 
 func (*V1OrganizationsOrganizationIDFavouritesPostOK) v1OrganizationsOrganizationIDFavouritesPostRes() {
 }

@@ -12,6 +12,7 @@ type Handler struct {
 	logger              *slog.Logger
 	organizationService OrganizationService
 	portfolioService    PortfolioService
+	favouriteService    FavouriteService
 }
 
 type OrganizationService interface {
@@ -32,13 +33,21 @@ type PortfolioService interface {
 	Update(ctx context.Context, params service.PortfolioUpdateParams) (models.Portfolio, error)
 }
 
+type FavouriteService interface {
+	Create(ctx context.Context, params service.FavouriteCreateParams) error
+	Get(ctx context.Context, params service.FavouriteGetParams) (models.FavouritePagination[models.FavouriteObject], error)
+	Delete(ctx context.Context, favouriteID int) error
+}
+
 func New(
 	logger *slog.Logger,
 	organizationService OrganizationService,
-	portfolioService PortfolioService) *Handler {
+	portfolioService PortfolioService,
+	favouriteService FavouriteService) *Handler {
 	return &Handler{
 		logger:              logger,
 		organizationService: organizationService,
 		portfolioService: portfolioService,
+		favouriteService:    favouriteService,
 	}
 }

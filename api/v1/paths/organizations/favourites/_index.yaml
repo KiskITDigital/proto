@@ -95,14 +95,5 @@ post:
   responses:
     '200':
       description: Success
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-              - data
-            properties:
-              data:
-                $ref: "../../../schemas/Favourites.yaml"
     default:
       $ref: "../../../responses/Error.yaml"
