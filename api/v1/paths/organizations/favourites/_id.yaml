@@ -16,7 +16,7 @@ delete:
         minimum: 1
       example: 1
   responses:
-    '200':
+    '204':
       description: Успешное удаление
     default:
       $ref: "../../../responses/Error.yaml"

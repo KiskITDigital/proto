@@ -13,6 +13,7 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/token"
 	authService "gitlab.ubrato.ru/ubrato/core/internal/service/auth"
 	catalogService "gitlab.ubrato.ru/ubrato/core/internal/service/catalog"
+	favouriteService "gitlab.ubrato.ru/ubrato/core/internal/service/favourite"
 	organizationService "gitlab.ubrato.ru/ubrato/core/internal/service/organization"
 	portfolioService "gitlab.ubrato.ru/ubrato/core/internal/service/portfolio"
 	questionAnswerService "gitlab.ubrato.ru/ubrato/core/internal/service/question_answer"
@@ -27,6 +28,7 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/store/postgres"
 	additionStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/addition"
 	catalogStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/catalog"
+	favouriteStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/favourite"
 	organizationStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/organization"
 	portfolioStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/portfolio"
 	questionAnswerStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/question_answer"
@@ -94,6 +96,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	questionAnswerStore := questionAnswerStore.NewQuestionAnswerStore()
 	portfolioStore := portfolioStore.NewPortfolioStore()
 	respondStore := respondStore.NewPesponsStore()
+	favouriteStore := favouriteStore.NewFavouriteStore()
 
 	dadataGateway := dadataGateway.NewClient(cfg.Gateway.Dadata.APIKey)
 
@@ -181,6 +184,13 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		portfolioStore,
 	)
 
+	favouriteService := favouriteService.New(
+		psql,
+		favouriteStore,
+		tenderStore,
+		organizationStore,
+	)
+
 	router := http.NewRouter(http.RouterParams{
 		Error:         errorHandler.New(logger),
 		Auth:          authHandler.New(logger, authService, userService),
@@ -188,7 +198,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		Catalog:       catalogHandler.New(logger, catalogService),
 		Users:         userHandler.New(logger, userService),
 		Survey:        surveyHandler.New(logger, surveyService),
-		Organization:  organizationHandler.New(logger, organizationService, portfolioService),
+		Organization:  organizationHandler.New(logger, organizationService, portfolioService, favouriteService),
 		Suggest:       suggestHandler.New(logger, suggestService),
 		Verification:  verificationHandler.New(logger, verificationService),
 		Employee:      employeeHandler.New(logger, userService),

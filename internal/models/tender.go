@@ -15,6 +15,7 @@ type TendersPagination struct {
 
 type Tender struct {
 	VerificationObject
+	FavouriteObject
 
 	ID                 int
 	Name               string
@@ -45,6 +46,13 @@ type Tender struct {
 func (t Tender) ToVerificationObject() api.VerificationRequestObject {
 	return api.VerificationRequestObject{
 		Type:   api.TenderVerificationRequestObject,
+		Tender: ConvertTenderModelToApi(t),
+	}
+}
+
+func (t Tender) ToFavouriteObject() api.FavouritesObject {
+	return api.FavouritesObject{
+		Type:   api.TenderFavouritesObject,
 		Tender: ConvertTenderModelToApi(t),
 	}
 }

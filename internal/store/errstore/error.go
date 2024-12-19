@@ -35,3 +35,7 @@ var (
 var (
 	ErrPortfolioNotFound = errors.New("portfolio not found")
 )
+
+var (
+	ErrFavouriteNotFound = errors.New("favourite not found")
+)

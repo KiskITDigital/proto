@@ -716,9 +716,9 @@ func encodeV1OrganizationsContractorsGetResponse(response V1OrganizationsContrac
 
 func encodeV1OrganizationsFavouritesFavouriteIDDeleteResponse(response V1OrganizationsFavouritesFavouriteIDDeleteRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *V1OrganizationsFavouritesFavouriteIDDeleteOK:
-		w.WriteHeader(200)
-		span.SetStatus(codes.Ok, http.StatusText(200))
+	case *V1OrganizationsFavouritesFavouriteIDDeleteNoContent:
+		w.WriteHeader(204)
+		span.SetStatus(codes.Ok, http.StatusText(204))
 
 		return nil
 
@@ -845,15 +845,8 @@ func encodeV1OrganizationsOrganizationIDFavouritesGetResponse(response V1Organiz
 func encodeV1OrganizationsOrganizationIDFavouritesPostResponse(response V1OrganizationsOrganizationIDFavouritesPostRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *V1OrganizationsOrganizationIDFavouritesPostOK:
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(200)
 		span.SetStatus(codes.Ok, http.StatusText(200))
-
-		e := new(jx.Encoder)
-		response.Encode(e)
-		if _, err := e.WriteTo(w); err != nil {
-			return errors.Wrap(err, "write")
-		}
 
 		return nil
 
