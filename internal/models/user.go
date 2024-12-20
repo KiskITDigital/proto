@@ -4,7 +4,13 @@ import (
 	"time"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/pagination"
 )
+
+type UserPagination struct {
+	Users      []api.V1UsersGetOKDataItem
+	Pagination pagination.Pagination
+}
 
 type UserRole uint8
 
@@ -125,4 +131,20 @@ func ConvertEmployeeUserModelToApi(user EmployeeUser) api.EmployeeUser {
 		CreatedAt:     user.CreatedAt,
 		UpdatedAt:     user.UpdatedAt,
 	}
+}
+
+func ConvertRegularToFull(users []RegularUser) []FullUser {
+	fullUsers := make([]FullUser, len(users))
+	for i, u := range users {
+		fullUsers[i] = FullUser{User: u.User, RegularUser: u}
+	}
+	return fullUsers
+}
+
+func ConvertEmployeeToFull(users []EmployeeUser) []FullUser {
+	fullUsers := make([]FullUser, len(users))
+	for i, u := range users {
+		fullUsers[i] = FullUser{User: u.User, EmployeeUser: u}
+	}
+	return fullUsers
 }

@@ -23,9 +23,12 @@ type DBTX interface {
 type UserStore interface {
 	Create(ctx context.Context, qe store.QueryExecutor, params store.UserCreateParams) (models.User, error)
 	CreateEmployee(ctx context.Context, qe store.QueryExecutor, params store.UserCreateEmployeeParams) error
-	GetWithOrganiztion(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) ([]models.RegularUser, error)
 	Get(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) ([]models.FullUser, error)
+	GetWithOrganiztion(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) ([]models.RegularUser, error)
+	GetWithEmployee(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) ([]models.EmployeeUser, error)
 	Update(ctx context.Context, qe store.QueryExecutor, params store.UserUpdateParams) error
+	CountUsers(ctx context.Context, qe store.QueryExecutor) (int, error)
+	CountEmployee(ctx context.Context, qe store.QueryExecutor, role models.Optional[[]models.UserRole]) (int, error)
 
 	SetEmailVerified(ctx context.Context, qe store.QueryExecutor, userID int) error
 	ResetPassword(ctx context.Context, qe store.QueryExecutor, params store.ResetPasswordParams) error

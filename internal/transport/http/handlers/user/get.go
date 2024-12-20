@@ -8,7 +8,9 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/contextor"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/convert"
+	"gitlab.ubrato.ru/ubrato/core/internal/lib/pagination"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
+	"gitlab.ubrato.ru/ubrato/core/internal/service"
 )
 
 func (h *Handler) V1UsersUserIDGet(ctx context.Context, params api.V1UsersUserIDGetParams) (api.V1UsersUserIDGetRes, error) {
@@ -27,26 +29,19 @@ func (h *Handler) V1UsersGet(ctx context.Context, params api.V1UsersGetParams) (
 		return nil, cerr.ErrPermission
 	}
 
-	users, err := h.svc.Get(ctx)
+	users, err := h.svc.Get(ctx, service.UserGetParams{
+		Role: models.Optional[[]models.UserRole]{
+			Value: convert.Slice[[]api.Role, []models.UserRole](params.Role, models.APIRoleToModel),
+			Set:   len(params.Role) > 0,
+		},
+		Page:    uint64(params.Page.Or(pagination.Page)),
+		PerPage: uint64(params.PerPage.Or(pagination.PerPage))})
 	if err != nil {
 		return nil, fmt.Errorf("get users: %w", err)
 	}
 
 	return &api.V1UsersGetOK{
-		Data: convert.Slice[[]models.FullUser, []api.V1UsersGetOKDataItem](users, func(fu models.FullUser) api.V1UsersGetOKDataItem {
-			var user api.V1UsersGetOKDataItem
-
-			if fu.Role != 0 {
-				fu.EmployeeUser.User = fu.User
-				user.Type = api.EmployeeUserV1UsersGetOKDataItem
-				user.EmployeeUser = models.ConvertEmployeeUserModelToApi(fu.EmployeeUser)
-				return user
-			}
-
-			fu.RegularUser.User = fu.User
-			user.Type = api.RegularUserV1UsersGetOKDataItem
-			user.RegularUser = models.ConvertRegularUserModelToApi(fu.RegularUser)
-			return user
-		}),
+		Data:       users.Users,
+		Pagination: pagination.ConvertPaginationToAPI(users.Pagination),
 	}, nil
 }
