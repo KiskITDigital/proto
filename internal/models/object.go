@@ -9,13 +9,15 @@ const (
 	ObjectTypeOrganization
 	ObjectTypeTender
 	ObjectTypeAddition
+	ObjectTypeQuestionAnswer
 )
 
 var mapVerificationObjectType = map[ObjectType]api.ObjectType{
-	ObjectTypeInvalid:      api.ObjectTypeInvalid,
-	ObjectTypeOrganization: api.ObjectTypeOrganization,
-	ObjectTypeTender:       api.ObjectTypeTender,
-	ObjectTypeAddition:     api.ObjectTypeAddition,
+	ObjectTypeInvalid:        api.ObjectTypeInvalid,
+	ObjectTypeOrganization:   api.ObjectTypeOrganization,
+	ObjectTypeTender:         api.ObjectTypeTender,
+	ObjectTypeAddition:       api.ObjectTypeAddition,
+	ObjectTypeQuestionAnswer: api.ObjectTypeQuestionAnswer,
 }
 
 func (v ObjectType) ToAPI() api.ObjectType {

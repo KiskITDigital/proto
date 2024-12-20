@@ -1,6 +1,8 @@
 type: string
 enum:
-  - invalid
   - organization
-  - addition
   - tender
+  - addition
+  - question-answer
+  - invalid
+  

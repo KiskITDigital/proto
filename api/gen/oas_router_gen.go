@@ -3018,7 +3018,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						switch method {
 						case "GET":
 							r.name = "V1VerificationsQuestionAnswerGet"
-							r.summary = "Get question-answer verification requests (UNIMPL)"
+							r.summary = "Get question-answer verification requests"
 							r.operationID = ""
 							r.pathPattern = "/v1/verifications/question-answer"
 							r.args = args

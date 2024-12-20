@@ -1,6 +1,8 @@
 package models
 
-import api "gitlab.ubrato.ru/ubrato/core/api/gen"
+import (
+	api "gitlab.ubrato.ru/ubrato/core/api/gen"
+)
 
 type QuestionAnswerType int
 
@@ -42,24 +44,35 @@ type QuestionAnswer struct {
 	ParentID             Optional[int]
 	Type                 QuestionAnswerType
 	Content              string
+	VerificationStatus   VerificationStatus
 }
 
 func ConvertQuestionAnswerToAPI(qe QuestionAnswer) api.QuestionAnswer {
 	return api.QuestionAnswer{
-		ID:       qe.ID,
-		ParentID: api.OptInt{Value: qe.ParentID.Value, Set: qe.ParentID.Set},
-		Type:     qe.Type.ToAPI(),
-		Content:  qe.Content,
+		ID:                 qe.ID,
+		ParentID:           api.OptInt{Value: qe.ParentID.Value, Set: qe.ParentID.Set},
+		Type:               qe.Type.ToAPI(),
+		Content:            qe.Content,
+		VerificationStatus: qe.VerificationStatus.ToAPI(),
 	}
 }
 
 type QuestionWithAnswer struct {
+	VerificationObject
+
 	Question QuestionAnswer
 	Answer   Optional[QuestionAnswer]
 }
 
-func ConvertQuestionWithAnswerToAPI(qe QuestionWithAnswer) api.V1TendersTenderIDQuestionAnswerGetOKDataItem {
-	return api.V1TendersTenderIDQuestionAnswerGetOKDataItem{
+func (qe QuestionWithAnswer) ToVerificationObject() api.VerificationRequestObject {
+	return api.VerificationRequestObject{
+		Type:               api.QuestionWithAnswerVerificationRequestObject,
+		QuestionWithAnswer: ConvertQuestionWithAnswerToAPI(qe),
+	}
+}
+
+func ConvertQuestionWithAnswerToAPI(qe QuestionWithAnswer) api.QuestionWithAnswer {
+	return api.QuestionWithAnswer{
 		Question: ConvertQuestionAnswerToAPI(qe.Question),
 		Answer:   api.OptQuestionAnswer{Value: ConvertQuestionAnswerToAPI(qe.Answer.Value), Set: qe.Answer.Set},
 	}

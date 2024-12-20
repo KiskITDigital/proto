@@ -68,7 +68,23 @@ func (h *Handler) V1VerificationsOrganizationsGet(ctx context.Context, params ap
 }
 
 func (h *Handler) V1VerificationsQuestionAnswerGet(ctx context.Context, params api.V1VerificationsQuestionAnswerGetParams) (api.V1VerificationsQuestionAnswerGetRes, error) {
-	return &api.V1VerificationsQuestionAnswerGetOK{}, nil
+	if contextor.GetRole(ctx) < models.UserRoleEmployee {
+		return nil, cerr.ErrPermission
+	}
+
+	requests, err := h.verificationService.Get(ctx, service.VerificationRequestsObjectGetParams{
+		ObjectType: models.ObjectTypeQuestionAnswer,
+		Status:     convert.Slice[[]api.VerificationStatus, []models.VerificationStatus](params.Status, models.APIToVerificationStatus),
+		Page:       uint64(params.Page.Or(pagination.Page)),
+		PerPage:    uint64(params.PerPage.Or(pagination.PerPage))})
+	if err != nil {
+		return nil, fmt.Errorf("get organization verif req: %w", err)
+	}
+
+	return &api.V1VerificationsQuestionAnswerGetOK{
+		Data:       convert.Slice[[]models.VerificationRequest[models.VerificationObject], []api.VerificationRequest](requests.VerificationRequests, models.VerificationRequestModelToApi),
+		Pagination: pagination.ConvertPaginationToAPI(requests.Pagination),
+	}, nil
 }
 
 func (h *Handler) V1VerificationsAdditionsGet(ctx context.Context, params api.V1VerificationsAdditionsGetParams) (api.V1VerificationsAdditionsGetRes, error) {

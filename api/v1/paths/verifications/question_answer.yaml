@@ -1,9 +1,9 @@
 get:
   tags:
     - verifications
-  summary: Get question-answer verification requests (UNIMPL)
+  summary: Get question-answer verification requests
   description: |-
-    Получение запросов на верификацию для дополнительной информации о вопросов-ответов
+    Получение запросов на верификацию для вопросов-ответов
 
     **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
     'Employee' or higher.

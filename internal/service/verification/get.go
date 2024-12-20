@@ -98,6 +98,20 @@ func (s *Service) Get(ctx context.Context, params service.VerificationRequestsOb
 			objectMap[addition.ID] = addition
 		}
 
+	case models.ObjectTypeQuestionAnswer:
+		questionAnswers, err := s.questionAnswerStore.Get(ctx, s.psql.DB(), store.QuestionAnswerGetParams{
+			QuestionAnswerIDs: models.Optional[[]int]{Value: objectIDs, Set: true}})
+		if err != nil {
+			return models.VerificationRequestPagination[models.VerificationObject]{}, fmt.Errorf("get question-answers: %w", err)
+		}
+
+		for _, qa := range questionAnswers {
+			objectMap[qa.Question.ID] = qa
+			if qa.Answer.Set {
+				objectMap[qa.Answer.Value.ID] = qa
+			}
+		}
+
 	default:
 		return models.VerificationRequestPagination[models.VerificationObject]{}, fmt.Errorf("invalid object type: %v", params.ObjectType)
 	}

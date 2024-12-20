@@ -10,6 +10,8 @@ import (
 type Service struct {
 	psql                DBTX
 	questionAnswerStore QuestionAnswerStore
+	tenderStore         TenderStore
+	verificationStore   VerificationStore
 }
 
 type DBTX interface {
@@ -20,15 +22,28 @@ type DBTX interface {
 
 type QuestionAnswerStore interface {
 	Create(ctx context.Context, qe store.QueryExecutor, params store.CreateQuestionAnswerParams) (models.QuestionAnswer, error)
-	Get(ctx context.Context, qe store.QueryExecutor, tenderID int) ([]models.QuestionWithAnswer, error)
+	GetWithAccess(ctx context.Context, qe store.QueryExecutor, params store.QuestionAnswerGetWithAccessParams) ([]models.QuestionWithAnswer, error)
+	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.QuestionWithAnswer, error)
+}
+
+type TenderStore interface {
+	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Tender, error)
+}
+
+type VerificationStore interface {
+	Create(ctx context.Context, qe store.QueryExecutor, params store.VerificationRequestCreateParams) error
 }
 
 func New(
 	psql DBTX,
 	questionAnswerStore QuestionAnswerStore,
+	tenderStore TenderStore,
+	verificationStore VerificationStore,
 ) *Service {
 	return &Service{
 		psql:                psql,
 		questionAnswerStore: questionAnswerStore,
+		tenderStore:         tenderStore,
+		verificationStore:   verificationStore,
 	}
 }

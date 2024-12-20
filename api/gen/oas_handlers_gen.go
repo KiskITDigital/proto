@@ -5648,6 +5648,8 @@ func (s *Server) handleV1TendersPostRequest(args [0]string, argsEscaped bool, w 
 // handleV1TendersTenderIDAdditionsGetRequest handles GET /v1/tenders/{tenderID}/additions operation.
 //
 // Получение дополнительной информации для тендера.
+// Создатель тендера не имеет ограничений на статус
+// верификации.
 //
 // GET /v1/tenders/{tenderID}/additions
 func (s *Server) handleV1TendersTenderIDAdditionsGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
@@ -5692,6 +5694,51 @@ func (s *Server) handleV1TendersTenderIDAdditionsGetRequest(args [1]string, args
 			ID:   "",
 		}
 	)
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			sctx, ok, err := s.securityBearerAuth(ctx, "V1TendersTenderIDAdditionsGet", r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "BearerAuth",
+					Err:              err,
+				}
+				defer recordError("Security:BearerAuth", err)
+				s.cfg.ErrorHandler(ctx, w, r, err)
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 0
+				ctx = sctx
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+				{},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			err = &ogenerrors.SecurityError{
+				OperationContext: opErrContext,
+				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+			}
+			defer recordError("Security", err)
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+	}
 	params, err := decodeV1TendersTenderIDAdditionsGetParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
@@ -6256,8 +6303,13 @@ func (s *Server) handleV1TendersTenderIDPutRequest(args [1]string, argsEscaped b
 
 // handleV1TendersTenderIDQuestionAnswerGetRequest handles GET /v1/tenders/{tenderID}/question-answer operation.
 //
-// Получить все вопросы и ответы, связанные с конкретным
-// тендером.
+// Получение вопросов-ответов с фильтрацией:
+// 1. **Создатель тендера**: вопросы со статусом approved, все
+// ответы.
+// 2. **Авторизированный пользователь**: все свои вопросы;
+// остальные вопросы и ответы со статусом approved.
+// 3. **Неавторизированный пользователь**: вопросы и
+// ответы статусом approved.
 //
 // GET /v1/tenders/{tenderID}/question-answer
 func (s *Server) handleV1TendersTenderIDQuestionAnswerGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
@@ -6302,6 +6354,51 @@ func (s *Server) handleV1TendersTenderIDQuestionAnswerGetRequest(args [1]string,
 			ID:   "",
 		}
 	)
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			sctx, ok, err := s.securityBearerAuth(ctx, "V1TendersTenderIDQuestionAnswerGet", r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "BearerAuth",
+					Err:              err,
+				}
+				defer recordError("Security:BearerAuth", err)
+				s.cfg.ErrorHandler(ctx, w, r, err)
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 0
+				ctx = sctx
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+				{},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			err = &ogenerrors.SecurityError{
+				OperationContext: opErrContext,
+				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+			}
+			defer recordError("Security", err)
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+	}
 	params, err := decodeV1TendersTenderIDQuestionAnswerGetParams(args, argsEscaped, r)
 	if err != nil {
 		err = &ogenerrors.DecodeParamsError{
@@ -8470,7 +8567,7 @@ func (s *Server) handleV1VerificationsOrganizationsOrganizationIDPostRequest(arg
 // handleV1VerificationsQuestionAnswerGetRequest handles GET /v1/verifications/question-answer operation.
 //
 // Получение запросов на верификацию для
-// дополнительной информации о вопросов-ответов
+// вопросов-ответов
 // **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //
@@ -8577,7 +8674,7 @@ func (s *Server) handleV1VerificationsQuestionAnswerGetRequest(args [0]string, a
 		mreq := middleware.Request{
 			Context:          ctx,
 			OperationName:    "V1VerificationsQuestionAnswerGet",
-			OperationSummary: "Get question-answer verification requests (UNIMPL)",
+			OperationSummary: "Get question-answer verification requests",
 			OperationID:      "",
 			Body:             nil,
 			Params: middleware.Parameters{

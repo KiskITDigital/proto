@@ -30,6 +30,7 @@ var (
 var (
 	ErrQuestionAnswerUniqueViolation = errors.New("answer to question already exists")
 	ErrQuestionAnswerFKViolation     = errors.New("foreign key violation on question_answer")
+	ErrQuestionAnswerNotFound        = errors.New("question-answer not found")
 )
 
 var (

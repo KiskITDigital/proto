@@ -51,7 +51,7 @@ post:
               - data
             properties:
               data:
-                $ref: "../../../schemas/QuestionAnswer.yaml"
+                $ref: "../../../schemas/question_answer/QuestionAnswer.yaml"
     default:
       $ref: "../../../responses/Error.yaml"
 
@@ -59,8 +59,14 @@ get:
   tags:
     - tenders
   summary: Get questions and answers for a tender
+  security:
+    - bearerAuth: []
+    - {}
   description: |
-    Получить все вопросы и ответы, связанные с конкретным тендером. 
+    Получение вопросов-ответов с фильтрацией:
+    1. **Создатель тендера**: вопросы со статусом approved, все ответы.
+    2. **Авторизированный пользователь**: все свои вопросы; остальные вопросы и ответы со статусом approved.
+    3. **Неавторизированный пользователь**: вопросы и ответы статусом approved.
   parameters:
     - name: tenderID
       required: true
@@ -83,14 +89,6 @@ get:
               data:
                 type: array
                 items:
-                  type: object
-                  required: 
-                    - question
-                  properties:
-                    question:
-                       $ref: "../../../schemas/QuestionAnswer.yaml"
-                    answer:
-                       $ref: "../../../schemas/QuestionAnswer.yaml"
-                 
+                  $ref: "../../../schemas/question_answer/QuestionWithAnswer.yaml"    
     default:
       $ref: "../../../responses/Error.yaml"

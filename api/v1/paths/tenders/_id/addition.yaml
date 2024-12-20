@@ -45,7 +45,12 @@ get:
     - tenders
   summary: Get additions for tender
   description: |-
-    Получение дополнительной информации для тендера
+    Получение дополнительной информации для тендера.
+
+    Создатель тендера не имеет ограничений на статус верификации.
+  security:
+    - bearerAuth: []
+    - {}
   parameters:
     - name: tenderID
       required: true
