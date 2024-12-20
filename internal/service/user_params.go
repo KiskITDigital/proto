@@ -1,6 +1,8 @@
 package service
 
-import "gitlab.ubrato.ru/ubrato/core/internal/models"
+import (
+	"gitlab.ubrato.ru/ubrato/core/internal/models"
+)
 
 type UserCreateEmployeeParams struct {
 	Email      string
@@ -20,4 +22,12 @@ type UserUpdateParams struct {
 	LastName   models.Optional[string]
 	MiddleName models.Optional[string]
 	AvatarURL  models.Optional[string]
+}
+
+type UserGetParams struct {
+	Email   string
+	ID      int
+	Role    models.Optional[[]models.UserRole]
+	Page    uint64
+	PerPage uint64
 }

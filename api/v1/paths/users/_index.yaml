@@ -43,6 +43,7 @@ get:
             type: object
             required:
               - data
+              - pagination
             properties:
               data:
                 type: array

@@ -52,6 +52,14 @@ func (s *UserStore) Get(ctx context.Context, qe store.QueryExecutor, params stor
 		LeftJoin("employee AS e ON u.id = e.user_id").
 		PlaceholderFormat(squirrel.Dollar)
 
+	if params.Limit.Set {
+		builder = builder.Limit(params.Limit.Value)
+	}
+
+	if params.Offset.Set {
+		builder = builder.Offset(params.Offset.Value)
+	}
+
 	if params.Email != "" {
 		builder = builder.Where(squirrel.Eq{"u.email": params.Email})
 	}
@@ -61,7 +69,6 @@ func (s *UserStore) Get(ctx context.Context, qe store.QueryExecutor, params stor
 	}
 
 	var users []models.FullUser
-
 	rows, err := builder.RunWith(qe).QueryContext(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("query row: %w", err)
@@ -200,6 +207,14 @@ func (s *UserStore) GetWithOrganiztion(ctx context.Context, qe store.QueryExecut
 		Join("organizations AS o ON o.id = ou.organization_id").
 		PlaceholderFormat(squirrel.Dollar)
 
+	if params.Limit.Set {
+		builder = builder.Limit(params.Limit.Value)
+	}
+
+	if params.Offset.Set {
+		builder = builder.Offset(params.Offset.Value)
+	}
+
 	if params.Email != "" {
 		builder = builder.Where(squirrel.Eq{"u.email": params.Email})
 	}
@@ -220,6 +235,7 @@ func (s *UserStore) GetWithOrganiztion(ctx context.Context, qe store.QueryExecut
 			user                  models.RegularUser
 			userAvatarURL         sql.NullString
 			organizationAvatarURL sql.NullString
+			middleName            sql.NullString
 		)
 
 		err = rows.Scan(
@@ -230,7 +246,7 @@ func (s *UserStore) GetWithOrganiztion(ctx context.Context, qe store.QueryExecut
 			&user.TOTPSalt,
 			&user.FirstName,
 			&user.LastName,
-			&user.MiddleName,
+			&middleName,
 			&userAvatarURL,
 			&user.EmailVerified,
 			&user.CreatedAt,
@@ -258,6 +274,12 @@ func (s *UserStore) GetWithOrganiztion(ctx context.Context, qe store.QueryExecut
 			return nil, fmt.Errorf("scan row: %w", err)
 		}
 
+		if middleName.Valid {
+			user.MiddleName = models.Optional[string]{Value: middleName.String, Set: true}
+		} else {
+			user.MiddleName = models.Optional[string]{Set: false}
+		}
+
 		user.AvatarURL = userAvatarURL.String
 		user.Organization.AvatarURL = organizationAvatarURL.String
 
@@ -282,12 +304,24 @@ func (s *UserStore) GetWithEmployee(ctx context.Context, qe store.QueryExecutor,
 			"u.email_verified",
 			"u.created_at",
 			"u.updated_at",
-			"e.user_id",
+			"e.role",
 			"e.position",
 		).
 		From("users AS u").
 		Join("employee AS e ON u.id = e.user_id").
 		PlaceholderFormat(squirrel.Dollar)
+
+	if params.Limit.Set {
+		builder = builder.Limit(params.Limit.Value)
+	}
+
+	if params.Offset.Set {
+		builder = builder.Offset(params.Offset.Value)
+	}
+
+	if params.Role.Set {
+		builder = builder.Where(squirrel.Eq{"e.role": params.Role.Value})
+	}
 
 	if params.Email != "" {
 		builder = builder.Where(squirrel.Eq{"u.email": params.Email})
@@ -308,6 +342,7 @@ func (s *UserStore) GetWithEmployee(ctx context.Context, qe store.QueryExecutor,
 		var (
 			user          models.EmployeeUser
 			userAvatarURL sql.NullString
+			middleName    sql.NullString
 		)
 
 		err = rows.Scan(
@@ -318,7 +353,7 @@ func (s *UserStore) GetWithEmployee(ctx context.Context, qe store.QueryExecutor,
 			&user.TOTPSalt,
 			&user.FirstName,
 			&user.LastName,
-			&user.MiddleName,
+			&middleName,
 			&userAvatarURL,
 			&user.EmailVerified,
 			&user.CreatedAt,
@@ -328,6 +363,12 @@ func (s *UserStore) GetWithEmployee(ctx context.Context, qe store.QueryExecutor,
 		)
 		if err != nil {
 			return nil, fmt.Errorf("scan row: %w", err)
+		}
+
+		if middleName.Valid {
+			user.MiddleName = models.Optional[string]{Value: middleName.String, Set: true}
+		} else {
+			user.MiddleName = models.Optional[string]{Set: false}
 		}
 
 		user.AvatarURL = userAvatarURL.String

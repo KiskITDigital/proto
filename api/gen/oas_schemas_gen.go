@@ -1235,52 +1235,6 @@ func (o OptOrganization) Or(d Organization) Organization {
 	return d
 }
 
-// NewOptPagination returns new OptPagination with value set to v.
-func NewOptPagination(v Pagination) OptPagination {
-	return OptPagination{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptPagination is optional Pagination.
-type OptPagination struct {
-	Value Pagination
-	Set   bool
-}
-
-// IsSet returns true if OptPagination was set.
-func (o OptPagination) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptPagination) Reset() {
-	var v Pagination
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptPagination) SetTo(v Pagination) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptPagination) Get() (v Pagination, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptPagination) Or(d Pagination) Pagination {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewOptPhone returns new OptPhone with value set to v.
 func NewOptPhone(v Phone) OptPhone {
 	return OptPhone{
@@ -5186,7 +5140,7 @@ func (s *V1UsersConfirmPasswordPostReq) SetPassword(val Password) {
 
 type V1UsersGetOK struct {
 	Data       []V1UsersGetOKDataItem `json:"data"`
-	Pagination OptPagination          `json:"pagination"`
+	Pagination Pagination             `json:"pagination"`
 }
 
 // GetData returns the value of Data.
@@ -5195,7 +5149,7 @@ func (s *V1UsersGetOK) GetData() []V1UsersGetOKDataItem {
 }
 
 // GetPagination returns the value of Pagination.
-func (s *V1UsersGetOK) GetPagination() OptPagination {
+func (s *V1UsersGetOK) GetPagination() Pagination {
 	return s.Pagination
 }
 
@@ -5205,7 +5159,7 @@ func (s *V1UsersGetOK) SetData(val []V1UsersGetOKDataItem) {
 }
 
 // SetPagination sets the value of Pagination.
-func (s *V1UsersGetOK) SetPagination(val OptPagination) {
+func (s *V1UsersGetOK) SetPagination(val Pagination) {
 	s.Pagination = val
 }
 

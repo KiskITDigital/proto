@@ -1,6 +1,8 @@
 package store
 
-import "gitlab.ubrato.ru/ubrato/core/internal/models"
+import (
+	"gitlab.ubrato.ru/ubrato/core/internal/models"
+)
 
 type UserCreateParams struct {
 	Email         string
@@ -15,12 +17,12 @@ type UserCreateParams struct {
 }
 
 type UserUpdateParams struct {
-	UserID        int
-	Phone         models.Optional[string]
-	FirstName     models.Optional[string]
-	LastName      models.Optional[string]
-	MiddleName    models.Optional[string]
-	AvatarURL     models.Optional[string]
+	UserID     int
+	Phone      models.Optional[string]
+	FirstName  models.Optional[string]
+	LastName   models.Optional[string]
+	MiddleName models.Optional[string]
+	AvatarURL  models.Optional[string]
 }
 
 type UserCreateEmployeeParams struct {
@@ -30,8 +32,11 @@ type UserCreateEmployeeParams struct {
 }
 
 type UserGetParams struct {
-	Email string
-	ID    int
+	Email  string
+	ID     int
+	Role   models.Optional[[]models.UserRole]
+	Offset models.Optional[uint64]
+	Limit  models.Optional[uint64]
 }
 
 type ResetPasswordParams struct {

@@ -2711,39 +2711,6 @@ func (s *OptOrganization) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode encodes Pagination as json.
-func (o OptPagination) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	o.Value.Encode(e)
-}
-
-// Decode decodes Pagination from json.
-func (o *OptPagination) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptPagination to nil")
-	}
-	o.Set = true
-	if err := o.Value.Decode(d); err != nil {
-		return err
-	}
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptPagination) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptPagination) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
 // Encode encodes Phone as json.
 func (o OptPhone) Encode(e *jx.Encoder) {
 	if !o.Set {
@@ -14470,10 +14437,8 @@ func (s *V1UsersGetOK) encodeFields(e *jx.Encoder) {
 		e.ArrEnd()
 	}
 	{
-		if s.Pagination.Set {
-			e.FieldStart("pagination")
-			s.Pagination.Encode(e)
-		}
+		e.FieldStart("pagination")
+		s.Pagination.Encode(e)
 	}
 }
 
@@ -14510,8 +14475,8 @@ func (s *V1UsersGetOK) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"data\"")
 			}
 		case "pagination":
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				s.Pagination.Reset()
 				if err := s.Pagination.Decode(d); err != nil {
 					return err
 				}
@@ -14529,7 +14494,7 @@ func (s *V1UsersGetOK) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00000001,
+		0b00000011,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

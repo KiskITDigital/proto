@@ -16,7 +16,7 @@ type Handler struct {
 
 type Service interface {
 	GetByID(ctx context.Context, tenderID int) (models.RegularUser, error)
-	Get(ctx context.Context) ([]models.FullUser, error)
+	Get(ctx context.Context, params service.UserGetParams) (models.UserPagination, error)
 	Update(ctx context.Context, params service.UserUpdateParams) error
 
 	ReqEmailVerification(ctx context.Context, email string) error
