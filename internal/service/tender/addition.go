@@ -21,12 +21,19 @@ func (s *Service) CreateAddition(ctx context.Context, params service.AdditionCre
 		return cerr.Wrap(cerr.ErrPermission, cerr.CodeNotPermitted, "Недостаточно прав для добавления дополнительной информации", nil)
 	}
 
+	if tender.VerificationStatus != models.VerificationStatusApproved {
+		return cerr.Wrap(
+			fmt.Errorf("tender status not approved"),
+			cerr.CodeUnprocessableEntity,
+			"Нельзя добавить дополнительную информацию, так как тендер не прошел модерацию", nil)
+	}
+
 	if err := s.psql.WithTransaction(ctx, func(qe store.QueryExecutor) error {
 		additionID, err := s.additionStore.CreateAddition(ctx, qe, store.AdditionCreateParams{
-			TenderID:       params.TenderID,
-			Title:          params.Title,
-			Content:        params.Content,
-			Attachments:    params.Attachments})
+			TenderID:    params.TenderID,
+			Title:       params.Title,
+			Content:     params.Content,
+			Attachments: params.Attachments})
 		if err != nil {
 			return fmt.Errorf("creating addition %w", err)
 		}
@@ -47,9 +54,15 @@ func (s *Service) CreateAddition(ctx context.Context, params service.AdditionCre
 }
 
 func (s *Service) GetAdditions(ctx context.Context, params service.GetAdditionParams) ([]models.Addition, error) {
+	tender, err := s.tenderStore.GetByID(ctx, s.psql.DB(), params.TenderID)
+	if err != nil {
+		return nil, fmt.Errorf("get tender: %w", err)
+	}
+
+	fmt.Println( tender.Organization.ID != contextor.GetOrganizationID(ctx))
 	additions, err := s.additionStore.Get(ctx, s.psql.DB(), store.AdditionGetParams{
 		TenderID:     models.NewOptional(params.TenderID),
-		VerifiedOnly: true})
+		VerifiedOnly: tender.Organization.ID != contextor.GetOrganizationID(ctx)})
 	if err != nil {
 		return nil, fmt.Errorf("get Addition: %w", err)
 	}

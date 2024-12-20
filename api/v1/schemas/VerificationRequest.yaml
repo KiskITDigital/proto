@@ -19,7 +19,7 @@ properties:
       - $ref: "./Tender.yaml"
       - $ref: "./Addition.yaml"
       - $ref: "./Organization.yaml"
-      - $ref: "./QuestionAnswer.yaml"
+      - $ref: "./question_answer/QuestionWithAnswer.yaml"
   content:
     type: string
   attachments:

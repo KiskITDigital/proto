@@ -279,6 +279,8 @@ type Invoker interface {
 	// V1TendersTenderIDAdditionsGet invokes GET /v1/tenders/{tenderID}/additions operation.
 	//
 	// Получение дополнительной информации для тендера.
+	// Создатель тендера не имеет ограничений на статус
+	// верификации.
 	//
 	// GET /v1/tenders/{tenderID}/additions
 	V1TendersTenderIDAdditionsGet(ctx context.Context, params V1TendersTenderIDAdditionsGetParams) (V1TendersTenderIDAdditionsGetRes, error)
@@ -305,8 +307,13 @@ type Invoker interface {
 	V1TendersTenderIDPut(ctx context.Context, request *V1TendersTenderIDPutReq, params V1TendersTenderIDPutParams) (V1TendersTenderIDPutRes, error)
 	// V1TendersTenderIDQuestionAnswerGet invokes GET /v1/tenders/{tenderID}/question-answer operation.
 	//
-	// Получить все вопросы и ответы, связанные с конкретным
-	// тендером.
+	// Получение вопросов-ответов с фильтрацией:
+	// 1. **Создатель тендера**: вопросы со статусом approved, все
+	// ответы.
+	// 2. **Авторизированный пользователь**: все свои вопросы;
+	// остальные вопросы и ответы со статусом approved.
+	// 3. **Неавторизированный пользователь**: вопросы и
+	// ответы статусом approved.
 	//
 	// GET /v1/tenders/{tenderID}/question-answer
 	V1TendersTenderIDQuestionAnswerGet(ctx context.Context, params V1TendersTenderIDQuestionAnswerGetParams) (V1TendersTenderIDQuestionAnswerGetRes, error)
@@ -408,7 +415,7 @@ type Invoker interface {
 	// V1VerificationsQuestionAnswerGet invokes GET /v1/verifications/question-answer operation.
 	//
 	// Получение запросов на верификацию для
-	// дополнительной информации о вопросов-ответов
+	// вопросов-ответов
 	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//
@@ -4904,6 +4911,8 @@ func (c *Client) sendV1TendersPost(ctx context.Context, request *V1TendersPostRe
 // V1TendersTenderIDAdditionsGet invokes GET /v1/tenders/{tenderID}/additions operation.
 //
 // Получение дополнительной информации для тендера.
+// Создатель тендера не имеет ограничений на статус
+// верификации.
 //
 // GET /v1/tenders/{tenderID}/additions
 func (c *Client) V1TendersTenderIDAdditionsGet(ctx context.Context, params V1TendersTenderIDAdditionsGetParams) (V1TendersTenderIDAdditionsGetRes, error) {
@@ -4973,6 +4982,40 @@ func (c *Client) sendV1TendersTenderIDAdditionsGet(ctx context.Context, params V
 	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1TendersTenderIDAdditionsGet", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+				{},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
 	}
 
 	stage = "SendRequest"
@@ -5369,8 +5412,13 @@ func (c *Client) sendV1TendersTenderIDPut(ctx context.Context, request *V1Tender
 
 // V1TendersTenderIDQuestionAnswerGet invokes GET /v1/tenders/{tenderID}/question-answer operation.
 //
-// Получить все вопросы и ответы, связанные с конкретным
-// тендером.
+// Получение вопросов-ответов с фильтрацией:
+// 1. **Создатель тендера**: вопросы со статусом approved, все
+// ответы.
+// 2. **Авторизированный пользователь**: все свои вопросы;
+// остальные вопросы и ответы со статусом approved.
+// 3. **Неавторизированный пользователь**: вопросы и
+// ответы статусом approved.
 //
 // GET /v1/tenders/{tenderID}/question-answer
 func (c *Client) V1TendersTenderIDQuestionAnswerGet(ctx context.Context, params V1TendersTenderIDQuestionAnswerGetParams) (V1TendersTenderIDQuestionAnswerGetRes, error) {
@@ -5440,6 +5488,40 @@ func (c *Client) sendV1TendersTenderIDQuestionAnswerGet(ctx context.Context, par
 	r, err := ht.NewRequest(ctx, "GET", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:BearerAuth"
+			switch err := c.securityBearerAuth(ctx, "V1TendersTenderIDQuestionAnswerGet", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"BearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+				{},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
 	}
 
 	stage = "SendRequest"
@@ -7197,7 +7279,7 @@ func (c *Client) sendV1VerificationsOrganizationsOrganizationIDPost(ctx context.
 // V1VerificationsQuestionAnswerGet invokes GET /v1/verifications/question-answer operation.
 //
 // Получение запросов на верификацию для
-// дополнительной информации о вопросов-ответов
+// вопросов-ответов
 // **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //

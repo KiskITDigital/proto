@@ -8,11 +8,12 @@ import (
 )
 
 type Service struct {
-	psql              DBTX
-	verificationStore VerificationStore
-	tenderStore       TenderStore
-	additionStore     AdditionStore
-	organizationStore OrganizationStore
+	psql                DBTX
+	verificationStore   VerificationStore
+	tenderStore         TenderStore
+	additionStore       AdditionStore
+	organizationStore   OrganizationStore
+	questionAnswerStore QuestionAnswerStore
 }
 
 type DBTX interface {
@@ -47,18 +48,25 @@ type OrganizationStore interface {
 	Get(ctx context.Context, qe store.QueryExecutor, params store.OrganizationGetParams) ([]models.Organization, error)
 }
 
+type QuestionAnswerStore interface {
+	Get(ctx context.Context, qe store.QueryExecutor, params store.QuestionAnswerGetParams) ([]models.QuestionWithAnswer, error)
+	UpdateVerificationStatus(ctx context.Context, qe store.QueryExecutor, params store.QuestionAnswerVerifStatusUpdateParams) error 
+}
+
 func New(
 	psql DBTX,
 	verificationStore VerificationStore,
 	tenderStore TenderStore,
 	additionStore AdditionStore,
 	organiOrganizationStore OrganizationStore,
+	questionAnswerStore QuestionAnswerStore,
 ) *Service {
 	return &Service{
-		psql:              psql,
-		verificationStore: verificationStore,
-		tenderStore:       tenderStore,
-		additionStore:     additionStore,
-		organizationStore: organiOrganizationStore,
+		psql:                psql,
+		verificationStore:   verificationStore,
+		tenderStore:         tenderStore,
+		additionStore:       additionStore,
+		organizationStore:   organiOrganizationStore,
+		questionAnswerStore: questionAnswerStore,
 	}
 }

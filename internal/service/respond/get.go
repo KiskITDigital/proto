@@ -13,12 +13,12 @@ import (
 )
 
 func (s *Service) Get(ctx context.Context, params service.RespondGetParams) (models.RespondPagination, error) {
-	respond, err := s.tenderStore.GetByID(ctx, s.psql.DB(), params.TenderID)
+	tender, err := s.tenderStore.GetByID(ctx, s.psql.DB(), params.TenderID)
 	if err != nil {
 		return models.RespondPagination{}, fmt.Errorf("get tender by id: %w", err)
 	}
 
-	if respond.Organization.ID != contextor.GetOrganizationID(ctx) {
+	if tender.Organization.ID != contextor.GetOrganizationID(ctx) {
 		return models.RespondPagination{}, cerr.Wrap(cerr.ErrPermission, cerr.CodeNotPermitted, "not enough permissions to get the responds", nil)
 	}
 

@@ -40,6 +40,11 @@ func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationR
 				VerificationStatus: params.Status,
 			})
 
+		case models.ObjectTypeQuestionAnswer:
+			err = s.questionAnswerStore.UpdateVerificationStatus(ctx, qe, store.QuestionAnswerVerifStatusUpdateParams{
+				QuestionAnswerID:   result.ObjectID,
+				VerificationStatus: params.Status,
+			})
 		default:
 			return fmt.Errorf("invalid object type: %v", result.ObjectType)
 		}

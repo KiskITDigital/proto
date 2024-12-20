@@ -21,11 +21,12 @@ func (h *Handler) V1TendersTenderIDQuestionAnswerPost(ctx context.Context, req *
 		ParentID:             models.Optional[int]{Value: req.GetParentID().Value, Set: req.GetParentID().Set},
 		Type:                 models.APIToQuestionAnswerType(params.Type),
 		Content:              req.Content})
+
 	switch {
+	case errors.Is(err, errstore.ErrQuestionAnswerNotFound):
+		return nil, cerr.Wrap(err, cerr.CodeNotFound, "Вопрос не найден", nil)
 	case errors.Is(err, errstore.ErrQuestionAnswerUniqueViolation):
 		return nil, cerr.Wrap(err, cerr.CodeConflict, "Ответ на вопрос уже существует", nil)
-	case errors.Is(err, errstore.ErrQuestionAnswerFKViolation):
-		return nil, cerr.Wrap(err, cerr.CodeUnprocessableEntity, "Вопрос не существует", nil)
 	case err != nil:
 		return nil, fmt.Errorf("create question-answer: %w", err)
 	}
@@ -38,10 +39,13 @@ func (h *Handler) V1TendersTenderIDQuestionAnswerPost(ctx context.Context, req *
 func (h *Handler) V1TendersTenderIDQuestionAnswerGet(ctx context.Context, params api.V1TendersTenderIDQuestionAnswerGetParams) (api.V1TendersTenderIDQuestionAnswerGetRes, error) {
 	questionWithAnswer, err := h.questionAnswerService.Get(ctx, params.TenderID)
 	if err != nil {
+		if errors.Is(err, errstore.ErrTenderNotFound) {
+			return nil, cerr.Wrap(err, cerr.CodeNotFound, "Тендер не найден", nil)
+		}
 		return nil, fmt.Errorf("get question-answer: %w", err)
 	}
 
 	return &api.V1TendersTenderIDQuestionAnswerGetOK{
-		Data: convert.Slice[[]models.QuestionWithAnswer, []api.V1TendersTenderIDQuestionAnswerGetOKDataItem](questionWithAnswer, models.ConvertQuestionWithAnswerToAPI),
+		Data: convert.Slice[[]models.QuestionWithAnswer, []api.QuestionWithAnswer](questionWithAnswer, models.ConvertQuestionWithAnswerToAPI),
 	}, nil
 }

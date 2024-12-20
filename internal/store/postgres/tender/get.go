@@ -3,7 +3,6 @@ package tender
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
@@ -12,6 +11,7 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/deduplicate"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
+	"gitlab.ubrato.ru/ubrato/core/internal/store/errstore"
 )
 
 func (s *TenderStore) GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Tender, error) {
@@ -23,7 +23,7 @@ func (s *TenderStore) GetByID(ctx context.Context, qe store.QueryExecutor, id in
 	}
 
 	if len(tenders) == 0 {
-		return models.Tender{}, errors.New("tender not found")
+		return models.Tender{}, errstore.ErrTenderNotFound
 	}
 
 	return tenders[0], nil

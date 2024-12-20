@@ -264,6 +264,8 @@ type Handler interface {
 	// V1TendersTenderIDAdditionsGet implements GET /v1/tenders/{tenderID}/additions operation.
 	//
 	// Получение дополнительной информации для тендера.
+	// Создатель тендера не имеет ограничений на статус
+	// верификации.
 	//
 	// GET /v1/tenders/{tenderID}/additions
 	V1TendersTenderIDAdditionsGet(ctx context.Context, params V1TendersTenderIDAdditionsGetParams) (V1TendersTenderIDAdditionsGetRes, error)
@@ -290,8 +292,13 @@ type Handler interface {
 	V1TendersTenderIDPut(ctx context.Context, req *V1TendersTenderIDPutReq, params V1TendersTenderIDPutParams) (V1TendersTenderIDPutRes, error)
 	// V1TendersTenderIDQuestionAnswerGet implements GET /v1/tenders/{tenderID}/question-answer operation.
 	//
-	// Получить все вопросы и ответы, связанные с конкретным
-	// тендером.
+	// Получение вопросов-ответов с фильтрацией:
+	// 1. **Создатель тендера**: вопросы со статусом approved, все
+	// ответы.
+	// 2. **Авторизированный пользователь**: все свои вопросы;
+	// остальные вопросы и ответы со статусом approved.
+	// 3. **Неавторизированный пользователь**: вопросы и
+	// ответы статусом approved.
 	//
 	// GET /v1/tenders/{tenderID}/question-answer
 	V1TendersTenderIDQuestionAnswerGet(ctx context.Context, params V1TendersTenderIDQuestionAnswerGetParams) (V1TendersTenderIDQuestionAnswerGetRes, error)
@@ -393,7 +400,7 @@ type Handler interface {
 	// V1VerificationsQuestionAnswerGet implements GET /v1/verifications/question-answer operation.
 	//
 	// Получение запросов на верификацию для
-	// дополнительной информации о вопросов-ответов
+	// вопросов-ответов
 	// **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 	// 'Employee' or higher.
 	//

@@ -166,6 +166,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		tenderStore,
 		additionStore,
 		organizationStore,
+		questionAnswerStore,
 	)
 
 	questionnaireService := questionnaireService.New(
@@ -177,6 +178,8 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	questionAnswerService := questionAnswerService.New(
 		psql,
 		questionAnswerStore,
+		tenderStore,
+		verificationStore,
 	)
 
 	portfolioService := portfolioService.New(

@@ -802,32 +802,36 @@ func (s *Object) SetName(val string) {
 type ObjectType string
 
 const (
-	ObjectTypeInvalid      ObjectType = "invalid"
-	ObjectTypeOrganization ObjectType = "organization"
-	ObjectTypeAddition     ObjectType = "addition"
-	ObjectTypeTender       ObjectType = "tender"
+	ObjectTypeOrganization   ObjectType = "organization"
+	ObjectTypeTender         ObjectType = "tender"
+	ObjectTypeAddition       ObjectType = "addition"
+	ObjectTypeQuestionAnswer ObjectType = "question-answer"
+	ObjectTypeInvalid        ObjectType = "invalid"
 )
 
 // AllValues returns all ObjectType values.
 func (ObjectType) AllValues() []ObjectType {
 	return []ObjectType{
-		ObjectTypeInvalid,
 		ObjectTypeOrganization,
-		ObjectTypeAddition,
 		ObjectTypeTender,
+		ObjectTypeAddition,
+		ObjectTypeQuestionAnswer,
+		ObjectTypeInvalid,
 	}
 }
 
 // MarshalText implements encoding.TextMarshaler.
 func (s ObjectType) MarshalText() ([]byte, error) {
 	switch s {
-	case ObjectTypeInvalid:
-		return []byte(s), nil
 	case ObjectTypeOrganization:
+		return []byte(s), nil
+	case ObjectTypeTender:
 		return []byte(s), nil
 	case ObjectTypeAddition:
 		return []byte(s), nil
-	case ObjectTypeTender:
+	case ObjectTypeQuestionAnswer:
+		return []byte(s), nil
+	case ObjectTypeInvalid:
 		return []byte(s), nil
 	default:
 		return nil, errors.Errorf("invalid value: %q", s)
@@ -837,17 +841,20 @@ func (s ObjectType) MarshalText() ([]byte, error) {
 // UnmarshalText implements encoding.TextUnmarshaler.
 func (s *ObjectType) UnmarshalText(data []byte) error {
 	switch ObjectType(data) {
-	case ObjectTypeInvalid:
-		*s = ObjectTypeInvalid
-		return nil
 	case ObjectTypeOrganization:
 		*s = ObjectTypeOrganization
+		return nil
+	case ObjectTypeTender:
+		*s = ObjectTypeTender
 		return nil
 	case ObjectTypeAddition:
 		*s = ObjectTypeAddition
 		return nil
-	case ObjectTypeTender:
-		*s = ObjectTypeTender
+	case ObjectTypeQuestionAnswer:
+		*s = ObjectTypeQuestionAnswer
+		return nil
+	case ObjectTypeInvalid:
+		*s = ObjectTypeInvalid
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
@@ -1887,14 +1894,11 @@ func (s *Portfolio) SetUpdatedAt(val OptDateTime) {
 
 // Ref: #
 type QuestionAnswer struct {
-	// Уникальный идентификатор.
-	ID int `json:"id"`
-	// Идентификатор вопроса, для которого создан ответ (null
-	// для вопросов).
-	ParentID OptInt             `json:"parent_id"`
-	Type     QuestionAnswerType `json:"type"`
-	// Текст вопроса или ответа.
-	Content string `json:"content"`
+	ID                 int                `json:"id"`
+	ParentID           OptInt             `json:"parent_id"`
+	Type               QuestionAnswerType `json:"type"`
+	Content            string             `json:"content"`
+	VerificationStatus VerificationStatus `json:"verification_status"`
 }
 
 // GetID returns the value of ID.
@@ -1917,6 +1921,11 @@ func (s *QuestionAnswer) GetContent() string {
 	return s.Content
 }
 
+// GetVerificationStatus returns the value of VerificationStatus.
+func (s *QuestionAnswer) GetVerificationStatus() VerificationStatus {
+	return s.VerificationStatus
+}
+
 // SetID sets the value of ID.
 func (s *QuestionAnswer) SetID(val int) {
 	s.ID = val
@@ -1935,6 +1944,11 @@ func (s *QuestionAnswer) SetType(val QuestionAnswerType) {
 // SetContent sets the value of Content.
 func (s *QuestionAnswer) SetContent(val string) {
 	s.Content = val
+}
+
+// SetVerificationStatus sets the value of VerificationStatus.
+func (s *QuestionAnswer) SetVerificationStatus(val VerificationStatus) {
+	s.VerificationStatus = val
 }
 
 // Ref: #
@@ -1984,6 +1998,32 @@ func (s *QuestionAnswerType) UnmarshalText(data []byte) error {
 	default:
 		return errors.Errorf("invalid value: %q", data)
 	}
+}
+
+// Ref: #
+type QuestionWithAnswer struct {
+	Question QuestionAnswer    `json:"question"`
+	Answer   OptQuestionAnswer `json:"answer"`
+}
+
+// GetQuestion returns the value of Question.
+func (s *QuestionWithAnswer) GetQuestion() QuestionAnswer {
+	return s.Question
+}
+
+// GetAnswer returns the value of Answer.
+func (s *QuestionWithAnswer) GetAnswer() OptQuestionAnswer {
+	return s.Answer
+}
+
+// SetQuestion sets the value of Question.
+func (s *QuestionWithAnswer) SetQuestion(val QuestionAnswer) {
+	s.Question = val
+}
+
+// SetAnswer sets the value of Answer.
+func (s *QuestionWithAnswer) SetAnswer(val OptQuestionAnswer) {
+	s.Answer = val
 }
 
 // Ref: #
@@ -4957,45 +4997,20 @@ func (s *V1TendersTenderIDPutReq) SetWorkEnd(val OptDateTime) {
 }
 
 type V1TendersTenderIDQuestionAnswerGetOK struct {
-	Data []V1TendersTenderIDQuestionAnswerGetOKDataItem `json:"data"`
+	Data []QuestionWithAnswer `json:"data"`
 }
 
 // GetData returns the value of Data.
-func (s *V1TendersTenderIDQuestionAnswerGetOK) GetData() []V1TendersTenderIDQuestionAnswerGetOKDataItem {
+func (s *V1TendersTenderIDQuestionAnswerGetOK) GetData() []QuestionWithAnswer {
 	return s.Data
 }
 
 // SetData sets the value of Data.
-func (s *V1TendersTenderIDQuestionAnswerGetOK) SetData(val []V1TendersTenderIDQuestionAnswerGetOKDataItem) {
+func (s *V1TendersTenderIDQuestionAnswerGetOK) SetData(val []QuestionWithAnswer) {
 	s.Data = val
 }
 
 func (*V1TendersTenderIDQuestionAnswerGetOK) v1TendersTenderIDQuestionAnswerGetRes() {}
-
-type V1TendersTenderIDQuestionAnswerGetOKDataItem struct {
-	Question QuestionAnswer    `json:"question"`
-	Answer   OptQuestionAnswer `json:"answer"`
-}
-
-// GetQuestion returns the value of Question.
-func (s *V1TendersTenderIDQuestionAnswerGetOKDataItem) GetQuestion() QuestionAnswer {
-	return s.Question
-}
-
-// GetAnswer returns the value of Answer.
-func (s *V1TendersTenderIDQuestionAnswerGetOKDataItem) GetAnswer() OptQuestionAnswer {
-	return s.Answer
-}
-
-// SetQuestion sets the value of Question.
-func (s *V1TendersTenderIDQuestionAnswerGetOKDataItem) SetQuestion(val QuestionAnswer) {
-	s.Question = val
-}
-
-// SetAnswer sets the value of Answer.
-func (s *V1TendersTenderIDQuestionAnswerGetOKDataItem) SetAnswer(val OptQuestionAnswer) {
-	s.Answer = val
-}
 
 type V1TendersTenderIDQuestionAnswerPostCreated struct {
 	Data QuestionAnswer `json:"data"`
@@ -5666,11 +5681,11 @@ func (s *VerificationRequest) SetReviewedAt(val OptDateTime) {
 
 // VerificationRequestObject represents sum type.
 type VerificationRequestObject struct {
-	Type           VerificationRequestObjectType // switch on this field
-	Tender         Tender
-	Addition       Addition
-	Organization   Organization
-	QuestionAnswer QuestionAnswer
+	Type               VerificationRequestObjectType // switch on this field
+	Tender             Tender
+	Addition           Addition
+	Organization       Organization
+	QuestionWithAnswer QuestionWithAnswer
 }
 
 // VerificationRequestObjectType is oneOf type of VerificationRequestObject.
@@ -5678,10 +5693,10 @@ type VerificationRequestObjectType string
 
 // Possible values for VerificationRequestObjectType.
 const (
-	TenderVerificationRequestObject         VerificationRequestObjectType = "Tender"
-	AdditionVerificationRequestObject       VerificationRequestObjectType = "Addition"
-	OrganizationVerificationRequestObject   VerificationRequestObjectType = "Organization"
-	QuestionAnswerVerificationRequestObject VerificationRequestObjectType = "QuestionAnswer"
+	TenderVerificationRequestObject             VerificationRequestObjectType = "Tender"
+	AdditionVerificationRequestObject           VerificationRequestObjectType = "Addition"
+	OrganizationVerificationRequestObject       VerificationRequestObjectType = "Organization"
+	QuestionWithAnswerVerificationRequestObject VerificationRequestObjectType = "QuestionWithAnswer"
 )
 
 // IsTender reports whether VerificationRequestObject is Tender.
@@ -5697,9 +5712,9 @@ func (s VerificationRequestObject) IsOrganization() bool {
 	return s.Type == OrganizationVerificationRequestObject
 }
 
-// IsQuestionAnswer reports whether VerificationRequestObject is QuestionAnswer.
-func (s VerificationRequestObject) IsQuestionAnswer() bool {
-	return s.Type == QuestionAnswerVerificationRequestObject
+// IsQuestionWithAnswer reports whether VerificationRequestObject is QuestionWithAnswer.
+func (s VerificationRequestObject) IsQuestionWithAnswer() bool {
+	return s.Type == QuestionWithAnswerVerificationRequestObject
 }
 
 // SetTender sets VerificationRequestObject to Tender.
@@ -5765,24 +5780,24 @@ func NewOrganizationVerificationRequestObject(v Organization) VerificationReques
 	return s
 }
 
-// SetQuestionAnswer sets VerificationRequestObject to QuestionAnswer.
-func (s *VerificationRequestObject) SetQuestionAnswer(v QuestionAnswer) {
-	s.Type = QuestionAnswerVerificationRequestObject
-	s.QuestionAnswer = v
+// SetQuestionWithAnswer sets VerificationRequestObject to QuestionWithAnswer.
+func (s *VerificationRequestObject) SetQuestionWithAnswer(v QuestionWithAnswer) {
+	s.Type = QuestionWithAnswerVerificationRequestObject
+	s.QuestionWithAnswer = v
 }
 
-// GetQuestionAnswer returns QuestionAnswer and true boolean if VerificationRequestObject is QuestionAnswer.
-func (s VerificationRequestObject) GetQuestionAnswer() (v QuestionAnswer, ok bool) {
-	if !s.IsQuestionAnswer() {
+// GetQuestionWithAnswer returns QuestionWithAnswer and true boolean if VerificationRequestObject is QuestionWithAnswer.
+func (s VerificationRequestObject) GetQuestionWithAnswer() (v QuestionWithAnswer, ok bool) {
+	if !s.IsQuestionWithAnswer() {
 		return v, false
 	}
-	return s.QuestionAnswer, true
+	return s.QuestionWithAnswer, true
 }
 
-// NewQuestionAnswerVerificationRequestObject returns new VerificationRequestObject from QuestionAnswer.
-func NewQuestionAnswerVerificationRequestObject(v QuestionAnswer) VerificationRequestObject {
+// NewQuestionWithAnswerVerificationRequestObject returns new VerificationRequestObject from QuestionWithAnswer.
+func NewQuestionWithAnswerVerificationRequestObject(v QuestionWithAnswer) VerificationRequestObject {
 	var s VerificationRequestObject
-	s.SetQuestionAnswer(v)
+	s.SetQuestionWithAnswer(v)
 	return s
 }
 

@@ -383,6 +383,8 @@ func (UnimplementedHandler) V1TendersPost(ctx context.Context, req *V1TendersPos
 // V1TendersTenderIDAdditionsGet implements GET /v1/tenders/{tenderID}/additions operation.
 //
 // Получение дополнительной информации для тендера.
+// Создатель тендера не имеет ограничений на статус
+// верификации.
 //
 // GET /v1/tenders/{tenderID}/additions
 func (UnimplementedHandler) V1TendersTenderIDAdditionsGet(ctx context.Context, params V1TendersTenderIDAdditionsGetParams) (r V1TendersTenderIDAdditionsGetRes, _ error) {
@@ -421,8 +423,13 @@ func (UnimplementedHandler) V1TendersTenderIDPut(ctx context.Context, req *V1Ten
 
 // V1TendersTenderIDQuestionAnswerGet implements GET /v1/tenders/{tenderID}/question-answer operation.
 //
-// Получить все вопросы и ответы, связанные с конкретным
-// тендером.
+// Получение вопросов-ответов с фильтрацией:
+// 1. **Создатель тендера**: вопросы со статусом approved, все
+// ответы.
+// 2. **Авторизированный пользователь**: все свои вопросы;
+// остальные вопросы и ответы со статусом approved.
+// 3. **Неавторизированный пользователь**: вопросы и
+// ответы статусом approved.
 //
 // GET /v1/tenders/{tenderID}/question-answer
 func (UnimplementedHandler) V1TendersTenderIDQuestionAnswerGet(ctx context.Context, params V1TendersTenderIDQuestionAnswerGetParams) (r V1TendersTenderIDQuestionAnswerGetRes, _ error) {
@@ -569,7 +576,7 @@ func (UnimplementedHandler) V1VerificationsOrganizationsOrganizationIDPost(ctx c
 // V1VerificationsQuestionAnswerGet implements GET /v1/verifications/question-answer operation.
 //
 // Получение запросов на верификацию для
-// дополнительной информации о вопросов-ответов
+// вопросов-ответов
 // **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
 // 'Employee' or higher.
 //

@@ -22,14 +22,14 @@ func (s *QuestionAnswerStore) Create(ctx context.Context, qe store.QueryExecutor
 			"parent_id",
 			"type",
 			"content",
-		).
+			"verification_status").
 		Values(
 			params.TenderID,
 			params.AuthorOrganizationID,
 			sql.NullInt64{Int64: int64(params.ParentID.Value), Valid: params.ParentID.Set},
 			params.Type,
 			params.Content,
-		).
+			models.VerificationStatusInReview).
 		Suffix(`
             RETURNING
                 id,
@@ -37,8 +37,8 @@ func (s *QuestionAnswerStore) Create(ctx context.Context, qe store.QueryExecutor
                 author_organization_id,
                 parent_id,
                 type,
-                content
-        `).
+                content,
+				verification_status`).
 		PlaceholderFormat(squirrel.Dollar)
 
 	var (
@@ -53,6 +53,7 @@ func (s *QuestionAnswerStore) Create(ctx context.Context, qe store.QueryExecutor
 		&parentID,
 		&questionAnswer.Type,
 		&questionAnswer.Content,
+		&questionAnswer.VerificationStatus,
 	)
 	if err != nil {
 		var pqErr *pq.Error

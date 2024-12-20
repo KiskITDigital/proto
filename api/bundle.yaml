@@ -512,7 +512,13 @@ paths:
       tags:
         - tenders
       summary: Get additions for tender
-      description: Получение дополнительной информации для тендера
+      description: |-
+        Получение дополнительной информации для тендера.
+
+        Создатель тендера не имеет ограничений на статус верификации.
+      security:
+        - bearerAuth: []
+        - {}
       parameters:
         - name: tenderID
           required: true
@@ -687,8 +693,14 @@ paths:
       tags:
         - tenders
       summary: Get questions and answers for a tender
+      security:
+        - bearerAuth: []
+        - {}
       description: |
-        Получить все вопросы и ответы, связанные с конкретным тендером. 
+        Получение вопросов-ответов с фильтрацией:
+        1. **Создатель тендера**: вопросы со статусом approved, все ответы.
+        2. **Авторизированный пользователь**: все свои вопросы; остальные вопросы и ответы со статусом approved.
+        3. **Неавторизированный пользователь**: вопросы и ответы статусом approved.
       parameters:
         - name: tenderID
           required: true
@@ -711,14 +723,7 @@ paths:
                   data:
                     type: array
                     items:
-                      type: object
-                      required:
-                        - question
-                      properties:
-                        question:
-                          $ref: '#/components/schemas/QuestionAnswer'
-                        answer:
-                          $ref: '#/components/schemas/QuestionAnswer'
+                      $ref: '#/components/schemas/QuestionWithAnswer'
         default:
           $ref: '#/components/responses/Error'
   /v1/users:
@@ -2188,9 +2193,9 @@ paths:
     get:
       tags:
         - verifications
-      summary: Get question-answer verification requests (UNIMPL)
+      summary: Get question-answer verification requests
       description: |-
-        Получение запросов на верификацию для дополнительной информации о вопросов-ответов
+        Получение запросов на верификацию для вопросов-ответов
 
         **[Role](https://youtrack.ubrato.ru/articles/UBR-A-7/Roli-privilegii) required**:
         'Employee' or higher.
@@ -2996,21 +3001,30 @@ components:
         - id
         - type
         - content
+        - verification_status
       properties:
         id:
           type: integer
-          description: Уникальный идентификатор
-          example: 2
+          example: 3
         parent_id:
           type: integer
-          description: Идентификатор вопроса, для которого создан ответ (null для вопросов)
           example: 1
         type:
           $ref: '#/components/schemas/question_answer_type'
         content:
           type: string
-          description: Текст вопроса или ответа
-          example: Какова минимальная цена?
+          example: Текст ответа или вопроса
+        verification_status:
+          $ref: '#/components/schemas/verification_status'
+    QuestionWithAnswer:
+      type: object
+      required:
+        - question
+      properties:
+        question:
+          $ref: '#/components/schemas/QuestionAnswer'
+        answer:
+          $ref: '#/components/schemas/QuestionAnswer'
     role:
       type: string
       enum:
@@ -3190,10 +3204,11 @@ components:
     object_type:
       type: string
       enum:
-        - invalid
         - organization
-        - addition
         - tender
+        - addition
+        - question-answer
+        - invalid
     Attachment:
       type: object
       required:
@@ -3227,7 +3242,7 @@ components:
             - $ref: '#/components/schemas/Tender'
             - $ref: '#/components/schemas/Addition'
             - $ref: '#/components/schemas/Organization'
-            - $ref: '#/components/schemas/QuestionAnswer'
+            - $ref: '#/components/schemas/QuestionWithAnswer'
         content:
           type: string
         attachments:
