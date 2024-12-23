@@ -18,9 +18,9 @@ func (h *Handler) V1VerificationsOrganizationsOrganizationIDPost(ctx context.Con
 	}
 
 	if err := h.verificationService.Create(ctx, service.VerificationRequestCreateParams{
-		ObjectID: params.OrganizationID,
-		ObjectType:     models.ObjectTypeOrganization,
-		Attachments:    convert.Slice[[]api.Attachment, []models.Attachment](req, models.ConvertAPIToAttachment),
+		ObjectID:    params.OrganizationID,
+		ObjectType:  models.ObjectTypeOrganization,
+		Attachments: convert.Slice[[]api.Attachment, []models.Attachment](req, models.ConvertAPIToAttachment),
 	}); err != nil {
 		return nil, fmt.Errorf("create verif req: %w", err)
 	}
