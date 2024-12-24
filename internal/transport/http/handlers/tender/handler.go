@@ -13,6 +13,7 @@ type Handler struct {
 	tenderService         TenderService
 	questionAnswerService QuestionAnswerService
 	respondService        RespondService
+	winnersStore          WinnersStore
 }
 
 type TenderService interface {
@@ -35,16 +36,24 @@ type RespondService interface {
 	Get(ctx context.Context, params service.RespondGetParams) (models.RespondPagination, error)
 }
 
+type WinnersStore interface {
+	Create(ctx context.Context, params service.WinnersCreateParams) (models.Winners, error)
+	Get(ctx context.Context, tenderID int) ([]models.Winners, error)
+	UpdateStatus(ctx context.Context, params service.WinnerUpdateParams) error
+}
+
 func New(
 	logger *slog.Logger,
 	tenderService TenderService,
 	questionAnswerService QuestionAnswerService,
 	respondService RespondService,
+	winnersStore WinnersStore,
 ) *Handler {
 	return &Handler{
 		logger:                logger,
 		tenderService:         tenderService,
 		questionAnswerService: questionAnswerService,
 		respondService:        respondService,
+		winnersStore:          winnersStore,
 	}
 }

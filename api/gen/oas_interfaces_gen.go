@@ -185,6 +185,22 @@ type V1TendersTenderIDRespondPostRes interface {
 	v1TendersTenderIDRespondPostRes()
 }
 
+type V1TendersTenderIDWinnersGetRes interface {
+	v1TendersTenderIDWinnersGetRes()
+}
+
+type V1TendersTenderIDWinnersPostRes interface {
+	v1TendersTenderIDWinnersPostRes()
+}
+
+type V1TendersWinnersWinnerIDAprovePostRes interface {
+	v1TendersWinnersWinnerIDAprovePostRes()
+}
+
+type V1TendersWinnersWinnerIDDenyPostRes interface {
+	v1TendersWinnersWinnerIDDenyPostRes()
+}
+
 type V1UsersConfirmEmailPostRes interface {
 	v1UsersConfirmEmailPostRes()
 }

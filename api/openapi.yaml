@@ -30,6 +30,12 @@ paths:
     $ref: "v1/paths/tenders/_id/respond.yaml"
   /v1/tenders/{tenderID}/question-answer:
     $ref: "v1/paths/tenders/_id/question_answer.yaml"
+  /v1/tenders/{tenderID}/winners:
+    $ref: "v1/paths/tenders/winners/winners.yaml"
+  /v1/tenders/winners/{winnerID}/aprove:
+    $ref: "v1/paths/tenders/winners/aprove.yaml"
+  /v1/tenders/winners/{winnerID}/deny:
+    $ref: "v1/paths/tenders/winners/deny.yaml"
 
   /v1/users:
     $ref: "v1/paths/users/_index.yaml"

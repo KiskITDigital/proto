@@ -24,6 +24,7 @@ import (
 	tenderService "gitlab.ubrato.ru/ubrato/core/internal/service/tender"
 	userService "gitlab.ubrato.ru/ubrato/core/internal/service/user"
 	verificationService "gitlab.ubrato.ru/ubrato/core/internal/service/verification"
+	winnersService "gitlab.ubrato.ru/ubrato/core/internal/service/winners"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 	"gitlab.ubrato.ru/ubrato/core/internal/store/postgres"
 	additionStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/addition"
@@ -38,6 +39,7 @@ import (
 	tenderStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/tender"
 	userStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/user"
 	verificationStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/verification"
+	winnersStore "gitlab.ubrato.ru/ubrato/core/internal/store/postgres/winners"
 	"gitlab.ubrato.ru/ubrato/core/internal/transport/http"
 	authHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/auth"
 	catalogHandler "gitlab.ubrato.ru/ubrato/core/internal/transport/http/handlers/catalog"
@@ -97,6 +99,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	portfolioStore := portfolioStore.NewPortfolioStore()
 	respondStore := respondStore.NewPesponsStore()
 	favouriteStore := favouriteStore.NewFavouriteStore()
+	winnersStore := winnersStore.NewWinnersStore()
 
 	dadataGateway := dadataGateway.NewClient(cfg.Gateway.Dadata.APIKey)
 
@@ -194,10 +197,16 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		organizationStore,
 	)
 
+	winnersService := winnersService.New(
+		psql,
+		winnersStore,
+		tenderStore,
+	)
+
 	router := http.NewRouter(http.RouterParams{
 		Error:         errorHandler.New(logger),
 		Auth:          authHandler.New(logger, authService, userService),
-		Tenders:       tenderHandler.New(logger, tenderService, questionAnswerService, respondService),
+		Tenders:       tenderHandler.New(logger, tenderService, questionAnswerService, respondService, winnersService),
 		Catalog:       catalogHandler.New(logger, catalogService),
 		Users:         userHandler.New(logger, userService),
 		Survey:        surveyHandler.New(logger, surveyService),

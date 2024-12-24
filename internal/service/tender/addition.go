@@ -59,7 +59,6 @@ func (s *Service) GetAdditions(ctx context.Context, params service.GetAdditionPa
 		return nil, fmt.Errorf("get tender: %w", err)
 	}
 
-	fmt.Println( tender.Organization.ID != contextor.GetOrganizationID(ctx))
 	additions, err := s.additionStore.Get(ctx, s.psql.DB(), store.AdditionGetParams{
 		TenderID:     models.NewOptional(params.TenderID),
 		VerifiedOnly: tender.Organization.ID != contextor.GetOrganizationID(ctx)})

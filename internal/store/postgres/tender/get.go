@@ -79,33 +79,11 @@ func (s *TenderStore) List(ctx context.Context, qe store.QueryExecutor, params s
 			"o.contractor_info",
 			"o.created_at",
 			"o.updated_at",
-			"ow.id",
-			"ow.brand_name",
-			"ow.full_name",
-			"ow.short_name",
-			"ow.inn",
-			"ow.okpo",
-			"ow.ogrn",
-			"ow.kpp",
-			"ow.tax_code",
-			"ow.address",
-			"ow.avatar_url",
-			"ow.emails",
-			"ow.phones",
-			"ow.messengers",
-			"ow.verification_status",
-			"ow.is_contractor",
-			"ow.is_banned",
-			"ow.customer_info",
-			"ow.contractor_info",
-			"ow.created_at",
-			"ow.updated_at",
 		).
 		From("tenders AS t").
 		Join("cities AS c ON c.id = t.city_id").
 		Join("regions AS r ON r.id = c.region_id").
 		Join("organizations AS o ON o.id = t.organization_id").
-		LeftJoin("organizations AS ow ON ow.id = t.winner_organization_id").
 		PlaceholderFormat(squirrel.Dollar)
 
 	if params.OrganizationID.Set {
@@ -154,24 +132,6 @@ func (s *TenderStore) List(ctx context.Context, qe store.QueryExecutor, params s
 			description      sql.NullString
 			wishes           sql.NullString
 			AvatarURL        sql.NullString
-
-			winner                   models.Organization
-			winnerID                 sql.NullInt64
-			winnerBrandName          sql.NullString
-			winnerFullName           sql.NullString
-			winnerShortName          sql.NullString
-			winnerINN                sql.NullString
-			winnerOKPO               sql.NullString
-			winnerOGRN               sql.NullString
-			winnerKPP                sql.NullString
-			winnerTaxCode            sql.NullString
-			winnerAddress            sql.NullString
-			winnerAvatarURL          sql.NullString
-			winnerVerificationStatus sql.NullInt16
-			winnerIsContractor       sql.NullBool
-			winnerIsBanned           sql.NullBool
-			winnerCreatedAt          sql.NullTime
-			winnerUpdatedAt          sql.NullTime
 		)
 
 		err = rows.Scan(
@@ -222,27 +182,6 @@ func (s *TenderStore) List(ctx context.Context, qe store.QueryExecutor, params s
 			&tender.Organization.ContractorInfo,
 			&tender.Organization.CreatedAt,
 			&tender.Organization.UpdatedAt,
-			&winnerID,
-			&winnerBrandName,
-			&winnerFullName,
-			&winnerShortName,
-			&winnerINN,
-			&winnerOKPO,
-			&winnerOGRN,
-			&winnerKPP,
-			&winnerTaxCode,
-			&winnerAddress,
-			&winnerAvatarURL,
-			&winner.Emails,
-			&winner.Phones,
-			&winner.Messengers,
-			&winnerVerificationStatus,
-			&winnerIsContractor,
-			&winnerIsBanned,
-			&winner.CustomerInfo,
-			&winner.ContractorInfo,
-			&winnerCreatedAt,
-			&winnerUpdatedAt,
 		)
 		if err != nil {
 			return nil, fmt.Errorf("scan row: %w", err)
@@ -251,35 +190,6 @@ func (s *TenderStore) List(ctx context.Context, qe store.QueryExecutor, params s
 		tender.Organization.AvatarURL = AvatarURL.String
 		tender.Description = description.String
 		tender.Wishes = wishes.String
-
-		if winnerID.Valid {
-			tender.WinnerOrganization = models.Optional[models.Organization]{
-				Value: models.Organization{
-					ID:                 int(winnerID.Int64),
-					BrandName:          winnerBrandName.String,
-					FullName:           winnerFullName.String,
-					ShortName:          winnerShortName.String,
-					INN:                winnerINN.String,
-					OKPO:               winnerOKPO.String,
-					OGRN:               winnerOGRN.String,
-					KPP:                winnerKPP.String,
-					TaxCode:            winnerTaxCode.String,
-					Address:            winnerAddress.String,
-					AvatarURL:          winnerAvatarURL.String,
-					VerificationStatus: models.VerificationStatus(winnerVerificationStatus.Int16),
-					IsContractor:       winnerIsContractor.Bool,
-					IsBanned:           winnerIsBanned.Bool,
-					Emails:             winner.Emails,
-					Phones:             winner.Phones,
-					Messengers:         winner.Messengers,
-					CustomerInfo:       winner.CustomerInfo,
-					ContractorInfo:     winner.ContractorInfo,
-					CreatedAt:          winnerCreatedAt.Time,
-					UpdatedAt:          winnerUpdatedAt.Time,
-				},
-				Set: true,
-			}
-		}
 
 		tenderServiceIDsConverted := convert.Slice[[]int64, []int](tenderServiceIDs, func(i int64) int { return int(i) })
 		tenderObjectIDsConverted := convert.Slice[[]int64, []int](tenderObjectIDs, func(i int64) int { return int(i) })

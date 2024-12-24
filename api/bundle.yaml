@@ -726,6 +726,121 @@ paths:
                       $ref: '#/components/schemas/QuestionWithAnswer'
         default:
           $ref: '#/components/responses/Error'
+  /v1/tenders/{tenderID}/winners:
+    post:
+      tags:
+        - tenders
+      summary: Send winners for tender
+      description: Добавление победителя торгов
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: tenderID
+          required: true
+          in: path
+          description: ID of tender
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+        - name: organizationID
+          required: true
+          in: query
+          description: ID of organization
+          schema:
+            type: integer
+            minimum: 1
+            example: 1
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Winners'
+        default:
+          $ref: '#/components/responses/Error'
+    get:
+      tags:
+        - tenders
+      summary: Get winners for tender
+      description: Получение победителей торгов
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: tenderID
+          required: true
+          in: path
+          description: ID of tender
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - data
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Winners'
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/tenders/winners/{winnerID}/aprove:
+    post:
+      tags:
+        - tenders
+      summary: Aprove of work completion
+      description: Подтверждение выполнения работы
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: winnerID
+          required: true
+          in: path
+          description: ID of winner
+          schema:
+            type: integer
+            minimum: 1
+            example: 1
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
+  /v1/tenders/winners/{winnerID}/deny:
+    post:
+      tags:
+        - tenders
+      summary: Deny of work completion
+      description: Отказ от выполнения работы
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: winnerID
+          required: true
+          in: path
+          description: ID of winner
+          schema:
+            type: integer
+            minimum: 1
+            example: 1
+      responses:
+        '200':
+          description: Success
+        default:
+          $ref: '#/components/responses/Error'
   /v1/users:
     get:
       tags:
@@ -2863,8 +2978,6 @@ components:
           type: integer
         organization:
           $ref: '#/components/schemas/Organization'
-        winner_organization:
-          $ref: '#/components/schemas/Organization'
         name:
           type: string
         city:
@@ -3026,6 +3139,29 @@ components:
           $ref: '#/components/schemas/QuestionAnswer'
         answer:
           $ref: '#/components/schemas/QuestionAnswer'
+    accepted:
+      type: string
+      enum:
+        - unverified
+        - awaiting
+        - declined
+        - approved
+    Winners:
+      type: object
+      required:
+        - id
+        - organization
+        - tender_id
+        - accepted
+      properties:
+        id:
+          type: integer
+        organization:
+          $ref: '#/components/schemas/Organization'
+        tender_id:
+          type: integer
+        accepted:
+          $ref: '#/components/schemas/accepted'
     role:
       type: string
       enum:

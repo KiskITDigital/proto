@@ -2,7 +2,6 @@
 CREATE TABLE IF NOT EXISTS tenders (
     id                      BIGSERIAL       PRIMARY KEY,
     organization_id         BIGINT          NOT NULL REFERENCES organizations(id),
-    winner_organization_id  BIGINT          REFERENCES organizations(id),
     city_id                 INT             NOT NULL REFERENCES cities(id),
     services_ids            INT[]           NOT NULL,
     objects_ids             INT[]           NOT NULL,
