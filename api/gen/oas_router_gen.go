@@ -934,6 +934,96 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'w': // Prefix: "winners/"
+						origElem := elem
+						if l := len("winners/"); len(elem) >= l && elem[0:l] == "winners/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "winnerID"
+						// Match until "/"
+						idx := strings.IndexByte(elem, '/')
+						if idx < 0 {
+							idx = len(elem)
+						}
+						args[0] = elem[:idx]
+						elem = elem[idx:]
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+							origElem := elem
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case 'a': // Prefix: "aprove"
+								origElem := elem
+								if l := len("aprove"); len(elem) >= l && elem[0:l] == "aprove" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "POST":
+										s.handleV1TendersWinnersWinnerIDAprovePostRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "POST")
+									}
+
+									return
+								}
+
+								elem = origElem
+							case 'd': // Prefix: "deny"
+								origElem := elem
+								if l := len("deny"); len(elem) >= l && elem[0:l] == "deny" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "POST":
+										s.handleV1TendersWinnersWinnerIDDenyPostRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "POST")
+									}
+
+									return
+								}
+
+								elem = origElem
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					}
 					// Param: "tenderID"
 					// Match until "/"
 					idx := strings.IndexByte(elem, '/')
@@ -1043,6 +1133,33 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 									}, elemIsEscaped, w, r)
 								case "POST":
 									s.handleV1TendersTenderIDRespondPostRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET,POST")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 'w': // Prefix: "winners"
+							origElem := elem
+							if l := len("winners"); len(elem) >= l && elem[0:l] == "winners" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleV1TendersTenderIDWinnersGetRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								case "POST":
+									s.handleV1TendersTenderIDWinnersPostRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
 								default:
@@ -2553,6 +2670,100 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 
+					if len(elem) == 0 {
+						break
+					}
+					switch elem[0] {
+					case 'w': // Prefix: "winners/"
+						origElem := elem
+						if l := len("winners/"); len(elem) >= l && elem[0:l] == "winners/" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						// Param: "winnerID"
+						// Match until "/"
+						idx := strings.IndexByte(elem, '/')
+						if idx < 0 {
+							idx = len(elem)
+						}
+						args[0] = elem[:idx]
+						elem = elem[idx:]
+
+						if len(elem) == 0 {
+							break
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+							origElem := elem
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								break
+							}
+							switch elem[0] {
+							case 'a': // Prefix: "aprove"
+								origElem := elem
+								if l := len("aprove"); len(elem) >= l && elem[0:l] == "aprove" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "POST":
+										r.name = "V1TendersWinnersWinnerIDAprovePost"
+										r.summary = "Aprove of work completion"
+										r.operationID = ""
+										r.pathPattern = "/v1/tenders/winners/{winnerID}/aprove"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							case 'd': // Prefix: "deny"
+								origElem := elem
+								if l := len("deny"); len(elem) >= l && elem[0:l] == "deny" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "POST":
+										r.name = "V1TendersWinnersWinnerIDDenyPost"
+										r.summary = "Deny of work completion"
+										r.operationID = ""
+										r.pathPattern = "/v1/tenders/winners/{winnerID}/deny"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					}
 					// Param: "tenderID"
 					// Match until "/"
 					idx := strings.IndexByte(elem, '/')
@@ -2687,6 +2898,39 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.summary = "Create responds to a tender"
 									r.operationID = ""
 									r.pathPattern = "/v1/tenders/{tenderID}/respond"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'w': // Prefix: "winners"
+							origElem := elem
+							if l := len("winners"); len(elem) >= l && elem[0:l] == "winners" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = "V1TendersTenderIDWinnersGet"
+									r.summary = "Get winners for tender"
+									r.operationID = ""
+									r.pathPattern = "/v1/tenders/{tenderID}/winners"
+									r.args = args
+									r.count = 1
+									return r, true
+								case "POST":
+									r.name = "V1TendersTenderIDWinnersPost"
+									r.summary = "Send winners for tender"
+									r.operationID = ""
+									r.pathPattern = "/v1/tenders/{tenderID}/winners"
 									r.args = args
 									r.count = 1
 									return r, true

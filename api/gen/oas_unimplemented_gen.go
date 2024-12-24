@@ -464,6 +464,42 @@ func (UnimplementedHandler) V1TendersTenderIDRespondPost(ctx context.Context, re
 	return r, ht.ErrNotImplemented
 }
 
+// V1TendersTenderIDWinnersGet implements GET /v1/tenders/{tenderID}/winners operation.
+//
+// Получение победителей торгов.
+//
+// GET /v1/tenders/{tenderID}/winners
+func (UnimplementedHandler) V1TendersTenderIDWinnersGet(ctx context.Context, params V1TendersTenderIDWinnersGetParams) (r V1TendersTenderIDWinnersGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1TendersTenderIDWinnersPost implements POST /v1/tenders/{tenderID}/winners operation.
+//
+// Добавление победителя торгов.
+//
+// POST /v1/tenders/{tenderID}/winners
+func (UnimplementedHandler) V1TendersTenderIDWinnersPost(ctx context.Context, params V1TendersTenderIDWinnersPostParams) (r V1TendersTenderIDWinnersPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1TendersWinnersWinnerIDAprovePost implements POST /v1/tenders/winners/{winnerID}/aprove operation.
+//
+// Подтверждение выполнения работы.
+//
+// POST /v1/tenders/winners/{winnerID}/aprove
+func (UnimplementedHandler) V1TendersWinnersWinnerIDAprovePost(ctx context.Context, params V1TendersWinnersWinnerIDAprovePostParams) (r V1TendersWinnersWinnerIDAprovePostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1TendersWinnersWinnerIDDenyPost implements POST /v1/tenders/winners/{winnerID}/deny operation.
+//
+// Отказ от выполнения работы.
+//
+// POST /v1/tenders/winners/{winnerID}/deny
+func (UnimplementedHandler) V1TendersWinnersWinnerIDDenyPost(ctx context.Context, params V1TendersWinnersWinnerIDDenyPostParams) (r V1TendersWinnersWinnerIDDenyPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1UsersConfirmEmailPost implements POST /v1/users/confirm/email operation.
 //
 // Confirm email use a code from mail.

@@ -10,6 +10,62 @@ import (
 )
 
 // Ref: #
+type Accepted string
+
+const (
+	AcceptedUnverified Accepted = "unverified"
+	AcceptedAwaiting   Accepted = "awaiting"
+	AcceptedDeclined   Accepted = "declined"
+	AcceptedApproved   Accepted = "approved"
+)
+
+// AllValues returns all Accepted values.
+func (Accepted) AllValues() []Accepted {
+	return []Accepted{
+		AcceptedUnverified,
+		AcceptedAwaiting,
+		AcceptedDeclined,
+		AcceptedApproved,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s Accepted) MarshalText() ([]byte, error) {
+	switch s {
+	case AcceptedUnverified:
+		return []byte(s), nil
+	case AcceptedAwaiting:
+		return []byte(s), nil
+	case AcceptedDeclined:
+		return []byte(s), nil
+	case AcceptedApproved:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *Accepted) UnmarshalText(data []byte) error {
+	switch Accepted(data) {
+	case AcceptedUnverified:
+		*s = AcceptedUnverified
+		return nil
+	case AcceptedAwaiting:
+		*s = AcceptedAwaiting
+		return nil
+	case AcceptedDeclined:
+		*s = AcceptedDeclined
+		return nil
+	case AcceptedApproved:
+		*s = AcceptedApproved
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Ref: #
 type Addition struct {
 	ID                 int       `json:"id"`
 	TenderID           int       `json:"tender_id"`
@@ -558,6 +614,10 @@ func (*ErrorStatusCode) v1TendersTenderIDQuestionAnswerGetRes()                {
 func (*ErrorStatusCode) v1TendersTenderIDQuestionAnswerPostRes()               {}
 func (*ErrorStatusCode) v1TendersTenderIDRespondGetRes()                       {}
 func (*ErrorStatusCode) v1TendersTenderIDRespondPostRes()                      {}
+func (*ErrorStatusCode) v1TendersTenderIDWinnersGetRes()                       {}
+func (*ErrorStatusCode) v1TendersTenderIDWinnersPostRes()                      {}
+func (*ErrorStatusCode) v1TendersWinnersWinnerIDAprovePostRes()                {}
+func (*ErrorStatusCode) v1TendersWinnersWinnerIDDenyPostRes()                  {}
 func (*ErrorStatusCode) v1UsersConfirmEmailPostRes()                           {}
 func (*ErrorStatusCode) v1UsersConfirmPasswordPostRes()                        {}
 func (*ErrorStatusCode) v1UsersGetRes()                                        {}
@@ -1183,52 +1243,6 @@ func (o OptName) Get() (v Name, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptName) Or(d Name) Name {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptOrganization returns new OptOrganization with value set to v.
-func NewOptOrganization(v Organization) OptOrganization {
-	return OptOrganization{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptOrganization is optional Organization.
-type OptOrganization struct {
-	Value Organization
-	Set   bool
-}
-
-// IsSet returns true if OptOrganization was set.
-func (o OptOrganization) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptOrganization) Reset() {
-	var v Organization
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptOrganization) SetTo(v Organization) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptOrganization) Get() (v Organization, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptOrganization) Or(d Organization) Organization {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -2554,7 +2568,6 @@ type TaxCode string
 type Tender struct {
 	ID                 int                   `json:"id"`
 	Organization       Organization          `json:"organization"`
-	WinnerOrganization OptOrganization       `json:"winner_organization"`
 	Name               string                `json:"name"`
 	City               City                  `json:"city"`
 	Price              float64               `json:"price"`
@@ -2588,11 +2601,6 @@ func (s *Tender) GetID() int {
 // GetOrganization returns the value of Organization.
 func (s *Tender) GetOrganization() Organization {
 	return s.Organization
-}
-
-// GetWinnerOrganization returns the value of WinnerOrganization.
-func (s *Tender) GetWinnerOrganization() OptOrganization {
-	return s.WinnerOrganization
 }
 
 // GetName returns the value of Name.
@@ -2708,11 +2716,6 @@ func (s *Tender) SetID(val int) {
 // SetOrganization sets the value of Organization.
 func (s *Tender) SetOrganization(val Organization) {
 	s.Organization = val
-}
-
-// SetWinnerOrganization sets the value of WinnerOrganization.
-func (s *Tender) SetWinnerOrganization(val OptOrganization) {
-	s.WinnerOrganization = val
 }
 
 // SetName sets the value of Name.
@@ -5067,6 +5070,48 @@ func (s *V1TendersTenderIDRespondPostReq) SetIsNds(val bool) {
 	s.IsNds = val
 }
 
+type V1TendersTenderIDWinnersGetOK struct {
+	Data []Winners `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1TendersTenderIDWinnersGetOK) GetData() []Winners {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1TendersTenderIDWinnersGetOK) SetData(val []Winners) {
+	s.Data = val
+}
+
+func (*V1TendersTenderIDWinnersGetOK) v1TendersTenderIDWinnersGetRes() {}
+
+type V1TendersTenderIDWinnersPostCreated struct {
+	Data Winners `json:"data"`
+}
+
+// GetData returns the value of Data.
+func (s *V1TendersTenderIDWinnersPostCreated) GetData() Winners {
+	return s.Data
+}
+
+// SetData sets the value of Data.
+func (s *V1TendersTenderIDWinnersPostCreated) SetData(val Winners) {
+	s.Data = val
+}
+
+func (*V1TendersTenderIDWinnersPostCreated) v1TendersTenderIDWinnersPostRes() {}
+
+// V1TendersWinnersWinnerIDAprovePostOK is response for V1TendersWinnersWinnerIDAprovePost operation.
+type V1TendersWinnersWinnerIDAprovePostOK struct{}
+
+func (*V1TendersWinnersWinnerIDAprovePostOK) v1TendersWinnersWinnerIDAprovePostRes() {}
+
+// V1TendersWinnersWinnerIDDenyPostOK is response for V1TendersWinnersWinnerIDDenyPost operation.
+type V1TendersWinnersWinnerIDDenyPostOK struct{}
+
+func (*V1TendersWinnersWinnerIDDenyPostOK) v1TendersWinnersWinnerIDDenyPostRes() {}
+
 // V1UsersConfirmEmailPostOK is response for V1UsersConfirmEmailPost operation.
 type V1UsersConfirmEmailPostOK struct{}
 
@@ -5809,6 +5854,54 @@ func (s *VerificationStatus) UnmarshalText(data []byte) error {
 	default:
 		return errors.Errorf("invalid value: %q", data)
 	}
+}
+
+// Ref: #
+type Winners struct {
+	ID           int          `json:"id"`
+	Organization Organization `json:"organization"`
+	TenderID     int          `json:"tender_id"`
+	Accepted     Accepted     `json:"accepted"`
+}
+
+// GetID returns the value of ID.
+func (s *Winners) GetID() int {
+	return s.ID
+}
+
+// GetOrganization returns the value of Organization.
+func (s *Winners) GetOrganization() Organization {
+	return s.Organization
+}
+
+// GetTenderID returns the value of TenderID.
+func (s *Winners) GetTenderID() int {
+	return s.TenderID
+}
+
+// GetAccepted returns the value of Accepted.
+func (s *Winners) GetAccepted() Accepted {
+	return s.Accepted
+}
+
+// SetID sets the value of ID.
+func (s *Winners) SetID(val int) {
+	s.ID = val
+}
+
+// SetOrganization sets the value of Organization.
+func (s *Winners) SetOrganization(val Organization) {
+	s.Organization = val
+}
+
+// SetTenderID sets the value of TenderID.
+func (s *Winners) SetTenderID(val int) {
+	s.TenderID = val
+}
+
+// SetAccepted sets the value of Accepted.
+func (s *Winners) SetAccepted(val Accepted) {
+	s.Accepted = val
 }
 
 // Ref: #

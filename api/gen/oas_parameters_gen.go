@@ -3751,6 +3751,401 @@ func decodeV1TendersTenderIDRespondPostParams(args [1]string, argsEscaped bool, 
 	return params, nil
 }
 
+// V1TendersTenderIDWinnersGetParams is parameters of GET /v1/tenders/{tenderID}/winners operation.
+type V1TendersTenderIDWinnersGetParams struct {
+	// ID of tender.
+	TenderID int
+}
+
+func unpackV1TendersTenderIDWinnersGetParams(packed middleware.Parameters) (params V1TendersTenderIDWinnersGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "tenderID",
+			In:   "path",
+		}
+		params.TenderID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1TendersTenderIDWinnersGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1TendersTenderIDWinnersGetParams, _ error) {
+	// Decode path: tenderID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "tenderID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.TenderID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.TenderID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "tenderID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1TendersTenderIDWinnersPostParams is parameters of POST /v1/tenders/{tenderID}/winners operation.
+type V1TendersTenderIDWinnersPostParams struct {
+	// ID of tender.
+	TenderID int
+	// ID of organization.
+	OrganizationID int
+}
+
+func unpackV1TendersTenderIDWinnersPostParams(packed middleware.Parameters) (params V1TendersTenderIDWinnersPostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "tenderID",
+			In:   "path",
+		}
+		params.TenderID = packed[key].(int)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "organizationID",
+			In:   "query",
+		}
+		params.OrganizationID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1TendersTenderIDWinnersPostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1TendersTenderIDWinnersPostParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode path: tenderID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "tenderID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.TenderID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.TenderID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "tenderID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode query: organizationID.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "organizationID",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.OrganizationID = c
+				return nil
+			}); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.OrganizationID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "organizationID",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1TendersWinnersWinnerIDAprovePostParams is parameters of POST /v1/tenders/winners/{winnerID}/aprove operation.
+type V1TendersWinnersWinnerIDAprovePostParams struct {
+	// ID of winner.
+	WinnerID int
+}
+
+func unpackV1TendersWinnersWinnerIDAprovePostParams(packed middleware.Parameters) (params V1TendersWinnersWinnerIDAprovePostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "winnerID",
+			In:   "path",
+		}
+		params.WinnerID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1TendersWinnersWinnerIDAprovePostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1TendersWinnersWinnerIDAprovePostParams, _ error) {
+	// Decode path: winnerID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "winnerID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.WinnerID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.WinnerID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "winnerID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
+// V1TendersWinnersWinnerIDDenyPostParams is parameters of POST /v1/tenders/winners/{winnerID}/deny operation.
+type V1TendersWinnersWinnerIDDenyPostParams struct {
+	// ID of winner.
+	WinnerID int
+}
+
+func unpackV1TendersWinnersWinnerIDDenyPostParams(packed middleware.Parameters) (params V1TendersWinnersWinnerIDDenyPostParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "winnerID",
+			In:   "path",
+		}
+		params.WinnerID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1TendersWinnersWinnerIDDenyPostParams(args [1]string, argsEscaped bool, r *http.Request) (params V1TendersWinnersWinnerIDDenyPostParams, _ error) {
+	// Decode path: winnerID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "winnerID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.WinnerID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+			if err := func() error {
+				if err := (validate.Int{
+					MinSet:        true,
+					Min:           1,
+					MaxSet:        false,
+					Max:           0,
+					MinExclusive:  false,
+					MaxExclusive:  false,
+					MultipleOfSet: false,
+					MultipleOf:    0,
+				}).Validate(int64(params.WinnerID)); err != nil {
+					return errors.Wrap(err, "int")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "winnerID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // V1UsersGetParams is parameters of GET /v1/users operation.
 type V1UsersGetParams struct {
 	// Фильтрует результат по ролям пользователей.

@@ -27,8 +27,6 @@ properties:
     type: integer
   organization:
     $ref: "Organization.yaml"
-  winner_organization:
-    $ref: "Organization.yaml"
   name:
     type: string
   city:

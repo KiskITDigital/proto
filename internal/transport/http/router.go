@@ -53,6 +53,11 @@ type Tenders interface {
 
 	V1TendersTenderIDQuestionAnswerPost(ctx context.Context, req *api.V1TendersTenderIDQuestionAnswerPostReq, params api.V1TendersTenderIDQuestionAnswerPostParams) (api.V1TendersTenderIDQuestionAnswerPostRes, error)
 	V1TendersTenderIDQuestionAnswerGet(ctx context.Context, params api.V1TendersTenderIDQuestionAnswerGetParams) (api.V1TendersTenderIDQuestionAnswerGetRes, error)
+
+	V1TendersTenderIDWinnersPost(ctx context.Context, params api.V1TendersTenderIDWinnersPostParams) (api.V1TendersTenderIDWinnersPostRes, error)
+	V1TendersTenderIDWinnersGet(ctx context.Context, params api.V1TendersTenderIDWinnersGetParams) (api.V1TendersTenderIDWinnersGetRes, error)
+	V1TendersWinnersWinnerIDAprovePost(ctx context.Context, params api.V1TendersWinnersWinnerIDAprovePostParams) (api.V1TendersWinnersWinnerIDAprovePostRes, error)
+	V1TendersWinnersWinnerIDDenyPost(ctx context.Context, params api.V1TendersWinnersWinnerIDDenyPostParams) (api.V1TendersWinnersWinnerIDDenyPostRes, error)
 }
 
 type Users interface {

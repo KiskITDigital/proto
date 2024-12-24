@@ -90,12 +90,6 @@ func ConvertTenderModelToApi(tender Tender) api.Tender {
 		UpdatedAt:          tender.UpdatedAt,
 	}
 
-	if tender.WinnerOrganization.Set {
-		tenderApi.WinnerOrganization = api.OptOrganization{
-			Value: ConvertOrganizationModelToApi(tender.WinnerOrganization.Value),
-			Set:   true}
-	}
-
 	return tenderApi
 }
 

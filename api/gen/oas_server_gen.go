@@ -321,6 +321,30 @@ type Handler interface {
 	//
 	// POST /v1/tenders/{tenderID}/respond
 	V1TendersTenderIDRespondPost(ctx context.Context, req *V1TendersTenderIDRespondPostReq, params V1TendersTenderIDRespondPostParams) (V1TendersTenderIDRespondPostRes, error)
+	// V1TendersTenderIDWinnersGet implements GET /v1/tenders/{tenderID}/winners operation.
+	//
+	// Получение победителей торгов.
+	//
+	// GET /v1/tenders/{tenderID}/winners
+	V1TendersTenderIDWinnersGet(ctx context.Context, params V1TendersTenderIDWinnersGetParams) (V1TendersTenderIDWinnersGetRes, error)
+	// V1TendersTenderIDWinnersPost implements POST /v1/tenders/{tenderID}/winners operation.
+	//
+	// Добавление победителя торгов.
+	//
+	// POST /v1/tenders/{tenderID}/winners
+	V1TendersTenderIDWinnersPost(ctx context.Context, params V1TendersTenderIDWinnersPostParams) (V1TendersTenderIDWinnersPostRes, error)
+	// V1TendersWinnersWinnerIDAprovePost implements POST /v1/tenders/winners/{winnerID}/aprove operation.
+	//
+	// Подтверждение выполнения работы.
+	//
+	// POST /v1/tenders/winners/{winnerID}/aprove
+	V1TendersWinnersWinnerIDAprovePost(ctx context.Context, params V1TendersWinnersWinnerIDAprovePostParams) (V1TendersWinnersWinnerIDAprovePostRes, error)
+	// V1TendersWinnersWinnerIDDenyPost implements POST /v1/tenders/winners/{winnerID}/deny operation.
+	//
+	// Отказ от выполнения работы.
+	//
+	// POST /v1/tenders/winners/{winnerID}/deny
+	V1TendersWinnersWinnerIDDenyPost(ctx context.Context, params V1TendersWinnersWinnerIDDenyPostParams) (V1TendersWinnersWinnerIDDenyPostRes, error)
 	// V1UsersConfirmEmailPost implements POST /v1/users/confirm/email operation.
 	//
 	// Confirm email use a code from mail.
