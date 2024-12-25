@@ -3634,12 +3634,12 @@ func (s *V1EmployeePostReq) SetPosition(val string) {
 }
 
 type V1OrganizationsContractorsGetOK struct {
-	Data       []Organization `json:"data"`
-	Pagination Pagination     `json:"pagination"`
+	Data       []V1OrganizationsContractorsGetOKDataItem `json:"data"`
+	Pagination Pagination                                `json:"pagination"`
 }
 
 // GetData returns the value of Data.
-func (s *V1OrganizationsContractorsGetOK) GetData() []Organization {
+func (s *V1OrganizationsContractorsGetOK) GetData() []V1OrganizationsContractorsGetOKDataItem {
 	return s.Data
 }
 
@@ -3649,7 +3649,7 @@ func (s *V1OrganizationsContractorsGetOK) GetPagination() Pagination {
 }
 
 // SetData sets the value of Data.
-func (s *V1OrganizationsContractorsGetOK) SetData(val []Organization) {
+func (s *V1OrganizationsContractorsGetOK) SetData(val []V1OrganizationsContractorsGetOKDataItem) {
 	s.Data = val
 }
 
@@ -3659,6 +3659,31 @@ func (s *V1OrganizationsContractorsGetOK) SetPagination(val Pagination) {
 }
 
 func (*V1OrganizationsContractorsGetOK) v1OrganizationsContractorsGetRes() {}
+
+type V1OrganizationsContractorsGetOKDataItem struct {
+	Organization Organization   `json:"organization"`
+	Profile      ContractorInfo `json:"profile"`
+}
+
+// GetOrganization returns the value of Organization.
+func (s *V1OrganizationsContractorsGetOKDataItem) GetOrganization() Organization {
+	return s.Organization
+}
+
+// GetProfile returns the value of Profile.
+func (s *V1OrganizationsContractorsGetOKDataItem) GetProfile() ContractorInfo {
+	return s.Profile
+}
+
+// SetOrganization sets the value of Organization.
+func (s *V1OrganizationsContractorsGetOKDataItem) SetOrganization(val Organization) {
+	s.Organization = val
+}
+
+// SetProfile sets the value of Profile.
+func (s *V1OrganizationsContractorsGetOKDataItem) SetProfile(val ContractorInfo) {
+	s.Profile = val
+}
 
 // V1OrganizationsFavouritesFavouriteIDDeleteNoContent is response for V1OrganizationsFavouritesFavouriteIDDelete operation.
 type V1OrganizationsFavouritesFavouriteIDDeleteNoContent struct{}

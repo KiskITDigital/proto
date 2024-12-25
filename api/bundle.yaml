@@ -1331,7 +1331,7 @@ paths:
       tags:
         - organizations
       summary: Get contractors
-      description: Получить всех исполнителей статусом approve
+      description: Получить всех исполнителей статусом approve с информацией об их профиле.
       parameters:
         - name: page
           in: query
@@ -1364,7 +1364,15 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Organization'
+                      type: object
+                      required:
+                        - organization
+                        - profile
+                      properties:
+                        organization:
+                          $ref: '#/components/schemas/Organization'
+                        profile:
+                          $ref: '#/components/schemas/ContractorInfo'
                   pagination:
                     $ref: '#/components/schemas/Pagination'
         default:
@@ -3233,16 +3241,6 @@ components:
       type: string
       description: Описание компании
       example: Мы являемся мировым лидером в области устойчивых решений.
-    CustomerInfo:
-      type: object
-      properties:
-        description:
-          $ref: '#/components/schemas/description'
-        cities:
-          type: array
-          description: Локации заказчика
-          items:
-            $ref: '#/components/schemas/City'
     Measure:
       type: object
       required:
@@ -3285,6 +3283,16 @@ components:
             $ref: '#/components/schemas/ServiceWithPrice'
         objects:
           $ref: '#/components/schemas/Objects'
+    CustomerInfo:
+      type: object
+      properties:
+        description:
+          $ref: '#/components/schemas/description'
+        cities:
+          type: array
+          description: Локации заказчика
+          items:
+            $ref: '#/components/schemas/City'
     Portfolio:
       type: object
       required:

@@ -44,16 +44,17 @@ func (h *Handler) V1OrganizationsOrganizationIDGet(ctx context.Context, params a
 }
 
 func (h *Handler) V1OrganizationsContractorsGet(ctx context.Context, params api.V1OrganizationsContractorsGetParams) (api.V1OrganizationsContractorsGetRes, error) {
-	organizations, err := h.organizationService.Get(ctx, service.OrganizationGetParams{
-		IsContractor: models.Optional[bool]{Value: true, Set: true},
-		Page:         uint64(params.Page.Or(pagination.Page)),
-		PerPage:      uint64(params.PerPage.Or(pagination.PerPage))})
+	organizations, err := h.organizationService.GetContractors(ctx, service.OrganizationContractorsGetParams{
+		Page:    uint64(params.Page.Or(pagination.Page)),
+		PerPage: uint64(params.PerPage.Or(pagination.PerPage))})
 	if err != nil {
 		return nil, fmt.Errorf("get organizations: %w", err)
 	}
 
 	return &api.V1OrganizationsContractorsGetOK{
-		Data:       convert.Slice[[]models.Organization, []api.Organization](organizations.Organizations, models.ConvertOrganizationModelToApi),
+		Data: convert.Slice[[]models.Organization, []api.V1OrganizationsContractorsGetOKDataItem](
+			organizations.Organizations, models.ConvertContractorModelToApi,
+		),
 		Pagination: pagination.ConvertPaginationToAPI(organizations.Pagination),
 	}, nil
 }

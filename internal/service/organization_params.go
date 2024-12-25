@@ -8,6 +8,11 @@ type OrganizationGetParams struct {
 	PerPage      uint64
 }
 
+type OrganizationContractorsGetParams struct {
+	Page    uint64
+	PerPage uint64
+}
+
 type OrganizationUpdateBrandParams struct {
 	OrganizationID int
 	Brand          models.Optional[string]

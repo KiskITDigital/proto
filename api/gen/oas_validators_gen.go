@@ -1868,6 +1868,40 @@ func (s *V1OrganizationsContractorsGetOK) Validate() error {
 	return nil
 }
 
+func (s *V1OrganizationsContractorsGetOKDataItem) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Organization.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "organization",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.Profile.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "profile",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
 func (s *V1OrganizationsGetOK) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer

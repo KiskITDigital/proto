@@ -215,3 +215,10 @@ func (a *ContractorInfo) Scan(value interface{}) error {
 
 	return json.Unmarshal(b, &a)
 }
+
+func ConvertContractorModelToApi(org Organization) api.V1OrganizationsContractorsGetOKDataItem {
+	return api.V1OrganizationsContractorsGetOKDataItem{
+		Organization: ConvertOrganizationModelToApi(org),
+		Profile:      ConvertContractorInfoToApi(org.ContractorInfo),
+	}
+}

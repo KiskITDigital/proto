@@ -3,7 +3,7 @@ get:
     - organizations
   summary: Get contractors
   description: |-
-    Получить всех исполнителей статусом approve
+    Получить всех исполнителей статусом approve с информацией об их профиле.
   parameters:
     - name: page
       in: query
@@ -36,7 +36,15 @@ get:
               data:
                 type: array
                 items:
-                  $ref: "../../schemas/Organization.yaml"
+                  type: object
+                  required:
+                    - organization
+                    - profile
+                  properties:
+                    organization:
+                      $ref: "../../schemas/Organization.yaml"
+                    profile:
+                      $ref: "../../schemas/ContractorInfo.yaml"
               pagination:
                 $ref: "../../schemas/Pagination.yaml"
     default:

@@ -140,7 +140,8 @@ func (UnimplementedHandler) V1EmployeePost(ctx context.Context, req *V1EmployeeP
 
 // V1OrganizationsContractorsGet implements GET /v1/organizations/contractors operation.
 //
-// Получить всех исполнителей статусом approve.
+// Получить всех исполнителей статусом approve с
+// информацией об их профиле.
 //
 // GET /v1/organizations/contractors
 func (UnimplementedHandler) V1OrganizationsContractorsGet(ctx context.Context, params V1OrganizationsContractorsGetParams) (r V1OrganizationsContractorsGetRes, _ error) {

@@ -96,7 +96,8 @@ type Handler interface {
 	V1EmployeePost(ctx context.Context, req *V1EmployeePostReq) (V1EmployeePostRes, error)
 	// V1OrganizationsContractorsGet implements GET /v1/organizations/contractors operation.
 	//
-	// Получить всех исполнителей статусом approve.
+	// Получить всех исполнителей статусом approve с
+	// информацией об их профиле.
 	//
 	// GET /v1/organizations/contractors
 	V1OrganizationsContractorsGet(ctx context.Context, params V1OrganizationsContractorsGetParams) (V1OrganizationsContractorsGetRes, error)
