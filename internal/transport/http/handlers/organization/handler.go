@@ -19,7 +19,8 @@ type OrganizationService interface {
 	Get(ctx context.Context, params service.OrganizationGetParams) (models.OrganizationsPagination, error)
 	GetByID(ctx context.Context, id int) (models.Organization, error)
 	GetCustomer(ctx context.Context, organizationId int) (models.Organization, error)
-	GetContractor(ctx context.Context, organizationId int) (models.Organization, error)
+	GetContractorByID(ctx context.Context, organizationId int) (models.Organization, error)
+	GetContractors(ctx context.Context, params service.OrganizationContractorsGetParams) (models.OrganizationsPagination, error)
 	UpdateBrand(ctx context.Context, params service.OrganizationUpdateBrandParams) error
 	UpdateContacts(ctx context.Context, params service.OrganizationUpdateContactsParams) error
 	UpdateCustomer(ctx context.Context, params service.OrganizationUpdateCustomerParams) (models.Organization, error)
@@ -47,7 +48,7 @@ func New(
 	return &Handler{
 		logger:              logger,
 		organizationService: organizationService,
-		portfolioService: portfolioService,
+		portfolioService:    portfolioService,
 		favouriteService:    favouriteService,
 	}
 }

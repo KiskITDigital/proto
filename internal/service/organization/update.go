@@ -63,5 +63,5 @@ func (s *Service) UpdateContractor(ctx context.Context, params service.Organizat
 		return models.Organization{}, fmt.Errorf("update organization: %w", err)
 	}
 
-	return s.organizationStore.GetContractor(ctx, s.psql.DB(), params.OrganizationID)
+	return s.organizationStore.GetContractorByID(ctx, s.psql.DB(), params.OrganizationID)
 }

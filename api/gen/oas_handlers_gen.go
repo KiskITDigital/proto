@@ -1852,7 +1852,8 @@ func (s *Server) handleV1EmployeePostRequest(args [0]string, argsEscaped bool, w
 
 // handleV1OrganizationsContractorsGetRequest handles GET /v1/organizations/contractors operation.
 //
-// Получить всех исполнителей статусом approve.
+// Получить всех исполнителей статусом approve с
+// информацией об их профиле.
 //
 // GET /v1/organizations/contractors
 func (s *Server) handleV1OrganizationsContractorsGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {

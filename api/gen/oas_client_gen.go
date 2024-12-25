@@ -111,7 +111,8 @@ type Invoker interface {
 	V1EmployeePost(ctx context.Context, request *V1EmployeePostReq) (V1EmployeePostRes, error)
 	// V1OrganizationsContractorsGet invokes GET /v1/organizations/contractors operation.
 	//
-	// Получить всех исполнителей статусом approve.
+	// Получить всех исполнителей статусом approve с
+	// информацией об их профиле.
 	//
 	// GET /v1/organizations/contractors
 	V1OrganizationsContractorsGet(ctx context.Context, params V1OrganizationsContractorsGetParams) (V1OrganizationsContractorsGetRes, error)
@@ -1845,7 +1846,8 @@ func (c *Client) sendV1EmployeePost(ctx context.Context, request *V1EmployeePost
 
 // V1OrganizationsContractorsGet invokes GET /v1/organizations/contractors operation.
 //
-// Получить всех исполнителей статусом approve.
+// Получить всех исполнителей статусом approve с
+// информацией об их профиле.
 //
 // GET /v1/organizations/contractors
 func (c *Client) V1OrganizationsContractorsGet(ctx context.Context, params V1OrganizationsContractorsGetParams) (V1OrganizationsContractorsGetRes, error) {

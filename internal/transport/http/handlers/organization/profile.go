@@ -15,7 +15,7 @@ import (
 )
 
 func (h *Handler) V1OrganizationsOrganizationIDProfileContractorGet(ctx context.Context, params api.V1OrganizationsOrganizationIDProfileContractorGetParams) (api.V1OrganizationsOrganizationIDProfileContractorGetRes, error) {
-	organization, err := h.organizationService.GetContractor(ctx, params.OrganizationID)
+	organization, err := h.organizationService.GetContractorByID(ctx, params.OrganizationID)
 	switch {
 	case errors.Is(err, errstore.ErrOrganizationNotFound):
 		return nil, cerr.Wrap(err, cerr.CodeNotFound, "Организация не найдена", map[string]interface{}{

@@ -9,6 +9,11 @@ type OrganizationGetParams struct {
 	Limit           models.Optional[uint64]
 }
 
+type OrganizationContractorsGetParams struct {
+	Offset models.Optional[uint64]
+	Limit  models.Optional[uint64]
+}
+
 type OrganizationGetCountParams struct {
 	IsContractor    models.Optional[bool]
 	OrganizationIDs []int
