@@ -3,10 +3,8 @@ package organization
 import (
 	"context"
 	"database/sql"
-	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 
 	sq "github.com/Masterminds/squirrel"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/deduplicate"
