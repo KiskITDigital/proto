@@ -108,3 +108,40 @@ func ConvertObjectModelToApi(object Object) api.Object {
 		Name:     object.Name,
 	}
 }
+
+type TenderStatus int
+
+const (
+	InvalidStatus TenderStatus = iota
+	DraftStatus
+	OnModerationStatus
+	ReceptionNotStartedStatus
+	ReceptionStatus
+	SelectingContractorStatus
+	ContractorSelectedStatus
+	ContractorNotSelectedStatus
+	RemovedByModeratorStatus
+)
+
+func (s TenderStatus) ToStatus() string {
+	switch s {
+	case DraftStatus:
+		return "draft"
+	case OnModerationStatus:
+		return "on moderation"
+	case ReceptionNotStartedStatus:
+		return "reception not started"
+	case ReceptionStatus:
+		return "reception"
+	case SelectingContractorStatus:
+		return "selecting contractor"
+	case ContractorSelectedStatus:
+		return "contractor selected"
+	case ContractorNotSelectedStatus:
+		return "contractor not selected"
+	case RemovedByModeratorStatus:
+		return "removed from publication"
+	default:
+		return "invalid"
+	}
+}

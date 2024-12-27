@@ -25,11 +25,13 @@ type WinnersStore interface {
 	Get(ctx context.Context, qe store.QueryExecutor, tenderID int) ([]models.Winners, error)
 	UpdateStatus(ctx context.Context, qe store.QueryExecutor, params store.WinnerUpdateParams) error
 	GetOrganizationIDByWinnerID(ctx context.Context, qe store.QueryExecutor, winnerID int) (int, error)
+	GetTenderIDByWinnerID(ctx context.Context, qe store.QueryExecutor, winnerID int) (int, error)
 	Count(ctx context.Context, qe store.QueryExecutor, tenderID int) (int, error)
 }
 
 type TenderStore interface {
 	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Tender, error)
+	UpdateStatus(ctx context.Context, qe store.QueryExecutor, params store.TenderUpdateStatusParams) error
 }
 
 type RespondStore interface {

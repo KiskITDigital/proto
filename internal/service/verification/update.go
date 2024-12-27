@@ -21,6 +21,16 @@ func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationR
 			return fmt.Errorf("update request status: %w", err)
 		}
 
+		var status models.TenderStatus
+
+		if params.Status == models.VerificationStatusApproved {
+			status = models.ReceptionStatus
+		} else if params.Status == models.VerificationStatusDeclined {
+			status = models.RemovedByModeratorStatus
+		} else {
+			status = models.InvalidStatus
+		}
+
 		switch result.ObjectType {
 		case models.ObjectTypeOrganization:
 			err = s.organizationStore.UpdateVerificationStatus(ctx, qe, store.OrganizationUpdateVerifStatusParams{
@@ -32,6 +42,7 @@ func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationR
 			err = s.tenderStore.UpdateVerificationStatus(ctx, qe, store.TenderUpdateVerifStatusParams{
 				TenderID:           result.ObjectID,
 				VerificationStatus: params.Status,
+				Status:             status,
 			})
 
 		case models.ObjectTypeAddition:
