@@ -28,6 +28,9 @@ func (s *Service) GetByID(ctx context.Context, requestID int) (models.Verificati
 
 	case models.ObjectTypeAddition:
 		object, err = s.additionStore.GetByID(ctx, s.psql.DB(), request.ObjectID)
+
+	case models.ObjectTypeQuestionAnswer:
+		object, err = s.questionAnswerStore.GetByID(ctx, s.psql.DB(), request.ObjectID)
 	}
 	if err != nil {
 		return models.VerificationRequest[models.VerificationObject]{}, fmt.Errorf("get object type=%v by id=%v: %w", request.ObjectType, request.ObjectID, err)

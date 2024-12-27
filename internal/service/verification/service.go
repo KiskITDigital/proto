@@ -50,7 +50,8 @@ type OrganizationStore interface {
 
 type QuestionAnswerStore interface {
 	Get(ctx context.Context, qe store.QueryExecutor, params store.QuestionAnswerGetParams) ([]models.QuestionWithAnswer, error)
-	UpdateVerificationStatus(ctx context.Context, qe store.QueryExecutor, params store.QuestionAnswerVerifStatusUpdateParams) error 
+	UpdateVerificationStatus(ctx context.Context, qe store.QueryExecutor, params store.QuestionAnswerVerifStatusUpdateParams) error
+	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.QuestionWithAnswer, error)
 }
 
 func New(
