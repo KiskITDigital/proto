@@ -1188,6 +1188,17 @@ func (s *Tender) Validate() error {
 		})
 	}
 	if err := func() error {
+		if err := (validate.Float{}).Validate(float64(s.Status)); err != nil {
+			return errors.Wrap(err, "float")
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "status",
+			Error: err,
+		})
+	}
+	if err := func() error {
 		if value, ok := s.VerificationStatus.Get(); ok {
 			if err := func() error {
 				if err := value.Validate(); err != nil {

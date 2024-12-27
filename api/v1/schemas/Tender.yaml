@@ -57,7 +57,7 @@ properties:
   objects:
     $ref: "catalog/Objects.yaml"
   status:
-    type: string
+    type: number
   verification_status:
     $ref: "../properties/verification_status.yaml"
   reception_start:

@@ -2631,7 +2631,7 @@ type Tender struct {
 	Attachments        []URL                 `json:"attachments"`
 	Services           Services              `json:"services"`
 	Objects            Objects               `json:"objects"`
-	Status             string                `json:"status"`
+	Status             float64               `json:"status"`
 	VerificationStatus OptVerificationStatus `json:"verification_status"`
 	// Дата начала приема заявок.
 	ReceptionStart time.Time `json:"reception_start"`
@@ -2719,7 +2719,7 @@ func (s *Tender) GetObjects() Objects {
 }
 
 // GetStatus returns the value of Status.
-func (s *Tender) GetStatus() string {
+func (s *Tender) GetStatus() float64 {
 	return s.Status
 }
 
@@ -2834,7 +2834,7 @@ func (s *Tender) SetObjects(val Objects) {
 }
 
 // SetStatus sets the value of Status.
-func (s *Tender) SetStatus(val string) {
+func (s *Tender) SetStatus(val float64) {
 	s.Status = val
 }
 
