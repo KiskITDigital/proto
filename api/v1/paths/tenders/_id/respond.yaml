@@ -40,8 +40,6 @@ get:
     - tenders
   summary: Get responds to a tender
   description: Получить все отклики на тендер
-  security:
-    - bearerAuth: []
   parameters:
     - name: tenderID
       required: true
