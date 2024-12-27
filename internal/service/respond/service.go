@@ -10,7 +10,6 @@ import (
 type Service struct {
 	psql         DBTX
 	respondStore RespondStore
-	tenderStore  TenderStore
 }
 
 type DBTX interface {
@@ -25,18 +24,12 @@ type RespondStore interface {
 	Count(ctx context.Context, qe store.QueryExecutor, params store.RespondGetCountParams) (int, error)
 }
 
-type TenderStore interface {
-	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Tender, error)
-}
-
 func New(
 	psql DBTX,
 	respondStore RespondStore,
-	tenderStore TenderStore,
 ) *Service {
 	return &Service{
 		psql:         psql,
 		respondStore: respondStore,
-		tenderStore:  tenderStore,
 	}
 }

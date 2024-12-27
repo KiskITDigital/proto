@@ -126,7 +126,6 @@ func run(cfg config.Default, logger *slog.Logger) error {
 	respondService := respondService.New(
 		psql,
 		respondStore,
-		tenderStore,
 	)
 
 	tenderService := tenderService.New(
