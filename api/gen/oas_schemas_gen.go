@@ -727,9 +727,9 @@ func (s *Favourites) SetObject(val FavouritesObject) {
 
 // FavouritesObject represents sum type.
 type FavouritesObject struct {
-	Type         FavouritesObjectType // switch on this field
-	Organization Organization
-	Tender       Tender
+	Type                    FavouritesObjectType // switch on this field
+	OrganizationWithProfile OrganizationWithProfile
+	Tender                  Tender
 }
 
 // FavouritesObjectType is oneOf type of FavouritesObject.
@@ -737,34 +737,36 @@ type FavouritesObjectType string
 
 // Possible values for FavouritesObjectType.
 const (
-	OrganizationFavouritesObject FavouritesObjectType = "Organization"
-	TenderFavouritesObject       FavouritesObjectType = "Tender"
+	OrganizationWithProfileFavouritesObject FavouritesObjectType = "OrganizationWithProfile"
+	TenderFavouritesObject                  FavouritesObjectType = "Tender"
 )
 
-// IsOrganization reports whether FavouritesObject is Organization.
-func (s FavouritesObject) IsOrganization() bool { return s.Type == OrganizationFavouritesObject }
+// IsOrganizationWithProfile reports whether FavouritesObject is OrganizationWithProfile.
+func (s FavouritesObject) IsOrganizationWithProfile() bool {
+	return s.Type == OrganizationWithProfileFavouritesObject
+}
 
 // IsTender reports whether FavouritesObject is Tender.
 func (s FavouritesObject) IsTender() bool { return s.Type == TenderFavouritesObject }
 
-// SetOrganization sets FavouritesObject to Organization.
-func (s *FavouritesObject) SetOrganization(v Organization) {
-	s.Type = OrganizationFavouritesObject
-	s.Organization = v
+// SetOrganizationWithProfile sets FavouritesObject to OrganizationWithProfile.
+func (s *FavouritesObject) SetOrganizationWithProfile(v OrganizationWithProfile) {
+	s.Type = OrganizationWithProfileFavouritesObject
+	s.OrganizationWithProfile = v
 }
 
-// GetOrganization returns Organization and true boolean if FavouritesObject is Organization.
-func (s FavouritesObject) GetOrganization() (v Organization, ok bool) {
-	if !s.IsOrganization() {
+// GetOrganizationWithProfile returns OrganizationWithProfile and true boolean if FavouritesObject is OrganizationWithProfile.
+func (s FavouritesObject) GetOrganizationWithProfile() (v OrganizationWithProfile, ok bool) {
+	if !s.IsOrganizationWithProfile() {
 		return v, false
 	}
-	return s.Organization, true
+	return s.OrganizationWithProfile, true
 }
 
-// NewOrganizationFavouritesObject returns new FavouritesObject from Organization.
-func NewOrganizationFavouritesObject(v Organization) FavouritesObject {
+// NewOrganizationWithProfileFavouritesObject returns new FavouritesObject from OrganizationWithProfile.
+func NewOrganizationWithProfileFavouritesObject(v OrganizationWithProfile) FavouritesObject {
 	var s FavouritesObject
-	s.SetOrganization(v)
+	s.SetOrganizationWithProfile(v)
 	return s
 }
 
@@ -1736,6 +1738,32 @@ func (s *Organization) SetCreatedAt(val time.Time) {
 // SetUpdatedAt sets the value of UpdatedAt.
 func (s *Organization) SetUpdatedAt(val time.Time) {
 	s.UpdatedAt = val
+}
+
+// Ref: #
+type OrganizationWithProfile struct {
+	Organization Organization   `json:"organization"`
+	Profile      ContractorInfo `json:"profile"`
+}
+
+// GetOrganization returns the value of Organization.
+func (s *OrganizationWithProfile) GetOrganization() Organization {
+	return s.Organization
+}
+
+// GetProfile returns the value of Profile.
+func (s *OrganizationWithProfile) GetProfile() ContractorInfo {
+	return s.Profile
+}
+
+// SetOrganization sets the value of Organization.
+func (s *OrganizationWithProfile) SetOrganization(val Organization) {
+	s.Organization = val
+}
+
+// SetProfile sets the value of Profile.
+func (s *OrganizationWithProfile) SetProfile(val ContractorInfo) {
+	s.Profile = val
 }
 
 // Ref: #
@@ -3768,10 +3796,21 @@ func (s *V1OrganizationsOrganizationIDFavouritesGetOK) SetPagination(val Paginat
 func (*V1OrganizationsOrganizationIDFavouritesGetOK) v1OrganizationsOrganizationIDFavouritesGetRes() {
 }
 
-// V1OrganizationsOrganizationIDFavouritesPostOK is response for V1OrganizationsOrganizationIDFavouritesPost operation.
-type V1OrganizationsOrganizationIDFavouritesPostOK struct{}
+type V1OrganizationsOrganizationIDFavouritesPostCreated struct {
+	ID int `json:"id"`
+}
 
-func (*V1OrganizationsOrganizationIDFavouritesPostOK) v1OrganizationsOrganizationIDFavouritesPostRes() {
+// GetID returns the value of ID.
+func (s *V1OrganizationsOrganizationIDFavouritesPostCreated) GetID() int {
+	return s.ID
+}
+
+// SetID sets the value of ID.
+func (s *V1OrganizationsOrganizationIDFavouritesPostCreated) SetID(val int) {
+	s.ID = val
+}
+
+func (*V1OrganizationsOrganizationIDFavouritesPostCreated) v1OrganizationsOrganizationIDFavouritesPostRes() {
 }
 
 type V1OrganizationsOrganizationIDFavouritesPostReq struct {

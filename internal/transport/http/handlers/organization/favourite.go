@@ -24,15 +24,18 @@ func (h *Handler) V1OrganizationsOrganizationIDFavouritesPost(
 		return nil, cerr.Wrap(cerr.ErrPermission, cerr.CodeNotPermitted, "not enough permissions to create a favourite", nil)
 	}
 
-	if err := h.favouriteService.Create(ctx, service.FavouriteCreateParams{
+	id, err := h.favouriteService.Create(ctx, service.FavouriteCreateParams{
 		OrganizationID: params.OrganizationID,
 		ObjectType:     models.APIToFavouriteType(params.ObjectType),
 		ObjectID:       req.ObjectID,
-	}); err != nil {
-		return nil, fmt.Errorf("create verif req: %w", err)
+	})
+	if err != nil {
+		return nil, fmt.Errorf("create favourite: %w", err)
 	}
 
-	return &api.V1OrganizationsOrganizationIDFavouritesPostOK{}, nil
+	return &api.V1OrganizationsOrganizationIDFavouritesPostCreated{
+		ID: models.ToInt(id),
+	}, nil
 }
 
 func (h *Handler) V1OrganizationsOrganizationIDFavouritesGet(

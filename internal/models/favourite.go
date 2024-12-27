@@ -69,3 +69,7 @@ func FavouriteModelToApi[T FavouriteObject](favourite Favourite[T]) api.Favourit
 		Object:         favourite.Object.ToFavouriteObject(),
 	}
 }
+
+func ToInt(id int64) int {
+	return int(id)
+}

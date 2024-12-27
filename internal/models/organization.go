@@ -78,13 +78,6 @@ func (o Organization) ToVerificationObject() api.VerificationRequestObject {
 	}
 }
 
-func (o Organization) ToFavouriteObject() api.FavouritesObject {
-	return api.FavouritesObject{
-		Type:         api.OrganizationFavouritesObject,
-		Organization: ConvertOrganizationModelToApi(o),
-	}
-}
-
 func ConvertOrganizationModelToApi(organization Organization) api.Organization {
 	return api.Organization{
 		ID:                 organization.ID,
@@ -221,4 +214,25 @@ func ConvertContractorModelToApi(org Organization) api.V1OrganizationsContractor
 		Organization: ConvertOrganizationModelToApi(org),
 		Profile:      ConvertContractorInfoToApi(org.ContractorInfo),
 	}
+}
+
+func (o OrganizationWithProfile) ToFavouriteObject() api.FavouritesObject {
+	return api.FavouritesObject{
+		Type:                    api.OrganizationWithProfileFavouritesObject,
+		OrganizationWithProfile: ConvertOrganizationWithProfileToApi(o),
+	}
+}
+
+func ConvertOrganizationWithProfileToApi(org OrganizationWithProfile) api.OrganizationWithProfile {
+	return api.OrganizationWithProfile{
+		Organization: ConvertOrganizationModelToApi(org.Organization),
+		Profile:      ConvertContractorInfoToApi(org.Profile),
+	}
+}
+
+type OrganizationWithProfile struct {
+	FavouriteObject
+
+	Organization Organization   `json:"organization"`
+	Profile      ContractorInfo `json:"profile"`
 }

@@ -93,7 +93,18 @@ post:
               type: integer
               example: 1
   responses:
-    '200':
+    '201':
       description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - id
+            properties:
+              id: 
+                type: integer
+                example: 1
+
     default:
       $ref: "../../../responses/Error.yaml"
