@@ -35,7 +35,7 @@ type PortfolioService interface {
 }
 
 type FavouriteService interface {
-	Create(ctx context.Context, params service.FavouriteCreateParams) error
+	Create(ctx context.Context, params service.FavouriteCreateParams) (int64, error)
 	Get(ctx context.Context, params service.FavouriteGetParams) (models.FavouritePagination[models.FavouriteObject], error)
 	Delete(ctx context.Context, favouriteID int) error
 }

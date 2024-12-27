@@ -21,7 +21,7 @@ type DBTX interface {
 }
 
 type FavouriteStore interface {
-	Create(ctx context.Context, qe store.QueryExecutor, params store.FavouriteCreateParams) error
+	Create(ctx context.Context, qe store.QueryExecutor, params store.FavouriteCreateParams) (int64, error)
 	Delete(ctx context.Context, qe store.QueryExecutor, favouriteID int) error
 	Get(ctx context.Context, qe store.QueryExecutor, params store.FavouriteGetParams) ([]models.Favourite[models.FavouriteObject], error)
 	GetByID(ctx context.Context, qe store.QueryExecutor, favouriteID int) (models.Favourite[models.FavouriteObject], error)
@@ -29,8 +29,8 @@ type FavouriteStore interface {
 }
 
 type OrganizationStore interface {
-	Get(ctx context.Context, qe store.QueryExecutor, params store.OrganizationGetParams) ([]models.Organization, error)
 	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Organization, error)
+	GetContractors(ctx context.Context, qe store.QueryExecutor, params store.OrganizationContractorsGetParams) ([]models.Organization, error)
 }
 
 type TenderStore interface {

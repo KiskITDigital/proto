@@ -12,8 +12,8 @@ properties:
     type: integer
     example: 1
   object_type:
-   $ref: "../properties/favourite_type.yaml"
+    $ref: "../properties/favourite_type.yaml"
   object:
     oneOf:
-      - $ref: "./Organization.yaml"
+      - $ref: "./OrganizationWithProfile.yaml"
       - $ref: "./Tender.yaml"

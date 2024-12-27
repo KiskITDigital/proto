@@ -1896,8 +1896,18 @@ paths:
                   type: integer
                   example: 1
       responses:
-        '200':
+        '201':
           description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: integer
+                    example: 1
         default:
           $ref: '#/components/responses/Error'
   /v1/organizations/favourites/{favouriteID}:
@@ -3332,6 +3342,16 @@ components:
       enum:
         - organization
         - tender
+    OrganizationWithProfile:
+      type: object
+      required:
+        - organization
+        - profile
+      properties:
+        organization:
+          $ref: '#/components/schemas/Organization'
+        profile:
+          $ref: '#/components/schemas/ContractorInfo'
     Favourites:
       type: object
       required:
@@ -3350,7 +3370,7 @@ components:
           $ref: '#/components/schemas/favourite_type'
         object:
           oneOf:
-            - $ref: '#/components/schemas/Organization'
+            - $ref: '#/components/schemas/OrganizationWithProfile'
             - $ref: '#/components/schemas/Tender'
     object_type:
       type: string

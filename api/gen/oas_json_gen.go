@@ -1592,8 +1592,8 @@ func (s *Favourites) UnmarshalJSON(data []byte) error {
 // Encode encodes FavouritesObject as json.
 func (s FavouritesObject) Encode(e *jx.Encoder) {
 	switch s.Type {
-	case OrganizationFavouritesObject:
-		s.Organization.Encode(e)
+	case OrganizationWithProfileFavouritesObject:
+		s.OrganizationWithProfile.Encode(e)
 	case TenderFavouritesObject:
 		s.Tender.Encode(e)
 	}
@@ -1601,8 +1601,8 @@ func (s FavouritesObject) Encode(e *jx.Encoder) {
 
 func (s FavouritesObject) encodeFields(e *jx.Encoder) {
 	switch s.Type {
-	case OrganizationFavouritesObject:
-		s.Organization.encodeFields(e)
+	case OrganizationWithProfileFavouritesObject:
+		s.OrganizationWithProfile.encodeFields(e)
 	case TenderFavouritesObject:
 		s.Tender.encodeFields(e)
 	}
@@ -1622,127 +1622,15 @@ func (s *FavouritesObject) Decode(d *jx.Decoder) error {
 	if err := d.Capture(func(d *jx.Decoder) error {
 		return d.ObjBytes(func(d *jx.Decoder, key []byte) error {
 			switch string(key) {
-			case "brand_name":
-				match := OrganizationFavouritesObject
+			case "profile":
+				match := OrganizationWithProfileFavouritesObject
 				if found && s.Type != match {
 					s.Type = ""
 					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
 				}
 				found = true
 				s.Type = match
-			case "full_name":
-				match := OrganizationFavouritesObject
-				if found && s.Type != match {
-					s.Type = ""
-					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
-				}
-				found = true
-				s.Type = match
-			case "short_name":
-				match := OrganizationFavouritesObject
-				if found && s.Type != match {
-					s.Type = ""
-					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
-				}
-				found = true
-				s.Type = match
-			case "inn":
-				match := OrganizationFavouritesObject
-				if found && s.Type != match {
-					s.Type = ""
-					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
-				}
-				found = true
-				s.Type = match
-			case "okpo":
-				match := OrganizationFavouritesObject
-				if found && s.Type != match {
-					s.Type = ""
-					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
-				}
-				found = true
-				s.Type = match
-			case "ogrn":
-				match := OrganizationFavouritesObject
-				if found && s.Type != match {
-					s.Type = ""
-					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
-				}
-				found = true
-				s.Type = match
-			case "kpp":
-				match := OrganizationFavouritesObject
-				if found && s.Type != match {
-					s.Type = ""
-					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
-				}
-				found = true
-				s.Type = match
-			case "tax_code":
-				match := OrganizationFavouritesObject
-				if found && s.Type != match {
-					s.Type = ""
-					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
-				}
-				found = true
-				s.Type = match
-			case "address":
-				match := OrganizationFavouritesObject
-				if found && s.Type != match {
-					s.Type = ""
-					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
-				}
-				found = true
-				s.Type = match
-			case "avatar_url":
-				match := OrganizationFavouritesObject
-				if found && s.Type != match {
-					s.Type = ""
-					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
-				}
-				found = true
-				s.Type = match
-			case "emails":
-				match := OrganizationFavouritesObject
-				if found && s.Type != match {
-					s.Type = ""
-					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
-				}
-				found = true
-				s.Type = match
-			case "phones":
-				match := OrganizationFavouritesObject
-				if found && s.Type != match {
-					s.Type = ""
-					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
-				}
-				found = true
-				s.Type = match
-			case "messengers":
-				match := OrganizationFavouritesObject
-				if found && s.Type != match {
-					s.Type = ""
-					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
-				}
-				found = true
-				s.Type = match
-			case "is_contractor":
-				match := OrganizationFavouritesObject
-				if found && s.Type != match {
-					s.Type = ""
-					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
-				}
-				found = true
-				s.Type = match
-			case "is_banned":
-				match := OrganizationFavouritesObject
-				if found && s.Type != match {
-					s.Type = ""
-					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
-				}
-				found = true
-				s.Type = match
-			case "organization":
+			case "id":
 				match := TenderFavouritesObject
 				if found && s.Type != match {
 					s.Type = ""
@@ -1862,6 +1750,14 @@ func (s *FavouritesObject) Decode(d *jx.Decoder) error {
 				}
 				found = true
 				s.Type = match
+			case "verification_status":
+				match := TenderFavouritesObject
+				if found && s.Type != match {
+					s.Type = ""
+					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
+				}
+				found = true
+				s.Type = match
 			case "reception_start":
 				match := TenderFavouritesObject
 				if found && s.Type != match {
@@ -1894,6 +1790,22 @@ func (s *FavouritesObject) Decode(d *jx.Decoder) error {
 				}
 				found = true
 				s.Type = match
+			case "created_at":
+				match := TenderFavouritesObject
+				if found && s.Type != match {
+					s.Type = ""
+					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
+				}
+				found = true
+				s.Type = match
+			case "updated_at":
+				match := TenderFavouritesObject
+				if found && s.Type != match {
+					s.Type = ""
+					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
+				}
+				found = true
+				s.Type = match
 			}
 			return d.Skip()
 		})
@@ -1904,8 +1816,8 @@ func (s *FavouritesObject) Decode(d *jx.Decoder) error {
 		return errors.New("unable to detect sum type variant")
 	}
 	switch s.Type {
-	case OrganizationFavouritesObject:
-		if err := s.Organization.Decode(d); err != nil {
+	case OrganizationWithProfileFavouritesObject:
+		if err := s.OrganizationWithProfile.Decode(d); err != nil {
 			return err
 		}
 	case TenderFavouritesObject:
@@ -3328,6 +3240,115 @@ func (s *Organization) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *Organization) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *OrganizationWithProfile) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *OrganizationWithProfile) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("organization")
+		s.Organization.Encode(e)
+	}
+	{
+		e.FieldStart("profile")
+		s.Profile.Encode(e)
+	}
+}
+
+var jsonFieldsNameOfOrganizationWithProfile = [2]string{
+	0: "organization",
+	1: "profile",
+}
+
+// Decode decodes OrganizationWithProfile from json.
+func (s *OrganizationWithProfile) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode OrganizationWithProfile to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "organization":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				if err := s.Organization.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"organization\"")
+			}
+		case "profile":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				if err := s.Profile.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"profile\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode OrganizationWithProfile")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000011,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfOrganizationWithProfile) {
+					name = jsonFieldsNameOfOrganizationWithProfile[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *OrganizationWithProfile) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OrganizationWithProfile) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -9218,6 +9239,102 @@ func (s *V1OrganizationsOrganizationIDFavouritesGetOK) MarshalJSON() ([]byte, er
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *V1OrganizationsOrganizationIDFavouritesGetOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *V1OrganizationsOrganizationIDFavouritesPostCreated) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *V1OrganizationsOrganizationIDFavouritesPostCreated) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("id")
+		e.Int(s.ID)
+	}
+}
+
+var jsonFieldsNameOfV1OrganizationsOrganizationIDFavouritesPostCreated = [1]string{
+	0: "id",
+}
+
+// Decode decodes V1OrganizationsOrganizationIDFavouritesPostCreated from json.
+func (s *V1OrganizationsOrganizationIDFavouritesPostCreated) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode V1OrganizationsOrganizationIDFavouritesPostCreated to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode V1OrganizationsOrganizationIDFavouritesPostCreated")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfV1OrganizationsOrganizationIDFavouritesPostCreated) {
+					name = jsonFieldsNameOfV1OrganizationsOrganizationIDFavouritesPostCreated[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *V1OrganizationsOrganizationIDFavouritesPostCreated) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *V1OrganizationsOrganizationIDFavouritesPostCreated) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -16451,7 +16568,7 @@ func (s *VerificationRequestObject) Decode(d *jx.Decoder) error {
 	if err := d.Capture(func(d *jx.Decoder) error {
 		return d.ObjBytes(func(d *jx.Decoder, key []byte) error {
 			switch string(key) {
-			case "organization":
+			case "id":
 				match := TenderVerificationRequestObject
 				if found && s.Type != match {
 					s.Type = ""
@@ -16571,6 +16688,14 @@ func (s *VerificationRequestObject) Decode(d *jx.Decoder) error {
 				}
 				found = true
 				s.Type = match
+			case "verification_status":
+				match := TenderVerificationRequestObject
+				if found && s.Type != match {
+					s.Type = ""
+					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
+				}
+				found = true
+				s.Type = match
 			case "reception_start":
 				match := TenderVerificationRequestObject
 				if found && s.Type != match {
@@ -16596,6 +16721,22 @@ func (s *VerificationRequestObject) Decode(d *jx.Decoder) error {
 				found = true
 				s.Type = match
 			case "work_end":
+				match := TenderVerificationRequestObject
+				if found && s.Type != match {
+					s.Type = ""
+					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
+				}
+				found = true
+				s.Type = match
+			case "created_at":
+				match := TenderVerificationRequestObject
+				if found && s.Type != match {
+					s.Type = ""
+					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
+				}
+				found = true
+				s.Type = match
+			case "updated_at":
 				match := TenderVerificationRequestObject
 				if found && s.Type != match {
 					s.Type = ""

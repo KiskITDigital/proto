@@ -301,8 +301,8 @@ func (s *Favourites) Validate() error {
 
 func (s FavouritesObject) Validate() error {
 	switch s.Type {
-	case OrganizationFavouritesObject:
-		if err := s.Organization.Validate(); err != nil {
+	case OrganizationWithProfileFavouritesObject:
+		if err := s.OrganizationWithProfile.Validate(); err != nil {
 			return err
 		}
 		return nil
@@ -624,6 +624,40 @@ func (s *Organization) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "verification_status",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *OrganizationWithProfile) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Organization.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "organization",
+			Error: err,
+		})
+	}
+	if err := func() error {
+		if err := s.Profile.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "profile",
 			Error: err,
 		})
 	}

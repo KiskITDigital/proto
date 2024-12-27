@@ -14,8 +14,8 @@ func (s *Service) Get(ctx context.Context, params service.FavouriteGetParams) (m
 	favourites, err := s.favouriteStore.Get(ctx, s.psql.DB(), store.FavouriteGetParams{
 		OrganizationID: models.NewOptional(params.OrganizationID),
 		ObjectType:     models.NewOptional(params.ObjectType),
-		Limit:  models.NewOptional(params.PerPage),
-		Offset: models.Optional[uint64]{Value: params.Page * params.PerPage, Set: (params.Page * params.PerPage) != 0},
+		Limit:          models.NewOptional(params.PerPage),
+		Offset:         models.Optional[uint64]{Value: params.Page * params.PerPage, Set: (params.Page * params.PerPage) != 0},
 	})
 	if err != nil {
 		return models.FavouritePagination[models.FavouriteObject]{}, fmt.Errorf("get object req: %w", err)
@@ -37,14 +37,16 @@ func (s *Service) Get(ctx context.Context, params service.FavouriteGetParams) (m
 	objectMap := map[int]models.FavouriteObject{}
 	switch params.ObjectType {
 	case models.FavouriteTypeOrganization:
-		organizations, err := s.organizationStore.Get(ctx, s.psql.DB(), store.OrganizationGetParams{
-			OrganizationIDs: objectID})
+		organizations, err := s.organizationStore.GetContractors(ctx, s.psql.DB(), store.OrganizationContractorsGetParams{})
 		if err != nil {
 			return models.FavouritePagination[models.FavouriteObject]{}, fmt.Errorf("get organizations: %w", err)
 		}
 
 		for _, organization := range organizations {
-			objectMap[organization.ID] = organization
+			objectMap[organization.ID] = models.OrganizationWithProfile{
+				Organization: organization,
+				Profile:      organization.ContractorInfo,
+			}
 		}
 
 	case models.FavouriteTypeTender:
