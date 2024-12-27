@@ -2324,11 +2324,18 @@ func (s *RegularUser) SetOrganization(val Organization) {
 
 // Ref: #
 type Respond struct {
+	ID             int       `json:"id"`
 	TenderID       int       `json:"tender_id"`
 	OrganizationID int       `json:"organization_id"`
 	Price          int       `json:"price"`
 	IsNdsPrice     bool      `json:"is_nds_price"`
+	IsWinner       bool      `json:"is_winner"`
 	CreatedAt      time.Time `json:"created_at"`
+}
+
+// GetID returns the value of ID.
+func (s *Respond) GetID() int {
+	return s.ID
 }
 
 // GetTenderID returns the value of TenderID.
@@ -2351,9 +2358,19 @@ func (s *Respond) GetIsNdsPrice() bool {
 	return s.IsNdsPrice
 }
 
+// GetIsWinner returns the value of IsWinner.
+func (s *Respond) GetIsWinner() bool {
+	return s.IsWinner
+}
+
 // GetCreatedAt returns the value of CreatedAt.
 func (s *Respond) GetCreatedAt() time.Time {
 	return s.CreatedAt
+}
+
+// SetID sets the value of ID.
+func (s *Respond) SetID(val int) {
+	s.ID = val
 }
 
 // SetTenderID sets the value of TenderID.
@@ -2374,6 +2391,11 @@ func (s *Respond) SetPrice(val int) {
 // SetIsNdsPrice sets the value of IsNdsPrice.
 func (s *Respond) SetIsNdsPrice(val bool) {
 	s.IsNdsPrice = val
+}
+
+// SetIsWinner sets the value of IsWinner.
+func (s *Respond) SetIsWinner(val bool) {
+	s.IsWinner = val
 }
 
 // SetCreatedAt sets the value of CreatedAt.

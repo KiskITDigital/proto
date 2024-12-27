@@ -11,13 +11,15 @@ import (
 
 func (s *RespondStore) Get(ctx context.Context, qe store.QueryExecutor, params store.RespondGetParams) ([]models.Respond, error) {
 	builder := squirrel.Select(
-		"r.tender_id",
-		"r.organization_id",
-		"r.price",
-		"r.is_nds_price",
-		"r.created_at",
-	).From("tender_responses AS r").
-		Where(squirrel.Eq{"r.tender_id": params.TenderID}).
+		"id",
+		"tender_id",
+		"organization_id",
+		"price",
+		"is_nds_price",
+		"is_winner",
+		"created_at",
+	).From("tender_responses").
+		Where(squirrel.Eq{"tender_id": params.TenderID}).
 		PlaceholderFormat(squirrel.Dollar)
 
 	if params.Limit.Set {
@@ -39,10 +41,12 @@ func (s *RespondStore) Get(ctx context.Context, qe store.QueryExecutor, params s
 		var respond models.Respond
 
 		if err = rows.Scan(
+			&respond.ID,
 			&respond.TenderID,
 			&respond.OrganizationID,
 			&respond.Price,
 			&respond.IsNDSPrice,
+			&respond.IsWinner,
 			&respond.CreatedAt,
 		); err != nil {
 			return nil, fmt.Errorf("scan row: %w", err)

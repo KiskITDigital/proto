@@ -18,3 +18,9 @@ type RespondGetParams struct {
 type RespondGetCountParams struct {
 	TenderID int
 }
+
+type RespondUpdateParams struct {
+	IsWinner       bool
+	TenderID       int
+	OrganizationID int
+}

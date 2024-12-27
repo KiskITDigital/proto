@@ -201,6 +201,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		psql,
 		winnersStore,
 		tenderStore,
+		respondStore,
 	)
 
 	router := http.NewRouter(http.RouterParams{
