@@ -11,11 +11,13 @@ type Service struct {
 	psql         DBTX
 	winnersStore WinnersStore
 	tenderStore  TenderStore
+	respondStore RespondStore
 }
 
 type DBTX interface {
 	DB() store.QueryExecutor
 	TX(ctx context.Context) (store.QueryExecutorTx, error)
+	WithTransaction(ctx context.Context, fn store.ExecFn) (err error)
 }
 
 type WinnersStore interface {
@@ -30,14 +32,20 @@ type TenderStore interface {
 	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Tender, error)
 }
 
+type RespondStore interface {
+	Update(ctx context.Context, qe store.QueryExecutor, params store.RespondUpdateParams) error
+}
+
 func New(
 	psql DBTX,
 	winnersStore WinnersStore,
 	tenderStore TenderStore,
+	respondStore RespondStore,
 ) *Service {
 	return &Service{
 		psql:         psql,
 		winnersStore: winnersStore,
 		tenderStore:  tenderStore,
+		respondStore: respondStore,
 	}
 }

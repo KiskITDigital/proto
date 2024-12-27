@@ -13,19 +13,23 @@ type RespondPagination struct {
 }
 
 type Respond struct {
+	ID             int
 	TenderID       int
 	OrganizationID int
 	Price          int
 	IsNDSPrice     bool
+	IsWinner       bool
 	CreatedAt      time.Time
 }
 
 func ConvertRespondModelToApi(respond Respond) api.Respond {
 	return api.Respond{
+		ID:             respond.ID,
 		TenderID:       respond.TenderID,
 		OrganizationID: respond.OrganizationID,
 		Price:          respond.Price,
 		IsNdsPrice:     respond.IsNDSPrice,
+		IsWinner:       respond.IsWinner,
 		CreatedAt:      respond.CreatedAt,
 	}
 }
