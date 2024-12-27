@@ -3024,7 +3024,7 @@ components:
         objects:
           $ref: '#/components/schemas/Objects'
         status:
-          type: string
+          type: number
         verification_status:
           $ref: '#/components/schemas/verification_status'
         reception_start:

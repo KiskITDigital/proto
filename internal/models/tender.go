@@ -80,7 +80,7 @@ func ConvertTenderModelToApi(tender Tender) api.Tender {
 		Objects: convert.Slice[[]Object, api.Objects](
 			tender.Objects, ConvertObjectModelToApi,
 		),
-		Status:             "",
+		Status:             0,
 		VerificationStatus: api.OptVerificationStatus{Value: tender.VerificationStatus.ToAPI(), Set: tender.VerificationStatus != 0},
 		ReceptionStart:     tender.ReceptionStart,
 		ReceptionEnd:       tender.ReceptionEnd,

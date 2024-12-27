@@ -5538,7 +5538,7 @@ func (s *Tender) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("status")
-		e.Str(s.Status)
+		e.Float64(s.Status)
 	}
 	{
 		if s.VerificationStatus.Set {
@@ -5786,8 +5786,8 @@ func (s *Tender) Decode(d *jx.Decoder) error {
 		case "status":
 			requiredBitSet[1] |= 1 << 7
 			if err := func() error {
-				v, err := d.Str()
-				s.Status = string(v)
+				v, err := d.Float64()
+				s.Status = float64(v)
 				if err != nil {
 					return err
 				}
