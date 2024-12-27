@@ -11,6 +11,13 @@ import (
 )
 
 func (s *TenderStore) Create(ctx context.Context, qe store.QueryExecutor, params store.TenderCreateParams) (int, error) {
+	var status models.TenderStatus
+	if params.IsDraft {
+		status = models.DraftStatus
+	} else {
+		status = models.OnModerationStatus
+	}
+
 	builder := squirrel.
 		Insert("tenders").
 		Columns(
@@ -49,7 +56,7 @@ func (s *TenderStore) Create(ctx context.Context, qe store.QueryExecutor, params
 			params.Wishes,
 			params.Specification,
 			pq.Array(params.Attachments),
-			params.Status,
+			status,
 			models.VerificationStatusInReview,
 			params.IsDraft,
 			params.ReceptionStart,

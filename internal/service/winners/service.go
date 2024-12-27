@@ -16,6 +16,7 @@ type Service struct {
 type DBTX interface {
 	DB() store.QueryExecutor
 	TX(ctx context.Context) (store.QueryExecutorTx, error)
+	WithTransaction(ctx context.Context, fn store.ExecFn) (err error)
 }
 
 type WinnersStore interface {
@@ -23,11 +24,13 @@ type WinnersStore interface {
 	Get(ctx context.Context, qe store.QueryExecutor, tenderID int) ([]models.Winners, error)
 	UpdateStatus(ctx context.Context, qe store.QueryExecutor, params store.WinnerUpdateParams) error
 	GetOrganizationIDByWinnerID(ctx context.Context, qe store.QueryExecutor, winnerID int) (int, error)
+	GetTenderIDByWinnerID(ctx context.Context, qe store.QueryExecutor, winnerID int) (int, error)
 	Count(ctx context.Context, qe store.QueryExecutor, tenderID int) (int, error)
 }
 
 type TenderStore interface {
 	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Tender, error)
+	UpdateStatus(ctx context.Context, qe store.QueryExecutor, params store.TenderUpdateStatusParams) error
 }
 
 func New(

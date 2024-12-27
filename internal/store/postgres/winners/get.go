@@ -110,3 +110,19 @@ func (s *WinnersStore) GetOrganizationIDByWinnerID(ctx context.Context, qe store
 
 	return organizationID, nil
 }
+
+func (s *WinnersStore) GetTenderIDByWinnerID(ctx context.Context, qe store.QueryExecutor, winnerID int) (int, error) {
+	builder := squirrel.Select("tender_id").
+		From("winners").
+		Where(squirrel.Eq{"id": winnerID}).
+		PlaceholderFormat(squirrel.Dollar)
+
+	var tenderID int
+
+	err := builder.RunWith(qe).QueryRowContext(ctx).Scan(&tenderID)
+	if err != nil {
+		return 0, fmt.Errorf("query row: %w", err)
+	}
+
+	return tenderID, nil
+}

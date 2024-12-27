@@ -6,6 +6,7 @@ import (
 
 	"github.com/Masterminds/squirrel"
 	"github.com/lib/pq"
+	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
@@ -32,6 +33,10 @@ func (s *TenderStore) Update(ctx context.Context, qe store.QueryExecutor, params
 	}
 	if params.IsDraft.Set {
 		builder = builder.Set("is_draft", params.IsDraft.Value)
+
+		if params.IsDraft.Value {
+			builder = builder.Set("status", models.DraftStatus)
+		}
 	}
 	if params.CityID.Set {
 		builder = builder.Set("city_id", params.CityID.Value)
@@ -85,8 +90,35 @@ func (s *TenderStore) UpdateVerificationStatus(ctx context.Context, qe store.Que
 	builder := squirrel.Update("tenders").
 		Set("verification_status", params.VerificationStatus).
 		Set("updated_at", squirrel.Expr("CURRENT_TIMESTAMP")).
+		Set("status", params.Status).
 		Where(squirrel.Eq{"id": params.TenderID}).
 		PlaceholderFormat(squirrel.Dollar)
+
+	result, err := builder.RunWith(qe).ExecContext(ctx)
+	if err != nil {
+		return fmt.Errorf("exec row: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("get affected rows: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("no rows were updated")
+	}
+
+	return nil
+}
+
+func (s *TenderStore) UpdateStatus(ctx context.Context, qe store.QueryExecutor, params store.TenderUpdateStatusParams) error {
+	builder := squirrel.Update("tenders").
+		Where(squirrel.Eq{"id": params.TenderID}).
+		PlaceholderFormat(squirrel.Dollar)
+
+	if params.Status.Set {
+		builder = builder.Set("status", params.Status.Value)
+	}
 
 	result, err := builder.RunWith(qe).ExecContext(ctx)
 	if err != nil {

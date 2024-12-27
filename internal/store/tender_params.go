@@ -20,7 +20,6 @@ type TenderCreateParams struct {
 	Wishes          string
 	Specification   string
 	Attachments     []string
-	Status          int
 	ReceptionStart  time.Time
 	ReceptionEnd    time.Time
 	WorkStart       time.Time
@@ -81,6 +80,7 @@ type TenderServicesDeleteParams struct {
 type TenderUpdateVerifStatusParams struct {
 	TenderID           int
 	VerificationStatus models.VerificationStatus
+	Status             models.TenderStatus
 }
 
 type TenderGetCountParams struct {
@@ -88,4 +88,9 @@ type TenderGetCountParams struct {
 	TenderIDs      models.Optional[[]int]
 	WithDrafts     bool
 	VerifiedOnly   bool
+}
+
+type TenderUpdateStatusParams struct {
+	TenderID int
+	Status   models.Optional[models.TenderStatus]
 }
