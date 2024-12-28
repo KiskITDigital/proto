@@ -7,4 +7,5 @@ const (
 	UbratoSurveySubmittedSubject = "ubrato.survey.submitted"
 	UbratoUserConfirmEmail       = "email.send.confirmation"
 	UbratoUserEmailResetPass     = "email.send.resetpass"
+	UbratoNotificationUsers      = "notification.users.send"
 )
