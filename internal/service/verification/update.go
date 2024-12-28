@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationRequestUpdateStatusParams) error {
-	return s.psql.WithTransaction(ctx, func(qe store.QueryExecutor) error {
+	err := s.psql.WithTransaction(ctx, func(qe store.QueryExecutor) error {
 		result, err := s.verificationStore.UpdateStatus(ctx, qe, store.VerificationRequestUpdateStatusParams{
 			UserID:        params.UserID,
 			RequestID:     params.RequesID,
@@ -65,4 +65,8 @@ func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationR
 
 		return nil
 	})
+	if err != nil {
+		return fmt.Errorf("run transaction: %w", err)
+	}
+	return nil
 }
