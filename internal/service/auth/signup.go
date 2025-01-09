@@ -128,31 +128,6 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 		return SignUpResult{}, fmt.Errorf("run transaction: %w", err)
 	}
 
-	notification, err := proto.Marshal(&eventsv1.SentNotification{
-		Context: &modelsv1.EventContext{
-			Timestamp:      timestamppb.New(time.Now()),
-			UserId:         proto.Int64(int64(result.User.ID)),
-			OrganizationId: proto.Int64(int64(result.User.Organization.ID)),
-		},
-		Notification: &modelsv1.Notification{
-			UserId:  *proto.Int64(int64(result.User.ID)),
-			Title:   "Верификация аккаунта",
-			Comment: "Аккаунт отправлен на верификацию. Пожалуйста, ожидайте.",
-			StatusBlock: &modelsv1.StatusBlock{
-				Text:   "На рассмотрении",
-				Status: modelsv1.Status(models.VerificationStatusInReview),
-			},
-		},
-	})
-	if err != nil {
-		return SignUpResult{}, fmt.Errorf("marhal notification proto: %w", err)
-	}
-
-	err = s.broker.Publish(ctx, broker.UbratoNotificationUsers, notification)
-	if err != nil {
-		return SignUpResult{}, fmt.Errorf("notification: %w", err)
-	}
-
 	b, err := proto.Marshal(&eventsv1.UserRegistered{
 		Context: &modelsv1.EventContext{
 			Timestamp:      timestamppb.New(time.Now()),
