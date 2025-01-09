@@ -17,7 +17,8 @@ properties:
   attachments:
     type: array
     items:
-      $ref: "../properties/url.yaml"
+      type: string
+      format: uri
     maxItems: 8
   created_at:
     type: string

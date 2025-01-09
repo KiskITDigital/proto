@@ -7,4 +7,5 @@ properties:
     description: Название элемента
     example: example
   url:
-    $ref: "../properties/url.yaml"
+    type: string
+    format: uri

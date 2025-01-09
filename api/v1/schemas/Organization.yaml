@@ -41,7 +41,8 @@ properties:
     type: string
     example: 117312, г Москва, Академический р-н, ул Вавилова, д 19
   avatar_url:
-    $ref: "../properties/url.yaml"
+    type: string
+    format: uri
   emails:
     type: array
     items:

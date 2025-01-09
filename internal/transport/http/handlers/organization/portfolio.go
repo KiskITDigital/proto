@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/url"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
@@ -27,8 +28,8 @@ func (h *Handler) V1OrganizationsOrganizationIDPortfolioPost(
 		OrganizationID: params.OrganizationID,
 		Title:          string(req.Title),
 		Description:    string(req.Description),
-		Attachments: convert.Slice[[]api.URL, []string](
-			req.GetAttachments(), func(u api.URL) string { return string(u) })})
+		Attachments: convert.Slice[[]url.URL, []string](
+			req.GetAttachments(), func(u url.URL) string { return u.String() })})
 	if err != nil {
 		if errors.Is(err, errstore.ErrOrganizationNotFound) {
 			return nil, cerr.Wrap(err, cerr.CodeNotFound, "Организация не существует", nil)
@@ -69,8 +70,8 @@ func (h *Handler) V1OrganizationsPortfolioPortfolioIDPut(ctx context.Context, re
 		PortfolioID: params.PortfolioID,
 		Title:       models.Optional[string]{Value: string(req.Title.Value), Set: req.Title.Set},
 		Description: models.Optional[string]{Value: string(req.Description.Value), Set: req.Description.Set},
-		Attachments: models.Optional[[]string]{Value: convert.Slice[[]api.URL, []string](
-			req.GetAttachments(), func(u api.URL) string { return string(u) },
+		Attachments: models.Optional[[]string]{Value: convert.Slice[[]url.URL, []string](
+			req.GetAttachments(), func(u url.URL) string { return u.String() },
 		), Set: req.GetAttachments() != nil}})
 	switch {
 	case errors.Is(err, errstore.ErrPortfolioNotFound):

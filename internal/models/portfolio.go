@@ -1,6 +1,7 @@
 package models
 
 import (
+	"net/url"
 	"time"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
@@ -22,8 +23,8 @@ func ConvertPortfolioModelToApi(portfolio Portfolio) api.Portfolio {
 		ID:          portfolio.ID,
 		Title:       portfolio.Title,
 		Description: api.Description(portfolio.Description),
-		Attachments: convert.Slice[[]string, []api.URL](
-			portfolio.Attachments, func(u string) api.URL { return api.URL(u) },
+		Attachments: convert.Slice[[]string, []url.URL](
+			portfolio.Attachments, func(s string) url.URL { return stringToUrl(s) },
 		),
 		CreatedAt: portfolio.CreatedAt,
 		UpdatedAt: api.OptDateTime{Value: portfolio.UpdatedAt.Value, Set: portfolio.UpdatedAt.Set},

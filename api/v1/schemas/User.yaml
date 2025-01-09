@@ -24,7 +24,8 @@ properties:
   middle_name:
     $ref: "../properties/name.yaml"
   avatar_url:
-    $ref: "../properties/url.yaml"
+    type: string
+    format: uri
   email_verified:
     type: boolean
   is_banned:

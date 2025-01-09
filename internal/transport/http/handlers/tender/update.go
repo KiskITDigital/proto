@@ -3,6 +3,7 @@ package tender
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"time"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
@@ -25,9 +26,9 @@ func (h *Handler) V1TendersTenderIDPut(ctx context.Context, req *api.V1TendersTe
 		FloorSpace:      models.Optional[int]{Value: req.GetFloorSpace().Value, Set: req.GetFloorSpace().Set},
 		Description:     models.Optional[string]{Value: req.GetDescription().Value, Set: req.GetDescription().Set},
 		Wishes:          models.Optional[string]{Value: req.GetWishes().Value, Set: req.GetWishes().Set},
-		Specification:   models.Optional[string]{Value: string(req.GetSpecification().Value), Set: req.GetSpecification().Set},
-		Attachments: models.Optional[[]string]{Value: convert.Slice[[]api.URL, []string](
-			req.GetAttachments(), func(u api.URL) string { return string(u) },
+		Specification:   models.Optional[string]{Value: string(req.Specification.Value.String()), Set: req.GetSpecification().Set},
+		Attachments: models.Optional[[]string]{Value: convert.Slice[[]url.URL, []string](
+			req.GetAttachments(), func(u url.URL) string { return u.String() },
 		), Set: req.GetAttachments() != nil},
 		ServiceIDs:     models.Optional[[]int]{Value: req.GetServices(), Set: len(req.GetServices()) > 0},
 		ObjectIDs:      models.Optional[[]int]{Value: req.GetObjects(), Set: len(req.GetObjects()) > 0},

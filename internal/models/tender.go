@@ -1,6 +1,7 @@
 package models
 
 import (
+	"net/url"
 	"time"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
@@ -70,9 +71,9 @@ func ConvertTenderModelToApi(tender Tender) api.Tender {
 		FloorSpace:      tender.FloorSpace,
 		Description:     tender.Description,
 		Wishes:          tender.Wishes,
-		Specification:   api.URL(tender.Specification),
-		Attachments: convert.Slice[[]string, []api.URL](
-			tender.Attachments, func(u string) api.URL { return api.URL(u) },
+		Specification:   stringToUrl(tender.Specification),
+		Attachments: convert.Slice[[]string, []url.URL](
+			tender.Attachments, func(s string) url.URL { return stringToUrl(s) },
 		),
 		Services: convert.Slice[[]Service, api.Services](
 			tender.Services, ConvertServiceModelToApi,

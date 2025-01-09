@@ -30,7 +30,8 @@ post:
             middle_name:
               $ref: "../../properties/name.yaml"
             avatar_url:
-              $ref: "../../properties/url.yaml"
+              type: string
+              format: uri
             inn:
               $ref: "../../properties/inn.yaml"
             is_contractor:

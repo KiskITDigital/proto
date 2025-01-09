@@ -3,6 +3,7 @@ package tender
 import (
 	"context"
 	"fmt"
+	"net/url"
 
 	api "gitlab.ubrato.ru/ubrato/core/api/gen"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/contextor"
@@ -23,9 +24,9 @@ func (h *Handler) V1TendersPost(ctx context.Context, req *api.V1TendersPostReq) 
 		FloorSpace:      req.GetFloorSpace(),
 		Description:     req.GetDescription().Value,
 		Wishes:          req.GetWishes().Value,
-		Specification:   string(req.Specification.Value),
-		Attachments: convert.Slice[[]api.URL, []string](
-			req.GetAttachments(), func(u api.URL) string { return string(u) },
+		Specification:   req.Specification.Value.String(),
+		Attachments: convert.Slice[[]url.URL, []string](
+			req.GetAttachments(), func(u url.URL) string { return u.String() },
 		),
 		ServiceIDs:     req.GetServices(),
 		ObjectIDs:      req.GetObjects(),

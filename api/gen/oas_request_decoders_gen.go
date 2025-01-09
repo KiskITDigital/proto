@@ -3,7 +3,6 @@
 package api
 
 import (
-	"fmt"
 	"io"
 	"mime"
 	"net/http"
@@ -671,14 +670,6 @@ func (s *Server) decodeV1OrganizationsOrganizationIDProfileBrandPutRequest(r *ht
 				Err:         err,
 			}
 			return req, close, err
-		}
-		if err := func() error {
-			if err := request.Validate(); err != nil {
-				return err
-			}
-			return nil
-		}(); err != nil {
-			return req, close, errors.Wrap(err, "validate")
 		}
 		return &request, close, nil
 	default:
@@ -1858,23 +1849,6 @@ func (s *Server) decodeV1VerificationsOrganizationsOrganizationIDPostRequest(r *
 				MaxLengthSet: true,
 			}).ValidateLength(len(request)); err != nil {
 				return errors.Wrap(err, "array")
-			}
-			var failures []validate.FieldError
-			for i, elem := range request {
-				if err := func() error {
-					if err := elem.Validate(); err != nil {
-						return err
-					}
-					return nil
-				}(); err != nil {
-					failures = append(failures, validate.FieldError{
-						Name:  fmt.Sprintf("[%d]", i),
-						Error: err,
-					})
-				}
-			}
-			if len(failures) > 0 {
-				return &validate.Error{Fields: failures}
 			}
 			return nil
 		}(); err != nil {

@@ -46,11 +46,13 @@ properties:
   wishes:
     type: string
   specification:
-    $ref: "../properties/url.yaml"
+    type: string
+    format: uri
   attachments:
     type: array
     items:
-      $ref: "../properties/url.yaml"
+      type: string
+      format: uri
     maxItems: 8
   services:
     $ref: "catalog/Services.yaml"
