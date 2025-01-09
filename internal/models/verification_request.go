@@ -47,14 +47,14 @@ func (a *Attachments) Scan(value interface{}) error {
 func ConvertAPIToAttachment(attachment api.Attachment) Attachment {
 	return Attachment{
 		Name: Optional[string]{Value: attachment.Name.Value, Set: attachment.Name.Set},
-		Url:  string(attachment.URL),
+		Url:  attachment.URL.String(),
 	}
 }
 
 func ConvertAttachmentToApi(attachment Attachment) api.Attachment {
 	return api.Attachment{
 		Name: api.OptString{Value: attachment.Name.Value, Set: attachment.Name.Set},
-		URL:  api.URL(attachment.Url),
+		URL:  stringToUrl(attachment.Url),
 	}
 }
 

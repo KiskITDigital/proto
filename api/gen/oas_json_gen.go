@@ -4,6 +4,7 @@ package api
 
 import (
 	"math/bits"
+	"net/url"
 	"strconv"
 	"time"
 
@@ -286,7 +287,7 @@ func (s *Attachment) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("url")
-		s.URL.Encode(e)
+		json.EncodeURI(e, s.URL)
 	}
 }
 
@@ -317,7 +318,9 @@ func (s *Attachment) Decode(d *jx.Decoder) error {
 		case "url":
 			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				if err := s.URL.Decode(d); err != nil {
+				v, err := json.DecodeURI(d)
+				s.URL = v
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2760,35 +2763,37 @@ func (s *OptString) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode encodes URL as json.
-func (o OptURL) Encode(e *jx.Encoder) {
+// Encode encodes url.URL as json.
+func (o OptURI) Encode(e *jx.Encoder) {
 	if !o.Set {
 		return
 	}
-	o.Value.Encode(e)
+	json.EncodeURI(e, o.Value)
 }
 
-// Decode decodes URL from json.
-func (o *OptURL) Decode(d *jx.Decoder) error {
+// Decode decodes url.URL from json.
+func (o *OptURI) Decode(d *jx.Decoder) error {
 	if o == nil {
-		return errors.New("invalid: unable to decode OptURL to nil")
+		return errors.New("invalid: unable to decode OptURI to nil")
 	}
 	o.Set = true
-	if err := o.Value.Decode(d); err != nil {
+	v, err := json.DecodeURI(d)
+	if err != nil {
 		return err
 	}
+	o.Value = v
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s OptURL) MarshalJSON() ([]byte, error) {
+func (s OptURI) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptURL) UnmarshalJSON(data []byte) error {
+func (s *OptURI) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -3605,7 +3610,7 @@ func (s *Portfolio) encodeFields(e *jx.Encoder) {
 		e.FieldStart("attachments")
 		e.ArrStart()
 		for _, elem := range s.Attachments {
-			elem.Encode(e)
+			json.EncodeURI(e, elem)
 		}
 		e.ArrEnd()
 	}
@@ -3676,10 +3681,12 @@ func (s *Portfolio) Decode(d *jx.Decoder) error {
 		case "attachments":
 			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				s.Attachments = make([]URL, 0)
+				s.Attachments = make([]url.URL, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem URL
-					if err := elem.Decode(d); err != nil {
+					var elem url.URL
+					v, err := json.DecodeURI(d)
+					elem = v
+					if err != nil {
 						return err
 					}
 					s.Attachments = append(s.Attachments, elem)
@@ -5570,13 +5577,13 @@ func (s *Tender) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("specification")
-		s.Specification.Encode(e)
+		json.EncodeURI(e, s.Specification)
 	}
 	{
 		e.FieldStart("attachments")
 		e.ArrStart()
 		for _, elem := range s.Attachments {
-			elem.Encode(e)
+			json.EncodeURI(e, elem)
 		}
 		e.ArrEnd()
 	}
@@ -5792,7 +5799,9 @@ func (s *Tender) Decode(d *jx.Decoder) error {
 		case "specification":
 			requiredBitSet[1] |= 1 << 3
 			if err := func() error {
-				if err := s.Specification.Decode(d); err != nil {
+				v, err := json.DecodeURI(d)
+				s.Specification = v
+				if err != nil {
 					return err
 				}
 				return nil
@@ -5802,10 +5811,12 @@ func (s *Tender) Decode(d *jx.Decoder) error {
 		case "attachments":
 			requiredBitSet[1] |= 1 << 4
 			if err := func() error {
-				s.Attachments = make([]URL, 0)
+				s.Attachments = make([]url.URL, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem URL
-					if err := elem.Decode(d); err != nil {
+					var elem url.URL
+					v, err := json.DecodeURI(d)
+					elem = v
+					if err != nil {
 						return err
 					}
 					s.Attachments = append(s.Attachments, elem)
@@ -5983,46 +5994,6 @@ func (s *Tender) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *Tender) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes URL as json.
-func (s URL) Encode(e *jx.Encoder) {
-	unwrapped := string(s)
-
-	e.Str(unwrapped)
-}
-
-// Decode decodes URL from json.
-func (s *URL) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode URL to nil")
-	}
-	var unwrapped string
-	if err := func() error {
-		v, err := d.Str()
-		unwrapped = string(v)
-		if err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		return errors.Wrap(err, "alias")
-	}
-	*s = URL(unwrapped)
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s URL) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *URL) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -9802,7 +9773,7 @@ func (s *V1OrganizationsOrganizationIDPortfolioPostReq) encodeFields(e *jx.Encod
 		e.FieldStart("attachments")
 		e.ArrStart()
 		for _, elem := range s.Attachments {
-			elem.Encode(e)
+			json.EncodeURI(e, elem)
 		}
 		e.ArrEnd()
 	}
@@ -9848,10 +9819,12 @@ func (s *V1OrganizationsOrganizationIDPortfolioPostReq) Decode(d *jx.Decoder) er
 		case "attachments":
 			requiredBitSet[0] |= 1 << 2
 			if err := func() error {
-				s.Attachments = make([]URL, 0)
+				s.Attachments = make([]url.URL, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem URL
-					if err := elem.Decode(d); err != nil {
+					var elem url.URL
+					v, err := json.DecodeURI(d)
+					elem = v
+					if err != nil {
 						return err
 					}
 					s.Attachments = append(s.Attachments, elem)
@@ -11556,7 +11529,7 @@ func (s *V1OrganizationsPortfolioPortfolioIDPutReq) encodeFields(e *jx.Encoder) 
 			e.FieldStart("attachments")
 			e.ArrStart()
 			for _, elem := range s.Attachments {
-				elem.Encode(e)
+				json.EncodeURI(e, elem)
 			}
 			e.ArrEnd()
 		}
@@ -11599,10 +11572,12 @@ func (s *V1OrganizationsPortfolioPortfolioIDPutReq) Decode(d *jx.Decoder) error 
 			}
 		case "attachments":
 			if err := func() error {
-				s.Attachments = make([]URL, 0)
+				s.Attachments = make([]url.URL, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem URL
-					if err := elem.Decode(d); err != nil {
+					var elem url.URL
+					v, err := json.DecodeURI(d)
+					elem = v
+					if err != nil {
 						return err
 					}
 					s.Attachments = append(s.Attachments, elem)
@@ -12769,7 +12744,7 @@ func (s *V1TendersPostReq) encodeFields(e *jx.Encoder) {
 			e.FieldStart("attachments")
 			e.ArrStart()
 			for _, elem := range s.Attachments {
-				elem.Encode(e)
+				json.EncodeURI(e, elem)
 			}
 			e.ArrEnd()
 		}
@@ -12948,10 +12923,12 @@ func (s *V1TendersPostReq) Decode(d *jx.Decoder) error {
 			}
 		case "attachments":
 			if err := func() error {
-				s.Attachments = make([]URL, 0)
+				s.Attachments = make([]url.URL, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem URL
-					if err := elem.Decode(d); err != nil {
+					var elem url.URL
+					v, err := json.DecodeURI(d)
+					elem = v
+					if err != nil {
 						return err
 					}
 					s.Attachments = append(s.Attachments, elem)
@@ -13624,7 +13601,7 @@ func (s *V1TendersTenderIDPutReq) encodeFields(e *jx.Encoder) {
 			e.FieldStart("attachments")
 			e.ArrStart()
 			for _, elem := range s.Attachments {
-				elem.Encode(e)
+				json.EncodeURI(e, elem)
 			}
 			e.ArrEnd()
 		}
@@ -13802,10 +13779,12 @@ func (s *V1TendersTenderIDPutReq) Decode(d *jx.Decoder) error {
 			}
 		case "attachments":
 			if err := func() error {
-				s.Attachments = make([]URL, 0)
+				s.Attachments = make([]url.URL, 0)
 				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem URL
-					if err := elem.Decode(d); err != nil {
+					var elem url.URL
+					v, err := json.DecodeURI(d)
+					elem = v
+					if err != nil {
 						return err
 					}
 					s.Attachments = append(s.Attachments, elem)

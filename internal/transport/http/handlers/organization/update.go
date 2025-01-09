@@ -26,7 +26,7 @@ func (h *Handler) V1OrganizationsOrganizationIDProfileBrandPut(
 	if err := h.organizationService.UpdateBrand(ctx, service.OrganizationUpdateBrandParams{
 		OrganizationID: params.OrganizationID,
 		Brand:          models.Optional[string]{Value: req.GetBrand().Value, Set: req.GetBrand().Set},
-		AvatarURL:      models.Optional[string]{Value: string(req.GetAvatarURL().Value), Set: req.GetAvatarURL().Set},
+		AvatarURL:      models.Optional[string]{Value: req.AvatarURL.Value.String(), Set: req.GetAvatarURL().Set},
 	}); err != nil {
 		if errors.Is(err, errstore.ErrOrganizationNotFound) {
 			return nil, cerr.Wrap(err, cerr.CodeNotFound, "Организация не найдена", map[string]interface{}{

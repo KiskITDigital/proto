@@ -26,7 +26,8 @@ put:
               description: Название бренда
               example: "Ubrato"
             avatar_url:
-              $ref: "../../../properties/url.yaml"   
+              type: string
+              format: uri
   responses:
     '200':
       description: Success

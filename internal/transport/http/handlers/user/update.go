@@ -24,7 +24,7 @@ func (h *Handler) V1UsersUserIDPut(ctx context.Context, req *api.V1UsersUserIDPu
 		FirstName:  models.Optional[string]{Value: string(req.FirstName.Value), Set: req.FirstName.Set},
 		LastName:   models.Optional[string]{Value: string(req.LastName.Value), Set: req.LastName.Set},
 		MiddleName: models.Optional[string]{Value: string(req.MiddleName.Value), Set: req.MiddleName.Set},
-		AvatarURL:  models.Optional[string]{Value: string(req.AvatarURL.Value), Set: req.AvatarURL.Set},
+		AvatarURL:  models.Optional[string]{Value: string(req.AvatarURL.Value.String()), Set: req.AvatarURL.Set},
 	}); err != nil {
 		if errors.Is(err, errstore.ErrUserNotFound) {
 			return nil, cerr.Wrap(err, cerr.CodeNotFound, "Пользователь не найден", map[string]interface{}{

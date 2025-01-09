@@ -3,6 +3,7 @@
 package api
 
 import (
+	"net/url"
 	"time"
 
 	"github.com/go-faster/errors"
@@ -150,7 +151,7 @@ func (s *Addition) SetCreatedAt(val time.Time) {
 type Attachment struct {
 	// Название элемента.
 	Name OptString `json:"name"`
-	URL  URL       `json:"url"`
+	URL  url.URL   `json:"url"`
 }
 
 // GetName returns the value of Name.
@@ -159,7 +160,7 @@ func (s *Attachment) GetName() OptString {
 }
 
 // GetURL returns the value of URL.
-func (s *Attachment) GetURL() URL {
+func (s *Attachment) GetURL() url.URL {
 	return s.URL
 }
 
@@ -169,7 +170,7 @@ func (s *Attachment) SetName(val OptString) {
 }
 
 // SetURL sets the value of URL.
-func (s *Attachment) SetURL(val URL) {
+func (s *Attachment) SetURL(val url.URL) {
 	s.URL = val
 }
 
@@ -353,7 +354,7 @@ type EmployeeUser struct {
 	FirstName     Name      `json:"first_name"`
 	LastName      Name      `json:"last_name"`
 	MiddleName    OptName   `json:"middle_name"`
-	AvatarURL     OptURL    `json:"avatar_url"`
+	AvatarURL     OptURI    `json:"avatar_url"`
 	EmailVerified bool      `json:"email_verified"`
 	IsBanned      bool      `json:"is_banned"`
 	CreatedAt     time.Time `json:"created_at"`
@@ -393,7 +394,7 @@ func (s *EmployeeUser) GetMiddleName() OptName {
 }
 
 // GetAvatarURL returns the value of AvatarURL.
-func (s *EmployeeUser) GetAvatarURL() OptURL {
+func (s *EmployeeUser) GetAvatarURL() OptURI {
 	return s.AvatarURL
 }
 
@@ -458,7 +459,7 @@ func (s *EmployeeUser) SetMiddleName(val OptName) {
 }
 
 // SetAvatarURL sets the value of AvatarURL.
-func (s *EmployeeUser) SetAvatarURL(val OptURL) {
+func (s *EmployeeUser) SetAvatarURL(val OptURI) {
 	s.AvatarURL = val
 }
 
@@ -1435,38 +1436,38 @@ func (o OptString) Or(d string) string {
 	return d
 }
 
-// NewOptURL returns new OptURL with value set to v.
-func NewOptURL(v URL) OptURL {
-	return OptURL{
+// NewOptURI returns new OptURI with value set to v.
+func NewOptURI(v url.URL) OptURI {
+	return OptURI{
 		Value: v,
 		Set:   true,
 	}
 }
 
-// OptURL is optional URL.
-type OptURL struct {
-	Value URL
+// OptURI is optional url.URL.
+type OptURI struct {
+	Value url.URL
 	Set   bool
 }
 
-// IsSet returns true if OptURL was set.
-func (o OptURL) IsSet() bool { return o.Set }
+// IsSet returns true if OptURI was set.
+func (o OptURI) IsSet() bool { return o.Set }
 
 // Reset unsets value.
-func (o *OptURL) Reset() {
-	var v URL
+func (o *OptURI) Reset() {
+	var v url.URL
 	o.Value = v
 	o.Set = false
 }
 
 // SetTo sets value to v.
-func (o *OptURL) SetTo(v URL) {
+func (o *OptURI) SetTo(v url.URL) {
 	o.Set = true
 	o.Value = v
 }
 
 // Get returns value and boolean that denotes whether value was set.
-func (o OptURL) Get() (v URL, ok bool) {
+func (o OptURI) Get() (v url.URL, ok bool) {
 	if !o.Set {
 		return v, false
 	}
@@ -1474,7 +1475,7 @@ func (o OptURL) Get() (v URL, ok bool) {
 }
 
 // Or returns value if set, or given parameter if does not.
-func (o OptURL) Or(d URL) URL {
+func (o OptURI) Or(d url.URL) url.URL {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -1539,7 +1540,7 @@ type Organization struct {
 	Kpp                Kpp                   `json:"kpp"`
 	TaxCode            TaxCode               `json:"tax_code"`
 	Address            string                `json:"address"`
-	AvatarURL          OptURL                `json:"avatar_url"`
+	AvatarURL          OptURI                `json:"avatar_url"`
 	Emails             []ContactInfo         `json:"emails"`
 	Phones             []ContactInfo         `json:"phones"`
 	Messengers         []ContactInfo         `json:"messengers"`
@@ -1601,7 +1602,7 @@ func (s *Organization) GetAddress() string {
 }
 
 // GetAvatarURL returns the value of AvatarURL.
-func (s *Organization) GetAvatarURL() OptURL {
+func (s *Organization) GetAvatarURL() OptURI {
 	return s.AvatarURL
 }
 
@@ -1696,7 +1697,7 @@ func (s *Organization) SetAddress(val string) {
 }
 
 // SetAvatarURL sets the value of AvatarURL.
-func (s *Organization) SetAvatarURL(val OptURL) {
+func (s *Organization) SetAvatarURL(val OptURI) {
 	s.AvatarURL = val
 }
 
@@ -1823,7 +1824,7 @@ type Portfolio struct {
 	ID          int         `json:"id"`
 	Title       string      `json:"title"`
 	Description Description `json:"description"`
-	Attachments []URL       `json:"attachments"`
+	Attachments []url.URL   `json:"attachments"`
 	CreatedAt   time.Time   `json:"created_at"`
 	UpdatedAt   OptDateTime `json:"updated_at"`
 }
@@ -1844,7 +1845,7 @@ func (s *Portfolio) GetDescription() Description {
 }
 
 // GetAttachments returns the value of Attachments.
-func (s *Portfolio) GetAttachments() []URL {
+func (s *Portfolio) GetAttachments() []url.URL {
 	return s.Attachments
 }
 
@@ -1874,7 +1875,7 @@ func (s *Portfolio) SetDescription(val Description) {
 }
 
 // SetAttachments sets the value of Attachments.
-func (s *Portfolio) SetAttachments(val []URL) {
+func (s *Portfolio) SetAttachments(val []url.URL) {
 	s.Attachments = val
 }
 
@@ -2222,7 +2223,7 @@ type RegularUser struct {
 	FirstName     Name         `json:"first_name"`
 	LastName      Name         `json:"last_name"`
 	MiddleName    OptName      `json:"middle_name"`
-	AvatarURL     OptURL       `json:"avatar_url"`
+	AvatarURL     OptURI       `json:"avatar_url"`
 	EmailVerified bool         `json:"email_verified"`
 	IsBanned      bool         `json:"is_banned"`
 	CreatedAt     time.Time    `json:"created_at"`
@@ -2261,7 +2262,7 @@ func (s *RegularUser) GetMiddleName() OptName {
 }
 
 // GetAvatarURL returns the value of AvatarURL.
-func (s *RegularUser) GetAvatarURL() OptURL {
+func (s *RegularUser) GetAvatarURL() OptURI {
 	return s.AvatarURL
 }
 
@@ -2321,7 +2322,7 @@ func (s *RegularUser) SetMiddleName(val OptName) {
 }
 
 // SetAvatarURL sets the value of AvatarURL.
-func (s *RegularUser) SetAvatarURL(val OptURL) {
+func (s *RegularUser) SetAvatarURL(val OptURI) {
 	s.AvatarURL = val
 }
 
@@ -2718,8 +2719,8 @@ type Tender struct {
 	FloorSpace         int                   `json:"floor_space"`
 	Description        string                `json:"description"`
 	Wishes             string                `json:"wishes"`
-	Specification      URL                   `json:"specification"`
-	Attachments        []URL                 `json:"attachments"`
+	Specification      url.URL               `json:"specification"`
+	Attachments        []url.URL             `json:"attachments"`
 	Services           Services              `json:"services"`
 	Objects            Objects               `json:"objects"`
 	Status             Status                `json:"status"`
@@ -2790,12 +2791,12 @@ func (s *Tender) GetWishes() string {
 }
 
 // GetSpecification returns the value of Specification.
-func (s *Tender) GetSpecification() URL {
+func (s *Tender) GetSpecification() url.URL {
 	return s.Specification
 }
 
 // GetAttachments returns the value of Attachments.
-func (s *Tender) GetAttachments() []URL {
+func (s *Tender) GetAttachments() []url.URL {
 	return s.Attachments
 }
 
@@ -2905,12 +2906,12 @@ func (s *Tender) SetWishes(val string) {
 }
 
 // SetSpecification sets the value of Specification.
-func (s *Tender) SetSpecification(val URL) {
+func (s *Tender) SetSpecification(val url.URL) {
 	s.Specification = val
 }
 
 // SetAttachments sets the value of Attachments.
-func (s *Tender) SetAttachments(val []URL) {
+func (s *Tender) SetAttachments(val []url.URL) {
 	s.Attachments = val
 }
 
@@ -2964,8 +2965,6 @@ func (s *Tender) SetUpdatedAt(val time.Time) {
 	s.UpdatedAt = val
 }
 
-type URL string
-
 // Ref: #
 type User struct {
 	ID            int       `json:"id"`
@@ -2974,7 +2973,7 @@ type User struct {
 	FirstName     Name      `json:"first_name"`
 	LastName      Name      `json:"last_name"`
 	MiddleName    OptName   `json:"middle_name"`
-	AvatarURL     OptURL    `json:"avatar_url"`
+	AvatarURL     OptURI    `json:"avatar_url"`
 	EmailVerified bool      `json:"email_verified"`
 	IsBanned      bool      `json:"is_banned"`
 	CreatedAt     time.Time `json:"created_at"`
@@ -3012,7 +3011,7 @@ func (s *User) GetMiddleName() OptName {
 }
 
 // GetAvatarURL returns the value of AvatarURL.
-func (s *User) GetAvatarURL() OptURL {
+func (s *User) GetAvatarURL() OptURI {
 	return s.AvatarURL
 }
 
@@ -3067,7 +3066,7 @@ func (s *User) SetMiddleName(val OptName) {
 }
 
 // SetAvatarURL sets the value of AvatarURL.
-func (s *User) SetAvatarURL(val OptURL) {
+func (s *User) SetAvatarURL(val OptURI) {
 	s.AvatarURL = val
 }
 
@@ -3341,7 +3340,7 @@ type V1AuthSignupPostReq struct {
 	FirstName    Name     `json:"first_name"`
 	LastName     Name     `json:"last_name"`
 	MiddleName   OptName  `json:"middle_name"`
-	AvatarURL    OptURL   `json:"avatar_url"`
+	AvatarURL    OptURI   `json:"avatar_url"`
 	Inn          Inn      `json:"inn"`
 	IsContractor bool     `json:"is_contractor"`
 }
@@ -3377,7 +3376,7 @@ func (s *V1AuthSignupPostReq) GetMiddleName() OptName {
 }
 
 // GetAvatarURL returns the value of AvatarURL.
-func (s *V1AuthSignupPostReq) GetAvatarURL() OptURL {
+func (s *V1AuthSignupPostReq) GetAvatarURL() OptURI {
 	return s.AvatarURL
 }
 
@@ -3422,7 +3421,7 @@ func (s *V1AuthSignupPostReq) SetMiddleName(val OptName) {
 }
 
 // SetAvatarURL sets the value of AvatarURL.
-func (s *V1AuthSignupPostReq) SetAvatarURL(val OptURL) {
+func (s *V1AuthSignupPostReq) SetAvatarURL(val OptURI) {
 	s.AvatarURL = val
 }
 
@@ -3970,7 +3969,7 @@ func (*V1OrganizationsOrganizationIDPortfolioPostOK) v1OrganizationsOrganization
 type V1OrganizationsOrganizationIDPortfolioPostReq struct {
 	Title       string      `json:"title"`
 	Description Description `json:"description"`
-	Attachments []URL       `json:"attachments"`
+	Attachments []url.URL   `json:"attachments"`
 }
 
 // GetTitle returns the value of Title.
@@ -3984,7 +3983,7 @@ func (s *V1OrganizationsOrganizationIDPortfolioPostReq) GetDescription() Descrip
 }
 
 // GetAttachments returns the value of Attachments.
-func (s *V1OrganizationsOrganizationIDPortfolioPostReq) GetAttachments() []URL {
+func (s *V1OrganizationsOrganizationIDPortfolioPostReq) GetAttachments() []url.URL {
 	return s.Attachments
 }
 
@@ -3999,7 +3998,7 @@ func (s *V1OrganizationsOrganizationIDPortfolioPostReq) SetDescription(val Descr
 }
 
 // SetAttachments sets the value of Attachments.
-func (s *V1OrganizationsOrganizationIDPortfolioPostReq) SetAttachments(val []URL) {
+func (s *V1OrganizationsOrganizationIDPortfolioPostReq) SetAttachments(val []url.URL) {
 	s.Attachments = val
 }
 
@@ -4012,7 +4011,7 @@ func (*V1OrganizationsOrganizationIDProfileBrandPutOK) v1OrganizationsOrganizati
 type V1OrganizationsOrganizationIDProfileBrandPutReq struct {
 	// Название бренда.
 	Brand     OptString `json:"brand"`
-	AvatarURL OptURL    `json:"avatar_url"`
+	AvatarURL OptURI    `json:"avatar_url"`
 }
 
 // GetBrand returns the value of Brand.
@@ -4021,7 +4020,7 @@ func (s *V1OrganizationsOrganizationIDProfileBrandPutReq) GetBrand() OptString {
 }
 
 // GetAvatarURL returns the value of AvatarURL.
-func (s *V1OrganizationsOrganizationIDProfileBrandPutReq) GetAvatarURL() OptURL {
+func (s *V1OrganizationsOrganizationIDProfileBrandPutReq) GetAvatarURL() OptURI {
 	return s.AvatarURL
 }
 
@@ -4031,7 +4030,7 @@ func (s *V1OrganizationsOrganizationIDProfileBrandPutReq) SetBrand(val OptString
 }
 
 // SetAvatarURL sets the value of AvatarURL.
-func (s *V1OrganizationsOrganizationIDProfileBrandPutReq) SetAvatarURL(val OptURL) {
+func (s *V1OrganizationsOrganizationIDProfileBrandPutReq) SetAvatarURL(val OptURI) {
 	s.AvatarURL = val
 }
 
@@ -4405,7 +4404,7 @@ func (*V1OrganizationsPortfolioPortfolioIDPutOK) v1OrganizationsPortfolioPortfol
 type V1OrganizationsPortfolioPortfolioIDPutReq struct {
 	Title       OptString      `json:"title"`
 	Description OptDescription `json:"description"`
-	Attachments []URL          `json:"attachments"`
+	Attachments []url.URL      `json:"attachments"`
 }
 
 // GetTitle returns the value of Title.
@@ -4419,7 +4418,7 @@ func (s *V1OrganizationsPortfolioPortfolioIDPutReq) GetDescription() OptDescript
 }
 
 // GetAttachments returns the value of Attachments.
-func (s *V1OrganizationsPortfolioPortfolioIDPutReq) GetAttachments() []URL {
+func (s *V1OrganizationsPortfolioPortfolioIDPutReq) GetAttachments() []url.URL {
 	return s.Attachments
 }
 
@@ -4434,7 +4433,7 @@ func (s *V1OrganizationsPortfolioPortfolioIDPutReq) SetDescription(val OptDescri
 }
 
 // SetAttachments sets the value of Attachments.
-func (s *V1OrganizationsPortfolioPortfolioIDPutReq) SetAttachments(val []URL) {
+func (s *V1OrganizationsPortfolioPortfolioIDPutReq) SetAttachments(val []url.URL) {
 	s.Attachments = val
 }
 
@@ -4666,8 +4665,8 @@ type V1TendersPostReq struct {
 	FloorSpace      int       `json:"floor_space"`
 	Description     OptString `json:"description"`
 	Wishes          OptString `json:"wishes"`
-	Specification   OptURL    `json:"specification"`
-	Attachments     []URL     `json:"attachments"`
+	Specification   OptURI    `json:"specification"`
+	Attachments     []url.URL `json:"attachments"`
 	Services        []int     `json:"services"`
 	Objects         []int     `json:"objects"`
 	IsDraft         OptBool   `json:"is_draft"`
@@ -4720,12 +4719,12 @@ func (s *V1TendersPostReq) GetWishes() OptString {
 }
 
 // GetSpecification returns the value of Specification.
-func (s *V1TendersPostReq) GetSpecification() OptURL {
+func (s *V1TendersPostReq) GetSpecification() OptURI {
 	return s.Specification
 }
 
 // GetAttachments returns the value of Attachments.
-func (s *V1TendersPostReq) GetAttachments() []URL {
+func (s *V1TendersPostReq) GetAttachments() []url.URL {
 	return s.Attachments
 }
 
@@ -4805,12 +4804,12 @@ func (s *V1TendersPostReq) SetWishes(val OptString) {
 }
 
 // SetSpecification sets the value of Specification.
-func (s *V1TendersPostReq) SetSpecification(val OptURL) {
+func (s *V1TendersPostReq) SetSpecification(val OptURI) {
 	s.Specification = val
 }
 
 // SetAttachments sets the value of Attachments.
-func (s *V1TendersPostReq) SetAttachments(val []URL) {
+func (s *V1TendersPostReq) SetAttachments(val []url.URL) {
 	s.Attachments = val
 }
 
@@ -4947,8 +4946,8 @@ type V1TendersTenderIDPutReq struct {
 	FloorSpace      OptInt     `json:"floor_space"`
 	Description     OptString  `json:"description"`
 	Wishes          OptString  `json:"wishes"`
-	Specification   OptURL     `json:"specification"`
-	Attachments     []URL      `json:"attachments"`
+	Specification   OptURI     `json:"specification"`
+	Attachments     []url.URL  `json:"attachments"`
 	Services        []int      `json:"services"`
 	Objects         []int      `json:"objects"`
 	IsDraft         OptBool    `json:"is_draft"`
@@ -5001,12 +5000,12 @@ func (s *V1TendersTenderIDPutReq) GetWishes() OptString {
 }
 
 // GetSpecification returns the value of Specification.
-func (s *V1TendersTenderIDPutReq) GetSpecification() OptURL {
+func (s *V1TendersTenderIDPutReq) GetSpecification() OptURI {
 	return s.Specification
 }
 
 // GetAttachments returns the value of Attachments.
-func (s *V1TendersTenderIDPutReq) GetAttachments() []URL {
+func (s *V1TendersTenderIDPutReq) GetAttachments() []url.URL {
 	return s.Attachments
 }
 
@@ -5086,12 +5085,12 @@ func (s *V1TendersTenderIDPutReq) SetWishes(val OptString) {
 }
 
 // SetSpecification sets the value of Specification.
-func (s *V1TendersTenderIDPutReq) SetSpecification(val OptURL) {
+func (s *V1TendersTenderIDPutReq) SetSpecification(val OptURI) {
 	s.Specification = val
 }
 
 // SetAttachments sets the value of Attachments.
-func (s *V1TendersTenderIDPutReq) SetAttachments(val []URL) {
+func (s *V1TendersTenderIDPutReq) SetAttachments(val []url.URL) {
 	s.Attachments = val
 }
 
@@ -5517,7 +5516,7 @@ type V1UsersUserIDPutReq struct {
 	LastName   OptName  `json:"last_name"`
 	MiddleName OptName  `json:"middle_name"`
 	Phone      OptPhone `json:"phone"`
-	AvatarURL  OptURL   `json:"avatar_url"`
+	AvatarURL  OptURI   `json:"avatar_url"`
 }
 
 // GetFirstName returns the value of FirstName.
@@ -5541,7 +5540,7 @@ func (s *V1UsersUserIDPutReq) GetPhone() OptPhone {
 }
 
 // GetAvatarURL returns the value of AvatarURL.
-func (s *V1UsersUserIDPutReq) GetAvatarURL() OptURL {
+func (s *V1UsersUserIDPutReq) GetAvatarURL() OptURI {
 	return s.AvatarURL
 }
 
@@ -5566,7 +5565,7 @@ func (s *V1UsersUserIDPutReq) SetPhone(val OptPhone) {
 }
 
 // SetAvatarURL sets the value of AvatarURL.
-func (s *V1UsersUserIDPutReq) SetAvatarURL(val OptURL) {
+func (s *V1UsersUserIDPutReq) SetAvatarURL(val OptURI) {
 	s.AvatarURL = val
 }
 

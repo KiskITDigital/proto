@@ -25,29 +25,6 @@ func (s Accepted) Validate() error {
 	}
 }
 
-func (s *Attachment) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if err := s.URL.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "url",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
 func (s *ContactInfo) Validate() error {
 	if s == nil {
 		return validate.ErrNilPointer
@@ -216,24 +193,6 @@ func (s *EmployeeUser) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "middle_name",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if value, ok := s.AvatarURL.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "avatar_url",
 			Error: err,
 		})
 	}
@@ -508,24 +467,6 @@ func (s *Organization) Validate() error {
 		})
 	}
 	if err := func() error {
-		if value, ok := s.AvatarURL.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "avatar_url",
-			Error: err,
-		})
-	}
-	if err := func() error {
 		if s.Emails == nil {
 			return errors.New("nil is invalid value")
 		}
@@ -716,23 +657,6 @@ func (s *Portfolio) Validate() error {
 			MaxLengthSet: true,
 		}).ValidateLength(len(s.Attachments)); err != nil {
 			return errors.Wrap(err, "array")
-		}
-		var failures []validate.FieldError
-		for i, elem := range s.Attachments {
-			if err := func() error {
-				if err := elem.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				failures = append(failures, validate.FieldError{
-					Name:  fmt.Sprintf("[%d]", i),
-					Error: err,
-				})
-			}
-		}
-		if len(failures) > 0 {
-			return &validate.Error{Fields: failures}
 		}
 		return nil
 	}(); err != nil {
@@ -992,24 +916,6 @@ func (s *RegularUser) Validate() error {
 		})
 	}
 	if err := func() error {
-		if value, ok := s.AvatarURL.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "avatar_url",
-			Error: err,
-		})
-	}
-	if err := func() error {
 		if err := s.Organization.Validate(); err != nil {
 			return err
 		}
@@ -1155,17 +1061,6 @@ func (s *Tender) Validate() error {
 		})
 	}
 	if err := func() error {
-		if err := s.Specification.Validate(); err != nil {
-			return err
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "specification",
-			Error: err,
-		})
-	}
-	if err := func() error {
 		if s.Attachments == nil {
 			return errors.New("nil is invalid value")
 		}
@@ -1176,23 +1071,6 @@ func (s *Tender) Validate() error {
 			MaxLengthSet: true,
 		}).ValidateLength(len(s.Attachments)); err != nil {
 			return errors.Wrap(err, "array")
-		}
-		var failures []validate.FieldError
-		for i, elem := range s.Attachments {
-			if err := func() error {
-				if err := elem.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				failures = append(failures, validate.FieldError{
-					Name:  fmt.Sprintf("[%d]", i),
-					Error: err,
-				})
-			}
-		}
-		if len(failures) > 0 {
-			return &validate.Error{Fields: failures}
 		}
 		return nil
 	}(); err != nil {
@@ -1243,22 +1121,6 @@ func (s *Tender) Validate() error {
 	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
-func (s URL) Validate() error {
-	alias := (string)(s)
-	if err := (validate.String{
-		MinLength:    0,
-		MinLengthSet: false,
-		MaxLength:    0,
-		MaxLengthSet: false,
-		Email:        false,
-		Hostname:     false,
-		Regex:        regexMap["^https?:\\/\\/[-a-zA-Z0-9а-яА-Я@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9а-яА-Я()]{1,6}\\b(?:[-a-zA-Z0-9а-яА-Я()@:%_\\+.~#?&\\/=]*)$"],
-	}).Validate(string(alias)); err != nil {
-		return errors.Wrap(err, "string")
 	}
 	return nil
 }
@@ -1328,24 +1190,6 @@ func (s *User) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "middle_name",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if value, ok := s.AvatarURL.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "avatar_url",
 			Error: err,
 		})
 	}
@@ -1672,24 +1516,6 @@ func (s *V1AuthSignupPostReq) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "middle_name",
-			Error: err,
-		})
-	}
-	if err := func() error {
-		if value, ok := s.AvatarURL.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "avatar_url",
 			Error: err,
 		})
 	}
@@ -2164,57 +1990,10 @@ func (s *V1OrganizationsOrganizationIDPortfolioPostReq) Validate() error {
 		}).ValidateLength(len(s.Attachments)); err != nil {
 			return errors.Wrap(err, "array")
 		}
-		var failures []validate.FieldError
-		for i, elem := range s.Attachments {
-			if err := func() error {
-				if err := elem.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				failures = append(failures, validate.FieldError{
-					Name:  fmt.Sprintf("[%d]", i),
-					Error: err,
-				})
-			}
-		}
-		if len(failures) > 0 {
-			return &validate.Error{Fields: failures}
-		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "attachments",
-			Error: err,
-		})
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-	return nil
-}
-
-func (s *V1OrganizationsOrganizationIDProfileBrandPutReq) Validate() error {
-	if s == nil {
-		return validate.ErrNilPointer
-	}
-
-	var failures []validate.FieldError
-	if err := func() error {
-		if value, ok := s.AvatarURL.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "avatar_url",
 			Error: err,
 		})
 	}
@@ -2655,23 +2434,6 @@ func (s *V1OrganizationsPortfolioPortfolioIDPutReq) Validate() error {
 		}).ValidateLength(len(s.Attachments)); err != nil {
 			return errors.Wrap(err, "array")
 		}
-		var failures []validate.FieldError
-		for i, elem := range s.Attachments {
-			if err := func() error {
-				if err := elem.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				failures = append(failures, validate.FieldError{
-					Name:  fmt.Sprintf("[%d]", i),
-					Error: err,
-				})
-			}
-		}
-		if len(failures) > 0 {
-			return &validate.Error{Fields: failures}
-		}
 		return nil
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
@@ -2903,24 +2665,6 @@ func (s *V1TendersPostReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if value, ok := s.Specification.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "specification",
-			Error: err,
-		})
-	}
-	if err := func() error {
 		if err := (validate.Array{
 			MinLength:    0,
 			MinLengthSet: false,
@@ -2928,23 +2672,6 @@ func (s *V1TendersPostReq) Validate() error {
 			MaxLengthSet: true,
 		}).ValidateLength(len(s.Attachments)); err != nil {
 			return errors.Wrap(err, "array")
-		}
-		var failures []validate.FieldError
-		for i, elem := range s.Attachments {
-			if err := func() error {
-				if err := elem.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				failures = append(failures, validate.FieldError{
-					Name:  fmt.Sprintf("[%d]", i),
-					Error: err,
-				})
-			}
-		}
-		if len(failures) > 0 {
-			return &validate.Error{Fields: failures}
 		}
 		return nil
 	}(); err != nil {
@@ -3075,24 +2802,6 @@ func (s *V1TendersTenderIDPutReq) Validate() error {
 		})
 	}
 	if err := func() error {
-		if value, ok := s.Specification.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "specification",
-			Error: err,
-		})
-	}
-	if err := func() error {
 		if err := (validate.Array{
 			MinLength:    0,
 			MinLengthSet: false,
@@ -3100,23 +2809,6 @@ func (s *V1TendersTenderIDPutReq) Validate() error {
 			MaxLengthSet: true,
 		}).ValidateLength(len(s.Attachments)); err != nil {
 			return errors.Wrap(err, "array")
-		}
-		var failures []validate.FieldError
-		for i, elem := range s.Attachments {
-			if err := func() error {
-				if err := elem.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				failures = append(failures, validate.FieldError{
-					Name:  fmt.Sprintf("[%d]", i),
-					Error: err,
-				})
-			}
-		}
-		if len(failures) > 0 {
-			return &validate.Error{Fields: failures}
 		}
 		return nil
 	}(); err != nil {
@@ -3507,24 +3199,6 @@ func (s *V1UsersUserIDPutReq) Validate() error {
 			Error: err,
 		})
 	}
-	if err := func() error {
-		if value, ok := s.AvatarURL.Get(); ok {
-			if err := func() error {
-				if err := value.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return err
-			}
-		}
-		return nil
-	}(); err != nil {
-		failures = append(failures, validate.FieldError{
-			Name:  "avatar_url",
-			Error: err,
-		})
-	}
 	if len(failures) > 0 {
 		return &validate.Error{Fields: failures}
 	}
@@ -3803,23 +3477,6 @@ func (s *VerificationRequest) Validate() error {
 	if err := func() error {
 		if s.Attachments == nil {
 			return errors.New("nil is invalid value")
-		}
-		var failures []validate.FieldError
-		for i, elem := range s.Attachments {
-			if err := func() error {
-				if err := elem.Validate(); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				failures = append(failures, validate.FieldError{
-					Name:  fmt.Sprintf("[%d]", i),
-					Error: err,
-				})
-			}
-		}
-		if len(failures) > 0 {
-			return &validate.Error{Fields: failures}
 		}
 		return nil
 	}(); err != nil {

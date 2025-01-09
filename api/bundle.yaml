@@ -113,7 +113,8 @@ paths:
                 middle_name:
                   $ref: '#/components/schemas/name'
                 avatar_url:
-                  $ref: '#/components/schemas/url'
+                  type: string
+                  format: uri
                 inn:
                   $ref: '#/components/schemas/inn'
                 is_contractor:
@@ -302,11 +303,13 @@ paths:
                 wishes:
                   type: string
                 specification:
-                  $ref: '#/components/schemas/url'
+                  type: string
+                  format: uri
                 attachments:
                   type: array
                   items:
-                    $ref: '#/components/schemas/url'
+                    type: string
+                    format: uri
                   maxItems: 8
                 services:
                   type: array
@@ -422,11 +425,13 @@ paths:
                 wishes:
                   type: string
                 specification:
-                  $ref: '#/components/schemas/url'
+                  type: string
+                  format: uri
                 attachments:
                   type: array
                   items:
-                    $ref: '#/components/schemas/url'
+                    type: string
+                    format: uri
                   maxItems: 8
                 services:
                   type: array
@@ -1059,7 +1064,8 @@ paths:
                 phone:
                   $ref: '#/components/schemas/phone'
                 avatar_url:
-                  $ref: '#/components/schemas/url'
+                  type: string
+                  format: uri
       responses:
         '200':
           description: Success
@@ -1403,7 +1409,8 @@ paths:
                   description: Название бренда
                   example: Ubrato
                 avatar_url:
-                  $ref: '#/components/schemas/url'
+                  type: string
+                  format: uri
       responses:
         '200':
           description: Success
@@ -1706,7 +1713,8 @@ paths:
                 attachments:
                   type: array
                   items:
-                    $ref: '#/components/schemas/url'
+                    type: string
+                    format: uri
                   maxItems: 8
       responses:
         '200':
@@ -1788,7 +1796,8 @@ paths:
                 attachments:
                   type: array
                   items:
-                    $ref: '#/components/schemas/url'
+                    type: string
+                    format: uri
                   maxItems: 8
       responses:
         '200':
@@ -2750,10 +2759,6 @@ components:
       minLength: 1
       pattern: ^[а-яА-ЯёЁ]+$
       example: Абоба
-    url:
-      type: string
-      pattern: ^https?:\/\/[-a-zA-Z0-9а-яА-Я@:%._\+~#=]{1,256}\.[a-zA-Z0-9а-яА-Я()]{1,6}\b(?:[-a-zA-Z0-9а-яА-Я()@:%_\+.~#?&\/=]*)$
-      example: https://s3.ubrato.ru/qwerty
     User:
       type: object
       required:
@@ -2781,7 +2786,8 @@ components:
         middle_name:
           $ref: '#/components/schemas/name'
         avatar_url:
-          $ref: '#/components/schemas/url'
+          type: string
+          format: uri
         email_verified:
           type: boolean
         is_banned:
@@ -2874,7 +2880,8 @@ components:
           type: string
           example: 117312, г Москва, Академический р-н, ул Вавилова, д 19
         avatar_url:
-          $ref: '#/components/schemas/url'
+          type: string
+          format: uri
         emails:
           type: array
           items:
@@ -3025,11 +3032,13 @@ components:
         wishes:
           type: string
         specification:
-          $ref: '#/components/schemas/url'
+          type: string
+          format: uri
         attachments:
           type: array
           items:
-            $ref: '#/components/schemas/url'
+            type: string
+            format: uri
           maxItems: 8
         services:
           $ref: '#/components/schemas/Services'
@@ -3341,7 +3350,8 @@ components:
         attachments:
           type: array
           items:
-            $ref: '#/components/schemas/url'
+            type: string
+            format: uri
           maxItems: 8
         created_at:
           type: string
@@ -3402,7 +3412,8 @@ components:
           description: Название элемента
           example: example
         url:
-          $ref: '#/components/schemas/url'
+          type: string
+          format: uri
     VerificationRequest:
       type: object
       required:

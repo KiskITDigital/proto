@@ -93,7 +93,7 @@ func ConvertOrganizationModelToApi(organization Organization) api.Organization {
 		Kpp:                api.Kpp(organization.KPP),
 		TaxCode:            api.TaxCode(organization.TaxCode),
 		Address:            organization.Address,
-		AvatarURL:          api.OptURL{Value: api.URL(organization.AvatarURL), Set: organization.AvatarURL != ""},
+		AvatarURL:          api.OptURI{Value: stringToUrl(organization.AvatarURL), Set: organization.AvatarURL != ""},
 		Emails: convert.Slice[ContactInfos, []api.ContactInfo](
 			organization.Emails, ConvertContactInfoModelToApi,
 		),

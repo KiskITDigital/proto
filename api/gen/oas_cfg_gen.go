@@ -25,7 +25,6 @@ var regexMap = map[string]ogenregex.Regexp{
 	"^\\d{13}$":                    ogenregex.MustCompile("^\\d{13}$"),
 	"^\\d{8}$|^\\d{10}$|^\\d{14}$": ogenregex.MustCompile("^\\d{8}$|^\\d{10}$|^\\d{14}$"),
 	"^\\d{9}$":                     ogenregex.MustCompile("^\\d{9}$"),
-	"^https?:\\/\\/[-a-zA-Z0-9а-яА-Я@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9а-яА-Я()]{1,6}\\b(?:[-a-zA-Z0-9а-яА-Я()@:%_\\+.~#?&\\/=]*)$": ogenregex.MustCompile("^https?:\\/\\/[-a-zA-Z0-9а-яА-Я@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9а-яА-Я()]{1,6}\\b(?:[-a-zA-Z0-9а-яА-Я()@:%_\\+.~#?&\\/=]*)$"),
 }
 var (
 	// Allocate option closure once.
