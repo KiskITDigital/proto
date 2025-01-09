@@ -5379,6 +5379,60 @@ func (s *Services) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes Status as json.
+func (s Status) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes Status from json.
+func (s *Status) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode Status to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch Status(v) {
+	case StatusInvalid:
+		*s = StatusInvalid
+	case StatusDraft:
+		*s = StatusDraft
+	case StatusOnModeration:
+		*s = StatusOnModeration
+	case StatusReceptionNotStarted:
+		*s = StatusReceptionNotStarted
+	case StatusReception:
+		*s = StatusReception
+	case StatusSelectingContractor:
+		*s = StatusSelectingContractor
+	case StatusContractorSelected:
+		*s = StatusContractorSelected
+	case StatusContractorNotSelected:
+		*s = StatusContractorNotSelected
+	case StatusRemovedFromPublication:
+		*s = StatusRemovedFromPublication
+	default:
+		*s = Status(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s Status) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *Status) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes Survey as json.
 func (s Survey) Encode(e *jx.Encoder) {
 	e.Str(string(s))
@@ -5538,7 +5592,7 @@ func (s *Tender) encodeFields(e *jx.Encoder) {
 	}
 	{
 		e.FieldStart("status")
-		e.Float64(s.Status)
+		s.Status.Encode(e)
 	}
 	{
 		if s.VerificationStatus.Set {
@@ -5786,9 +5840,7 @@ func (s *Tender) Decode(d *jx.Decoder) error {
 		case "status":
 			requiredBitSet[1] |= 1 << 7
 			if err := func() error {
-				v, err := d.Float64()
-				s.Status = float64(v)
-				if err != nil {
+				if err := s.Status.Decode(d); err != nil {
 					return err
 				}
 				return nil

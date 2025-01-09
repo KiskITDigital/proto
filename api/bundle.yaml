@@ -2964,6 +2964,18 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Object'
+    status:
+      type: string
+      enum:
+        - invalid
+        - draft
+        - on moderation
+        - reception not started
+        - reception
+        - selecting contractor
+        - contractor selected
+        - contractor not selected
+        - removed from publication
     Tender:
       type: object
       required:
@@ -3024,7 +3036,7 @@ components:
         objects:
           $ref: '#/components/schemas/Objects'
         status:
-          type: number
+          $ref: '#/components/schemas/status'
         verification_status:
           $ref: '#/components/schemas/verification_status'
         reception_start:

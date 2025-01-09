@@ -2564,6 +2564,97 @@ func (s *ServiceWithPrice) SetPrice(val float32) {
 type Services []Service
 
 // Ref: #
+type Status string
+
+const (
+	StatusInvalid                Status = "invalid"
+	StatusDraft                  Status = "draft"
+	StatusOnModeration           Status = "on moderation"
+	StatusReceptionNotStarted    Status = "reception not started"
+	StatusReception              Status = "reception"
+	StatusSelectingContractor    Status = "selecting contractor"
+	StatusContractorSelected     Status = "contractor selected"
+	StatusContractorNotSelected  Status = "contractor not selected"
+	StatusRemovedFromPublication Status = "removed from publication"
+)
+
+// AllValues returns all Status values.
+func (Status) AllValues() []Status {
+	return []Status{
+		StatusInvalid,
+		StatusDraft,
+		StatusOnModeration,
+		StatusReceptionNotStarted,
+		StatusReception,
+		StatusSelectingContractor,
+		StatusContractorSelected,
+		StatusContractorNotSelected,
+		StatusRemovedFromPublication,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s Status) MarshalText() ([]byte, error) {
+	switch s {
+	case StatusInvalid:
+		return []byte(s), nil
+	case StatusDraft:
+		return []byte(s), nil
+	case StatusOnModeration:
+		return []byte(s), nil
+	case StatusReceptionNotStarted:
+		return []byte(s), nil
+	case StatusReception:
+		return []byte(s), nil
+	case StatusSelectingContractor:
+		return []byte(s), nil
+	case StatusContractorSelected:
+		return []byte(s), nil
+	case StatusContractorNotSelected:
+		return []byte(s), nil
+	case StatusRemovedFromPublication:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *Status) UnmarshalText(data []byte) error {
+	switch Status(data) {
+	case StatusInvalid:
+		*s = StatusInvalid
+		return nil
+	case StatusDraft:
+		*s = StatusDraft
+		return nil
+	case StatusOnModeration:
+		*s = StatusOnModeration
+		return nil
+	case StatusReceptionNotStarted:
+		*s = StatusReceptionNotStarted
+		return nil
+	case StatusReception:
+		*s = StatusReception
+		return nil
+	case StatusSelectingContractor:
+		*s = StatusSelectingContractor
+		return nil
+	case StatusContractorSelected:
+		*s = StatusContractorSelected
+		return nil
+	case StatusContractorNotSelected:
+		*s = StatusContractorNotSelected
+		return nil
+	case StatusRemovedFromPublication:
+		*s = StatusRemovedFromPublication
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// Ref: #
 type Survey string
 
 const (
@@ -2631,7 +2722,7 @@ type Tender struct {
 	Attachments        []URL                 `json:"attachments"`
 	Services           Services              `json:"services"`
 	Objects            Objects               `json:"objects"`
-	Status             float64               `json:"status"`
+	Status             Status                `json:"status"`
 	VerificationStatus OptVerificationStatus `json:"verification_status"`
 	// Дата начала приема заявок.
 	ReceptionStart time.Time `json:"reception_start"`
@@ -2719,7 +2810,7 @@ func (s *Tender) GetObjects() Objects {
 }
 
 // GetStatus returns the value of Status.
-func (s *Tender) GetStatus() float64 {
+func (s *Tender) GetStatus() Status {
 	return s.Status
 }
 
@@ -2834,7 +2925,7 @@ func (s *Tender) SetObjects(val Objects) {
 }
 
 // SetStatus sets the value of Status.
-func (s *Tender) SetStatus(val float64) {
+func (s *Tender) SetStatus(val Status) {
 	s.Status = val
 }
 

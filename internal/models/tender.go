@@ -34,7 +34,7 @@ type Tender struct {
 	Services           []Service
 	Objects            []Object
 	VerificationStatus VerificationStatus
-	Status             int
+	Status             TenderStatus
 	ReceptionStart     time.Time
 	ReceptionEnd       time.Time
 	WorkStart          time.Time
@@ -80,7 +80,7 @@ func ConvertTenderModelToApi(tender Tender) api.Tender {
 		Objects: convert.Slice[[]Object, api.Objects](
 			tender.Objects, ConvertObjectModelToApi,
 		),
-		Status:             0,
+		Status:             api.Status(tender.Status.ToStatus()),
 		VerificationStatus: api.OptVerificationStatus{Value: tender.VerificationStatus.ToAPI(), Set: tender.VerificationStatus != 0},
 		ReceptionStart:     tender.ReceptionStart,
 		ReceptionEnd:       tender.ReceptionEnd,
@@ -123,25 +123,25 @@ const (
 	RemovedByModeratorStatus
 )
 
-func (s TenderStatus) ToStatus() string {
+func (s TenderStatus) ToStatus() api.Status {
 	switch s {
 	case DraftStatus:
-		return "draft"
+		return api.StatusDraft
 	case OnModerationStatus:
-		return "on moderation"
+		return api.StatusOnModeration
 	case ReceptionNotStartedStatus:
-		return "reception not started"
+		return api.StatusReceptionNotStarted
 	case ReceptionStatus:
-		return "reception"
+		return api.StatusReception
 	case SelectingContractorStatus:
-		return "selecting contractor"
+		return api.StatusSelectingContractor
 	case ContractorSelectedStatus:
-		return "contractor selected"
+		return api.StatusContractorSelected
 	case ContractorNotSelectedStatus:
-		return "contractor not selected"
+		return api.StatusContractorNotSelected
 	case RemovedByModeratorStatus:
-		return "removed from publication"
+		return api.StatusRemovedFromPublication
 	default:
-		return "invalid"
+		return api.StatusInvalid
 	}
 }
