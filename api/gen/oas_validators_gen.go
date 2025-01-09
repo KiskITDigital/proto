@@ -1072,6 +1072,31 @@ func (s Services) Validate() error {
 	return nil
 }
 
+func (s Status) Validate() error {
+	switch s {
+	case "invalid":
+		return nil
+	case "draft":
+		return nil
+	case "on moderation":
+		return nil
+	case "reception not started":
+		return nil
+	case "reception":
+		return nil
+	case "selecting contractor":
+		return nil
+	case "contractor selected":
+		return nil
+	case "contractor not selected":
+		return nil
+	case "removed from publication":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
 func (s Survey) Validate() error {
 	switch s {
 	case "SURVEY_TYPE_REGISTRATION":
@@ -1188,8 +1213,8 @@ func (s *Tender) Validate() error {
 		})
 	}
 	if err := func() error {
-		if err := (validate.Float{}).Validate(float64(s.Status)); err != nil {
-			return errors.Wrap(err, "float")
+		if err := s.Status.Validate(); err != nil {
+			return err
 		}
 		return nil
 	}(); err != nil {
