@@ -133,6 +133,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		tenderStore,
 		additionStore,
 		verificationStore,
+		jetStream,
 	)
 
 	catalogService := catalogService.New(
@@ -169,6 +170,8 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		additionStore,
 		organizationStore,
 		questionAnswerStore,
+		jetStream,
+		userStore,
 	)
 
 	questionnaireService := questionnaireService.New(

@@ -3,6 +3,7 @@ package tender
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
@@ -231,4 +232,30 @@ func (s *TenderStore) List(ctx context.Context, qe store.QueryExecutor, params s
 	}
 
 	return tenders, nil
+}
+
+// Получает только "name", "reception_start", "organization_id "
+func (s *TenderStore) GetTenderNotifyInfoByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Tender, error) {
+	builder := squirrel.Select(
+		"name",
+		"reception_start",
+		"organization_id ").
+		Where(squirrel.Eq{"id": id}).
+		From("tenders").
+		PlaceholderFormat(squirrel.Dollar)
+
+	var (
+		tender models.Tender
+	)
+	if err := builder.RunWith(qe).QueryRowContext(ctx).Scan(
+		&tender.Name,
+		&tender.ReceptionStart,
+		&tender.Organization.ID); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return models.Tender{}, errstore.ErrTenderNotFound
+		}
+		return models.Tender{}, fmt.Errorf("db: %w", err)
+	}
+
+	return tender, nil
 }

@@ -3,11 +3,13 @@ package user
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
+	"gitlab.ubrato.ru/ubrato/core/internal/store/errstore"
 )
 
 func (s *UserStore) Get(ctx context.Context, qe store.QueryExecutor, params store.UserGetParams) ([]models.FullUser, error) {
@@ -377,4 +379,22 @@ func (s *UserStore) GetWithEmployee(ctx context.Context, qe store.QueryExecutor,
 	}
 
 	return users, nil
+}
+
+func (s *UserStore) GetUserIDByOrganizationID(ctx context.Context, qe store.QueryExecutor, organizationID int) (int, error) {
+	builder := squirrel.
+		Select("user_id").
+		From("organization_users").
+		Where(squirrel.Eq{"organization_id": organizationID}).
+		PlaceholderFormat(squirrel.Dollar)
+
+	var userID int
+	if err := builder.RunWith(qe).QueryRowContext(ctx).Scan(&userID); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return 0, errstore.ErrUserNotFound
+		}
+		return 0, fmt.Errorf("query row: %w", err)
+	}
+
+	return userID, nil
 }
