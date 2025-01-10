@@ -3,23 +3,30 @@ package verification
 import (
 	"context"
 
+	"gitlab.ubrato.ru/ubrato/core/internal/broker"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
 type Service struct {
 	psql                DBTX
+	broker              Broker
 	verificationStore   VerificationStore
 	tenderStore         TenderStore
 	additionStore       AdditionStore
 	organizationStore   OrganizationStore
 	questionAnswerStore QuestionAnswerStore
+	userStore           UserStore
 }
 
 type DBTX interface {
 	DB() store.QueryExecutor
 	TX(ctx context.Context) (store.QueryExecutorTx, error)
 	WithTransaction(ctx context.Context, fn store.ExecFn) (err error)
+}
+
+type Broker interface {
+	Publish(ctx context.Context, subject broker.Topic, data []byte) error
 }
 
 type VerificationStore interface {
@@ -32,6 +39,7 @@ type VerificationStore interface {
 
 type TenderStore interface {
 	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Tender, error)
+	GetTenderNotifyInfoByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Tender, error)
 	List(ctx context.Context, qe store.QueryExecutor, params store.TenderListParams) ([]models.Tender, error)
 	UpdateVerificationStatus(ctx context.Context, qe store.QueryExecutor, params store.TenderUpdateVerifStatusParams) error
 }
@@ -45,6 +53,7 @@ type AdditionStore interface {
 type OrganizationStore interface {
 	UpdateVerificationStatus(ctx context.Context, qe store.QueryExecutor, params store.OrganizationUpdateVerifStatusParams) error
 	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Organization, error)
+	GetIsContractorByID(ctx context.Context, qe store.QueryExecutor, id int) (bool, error)
 	Get(ctx context.Context, qe store.QueryExecutor, params store.OrganizationGetParams) ([]models.Organization, error)
 }
 
@@ -54,6 +63,10 @@ type QuestionAnswerStore interface {
 	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.QuestionWithAnswer, error)
 }
 
+type UserStore interface {
+	GetUserIDByOrganizationID(ctx context.Context, qe store.QueryExecutor, organizationID int) (int, error)
+}
+
 func New(
 	psql DBTX,
 	verificationStore VerificationStore,
@@ -61,13 +74,17 @@ func New(
 	additionStore AdditionStore,
 	organiOrganizationStore OrganizationStore,
 	questionAnswerStore QuestionAnswerStore,
+	broker Broker,
+	userStore UserStore,
 ) *Service {
 	return &Service{
 		psql:                psql,
+		broker:              broker,
 		verificationStore:   verificationStore,
 		tenderStore:         tenderStore,
 		additionStore:       additionStore,
 		organizationStore:   organiOrganizationStore,
 		questionAnswerStore: questionAnswerStore,
+		userStore:           userStore,
 	}
 }

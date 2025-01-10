@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/Masterminds/squirrel"
 	sq "github.com/Masterminds/squirrel"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/deduplicate"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
@@ -433,4 +434,21 @@ func (s *OrganizationStore) GetByID(ctx context.Context, qe store.QueryExecutor,
 	}
 
 	return organizations[0], nil
+}
+
+func (s *OrganizationStore) GetIsContractorByID(ctx context.Context, qe store.QueryExecutor, id int) (bool, error) {
+	builder := squirrel.Select("is_contractor ").
+		Where(squirrel.Eq{"id": id}).
+		From("organizations").
+		PlaceholderFormat(squirrel.Dollar)
+
+	var isContractor bool
+	if err := builder.RunWith(qe).QueryRowContext(ctx).Scan(&isContractor); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return false, errstore.ErrOrganizationNotFound
+		}
+		return false, fmt.Errorf("db: %w", err)
+	}
+
+	return isContractor, nil
 }
