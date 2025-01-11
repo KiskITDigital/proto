@@ -94,3 +94,9 @@ type TenderUpdateStatusParams struct {
 	TenderID int
 	Status   models.Optional[models.TenderStatus]
 }
+
+type TenderNotifyInfoParams struct {
+	TenderID         models.Optional[int]
+	AdditionID       models.Optional[int]
+	QuestionAnswerID models.Optional[int]
+}

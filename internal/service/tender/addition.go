@@ -4,11 +4,15 @@ import (
 	"context"
 	"fmt"
 
+	"gitlab.ubrato.ru/ubrato/core/internal/broker"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/contextor"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
+	eventsv1 "gitlab.ubrato.ru/ubrato/core/internal/models/gen/proto/events/v1"
+	modelsv1 "gitlab.ubrato.ru/ubrato/core/internal/models/gen/proto/models/v1"
 	"gitlab.ubrato.ru/ubrato/core/internal/service"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
+	"google.golang.org/protobuf/proto"
 )
 
 func (s *Service) CreateAddition(ctx context.Context, params service.AdditionCreateParams) error {
@@ -43,6 +47,33 @@ func (s *Service) CreateAddition(ctx context.Context, params service.AdditionCre
 			ObjectType: models.ObjectTypeAddition})
 		if err != nil {
 			return fmt.Errorf("create verification request: %w", err)
+		}
+
+		// уведомления
+		b, err := proto.Marshal(&eventsv1.SentNotification{
+			Notification: &modelsv1.Notification{
+				User: &modelsv1.NotifiedUser{
+					Id: *proto.Int32(int32(contextor.GetUserID(ctx))),
+				},
+				Verification: &modelsv1.Verification{
+					Status: modelsv1.Status_STATUS_IN_REVIEW,
+				},
+				Object: &modelsv1.Object{
+					Id:   int32(additionID),
+					Type: modelsv1.ObjectType_ObjectTypeAddition,
+					Tender: &modelsv1.Tender{
+						Id:    int32(tender.ID),
+						Title: tender.Name,
+					},
+				},
+			}})
+		if err != nil {
+			return fmt.Errorf("marhal notification proto: %w", err)
+		}
+
+		err = s.broker.Publish(ctx, broker.UbratoTenderAdditionVerification, b)
+		if err != nil {
+			return fmt.Errorf("notification: %w", err)
 		}
 
 		return nil

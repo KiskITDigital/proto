@@ -185,6 +185,7 @@ func run(cfg config.Default, logger *slog.Logger) error {
 		questionAnswerStore,
 		tenderStore,
 		verificationStore,
+		jetStream,
 	)
 
 	portfolioService := portfolioService.New(
