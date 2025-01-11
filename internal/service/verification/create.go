@@ -43,19 +43,13 @@ func (s *Service) Create(ctx context.Context, params service.VerificationRequest
 		case models.ObjectTypeOrganization:
 			topic = broker.UbratoOrganizationVerification
 
-		case models.ObjectTypeAddition:
-			topic = broker.UbratoTenderAdditionVerification
-			// title = fmt.Sprintf(`Создание вопроса/ответа № %v`, params.ObjectID)
-			// comment = fmt.Sprintf("Ваш вопрос/ответ № %v будет опубликован после прохождения модерации. Пожалуйста, ожидайте.", params.ObjectID)
-
-		case models.ObjectTypeQuestionAnswer:
-			topic = broker.UbratoTenderQuestionAnswerVerification
-			// title = fmt.Sprintf(`Создание вопроса/ответа № %v`, params.ObjectID)
-			// comment = fmt.Sprintf("Вопрос/ответ № %v отправлен на модерацию. Пожалуйста, ожидайте.", params.ObjectID)
-			// actionButton = &modelsv1.ActionButton{
-			// 	Text: "Перейти",
-			// 	Url:  "",
-			// }
+			err := s.organizationStore.UpdateVerificationStatus(ctx, qe, store.OrganizationUpdateVerifStatusParams{
+				OrganizationID:     params.ObjectID,
+				VerificationStatus: models.VerificationStatusInReview,
+			})
+			if err != nil {
+				return fmt.Errorf("update organization verification status: %w", err)
+			}
 		default:
 			return fmt.Errorf("invalid object type: %v", params.ObjectType)
 		}

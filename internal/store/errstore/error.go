@@ -20,6 +20,7 @@ var (
 
 var (
 	ErrTenderNotFound = errors.New("tender not found")
+	ErrTenderAdditionNotFound = errors.New("tender addition not found")
 )
 
 var (

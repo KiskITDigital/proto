@@ -234,20 +234,36 @@ func (s *TenderStore) List(ctx context.Context, qe store.QueryExecutor, params s
 	return tenders, nil
 }
 
-// Получает только "name", "reception_start", "organization_id "
-func (s *TenderStore) GetTenderNotifyInfoByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Tender, error) {
+// Получает только "id", "name", "reception_start", "organization_id "
+func (s *TenderStore) GetTenderNotifyInfoByObjectID(ctx context.Context, qe store.QueryExecutor, params store.TenderNotifyInfoParams) (models.Tender, error) {
 	builder := squirrel.Select(
-		"name",
-		"reception_start",
-		"organization_id ").
-		Where(squirrel.Eq{"id": id}).
-		From("tenders").
+		"t.id",
+		"t.name",
+		"t.reception_start",
+		"t.organization_id ").
 		PlaceholderFormat(squirrel.Dollar)
 
-	var (
-		tender models.Tender
-	)
+	if params.TenderID.Set {
+		builder = builder.From("tenders AS t").Where(squirrel.Eq{"t.id": params.TenderID.Value})
+	}
+
+	if params.AdditionID.Set {
+		builder = builder.
+			From("additions AS a").
+			Join("tenders AS t ON a.tender_id = t.id").
+			Where(squirrel.Eq{"a.id": params.AdditionID.Value})
+	}
+
+	if params.QuestionAnswerID.Set {
+		builder = builder.
+			From("question_answer AS qa").
+			Join("tenders AS t ON qa.tender_id = t.id").
+			Where(squirrel.Eq{"qa.id": params.QuestionAnswerID.Value})
+	}
+
+	var tender models.Tender
 	if err := builder.RunWith(qe).QueryRowContext(ctx).Scan(
+		&tender.ID,
 		&tender.Name,
 		&tender.ReceptionStart,
 		&tender.Organization.ID); err != nil {

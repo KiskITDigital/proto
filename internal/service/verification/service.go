@@ -39,7 +39,7 @@ type VerificationStore interface {
 
 type TenderStore interface {
 	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Tender, error)
-	GetTenderNotifyInfoByID(ctx context.Context, qe store.QueryExecutor, id int) (models.Tender, error)
+	GetTenderNotifyInfoByObjectID(ctx context.Context, qe store.QueryExecutor, params store.TenderNotifyInfoParams) (models.Tender, error)
 	List(ctx context.Context, qe store.QueryExecutor, params store.TenderListParams) ([]models.Tender, error)
 	UpdateVerificationStatus(ctx context.Context, qe store.QueryExecutor, params store.TenderUpdateVerifStatusParams) error
 }
@@ -60,6 +60,7 @@ type OrganizationStore interface {
 type QuestionAnswerStore interface {
 	Get(ctx context.Context, qe store.QueryExecutor, params store.QuestionAnswerGetParams) ([]models.QuestionWithAnswer, error)
 	UpdateVerificationStatus(ctx context.Context, qe store.QueryExecutor, params store.QuestionAnswerVerifStatusUpdateParams) error
+	GetAuthorOrganizationIDByID(ctx context.Context, qe store.QueryExecutor, qeID int) (int, error)
 	GetByID(ctx context.Context, qe store.QueryExecutor, id int) (models.QuestionWithAnswer, error)
 }
 

@@ -33,9 +33,8 @@ func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationR
 				Comment: params.ReviewComment.Value,
 			},
 			Object: &modelsv1.Object{
-				Id:     int32(result.ObjectID),
-				Type:   modelsv1.ObjectType(result.ObjectType),
-				Tender: &modelsv1.Tender{},
+				Id:   int32(result.ObjectID),
+				Type: modelsv1.ObjectType(result.ObjectType),
 			},
 		}
 
@@ -79,12 +78,16 @@ func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationR
 				Status:             status,
 			})
 
-			tenderNotifyInfo, err := s.tenderStore.GetTenderNotifyInfoByID(ctx, qe, result.ObjectID)
+			tenderNotifyInfo, err := s.tenderStore.GetTenderNotifyInfoByObjectID(ctx, qe, store.TenderNotifyInfoParams{TenderID: models.NewOptional(result.ObjectID)})
 			if err != nil {
-				return fmt.Errorf("get tender name, receptionStart by id=%v: %w", result.ObjectID, err)
+				return fmt.Errorf("get tender notify: %w", err)
 			}
-			notification.Object.Tender.Title = tenderNotifyInfo.Name
-			notification.Object.Tender.ReceptionStart = timestamppb.New(tenderNotifyInfo.ReceptionStart)
+
+			notification.Object.Tender = &modelsv1.Tender{
+				Id:             int32(tenderNotifyInfo.ID),
+				Title:          tenderNotifyInfo.Name,
+				ReceptionStart: timestamppb.New(tenderNotifyInfo.ReceptionStart),
+			}
 			userOrganizationID = tenderNotifyInfo.Organization.ID
 
 		case models.ObjectTypeAddition:
@@ -95,6 +98,17 @@ func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationR
 				VerificationStatus: params.Status,
 			})
 
+			tenderNotifyInfo, err := s.tenderStore.GetTenderNotifyInfoByObjectID(ctx, qe, store.TenderNotifyInfoParams{AdditionID: models.NewOptional(result.ObjectID)})
+			if err != nil {
+				return fmt.Errorf("get tender notify: %w", err)
+			}
+
+			notification.Object.Tender = &modelsv1.Tender{
+				Id:    int32(tenderNotifyInfo.ID),
+				Title: tenderNotifyInfo.Name,
+			}
+			userOrganizationID = tenderNotifyInfo.Organization.ID
+
 		case models.ObjectTypeQuestionAnswer:
 			topic = broker.UbratoTenderQuestionAnswerVerification
 
@@ -102,6 +116,24 @@ func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationR
 				QuestionAnswerID:   result.ObjectID,
 				VerificationStatus: params.Status,
 			})
+
+			tenderNotifyInfo, err := s.tenderStore.GetTenderNotifyInfoByObjectID(ctx, qe, store.TenderNotifyInfoParams{QuestionAnswerID: models.NewOptional(result.ObjectID)})
+			if err != nil {
+				return fmt.Errorf("get tender notify: %w", err)
+			}
+
+			notification.Object.Tender = &modelsv1.Tender{
+				Id:             int32(tenderNotifyInfo.ID),
+				Title:          tenderNotifyInfo.Name,
+				ReceptionStart: timestamppb.New(tenderNotifyInfo.ReceptionStart),
+			}
+
+			authorID, err := s.questionAnswerStore.GetAuthorOrganizationIDByID(ctx, qe, result.ObjectID)
+			if err != nil {
+				return fmt.Errorf("get author question/answer: %w", err)
+			}
+			userOrganizationID = authorID
+
 		default:
 			return fmt.Errorf("invalid object type: %v", result.ObjectType)
 		}

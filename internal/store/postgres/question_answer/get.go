@@ -3,6 +3,7 @@ package questionanswer
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/Masterminds/squirrel"
@@ -223,4 +224,22 @@ func (s *QuestionAnswerStore) GetWithAccess(ctx context.Context, qe store.QueryE
 	}
 
 	return questionWithAnswers, nil
+}
+
+func (s *QuestionAnswerStore) GetAuthorOrganizationIDByID(ctx context.Context, qe store.QueryExecutor, qeID int) (int, error) {
+	builder := squirrel.
+		Select("author_organization_id").
+		From("question_answer").
+		Where(squirrel.Eq{"id": qeID}).
+		PlaceholderFormat(squirrel.Dollar)
+
+	var authorOrganizationID int
+	if err := builder.RunWith(qe).QueryRowContext(ctx).Scan(&authorOrganizationID); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return 0, errstore.ErrQuestionAnswerNotFound
+		}
+		return 0, fmt.Errorf("query row: %w", err)
+	}
+
+	return authorOrganizationID, nil
 }
