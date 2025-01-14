@@ -41,7 +41,7 @@ func (s *Service) Create(ctx context.Context, params service.VerificationRequest
 		var topic broker.Topic
 		switch params.ObjectType {
 		case models.ObjectTypeOrganization:
-			topic = broker.UbratoOrganizationVerification
+			topic = broker.NotifyOrganizationVerification
 
 			err := s.organizationStore.UpdateVerificationStatus(ctx, qe, store.OrganizationUpdateVerifStatusParams{
 				OrganizationID:     params.ObjectID,

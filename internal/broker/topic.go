@@ -8,12 +8,13 @@ const (
 	UbratoUserConfirmEmail       = "email.send.confirmation"
 	UbratoUserEmailResetPass     = "email.send.resetpass"
 
-	UbratoNotificationUsers        = "notification.users.send"
-	UbratoUserRegistration         = "user.registration"
-	UbratoOrganizationVerification = "organization.verification"
+	NotifyUserEmailConfirmation = "notify.user.email.confirmation"
+	NotifyUserEmailConfirmed    = "notify.user.email.confirmed"
 
-	UbratoTenderVerification               = "tender.verification"
-	UbratoTenderAdditionVerification       = "tender.addition.verification"
-	UbratoTenderInvitation                 = "tender.invitation"
-	UbratoTenderQuestionAnswerVerification = "tender.question.answer.verification"
+	NotifyOrganizationVerification         = "notify.organization.verification"
+	NotifyTenderVerification               = "notify.tender.verification"
+	NotifyTenderAdditionVerification       = "notify.tender.addition.verification"
+	NotifyTenderQuestionAnswerVerification = "notify.tender.question.answer.verification"
+
+	NotifyTenderInvitation = "notify.tender.invitation"
 )

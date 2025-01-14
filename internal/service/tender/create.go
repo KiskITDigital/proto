@@ -72,7 +72,7 @@ func (s *Service) Create(ctx context.Context, params service.TenderCreateParams)
 			return models.Tender{}, fmt.Errorf("marhal notification proto: %w", err)
 		}
 
-		err = s.broker.Publish(ctx, broker.UbratoTenderVerification, b)
+		err = s.broker.Publish(ctx, broker.NotifyTenderVerification, b)
 		if err != nil {
 			return models.Tender{}, fmt.Errorf("notification: %w", err)
 		}
