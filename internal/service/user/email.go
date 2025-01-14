@@ -8,6 +8,7 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/broker"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/crypto"
+	eventsv1 "gitlab.ubrato.ru/ubrato/core/internal/models/gen/proto/events/v1"
 	modelsv1 "gitlab.ubrato.ru/ubrato/core/internal/models/gen/proto/models/v1"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 	"google.golang.org/protobuf/proto"
@@ -74,6 +75,22 @@ func (s *Service) ConfirmEmail(ctx context.Context, params ConfirmEmailParams) e
 
 	if err := s.userStore.SetEmailVerified(ctx, s.psql.DB(), user.ID); err != nil {
 		return fmt.Errorf("set email verifed: %w", err)
+	}
+
+	// уведомление
+	notify, err := proto.Marshal(&eventsv1.SentNotification{
+		Notification: &modelsv1.Notification{
+			User: &modelsv1.NotifiedUser{
+				Id: *proto.Int32(int32(user.ID)),
+			},
+		}})
+	if err != nil {
+		return fmt.Errorf("marhal notification proto: %w", err)
+	}
+
+	err = s.broker.Publish(ctx, broker.NotifyUserEmailConfirmed, notify)
+	if err != nil {
+		return fmt.Errorf("notification: %w", err)
 	}
 
 	return nil

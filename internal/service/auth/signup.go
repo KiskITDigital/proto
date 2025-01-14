@@ -49,13 +49,14 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 		return SignUpResult{}, fmt.Errorf("organization not found")
 	}
 
+	var user models.User
 	err = s.psql.WithTransaction(ctx, func(qe store.QueryExecutor) error {
 		hashedPassword, err := crypto.Password(params.Password)
 		if err != nil {
 			return fmt.Errorf("hash password: %w", err)
 		}
 
-		user, err := s.userStore.Create(ctx, qe, store.UserCreateParams{
+		user, err = s.userStore.Create(ctx, qe, store.UserCreateParams{
 			Email:        params.Email,
 			Phone:        params.Phone,
 			PasswordHash: hashedPassword,
@@ -128,6 +129,23 @@ func (s *Service) SignUp(ctx context.Context, params SignUpParams) (SignUpResult
 		return SignUpResult{}, fmt.Errorf("run transaction: %w", err)
 	}
 
+	// уведомление
+	notify, err := proto.Marshal(&eventsv1.SentNotification{
+		Notification: &modelsv1.Notification{
+			User: &modelsv1.NotifiedUser{
+				Id: *proto.Int32(int32(user.ID)),
+			},
+		}})
+	if err != nil {
+		return SignUpResult{}, fmt.Errorf("marhal notification proto: %w", err)
+	}
+
+	err = s.broker.Publish(ctx, broker.NotifyUserEmailConfirmation, notify)
+	if err != nil {
+		return SignUpResult{}, fmt.Errorf("notification: %w", err)
+	}
+
+	// amo
 	b, err := proto.Marshal(&eventsv1.UserRegistered{
 		Context: &modelsv1.EventContext{
 			Timestamp:      timestamppb.New(time.Now()),

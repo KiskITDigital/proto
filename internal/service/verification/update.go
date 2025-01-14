@@ -55,7 +55,7 @@ func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationR
 
 		switch result.ObjectType {
 		case models.ObjectTypeOrganization:
-			topic = broker.UbratoOrganizationVerification
+			topic = broker.NotifyOrganizationVerification
 
 			err = s.organizationStore.UpdateVerificationStatus(ctx, qe, store.OrganizationUpdateVerifStatusParams{
 				OrganizationID:     result.ObjectID,
@@ -70,7 +70,7 @@ func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationR
 			userOrganizationID = result.ObjectID
 
 		case models.ObjectTypeTender:
-			topic = broker.UbratoTenderVerification
+			topic = broker.NotifyTenderVerification
 
 			err = s.tenderStore.UpdateVerificationStatus(ctx, qe, store.TenderUpdateVerifStatusParams{
 				TenderID:           result.ObjectID,
@@ -91,7 +91,7 @@ func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationR
 			userOrganizationID = tenderNotifyInfo.Organization.ID
 
 		case models.ObjectTypeAddition:
-			topic = broker.UbratoTenderAdditionVerification
+			topic = broker.NotifyTenderAdditionVerification
 
 			err = s.additionStore.UpdateVerificationStatus(ctx, qe, store.AdditionUpdateVerifStatusParams{
 				AdditionID:         result.ObjectID,
@@ -110,7 +110,7 @@ func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationR
 			userOrganizationID = tenderNotifyInfo.Organization.ID
 
 		case models.ObjectTypeQuestionAnswer:
-			topic = broker.UbratoTenderQuestionAnswerVerification
+			topic = broker.NotifyTenderQuestionAnswerVerification
 
 			err = s.questionAnswerStore.UpdateVerificationStatus(ctx, qe, store.QuestionAnswerVerifStatusUpdateParams{
 				QuestionAnswerID:   result.ObjectID,

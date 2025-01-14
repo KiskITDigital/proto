@@ -71,7 +71,7 @@ func (s *Service) CreateAddition(ctx context.Context, params service.AdditionCre
 			return fmt.Errorf("marhal notification proto: %w", err)
 		}
 
-		err = s.broker.Publish(ctx, broker.UbratoTenderAdditionVerification, b)
+		err = s.broker.Publish(ctx, broker.NotifyTenderAdditionVerification, b)
 		if err != nil {
 			return fmt.Errorf("notification: %w", err)
 		}
