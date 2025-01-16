@@ -8,7 +8,7 @@ import (
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
-func (s *QuestionAnswerStore) UpdateVerificationStatus(ctx context.Context, qe store.QueryExecutor, params store.QuestionAnswerVerifStatusUpdateParams) error {
+func (s *QuestionAnswerStore) UpdateVerificationStatus(ctx context.Context, qe store.QueryExecutor, params store.QuestionAnswerVerifStatusUpdateParams) (error) {
 	builder := squirrel.Update("question_answer").
 		Set("verification_status", params.VerificationStatus).
 		Where(squirrel.Eq{"id": params.QuestionAnswerID}).

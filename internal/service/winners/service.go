@@ -3,21 +3,28 @@ package winners
 import (
 	"context"
 
+	"gitlab.ubrato.ru/ubrato/core/internal/broker"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
 )
 
 type Service struct {
 	psql         DBTX
+	broker       Broker
 	winnersStore WinnersStore
 	tenderStore  TenderStore
 	respondStore RespondStore
+	userStore    UserStore
 }
 
 type DBTX interface {
 	DB() store.QueryExecutor
 	TX(ctx context.Context) (store.QueryExecutorTx, error)
 	WithTransaction(ctx context.Context, fn store.ExecFn) (err error)
+}
+
+type Broker interface {
+	Publish(ctx context.Context, subject broker.Topic, data []byte) error
 }
 
 type WinnersStore interface {
@@ -38,16 +45,24 @@ type RespondStore interface {
 	Update(ctx context.Context, qe store.QueryExecutor, params store.RespondUpdateParams) error
 }
 
+type UserStore interface {
+	GetUserIDByOrganizationID(ctx context.Context, qe store.QueryExecutor, organizationID int) (int, error)
+}
+
 func New(
 	psql DBTX,
+	broker Broker,
 	winnersStore WinnersStore,
 	tenderStore TenderStore,
 	respondStore RespondStore,
+	userStore UserStore,
 ) *Service {
 	return &Service{
 		psql:         psql,
+		broker:       broker,
 		winnersStore: winnersStore,
 		tenderStore:  tenderStore,
 		respondStore: respondStore,
+		userStore:    userStore,
 	}
 }

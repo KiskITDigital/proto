@@ -6,11 +6,15 @@ import (
 	"errors"
 	"fmt"
 
+	"gitlab.ubrato.ru/ubrato/core/internal/broker"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/cerr"
 	"gitlab.ubrato.ru/ubrato/core/internal/lib/contextor"
 	"gitlab.ubrato.ru/ubrato/core/internal/models"
+	eventsv1 "gitlab.ubrato.ru/ubrato/core/internal/models/gen/proto/events/v1"
+	modelsv1 "gitlab.ubrato.ru/ubrato/core/internal/models/gen/proto/models/v1"
 	"gitlab.ubrato.ru/ubrato/core/internal/service"
 	"gitlab.ubrato.ru/ubrato/core/internal/store"
+	"google.golang.org/protobuf/proto"
 )
 
 func (s *Service) Create(ctx context.Context, params service.WinnersCreateParams) (models.Winners, error) {
@@ -56,6 +60,52 @@ func (s *Service) Create(ctx context.Context, params service.WinnersCreateParams
 		})
 		if err != nil {
 			return fmt.Errorf("update is_winner status in respond table: %w", err)
+		}
+
+		notify := &modelsv1.Notification{
+			Object: &modelsv1.Object{
+				Tender: &modelsv1.Tender{
+					Id:    int32(tender.ID),
+					Title: tender.Name,
+				},
+			},
+		}
+
+		// уведомление заказчику о выборе победителя
+		notify.User = &modelsv1.NotifiedUser{
+			Id:           int32(contextor.GetUserID(ctx)),
+			IsContractor: false,
+		}
+
+		b, err := proto.Marshal(&eventsv1.SentNotification{Notification: notify})
+		if err != nil {
+			return fmt.Errorf("marhal notification proto: %w", err)
+		}
+
+		err = s.broker.Publish(ctx, broker.NotifyTenderWinners, b)
+		if err != nil {
+			return fmt.Errorf("notifications: %w", err)
+		}
+
+		// уведомление исполнителю о выборе побидителем
+		userID, err := s.userStore.GetUserIDByOrganizationID(ctx, qe, winner.Organization.ID)
+		if err != nil {
+			return fmt.Errorf("get userID by orgID: %w", err)
+		}
+
+		notify.User = &modelsv1.NotifiedUser{
+			Id:           int32(userID),
+			IsContractor: true,
+		}
+
+		b, err = proto.Marshal(&eventsv1.SentNotification{Notification: notify})
+		if err != nil {
+			return fmt.Errorf("marhal notification proto: %w", err)
+		}
+
+		err = s.broker.Publish(ctx, broker.NotifyTenderWinners, b)
+		if err != nil {
+			return fmt.Errorf("notifications: %w", err)
 		}
 
 		return nil

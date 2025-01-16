@@ -16,5 +16,6 @@ const (
 	NotifyTenderAdditionVerification       = "notify.tender.addition.verification"
 	NotifyTenderQuestionAnswerVerification = "notify.tender.question.answer.verification"
 
-	NotifyTenderInvitation = "notify.tender.invitation"
+	NotifyTenderQA      = "notify.tender.qa"
+	NotifyTenderWinners = "notify.tender.winners"
 )

@@ -202,9 +202,11 @@ func run(cfg config.Default, logger *slog.Logger) error {
 
 	winnersService := winnersService.New(
 		psql,
+		jetStream,
 		winnersStore,
 		tenderStore,
 		respondStore,
+		userStore,
 	)
 
 	router := http.NewRouter(http.RouterParams{

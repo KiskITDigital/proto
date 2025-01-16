@@ -38,45 +38,38 @@ func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationR
 			},
 		}
 
-		// Статусы
-		var status models.TenderStatus
-		if params.Status == models.VerificationStatusApproved {
-			status = models.ReceptionStatus
-		} else if params.Status == models.VerificationStatusDeclined {
-			status = models.RemovedByModeratorStatus
-		} else {
-			status = models.InvalidStatus
-		}
-
-		var (
-			topic              broker.Topic
-			userOrganizationID int
-		)
-
 		switch result.ObjectType {
 		case models.ObjectTypeOrganization:
-			topic = broker.NotifyOrganizationVerification
-
-			err = s.organizationStore.UpdateVerificationStatus(ctx, qe, store.OrganizationUpdateVerifStatusParams{
+			if err = s.organizationStore.UpdateVerificationStatus(ctx, qe, store.OrganizationUpdateVerifStatusParams{
 				OrganizationID:     result.ObjectID,
-				VerificationStatus: params.Status,
-			})
+				VerificationStatus: params.Status}); err != nil {
+				return fmt.Errorf("update organization verif status: %w", err)
+			}
 
 			isContractor, err := s.organizationStore.GetIsContractorByID(ctx, qe, result.ObjectID)
 			if err != nil {
 				return fmt.Errorf("get organization is_contractor by id: %w", err)
 			}
 			notification.User.IsContractor = isContractor
-			userOrganizationID = result.ObjectID
+
+			return s.SendUserNotify(ctx, notification, broker.NotifyOrganizationVerification, result.ObjectID)
 
 		case models.ObjectTypeTender:
-			topic = broker.NotifyTenderVerification
+			status := models.InvalidStatus
+			switch params.Status {
+			case models.VerificationStatusApproved:
+				status = models.ReceptionStatus
+			case models.VerificationStatusDeclined:
+				status = models.RemovedByModeratorStatus
+			}
 
 			err = s.tenderStore.UpdateVerificationStatus(ctx, qe, store.TenderUpdateVerifStatusParams{
 				TenderID:           result.ObjectID,
 				VerificationStatus: params.Status,
-				Status:             status,
-			})
+				Status:             status})
+			if err != nil {
+				return fmt.Errorf("update tender verif status: %w", err)
+			}
 
 			tenderNotifyInfo, err := s.tenderStore.GetTenderNotifyInfoByObjectID(ctx, qe, store.TenderNotifyInfoParams{TenderID: models.NewOptional(result.ObjectID)})
 			if err != nil {
@@ -88,15 +81,15 @@ func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationR
 				Title:          tenderNotifyInfo.Name,
 				ReceptionStart: timestamppb.New(tenderNotifyInfo.ReceptionStart),
 			}
-			userOrganizationID = tenderNotifyInfo.Organization.ID
+
+			return s.SendUserNotify(ctx, notification, broker.NotifyTenderVerification, tenderNotifyInfo.Organization.ID)
 
 		case models.ObjectTypeAddition:
-			topic = broker.NotifyTenderAdditionVerification
-
-			err = s.additionStore.UpdateVerificationStatus(ctx, qe, store.AdditionUpdateVerifStatusParams{
+			if err = s.additionStore.UpdateVerificationStatus(ctx, qe, store.AdditionUpdateVerifStatusParams{
 				AdditionID:         result.ObjectID,
-				VerificationStatus: params.Status,
-			})
+				VerificationStatus: params.Status}); err != nil {
+				return fmt.Errorf("update tender ddition verif status: %w", err)
+			}
 
 			tenderNotifyInfo, err := s.tenderStore.GetTenderNotifyInfoByObjectID(ctx, qe, store.TenderNotifyInfoParams{AdditionID: models.NewOptional(result.ObjectID)})
 			if err != nil {
@@ -107,57 +100,88 @@ func (s *Service) UpdateStatus(ctx context.Context, params service.VerificationR
 				Id:    int32(tenderNotifyInfo.ID),
 				Title: tenderNotifyInfo.Name,
 			}
-			userOrganizationID = tenderNotifyInfo.Organization.ID
+
+			return s.SendUserNotify(ctx, notification, broker.NotifyTenderAdditionVerification, tenderNotifyInfo.Organization.ID)
 
 		case models.ObjectTypeQuestionAnswer:
-			topic = broker.NotifyTenderQuestionAnswerVerification
-
-			err = s.questionAnswerStore.UpdateVerificationStatus(ctx, qe, store.QuestionAnswerVerifStatusUpdateParams{
+			if err = s.questionAnswerStore.UpdateVerificationStatus(ctx, qe, store.QuestionAnswerVerifStatusUpdateParams{
 				QuestionAnswerID:   result.ObjectID,
-				VerificationStatus: params.Status,
-			})
+				VerificationStatus: params.Status}); err != nil {
+				return fmt.Errorf("update qa verif status: %w", err)
+			}
 
+			// уведомления
 			tenderNotifyInfo, err := s.tenderStore.GetTenderNotifyInfoByObjectID(ctx, qe, store.TenderNotifyInfoParams{QuestionAnswerID: models.NewOptional(result.ObjectID)})
 			if err != nil {
 				return fmt.Errorf("get tender notify: %w", err)
 			}
 
-			notification.Object.Tender = &modelsv1.Tender{
-				Id:             int32(tenderNotifyInfo.ID),
-				Title:          tenderNotifyInfo.Name,
-				ReceptionStart: timestamppb.New(tenderNotifyInfo.ReceptionStart),
+			eventTender := &modelsv1.Tender{
+				Id:    int32(tenderNotifyInfo.ID),
+				Title: tenderNotifyInfo.Name,
 			}
+			notification.Object.Tender = eventTender
 
-			authorID, err := s.questionAnswerStore.GetAuthorOrganizationIDByID(ctx, qe, result.ObjectID)
+			// получение вопроса с ответом
+			qa, err := s.questionAnswerStore.GetByID(ctx, qe, result.ObjectID)
 			if err != nil {
-				return fmt.Errorf("get author question/answer: %w", err)
+				return fmt.Errorf("update request status: %w", err)
 			}
-			userOrganizationID = authorID
 
+			// 1. Верификация
+			// уведомление для исполнителя о верификации вопроса
+			organizationID := qa.Question.AuthorOrganizationID
+			if qa.Answer.Set {
+				// уведомление для заказчика о верификации ответа
+				organizationID = qa.Answer.Value.AuthorOrganizationID
+			}
+
+			notification.User.IsContractor = !qa.Answer.Set
+
+			// Отправка автору вопроса/ответа уведомления о верификации
+			if err = s.SendUserNotify(ctx, notification, broker.NotifyTenderQuestionAnswerVerification, organizationID); err != nil {
+				return fmt.Errorf("send verification notify: %w", err)
+			}
+
+			// 2. Вопрос ответ тендера
+			if params.Status == models.VerificationStatusApproved {
+				if qa.Answer.Set {
+					// Отправка уведомления исполнителю о наличии ответа
+					organizationID = qa.Question.AuthorOrganizationID
+				} else {
+					// Отправка уведомления заказчику о наличии вопроса	
+					organizationID = tenderNotifyInfo.Organization.ID
+				}
+
+
+				return s.SendUserNotify(ctx, &modelsv1.Notification{
+					User: &modelsv1.NotifiedUser{IsContractor: qa.Answer.Set},
+					Object: &modelsv1.Object{
+						Id:     int32(result.ObjectID),
+						Type:   modelsv1.ObjectType(result.ObjectType),
+						Tender: eventTender,
+					},
+				}, broker.NotifyTenderQA, organizationID)
+			}
 		default:
 			return fmt.Errorf("invalid object type: %v", result.ObjectType)
-		}
-		if err != nil {
-			return fmt.Errorf("update object type=%v status: %w", result.ObjectType, err)
-		}
-
-		userID, err := s.userStore.GetUserIDByOrganizationID(ctx, qe, userOrganizationID)
-		if err != nil {
-			return fmt.Errorf("get userID by orgID: %w", err)
-		}
-		notification.User.Id = int32(userID)
-
-		// Уведомления
-		b, err := proto.Marshal(&eventsv1.SentNotification{Notification: notification})
-		if err != nil {
-			return fmt.Errorf("marhal notification proto: %w", err)
-		}
-
-		err = s.broker.Publish(ctx, topic, b)
-		if err != nil {
-			return fmt.Errorf("notification: %w", err)
 		}
 
 		return nil
 	})
+}
+
+func (s *Service) SendUserNotify(ctx context.Context, notify *modelsv1.Notification, topic broker.Topic, organizationID int) error {
+	userID, err := s.userStore.GetUserIDByOrganizationID(ctx, s.psql.DB(), organizationID)
+	if err != nil {
+		return fmt.Errorf("get userID by orgID: %w", err)
+	}
+	notify.User.Id = int32(userID)
+
+	b, err := proto.Marshal(&eventsv1.SentNotification{Notification: notify})
+	if err != nil {
+		return fmt.Errorf("marhal notification proto: %w", err)
+	}
+
+	return s.broker.Publish(ctx, topic, b)
 }

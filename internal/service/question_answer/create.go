@@ -60,6 +60,7 @@ func (s *Service) Create(ctx context.Context, params service.CreateQuestionAnswe
 			Notification: &modelsv1.Notification{
 				User: &modelsv1.NotifiedUser{
 					Id: *proto.Int32(int32(contextor.GetUserID(ctx))),
+					IsContractor: params.Type == models.QuestionAnswerTypeQuestion,
 				},
 				Verification: &modelsv1.Verification{
 					Status: modelsv1.Status_STATUS_IN_REVIEW,
